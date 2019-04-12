@@ -162,6 +162,10 @@ class SeattleEventScraper(EventScraper):
             except AttributeError:
                 raise errors.EventParseError(body, dt)
 
+        # Check executive session
+        if "executive session" in agenda.lower():
+            raise errors.ExecutiveSessionError(body, dt)
+
         # The agenda is returned as a single string
         # Clean it and split it into its parts
         agenda = agenda.replace("Agenda:", "")
@@ -229,7 +233,7 @@ class SeattleEventScraper(EventScraper):
                 # Successful parse
                 events.success.append(event)
 
-            except errors.EventOutOfTimeboundsError as e:
+            except (errors.EventOutOfTimeboundsError, errors.ExecutiveSessionError) as e:
                 # For logging purposes, return the errors
                 events.warning.append((container, e))
 

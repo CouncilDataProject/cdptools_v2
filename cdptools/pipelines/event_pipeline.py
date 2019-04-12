@@ -74,6 +74,7 @@ class EventPipeline(Pipeline):
                     key=key,
                     save_name="video.mp4"
                 )
+                log.info(f"Stored video at: {local_video_path}")
 
                 # Create audio split of video
                 # temp_audio_path = self.audio_splitters.split(local_paths["video"])

@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 import hashlib
 import logging
 import os
 import re
-import requests
 from typing import Dict, List, Union
+
+from bs4 import BeautifulSoup
+import requests
 
 from . import errors
 from .event_scraper import EventScraper
@@ -19,9 +20,9 @@ from .event_scraper import EventScraper
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(levelname)4s:%(lineno)4s %(asctime)s] %(message)s'
+    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
 )
-log = logging.getLogger()
+log = logging.getLogger(__file__)
 
 ###############################################################################
 
@@ -206,7 +207,7 @@ class SeattleEventScraper(EventScraper):
 
         # Add SHA256 to act as a key
         key = hashlib.sha256(bytes(event["video_url"].encode("utf8"))).hexdigest()
-        event["sha256"] = key
+        event["key"] = key
 
         return event
 

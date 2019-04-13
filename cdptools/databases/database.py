@@ -26,6 +26,13 @@ class Database(ABC):
         return {}
 
     @abstractmethod
+    def upload_error(self, error: Dict) -> str:
+        """
+        Upload error details to a log.
+        """
+        return ""
+
+    @abstractmethod
     def get_indexed_words(self) -> Dict[str, Dict]:
         """
         Get all preprocessed words.

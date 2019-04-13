@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+from datetime import datetime
 import logging
 from pathlib import Path
 from typing import Dict, Union
+
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
 
 from .database import Database
 
@@ -14,9 +16,9 @@ from .database import Database
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(levelname)4s:%(lineno)4s %(asctime)s] %(message)s'
+    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
 )
-log = logging.getLogger()
+log = logging.getLogger(__file__)
 
 ###############################################################################
 

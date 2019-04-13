@@ -14,12 +14,9 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'appdirs>=1.4.3',
     'beautifulsoup4>=4.7.1',
+    'firebase-admin>=2.16.0',
     'fuzzywuzzy[speedup]>=0.17.0',
     'requests>=2.21.0'
-]
-
-cloud_firestore_requires = [
-    'firebase-admin>=2.16.0'
 ]
 
 setup_requirements = ['pytest-runner', ]
@@ -28,8 +25,7 @@ test_requirements = ['pytest', 'pytest-cov', 'pytest-raises', ]
 
 extra_requirements = {
     'test': test_requirements,
-    'setup': setup_requirements,
-    'cloud-firestore': cloud_firestore_requires
+    'setup': setup_requirements
 }
 
 setup(

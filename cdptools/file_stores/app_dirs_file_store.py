@@ -46,6 +46,11 @@ class AppDirsFileStore(FileStore):
 
     @staticmethod
     def _external_resource_copy(url: str, dst: Union[str, Path]) -> Path:
+        # Enforce dst does not exist
+        dst = Path(dst).resolve()
+        if dst.is_file():
+            raise FileExistsError(dst)
+
         # Open requests connection to url as a stream
         with requests.get(url, stream=True) as streamed_read:
             # Open bytes writing file
@@ -101,7 +106,7 @@ class AppDirsFileStore(FileStore):
 
         # Check if file already exists
         if save_path.is_file():
-            raise FileExistsError(f"Target save file path already exists: {save_path}")
+            raise FileExistsError(save_path)
 
         # Create save_dir if not already exists
         save_path.parent.mkdir(parents=True, exist_ok=True)

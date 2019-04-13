@@ -14,6 +14,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'appdirs>=1.4.3',
     'beautifulsoup4>=4.7.1',
+    'ffmpeg-python>=0.1.17',
     'firebase-admin>=2.16.0',
     'fuzzywuzzy[speedup]>=0.17.0',
     'requests>=2.21.0'

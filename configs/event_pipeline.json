@@ -16,6 +16,11 @@
         "object_name": "AppDirsFileStore",
         "object_kwargs": {}
     },
+    "audio_splitter": {
+        "module_path": "cdptools.audio_splitters.ffmpeg_audio_splitter",
+        "object_name": "FFmpegAudioSplitter",
+        "object_kwargs": {}
+    },
     "speech_recognition_model": {
         "module_path": "cdptools.sr_models.google_cloud_model",
         "object_name": "GoogleCloudModel",

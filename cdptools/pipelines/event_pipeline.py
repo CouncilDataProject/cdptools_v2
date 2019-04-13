@@ -51,6 +51,11 @@ class EventPipeline(Pipeline):
             object_name=self.config["file_store"]["object_name"],
             object_kwargs=self.config["file_store"].get("object_kwargs", {})
         )
+        self.audio_splitter = super().load_custom_object(
+            module_path=self.config["audio_splitter"]["module_path"],
+            object_name=self.config["audio_splitter"]["object_name"],
+            object_kwargs=self.config["audio_splitter"].get("object_kwargs", {})
+        )
         # self.sr_model = super().load_custom_object(
         #     module_path=self.config["speech_recognition_model"]["module_path"],
         #     object_name=self.config["speech_recognition_model"]["object_name"],
@@ -64,26 +69,36 @@ class EventPipeline(Pipeline):
         try:
             # Check event already exists
             if self.database.get_event(key):
-                log.info(f"Event already exists: {key}")
+                log.debug(f"Event already exists: {key}")
             else:
-                log.info(f"Processing new event: {key}")
+                log.debug(f"Processing event: {key}")
 
-                # Create local copy of video
-                log.info(f"Beginning video copy...")
+                # Check for video file
                 video_suffix = event["video_url"].split(".")[-1]
-                local_video_path = self.file_store.store_file(
-                    file=event["video_url"],
-                    key=key,
-                    save_name=f"video.{video_suffix}"
-                )
-                log.info(f"Stored video at: {local_video_path}")
+                try:
+                    local_video_path = self.file_store.get_file(key, filename=f"video.{video_suffix}")
+                except FileNotFoundError:
+                    # Create local copy of video
+                    log.debug("Beginning video copy...")
+                    local_video_path = self.file_store.store_file(
+                        file=event["video_url"],
+                        key=key,
+                        save_name=f"video.{video_suffix}"
+                    )
+                    log.debug(f"Stored video at: {local_video_path}")
 
-                # Create audio split of video
-                # temp_audio_path = self.audio_splitters.split(local_paths["video"])
-                #
-                # # Store audio split in file store
-                # local_paths["audio"] = self.file_store.store("audio", temp_audio_path, remove=True)
-                #
+                # Check for audio file
+                try:
+                    local_audio_path = self.file_store.get_file(key=key, filename="audio.mp3")
+                except FileNotFoundError:
+                    # Create audio file
+                    log.debug("Beginning audio split...")
+                    local_audio_path = self.audio_splitter.split(
+                        video_read_path=local_video_path,
+                        audio_save_path=local_video_path.parent / "audio.mp3"
+                    )
+                    log.debug(f"Stored audio at: {local_audio_path}")
+
                 # # Transcribe audio to text
                 # transcript = self.sr_model.transcribe(local_paths["audio"])
 
@@ -109,7 +124,7 @@ class EventPipeline(Pipeline):
         try:
             # Get events
             log.info("Beginning event collection.")
-            events = self.event_scraper.get_events()
+            events = self.event_scraper.get_events()[:3]
 
             # Multithread each event found
             with ThreadPoolExecutor(self.n_workers) as exe:

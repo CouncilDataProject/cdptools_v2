@@ -58,7 +58,7 @@ MOCK_EVENT = {
     "event_datetime": datetime(now.year, now.month, now.day),
     "thumbnail_url": "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",
     "video_url": "http://video.seattle.gov:8080/media/council/tests_032919.mp4",
-    "sha256": "60dc627c8e09774262d5cf839c228e7a0ba3080821bd0979a581519752d756de"
+    "key": "60dc627c8e09774262d5cf839c228e7a0ba3080821bd0979a581519752d756de"
 }
 m_d_y = "{}/{}/{}".format(now.month, now.day, now.year)
 m_d_sy = "{}/{}/{}".format(now.month, now.day, str(now.year)[2:])

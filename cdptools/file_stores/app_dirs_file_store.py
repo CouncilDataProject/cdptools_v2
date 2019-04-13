@@ -79,6 +79,12 @@ class AppDirsFileStore(FileStore):
         save_name: Optional[str] = None,
         remove: bool = False
     ) -> Path:
+        # Try to get the file first
+        try:
+            return self.get_file(key=key, filename=save_name)
+        except FileNotFoundError:
+            pass
+
         # Check if resource is internal
         if self._path_is_local(file):
             # It is so resolve the path to enforce path complete.
@@ -121,9 +127,9 @@ class AppDirsFileStore(FileStore):
         # Return path after copy
         return save_path
 
-    def get_file(self, key: str, file_name: str) -> Path:
+    def get_file(self, key: str, filename: str) -> Path:
         # Get path
-        path = self._locate_file(self.root, key, file_name)
+        path = self._locate_file(self.root, key, filename)
 
         # Check exists
         path = path.resolve(strict=True)

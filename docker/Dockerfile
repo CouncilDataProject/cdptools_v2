@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
 RUN add-apt-repository universe
 
 RUN apt-get update && apt-get install -y \
+    ffmpeg \
     python3.7 \
     python3-pip
 

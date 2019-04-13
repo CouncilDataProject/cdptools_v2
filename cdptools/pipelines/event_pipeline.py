@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import logging
 from pathlib import Path
+import traceback
 from typing import Dict, Union
 
 from .pipeline import Pipeline
@@ -13,9 +14,9 @@ from .pipeline import Pipeline
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(levelname)4s:%(lineno)4s %(asctime)s] %(message)s'
+    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
 )
-log = logging.getLogger()
+log = logging.getLogger(__file__)
 
 ###############################################################################
 
@@ -59,7 +60,7 @@ class EventPipeline(Pipeline):
 
     def process_event(self, event: Dict) -> str:
         # Get event key
-        key = event["sha256"]
+        key = event["key"]
         try:
             # Check event already exists
             if self.database.get_event(key):
@@ -86,11 +87,20 @@ class EventPipeline(Pipeline):
                 # transcript = self.sr_model.transcribe(local_paths["audio"])
 
                 # Store event
-                log.info("Beginning event details upload...")
                 event = self.database.upload_event(event)
         except Exception as e:
-            # TODO: push exception log to database
-            raise e
+            # Create error
+            to_store_error = {
+                "error": str(e),
+                "traceback": traceback.format_exc(),
+                "event": event
+            }
+            # Upload
+            log.info("Something went wrong... Uploading error details.")
+            self.database.upload_error(to_store_error)
+
+        # Finish
+        log.info(f"Finished processing event: {key}")
 
     def run(self):
         # TODO: wrap this in a scheduler

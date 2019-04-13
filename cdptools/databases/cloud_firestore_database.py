@@ -43,18 +43,30 @@ class CloudFirestoreDatabase(Database):
         return ref.get().to_dict()
 
     def upload_event(self, event: Dict) -> str:
-        # Construct ref
-        ref = self.root.collection(u"events").document(event["sha256"])
-        log.debug(f"Created reference: {ref}")
+        # Get key
+        key = event.pop("key")
 
-        # Remove sha256
-        event.pop("sha256")
+        # Construct ref
+        ref = self.root.collection(u"events").document(key)
+        log.debug(f"Created reference: {ref}")
 
         # Add created timestamp
         event[u"created_datetime"] = firestore.SERVER_TIMESTAMP
 
         # Attempt set
         return ref.set(event)
+
+    def upload_error(self, error: Dict) -> str:
+        # Create error key
+        # Just use the current datetime
+        current_dt = str(datetime.utcnow()).replace(" ", "T")
+
+        # Construct ref
+        ref = self.root.collection(u"errors").document(current_dt)
+        log.debug(f"Created reference: {ref}")
+
+        # Attempt set
+        return ref.set(error)
 
     def get_indexed_words(self) -> Dict[str, Dict]:
         """

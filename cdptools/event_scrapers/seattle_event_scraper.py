@@ -190,10 +190,10 @@ class SeattleEventScraper(EventScraper):
             raise errors.EventParseError(body, dt)
 
         # If the event was not today, ignore it.
-        now = SeattleEventScraper.pstnow()
-        yesterday = now - timedelta(days=1)
-        if not (dt > yesterday and dt < now):
-            raise errors.EventOutOfTimeboundsError(dt, yesterday, now)
+        # now = SeattleEventScraper.pstnow()
+        # yesterday = now - timedelta(days=1)
+        # if not (dt > yesterday and dt < now):
+        #     raise errors.EventOutOfTimeboundsError(dt, yesterday, now)
 
         # Construct event
         event = {
@@ -264,7 +264,7 @@ class SeattleEventScraper(EventScraper):
             warning,
             error
         )
-        log.info(f"Collected: {len(results.success)}, "
+        log.info(f"Collected: {len(results.success)}. "
                  f"Ignored: {len(results.warning)}. "
                  f"Errored: {len(results.error)}.")
 

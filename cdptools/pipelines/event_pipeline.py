@@ -70,10 +70,11 @@ class EventPipeline(Pipeline):
 
                 # Create local copy of video
                 log.info(f"Beginning video copy...")
+                video_suffix = event["video_url"].split(".")[-1]
                 local_video_path = self.file_store.store_file(
                     file=event["video_url"],
                     key=key,
-                    save_name="video.mp4"
+                    save_name=f"video.{video_suffix}"
                 )
                 log.info(f"Stored video at: {local_video_path}")
 

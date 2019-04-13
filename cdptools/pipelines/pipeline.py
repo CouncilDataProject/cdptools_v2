@@ -10,9 +10,9 @@ from typing import Dict, List, Union
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(levelname)4s:%(lineno)4s %(asctime)s] %(message)s'
+    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
 )
-log = logging.getLogger()
+log = logging.getLogger(__file__)
 
 ###############################################################################
 

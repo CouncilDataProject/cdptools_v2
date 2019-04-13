@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import appdirs
 import logging
 import os
 from pathlib import Path
-import requests
 import shutil
 from typing import Optional, Union
+
+import appdirs
+import requests
 
 from .file_store import FileStore
 
@@ -15,9 +16,9 @@ from .file_store import FileStore
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(levelname)4s:%(lineno)4s %(asctime)s] %(message)s'
+    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
 )
-log = logging.getLogger()
+log = logging.getLogger(__file__)
 
 ###############################################################################
 

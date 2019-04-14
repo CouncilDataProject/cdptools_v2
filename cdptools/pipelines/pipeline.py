@@ -38,7 +38,7 @@ class Pipeline(ABC):
         obj = obj(**object_kwargs)
 
         # Log
-        log.info(f"Using object: {type(obj)}")
+        log.debug(f"Using object: {type(obj)}")
 
         return obj
 

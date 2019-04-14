@@ -118,7 +118,10 @@ class AppDirsFileStore(FileStore):
         save_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Actual copy operation
+        log.debug(f"Beginning file copy for: {file}")
         save_path = copy_function(file, save_path)
+        log.debug(f"Completed file copy for: {file}")
+        log.debug(f"Stored copy at: {save_path}")
 
         # Remove if desired
         if remove:

@@ -89,15 +89,13 @@ class EventPipeline(Pipeline):
 
                 # Check for audio file
                 try:
-                    local_audio_path = self.file_store.get_file(key=key, filename="audio.mp3")
+                    local_audio_path = file_store.get_file(key=key, filename="audio.raw")
                 except FileNotFoundError:
                     # Create audio file
-                    log.debug("Beginning audio split...")
-                    local_audio_path = self.audio_splitter.split(
+                    local_audio_path = audio_splitter.split(
                         video_read_path=local_video_path,
-                        audio_save_path=local_video_path.parent / "audio.mp3"
+                        audio_save_path=local_video_path.parent / "audio.raw"
                     )
-                    log.debug(f"Stored audio at: {local_audio_path}")
 
                 # # Transcribe audio to text
                 # transcript = self.sr_model.transcribe(local_paths["audio"])

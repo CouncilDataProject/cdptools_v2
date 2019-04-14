@@ -34,10 +34,13 @@ class FFmpegAudioSplitter(AudioSplitter):
 
         # Construct ffmpeg dag
         stream = ffmpeg.input(video_read_path)
-        stream = ffmpeg.output(stream, filename=audio_save_path, f=audio_save_path.suffix[1:])
+        stream = ffmpeg.output(stream, filename=audio_save_path, format="s16le", acodec="pcm_s16le", ac=1, ar="16k")
 
         # Run dag
+        log.debug(f"Beginning audio separation for: {video_read_path}")
         out, err = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
+        log.debug(f"Completed audio separation for: {video_read_path}")
+        log.debug(f"Stored audio at: {audio_save_path}")
 
         # Find base log target
         log_target = audio_save_path.parent / "ffmpeg_log"

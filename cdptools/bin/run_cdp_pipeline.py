@@ -4,10 +4,12 @@
 import argparse
 import logging
 from pathlib import Path
+import schedule
 import sys
+import time
 import traceback
 
-from cdptools import pipelines
+from cdptools import get_module_version, pipelines
 
 ###############################################################################
 
@@ -32,6 +34,8 @@ class Args(argparse.Namespace):
         )
         p.add_argument('pipeline_type', help='Which pipeline to launch.')
         p.add_argument('config_path', type=Path, help='Path to a configuration file with details for the pipeline.')
+        p.add_argument('--nm', '--run_every_n_minutes', action='store', dest='schedule', type=int, default=None,
+                       help='Integer to run the specified pipeline every n minutes. Default: Run pipeline once.')
         p.add_argument('--debug', action='store_true', dest='debug', help='Show traceback if the script were to fail.')
         p.parse_args(namespace=self)
 
@@ -50,8 +54,25 @@ def main():
             object_kwargs={"config_path": args.config_path}
         )
 
-        # Run pipeline
-        pipeline.run()
+        log.info(f"CDPTools Version: {get_module_version()}")
+        log.info(f"Initializing: {args.pipeline_type}")
+
+        # If pipeline schedule was provided run on schedule
+        if args.schedule:
+            schedule.every(args.schedule).minutes.do(pipeline.run)
+            log.info(f"Pipeline will run every {args.schedule} minutes.")
+            log.info("=" * 80)
+
+            # Continuely run
+            while True:
+                schedule.run_pending()
+                time.sleep(1)
+
+        # No schedule passed. Run once
+        else:
+            log.info(f"Pipeline will run once.")
+            log.info("=" * 80)
+            pipeline.run()
 
     except Exception as e:
         log.error("=============================================")

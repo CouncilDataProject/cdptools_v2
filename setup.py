@@ -17,7 +17,9 @@ requirements = [
     'ffmpeg-python>=0.1.17',
     'firebase-admin>=2.16.0',
     'fuzzywuzzy[speedup]>=0.17.0',
-    'requests>=2.21.0'
+    'google-cloud-speech>=1.0.0',
+    'requests>=2.21.0',
+    'schedule>=0.6.0'
 ]
 
 setup_requirements = ['pytest-runner', ]

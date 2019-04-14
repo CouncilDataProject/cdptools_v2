@@ -152,7 +152,7 @@ class SeattleEventScraper(EventScraper):
         # Split date into components
         month, day, year = tuple(date.split("/"))
         # Create datetime string
-        dt = datetime(int(year), int(month), int(day))
+        event_dt = datetime(int(year), int(month), int(day))
 
         # Agendas have mixed formatting
         try:
@@ -161,22 +161,28 @@ class SeattleEventScraper(EventScraper):
             try:
                 agenda = event_details.find("div", class_="titleExcerptText").text
             except AttributeError:
-                raise errors.EventParseError(body, dt)
+                raise errors.EventParseError(body, event_dt)
 
         # Check executive session
         if "executive session" in agenda.lower():
-            raise errors.ExecutiveSessionError(body, dt)
+            raise errors.ExecutiveSessionError(body, event_dt)
 
         # The agenda is returned as a single string
         # Clean it and split it into its parts
         agenda = agenda.replace("Agenda:", "")
         agenda = agenda.replace("Agenda Items:", "")
-        agenda = agenda.split(";")
+
+        # Older agendas used commas instead of semicolons
+        if ";" in agenda:
+            agenda = agenda.split(";")
+        else:
+            agenda = agenda.split(",")
 
         # Find video and thumbnail urls
         video_and_thumbnail = event_container.find("div", class_="col-xs-12 col-sm-4 col-md-3")
         thumbnail = video_and_thumbnail.find("a").find("img").get("src")
         video = video_and_thumbnail.find("a").get("onclick")
+        seattle_channel_page = video_and_thumbnail.find("a").get("href")
 
         # Onclick returns a javascript function
         # Try to find the url the function redirects to
@@ -187,7 +193,7 @@ class SeattleEventScraper(EventScraper):
             # regex search pattern.
             video = re.search(r"http://video\.seattle\.gov\:8080[a-zA-Z0-9\/_ ]*\.(mp4|flv)", video).group(0)
         except AttributeError:
-            raise errors.EventParseError(body, dt)
+            raise errors.EventParseError(body, event_dt)
 
         # If the event was not today, ignore it.
         # now = SeattleEventScraper.pstnow()
@@ -197,12 +203,13 @@ class SeattleEventScraper(EventScraper):
 
         # Construct event
         event = {
-            "body": SeattleEventScraper._clean_string(body),
-            "event_datetime": dt,
             "agenda": [SeattleEventScraper._clean_string(item) for item in agenda],
-            "video_url": video.replace(" ", ""),
+            "body": SeattleEventScraper._clean_string(body),
+            "event_datetime": str(event_dt).replace(" ", "T"),
+            "parsed_datetime": datetime.utcnow(),
+            "source_url": SeattleEventScraper._resolve_route(complete_sibling, seattle_channel_page),
             "thumbnail_url": SeattleEventScraper._resolve_route(complete_sibling, thumbnail),
-            "parsed_datetime": datetime.utcnow()
+            "video_url": video.replace(" ", "")
         }
 
         # Add SHA256 to act as a key

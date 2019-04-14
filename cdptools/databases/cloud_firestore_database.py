@@ -4,7 +4,7 @@
 from datetime import datetime
 import logging
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
 import firebase_admin
 from firebase_admin import credentials
@@ -25,10 +25,18 @@ log = logging.getLogger(__file__)
 
 class CloudFirestoreDatabase(Database):
 
-    def __init__(self, credentials_path: Union[str, Path]):
+    def __init__(self, credentials_path: Union[str, Path], name: Optional[str] = None):
+        # Resolve credentials
+        credentials_path = Path(credentials_path).resolve(strict=True)
+
         # Initialize database reference
         cred = credentials.Certificate(str(credentials_path))
-        firebase_admin.initialize_app(cred)
+        # Check name
+        # This is done as if the name is None we just want to initialize the main connection
+        if not name:
+            firebase_admin.initialize_app(cred)
+        else:
+            firebase_admin.initialize_app(cred, name=name)
 
         # Store configuration
         self.credentials_path = credentials_path

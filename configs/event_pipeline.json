@@ -12,9 +12,12 @@
         }
     },
     "file_store": {
-        "module_path": "cdptools.file_stores.app_dirs_file_store",
-        "object_name": "AppDirsFileStore",
-        "object_kwargs": {}
+        "module_path": "cdptools.file_stores.gcs_file_store",
+        "object_name": "GCSFileStore",
+        "object_kwargs": {
+            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_firestore_stg.json",
+            "bucket_uri": "stg-cdp-seattle.appspot.com"
+        }
     },
     "audio_splitter": {
         "module_path": "cdptools.audio_splitters.ffmpeg_audio_splitter",

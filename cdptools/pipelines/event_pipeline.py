@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 # For testing
-# import random
+import random
 
 from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 import json
 import logging
+import os
 from pathlib import Path
 import traceback
 from typing import Dict, Union
@@ -39,12 +40,12 @@ class EventPipeline(Pipeline):
         self.n_workers = self.config.get("max_synchronous_jobs")
 
         # Load event scraper
-        self.event_scraper = super().load_custom_object(
+        self.event_scraper = self.load_custom_object(
             module_path=self.config["event_scraper"]["module_path"],
             object_name=self.config["event_scraper"]["object_name"],
             object_kwargs=self.config["event_scraper"].get("object_kwargs", {})
         )
-        self.database = super().load_custom_object(
+        self.database = self.load_custom_object(
             module_path=self.config["database"]["module_path"],
             object_name=self.config["database"]["object_name"],
             object_kwargs=self.config["database"].get("object_kwargs", {})
@@ -64,7 +65,7 @@ class EventPipeline(Pipeline):
         file_store = module_loader(
             module_path=config["file_store"]["module_path"],
             object_name=config["file_store"]["object_name"],
-            object_kwargs=config["file_store"].get("object_kwargs", {})
+            object_kwargs={**config["file_store"].get("object_kwargs", {}), **{"name": f"fs_{key}"}}
         )
         audio_splitter = module_loader(
             module_path=config["audio_splitter"]["module_path"],
@@ -79,56 +80,85 @@ class EventPipeline(Pipeline):
 
         # Begin
         try:
-            # Check event already exists
+            # Check event already exists in database
             if database.get_event(key):
                 log.debug(f"Event already exists: {key}")
             else:
                 log.info(f"Processing event: {key}")
 
-                # Check for video file
-                video_suffix = event["video_url"].split(".")[-1]
+                # Check if transcript already exists in file store
+                tmp_transcript_filepath = f"{key}_transcript_0.txt"
                 try:
-                    local_video_path = file_store.get_file(key, filename=f"video.{video_suffix}")
+                    transcript_uri = file_store.get_file(filename=tmp_transcript_filepath)
                 except FileNotFoundError:
-                    # Create local copy of video
-                    local_video_path = file_store.store_file(
-                        file=event["video_url"],
-                        key=key,
-                        save_name=f"video.{video_suffix}"
+                    # Check if audio already exists in file store
+                    tmp_audio_filepath = f"{key}_audio.wav"
+                    try:
+                        audio_uri = file_store.get_file(filename=tmp_audio_filepath)
+                    except FileNotFoundError:
+                        # Store the video in temporary file
+                        tmp_video_filepath = f"tmp_{key}_video"
+                        tmp_video_filepath = file_store._external_resource_copy(
+                            url=event["video_url"],
+                            dst=tmp_video_filepath
+                        )
+
+                        # Split and store the audio in temporary file prior to upload
+                        audio_splitter.split(video_read_path=tmp_video_filepath, audio_save_path=tmp_audio_filepath)
+
+                        # Remove tmp video file
+                        os.remove(tmp_video_filepath)
+
+                        # Store audio and logs
+                        audio_uri = file_store.store_file(
+                            filepath=tmp_audio_filepath,
+                            content_type="audio/wav",
+                            remove=True
+                        )
+                        file_store.store_file(
+                            filepath=f"{key}_audio_log.out",
+                            content_type="text/plain",
+                            remove=True
+                        )
+                        file_store.store_file(
+                            filepath=f"{key}_audio_log.err",
+                            content_type="text/plain",
+                            remove=True
+                        )
+
+                    # Transcribe audio
+                    tmp_transcript_filepath = sr_model.transcribe(
+                        audio_uri=audio_uri,
+                        transcript_save_path=tmp_transcript_filepath
                     )
 
-                # Check for audio file
-                try:
-                    local_audio_path = file_store.get_file(key=key, filename="audio.raw")
-                except FileNotFoundError:
-                    # Create audio file
-                    local_audio_path = audio_splitter.split(
-                        video_read_path=local_video_path,
-                        audio_save_path=local_video_path.parent / "audio.raw"
+                    # Upload transcript
+                    transcript_uri = file_store.store_file(
+                        filepath=tmp_transcript_filepath,
+                        content_type="text/plain"
                     )
 
-                # Check for transcript
-                # try:
-                #     local_transcript_path = file_store.get_file(key=key, filename="initial_transcript.txt")
-                # except FileNotFoundError:
-                #     # Transcribe audio to text
-                #     transcript = sr_model.transcribe(
-                #         audio_read_path=local_audio_path,
-                #         transcript_save_path=local_audio_path.parent / f"initial_transcript.txt"
-                #     )
+                    # Upload transcript details
+                    transcript_id = f"{key}_0"
+                    database.upload_transcript({
+                        "key": transcript_id,
+                        "event_id": key,
+                        "uri": transcript_uri
+                    })
+
+                    # Update event
+                    event["transcript_ids"] = [transcript_id]
 
                 # Store event
-                event = database.upload_event(event)
+                database.upload_event(event)
         except Exception as e:
-            # Create error
-            to_store_error = {
+            # Upload error
+            log.info("Something went wrong... Uploading error details.")
+            database.upload_error({
                 "error": str(e),
                 "traceback": traceback.format_exc(),
                 "event": event
-            }
-            # Upload
-            log.info("Something went wrong... Uploading error details.")
-            database.upload_error(to_store_error)
+            })
 
         # Update progress
         log.info(f"Completed processing for event: {key}")
@@ -139,10 +169,10 @@ class EventPipeline(Pipeline):
         events = self.event_scraper.get_events()
 
         # For testing
-        # events = random.sample(events, 1)
+        events = random.sample(events, 1)
 
         # Initialize partial
-        process_func = partial(self.process_event, config=self.config, module_loader=super().load_custom_object)
+        process_func = partial(self.process_event, config=self.config, module_loader=self.load_custom_object)
 
         # Multiprocess each event found
         with ProcessPoolExecutor(self.n_workers) as exe:

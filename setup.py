@@ -12,23 +12,38 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'appdirs>=1.4.3',
     'beautifulsoup4>=4.7.1',
     'ffmpeg-python>=0.1.17',
-    'firebase-admin>=2.16.0',
     'fuzzywuzzy[speedup]>=0.17.0',
-    'google-cloud-speech>=1.0.0',
     'requests>=2.21.0',
     'schedule>=0.6.0'
 ]
 
-setup_requirements = ['pytest-runner', ]
+local_requires = [
+    'appdirs>=1.4.3'
+]
 
-test_requirements = ['pytest', 'pytest-cov', 'pytest-raises', ]
+google_cloud_requires = [
+    'firebase-admin>=2.16.0',
+    'google-cloud-speech>=1.0.0',
+    'google-cloud-storage>=1.14.0'
+]
+
+setup_requirements = [
+    'pytest-runner'
+]
+
+test_requirements = [
+    'pytest',
+    'pytest-cov',
+    'pytest-raises'
+]
 
 extra_requirements = {
     'test': test_requirements,
-    'setup': setup_requirements
+    'setup': setup_requirements,
+    'local': local_requires,
+    'google-cloud': google_cloud_requires
 }
 
 setup(

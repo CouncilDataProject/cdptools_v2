@@ -22,7 +22,7 @@ log = logging.getLogger(__file__)
 
 class FFmpegAudioSplitter(AudioSplitter):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         pass
 
     def split(self, video_read_path: Union[str, Path], audio_save_path: Union[str, Path]) -> Path:
@@ -34,7 +34,7 @@ class FFmpegAudioSplitter(AudioSplitter):
 
         # Construct ffmpeg dag
         stream = ffmpeg.input(video_read_path)
-        stream = ffmpeg.output(stream, filename=audio_save_path, format="s16le", acodec="pcm_s16le", ac=1, ar="16k")
+        stream = ffmpeg.output(stream, filename=audio_save_path, format="wav", acodec="pcm_s16le", ac=1, ar="16k")
 
         # Run dag
         log.debug(f"Beginning audio separation for: {video_read_path}")
@@ -43,7 +43,8 @@ class FFmpegAudioSplitter(AudioSplitter):
         log.debug(f"Stored audio at: {audio_save_path}")
 
         # Find base log target
-        log_target = audio_save_path.parent / "ffmpeg_log"
+        save_name = audio_save_path.with_suffix("").name
+        log_target = audio_save_path.parent / f"{save_name}_log"
 
         # Store logs
         with open(log_target.with_suffix(".out"), "wb") as write_out:

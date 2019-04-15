@@ -50,7 +50,8 @@ class SeattleEventScraper(EventScraper):
         self,
         main_route: str = "http://www.seattlechannel.org/CityCouncil",
         legistar_client: str = "seattle",
-        max_concurrent_requests: int = None
+        max_concurrent_requests: int = None,
+        **kwargs
     ):
         # Store configuration
         self.main_route = main_route
@@ -213,7 +214,7 @@ class SeattleEventScraper(EventScraper):
         }
 
         # Add SHA256 to act as a key
-        key = hashlib.sha256(bytes(event["video_url"].encode("utf8"))).hexdigest()
+        key = hashlib.sha256(event["video_url"].encode("utf8")).hexdigest()
         event["key"] = key
 
         return event

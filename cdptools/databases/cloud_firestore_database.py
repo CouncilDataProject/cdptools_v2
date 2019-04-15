@@ -25,18 +25,19 @@ log = logging.getLogger(__file__)
 
 class CloudFirestoreDatabase(Database):
 
-    def __init__(self, credentials_path: Union[str, Path], name: Optional[str] = None):
+    def __init__(self, credentials_path: Union[str, Path], name: Optional[str] = None, **kwargs):
         # Resolve credentials
         credentials_path = Path(credentials_path).resolve(strict=True)
 
         # Initialize database reference
         cred = credentials.Certificate(str(credentials_path))
+
         # Check name
         # This is done as if the name is None we just want to initialize the main connection
-        if not name:
-            firebase_admin.initialize_app(cred)
-        else:
+        if name:
             firebase_admin.initialize_app(cred, name=name)
+        else:
+            firebase_admin.initialize_app(cred)
 
         # Store configuration
         self.credentials_path = credentials_path
@@ -50,19 +51,19 @@ class CloudFirestoreDatabase(Database):
         # Attempt get
         return ref.get().to_dict()
 
-    def upload_event(self, event: Dict) -> str:
+    def upload_event(self, event_details: Dict) -> str:
         # Get key
-        key = event.pop("key")
+        key = event_details.pop("key")
 
         # Construct ref
         ref = self.root.collection(u"events").document(key)
         log.debug(f"Created reference: {ref}")
 
         # Add created timestamp
-        event[u"created_datetime"] = firestore.SERVER_TIMESTAMP
+        event_details[u"created_datetime"] = firestore.SERVER_TIMESTAMP
 
         # Attempt set
-        return ref.set(event)
+        return ref.set(event_details)
 
     def upload_error(self, error: Dict) -> str:
         # Create error key
@@ -94,15 +95,29 @@ class CloudFirestoreDatabase(Database):
         """
         Get a transcript from the transcript id.
         """
+        # Construct ref
+        ref = self.root.collection(u"transcripts").document(transcript_id)
+        log.debug(f"Created reference: {ref}")
 
-        return ""
+        # Attempt get
+        return ref.get().to_dict()
 
-    def upload_transcript(self, transcript: str) -> str:
+    def upload_transcript(self, transcript_details: Dict) -> str:
         """
         Upload a transcript and return the transcript id.
         """
+        # Get key
+        key = transcript_details.pop("key")
 
-        return ""
+        # Construct ref
+        ref = self.root.collection(u"transcripts").document(key)
+        log.debug(f"Created reference: {ref}")
+
+        # Add created timestamp
+        transcript_details[u"created_datetime"] = firestore.SERVER_TIMESTAMP
+
+        # Attempt set
+        return ref.set(transcript_details)
 
     def __str__(self):
         return f"<FirebaseDatabase [{self.credentials_path}]>"

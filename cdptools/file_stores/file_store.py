@@ -2,16 +2,58 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABC, abstractmethod
+import logging
 from pathlib import Path
-from typing import Union
+import shutil
+from typing import Optional, Union
+
+import requests
+
+###############################################################################
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
+)
+log = logging.getLogger(__file__)
 
 ###############################################################################
 
 
 class FileStore(ABC):
 
+    @staticmethod
+    def _path_is_local(path: Union[str, Path]) -> bool:
+        # Convert path
+        path = str(path)
+
+        # Start checks
+        if path.startswith("http://"):
+            return False
+        elif path.startswith("https://"):
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def _external_resource_copy(url: str, dst: Union[str, Path]) -> Path:
+        # Ensure dst doesn't exist
+        dst = Path(dst).resolve()
+        if dst.is_file():
+            raise FileExistsError(dst)
+
+        # Open requests connection to url as a stream
+        log.debug(f"Beginning external resource copy from: {url}")
+        with requests.get(url, stream=True) as streamed_read:
+            with open(dst, "wb") as streamed_write:
+                shutil.copyfileobj(streamed_read.raw, streamed_write)
+        log.debug(f"Completed external resource copy from: {url}")
+        log.info(f"Stored external resource copy: {dst}")
+
+        return dst
+
     @abstractmethod
-    def store_file(self, file: Union[str, Path]) -> str:
+    def store_file(self, filepath: Union[str, Path], save_name: Optional[str] = None, remove: bool = False) -> str:
         """
         Store a file.
         """
@@ -19,8 +61,9 @@ class FileStore(ABC):
         return ""
 
     @abstractmethod
-    def get_file(self, file_id: str) -> Path:
+    def get_file(self, filename: str) -> str:
         """
-        Get a file by id.
+        Get a file.
         """
-        return Path("/root/.local/path/to/file/id.mp4")
+
+        return ""

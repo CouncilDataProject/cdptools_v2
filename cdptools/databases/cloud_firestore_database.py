@@ -55,6 +55,10 @@ class CloudFirestoreDatabase(Database):
         # Get key
         key = event_details.pop("key")
 
+        # Check for exists
+        if self.get_event(key):
+            raise KeyError(f"An event with key {key} already exists.")
+
         # Construct ref
         ref = self.root.collection(u"events").document(key)
         log.debug(f"Created reference: {ref}")
@@ -108,6 +112,10 @@ class CloudFirestoreDatabase(Database):
         """
         # Get key
         key = transcript_details.pop("key")
+
+        # Check for exists
+        if self.get_transcript(key):
+            raise KeyError(f"A transcript with key {key} already exists.")
 
         # Construct ref
         ref = self.root.collection(u"transcripts").document(key)

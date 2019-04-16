@@ -44,17 +44,35 @@ class AppDirsFileStore(FileStore):
         # Return with file name attached
         return path_parent / filename
 
-    def store_file(self, filepath: Union[str, Path], save_name: Optional[str] = None, remove: bool = False) -> Path:
+    def get_file_uri(self, filename: Union[str, Path], **kwargs) -> str:
+        # Resolve path
+        filename = Path(filename).resolve()
+
+        # Get path
+        path = self._locate_file(filename.name)
+
+        # Check exists
+        path = path.resolve(strict=True)
+
+        return str(path)
+
+    def upload_file(
+        self,
+        filepath: Union[str, Path],
+        save_name: Optional[str] = None,
+        remove: bool = False,
+        **kwargs
+    ) -> str:
         # Resolve the path to enforce path complete
         filepath = Path(filepath).resolve(strict=True)
 
         # Create save name if none provided
-        if not save_name:
+        if save_name is None:
             save_name = filepath.name
 
         # Try to get the file first
         try:
-            return self.get_file(filename=save_name)
+            return self.get_file_uri(filename=save_name)
         except FileNotFoundError:
             pass
 
@@ -71,7 +89,7 @@ class AppDirsFileStore(FileStore):
         # Actual copy operation
         log.debug(f"Beginning file copy for: {filepath}")
         save_path = shutil.copyfile(filepath, save_path)
-        log.debug(f"Completed file copy for: {filepath}")
+        log.info(f"Completed file copy for: {filepath}")
         log.debug(f"Stored copy at: {save_path}")
 
         # Remove if desired
@@ -79,16 +97,26 @@ class AppDirsFileStore(FileStore):
             os.remove(filepath)
 
         # Return path after copy
-        return save_path
+        return str(save_path)
 
-    def get_file(self, filename: Union[str, Path]) -> Path:
-        # Resolve path
-        filename = Path(filename).resolve()
+    def download_file(self, filename: str, save_path: Optional[Union[str, Path]] = None, **kwargs) -> Path:
+        # Fix name
+        filename = Path(filename).resolve().name
 
-        # Get path
-        path = self._locate_file(filename.name)
+        # Get file uri
+        stored_uri = self.get_file_uri(filename)
 
-        # Check exists
-        path = path.resolve(strict=True)
+        # No save path just return file
+        if save_path is None:
+            return stored_uri
 
-        return path
+        # Check save path
+        save_path = Path(save_path).resolve()
+        if save_path.is_file():
+            raise FileExistsError(save_path)
+
+        # Copy file to save path
+        log.debug(f"Beginning file copy for: {filename}")
+        saved_path = Path(shutil.copyfile(save_path))
+        log.debug(f"Completed file copy for: {filename}")
+        return saved_path

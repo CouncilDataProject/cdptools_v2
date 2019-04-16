@@ -65,7 +65,7 @@ class EventPipeline(Pipeline):
         file_store = module_loader(
             module_path=config["file_store"]["module_path"],
             object_name=config["file_store"]["object_name"],
-            object_kwargs={**config["file_store"].get("object_kwargs", {}), **{"name": f"fs_{key}"}}
+            object_kwargs=config["file_store"].get("object_kwargs", {})
         )
         audio_splitter = module_loader(
             module_path=config["audio_splitter"]["module_path"],

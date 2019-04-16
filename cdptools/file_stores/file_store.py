@@ -53,7 +53,21 @@ class FileStore(ABC):
         return dst
 
     @abstractmethod
-    def store_file(self, filepath: Union[str, Path], save_name: Optional[str] = None, remove: bool = False) -> str:
+    def get_file_uri(self, filename: str, **kwargs) -> str:
+        """
+        Get a file path/ uri.
+        """
+
+        return ""
+
+    @abstractmethod
+    def upload_file(
+        self,
+        filepath: Union[str, Path],
+        save_name: Optional[str] = None,
+        remove: bool = False,
+        **kwargs
+    ) -> str:
         """
         Store a file.
         """
@@ -61,9 +75,9 @@ class FileStore(ABC):
         return ""
 
     @abstractmethod
-    def get_file(self, filename: str) -> str:
+    def download_file(self, filename: str, save_path: Optional[Union[str, Path]] = None, **kwargs) -> Path:
         """
-        Get a file.
+        Download the file if neccessary and return the Path.
         """
 
-        return ""
+        return Path("/tmp/file.tmp")

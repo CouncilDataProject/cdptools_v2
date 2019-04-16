@@ -86,46 +86,49 @@ class EventPipeline(Pipeline):
             else:
                 log.info(f"Processing event: {key}")
 
+                # Check if audio already exists in file store
+                tmp_audio_filepath = f"{key}_audio.wav"
+                try:
+                    audio_uri = file_store.get_file_uri(filename=tmp_audio_filepath)
+                except FileNotFoundError:
+                    # Store the video in temporary file
+                    tmp_video_filepath = f"tmp_{key}_video"
+                    tmp_video_filepath = file_store._external_resource_copy(
+                        url=event["video_url"],
+                        dst=tmp_video_filepath
+                    )
+
+                    # Split and store the audio in temporary file prior to upload
+                    tmp_audio_filepath = audio_splitter.split(
+                        video_read_path=tmp_video_filepath,
+                        audio_save_path=tmp_audio_filepath
+                    )
+
+                    # Remove tmp video file
+                    os.remove(tmp_video_filepath)
+
+                    # Store audio and logs
+                    audio_uri = file_store.upload_file(
+                        filepath=tmp_audio_filepath,
+                        content_type="audio/wav",
+                        remove=True
+                    )
+                    file_store.upload_file(
+                        filepath=f"{key}_audio_log.out",
+                        content_type="text/plain",
+                        remove=True
+                    )
+                    file_store.upload_file(
+                        filepath=f"{key}_audio_log.err",
+                        content_type="text/plain",
+                        remove=True
+                    )
+
                 # Check if transcript already exists in file store
                 tmp_transcript_filepath = f"{key}_transcript_0.txt"
                 try:
-                    transcript_uri = file_store.get_file(filename=tmp_transcript_filepath)
+                    transcript_uri = file_store.get_file_uri(filename=tmp_transcript_filepath)
                 except FileNotFoundError:
-                    # Check if audio already exists in file store
-                    tmp_audio_filepath = f"{key}_audio.wav"
-                    try:
-                        audio_uri = file_store.get_file(filename=tmp_audio_filepath)
-                    except FileNotFoundError:
-                        # Store the video in temporary file
-                        tmp_video_filepath = f"tmp_{key}_video"
-                        tmp_video_filepath = file_store._external_resource_copy(
-                            url=event["video_url"],
-                            dst=tmp_video_filepath
-                        )
-
-                        # Split and store the audio in temporary file prior to upload
-                        audio_splitter.split(video_read_path=tmp_video_filepath, audio_save_path=tmp_audio_filepath)
-
-                        # Remove tmp video file
-                        os.remove(tmp_video_filepath)
-
-                        # Store audio and logs
-                        audio_uri = file_store.store_file(
-                            filepath=tmp_audio_filepath,
-                            content_type="audio/wav",
-                            remove=True
-                        )
-                        file_store.store_file(
-                            filepath=f"{key}_audio_log.out",
-                            content_type="text/plain",
-                            remove=True
-                        )
-                        file_store.store_file(
-                            filepath=f"{key}_audio_log.err",
-                            content_type="text/plain",
-                            remove=True
-                        )
-
                     # Transcribe audio
                     tmp_transcript_filepath = sr_model.transcribe(
                         audio_uri=audio_uri,
@@ -133,21 +136,22 @@ class EventPipeline(Pipeline):
                     )
 
                     # Upload transcript
-                    transcript_uri = file_store.store_file(
+                    transcript_uri = file_store.upload_file(
                         filepath=tmp_transcript_filepath,
-                        content_type="text/plain"
+                        content_type="text/plain",
+                        remove=True
                     )
 
-                    # Upload transcript details
-                    transcript_id = f"{key}_0"
-                    database.upload_transcript({
-                        "key": transcript_id,
-                        "event_id": key,
-                        "uri": transcript_uri
-                    })
+                # Upload transcript details
+                transcript_id = f"{key}_0"
+                database.upload_transcript({
+                    "key": transcript_id,
+                    "event_id": key,
+                    "uri": transcript_uri
+                })
 
-                    # Update event
-                    event["transcript_ids"] = [transcript_id]
+                # Update event
+                event["transcript_ids"] = [transcript_id]
 
                 # Store event
                 database.upload_event(event)

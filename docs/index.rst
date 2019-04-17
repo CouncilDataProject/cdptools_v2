@@ -1,4 +1,4 @@
-Welcome to cdppipeline's documentation!
+Welcome to cdptools's documentation!
 ======================================
 
 .. toctree::

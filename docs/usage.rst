@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use cdppipeline in a project::
+To use cdptools in a project::
 
-    import cdppipeline
+    import cdptools

@@ -45,11 +45,6 @@ class EventPipeline(Pipeline):
             object_name=self.config["event_scraper"]["object_name"],
             object_kwargs=self.config["event_scraper"].get("object_kwargs", {})
         )
-        self.database = self.load_custom_object(
-            module_path=self.config["database"]["module_path"],
-            object_name=self.config["database"]["object_name"],
-            object_kwargs=self.config["database"].get("object_kwargs", {})
-        )
 
     @staticmethod
     def process_event(event: Dict, config: Dict, module_loader: callable) -> str:

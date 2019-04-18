@@ -2,64 +2,61 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABC, abstractmethod
-from typing import Dict
+from datetime import datetime
+from typing import Dict, NamedTuple, Optional, Union
 
 ###############################################################################
+
+
+class WhereCondition(NamedTuple):
+    column_name: str
+    operator: str
+    value: Union[bool, datetime, float, int, str]
+
+
+class OrderCondition(NamedTuple):
+    column_name: str
+    operator: str
 
 
 class Database(ABC):
 
     @abstractmethod
-    def upload_event(self, event: Dict) -> str:
+    def get_or_upload_body(
+        self,
+        name: str,
+        description: Optional[str]
+    ) -> Dict:
         """
-        Upload an event dictionary and return the event id.
-        """
-
-        return ""
-
-    @abstractmethod
-    def get_event(self, event_id: str) -> Dict:
-        """
-        Get an event dictionary from the event id.
+        Get or upload a body.
         """
 
         return {}
 
     @abstractmethod
-    def upload_error(self, error: Dict) -> str:
+    def get_or_upload_event(
+        self,
+        body_id: int,
+        event_datetime: datetime,
+        source_uri: str,
+        thumbnail_uri: str,
+        video_uri: str
+    ) -> Dict:
         """
-        Upload error details to a log.
-        """
-        return ""
-
-    @abstractmethod
-    def get_indexed_words(self) -> Dict[str, Dict]:
-        """
-        Get all preprocessed words.
-        """
-
-        return {}
-
-    @abstractmethod
-    def upload_indexed_words(self, words: Dict[str, Dict]) -> Dict[str, Dict]:
-        """
-        Provided a dictionary of dictionaries with {word: {indexing results}} update or add index results for each one.
+        Get or upload an event.
         """
 
         return {}
 
     @abstractmethod
-    def get_transcript(self, transcript_id: str) -> Dict:
+    def get_or_upload_algorithm(
+        self,
+        name: str,
+        version: str,
+        description: Optional[str] = None,
+        source: Optional[str] = None
+    ) -> Dict:
         """
-        Get a transcript from the transcript id.
+        Get or upload an algorithm.
         """
-
-        return ""
-
-    @abstractmethod
-    def upload_transcript(self, transcript: str) -> str:
-        """
-        Upload a transcript and return the transcript id.
-        """
-
-        return ""
+        return {}

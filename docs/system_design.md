@@ -48,10 +48,9 @@ LegistarEventScraper. However, some cities don't have all the required data avai
 actually has *most* of the data CDP systems need on the cities broadcasting website
 [seattlechannel.org](http://www.seattlechannel.org). The remaining data can be retrieved by querying very specific
 Legistar endpoints. Because of this, the `event_scrapers.SeattleEventScraper` uses a mix of web scraping and JSON
-requests.
-
-**To sum up:** Event scrapers are a module usually tailored for each city, unless they have the Legistar data easily
-accessible, that retrieves the data and formats it into a system wide expectation of what event data should look like.
+requests. To sum up, event scrapers are a module usually tailored for each city, unless they have the Legistar data
+easily accessible, that retrieves the data and formats it into a system wide expectation of what event data should look
+like.
 
 ### File Stores
 File stores are largely wrappers around other already well known file storage solutions. `file_stores.AppDirsFileStore`
@@ -99,13 +98,14 @@ managing task graphs has been made popular by tools like [Apache Airflow](https:
 configuration files that dictate which modules to use and any extra arguments needed to be passed to them then allow the
 entire pipeline to run.
 
+---
 ## Why not Airflow
-Circling back to the original intent of these tools: CDP aims to be high modular, and still reusable by nearly every
-city. However, if individuals who want to see data for their own city council can't set up Airflow, and don't have a
+Circling back to the original intent of these tools: CDP aims to be highly modular and still reusable by many cities.
+However, if individuals who want to see data for their own city council can't set up Airflow, and don't have a
 computation cluster to support it's operations, then what is the point of making the system modular? So yes, while many
 CDP operations could be very efficiently handled by Airflow, ease of use is also a factor and until we dedicate time to
 wrapping all the processes and pipelines in as easy to use configuration files tailored for Airflow, this is the format
 we are going with for now. Contributions welcome on that front though.
----
 
+---
 Now go make transparency research happen.

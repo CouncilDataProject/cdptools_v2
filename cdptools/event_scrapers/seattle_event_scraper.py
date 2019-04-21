@@ -3,7 +3,6 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
-import hashlib
 import logging
 import os
 import re
@@ -181,7 +180,6 @@ class SeattleEventScraper(EventScraper):
 
         # Find video and thumbnail urls
         video_and_thumbnail = event_container.find("div", class_="col-xs-12 col-sm-4 col-md-3")
-        thumbnail = video_and_thumbnail.find("a").find("img").get("src")
         video = video_and_thumbnail.find("a").get("onclick")
         seattle_channel_page = video_and_thumbnail.find("a").get("href")
 
@@ -204,19 +202,12 @@ class SeattleEventScraper(EventScraper):
 
         # Construct event
         event = {
-            "agenda": [SeattleEventScraper._clean_string(item) for item in agenda],
+            "agenda_items": [SeattleEventScraper._clean_string(item) for item in agenda],
             "body": SeattleEventScraper._clean_string(body),
             "event_datetime": str(event_dt).replace(" ", "T"),
-            "parsed_datetime": datetime.utcnow(),
-            "source_url": SeattleEventScraper._resolve_route(complete_sibling, seattle_channel_page),
-            "thumbnail_url": SeattleEventScraper._resolve_route(complete_sibling, thumbnail),
-            "video_url": video.replace(" ", "")
+            "source_uri": SeattleEventScraper._resolve_route(complete_sibling, seattle_channel_page),
+            "video_uri": video.replace(" ", "")
         }
-
-        # Add SHA256 to act as a key
-        key = hashlib.sha256(event["video_url"].encode("utf8")).hexdigest()
-        event["key"] = key
-
         return event
 
     def _collect_sub_route_events(self, url: str) -> List[Dict]:

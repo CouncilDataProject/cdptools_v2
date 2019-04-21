@@ -7,8 +7,10 @@ from pathlib import Path
 from typing import Optional, Union
 
 from google.cloud import storage
+import requests
 
 from .file_store import FileStore
+from ..utils import exceptions
 
 ###############################################################################
 
@@ -18,31 +20,72 @@ logging.basicConfig(
 )
 log = logging.getLogger(__file__)
 
+GCS_URI = "https://storage.googleapis.com/{bucket}/{filename}"
+
+SUFFIX_CONTENT_TYPE_MAP = {
+    ".wav": "audio/wav",
+    ".txt": "text/plain",
+    ".err": "text/plain",
+    ".out": "text/plain"
+}
+
 ###############################################################################
 
 
 class GCSFileStore(FileStore):
 
-    def __init__(self, credentials_path: Union[str, Path], bucket_name: str, **kwargs):
-        # Resolve credentials
-        self.credentials_path = Path(credentials_path).resolve(strict=True)
+    def __init__(
+        self,
+        bucket_name: str,
+        credentials_path: Optional[Union[str, Path]] = None,
+        **kwargs
+    ):
+        # With credentials:
+        if credentials_path:
+            # Resolve credentials
+            self._credentials_path = Path(credentials_path).resolve(strict=True)
 
-        # Initialize client
-        self.client = storage.Client.from_service_account_json(self.credentials_path)
-        self.bucket = self.client.get_bucket(bucket_name)
+            # Initialize client
+            self._client = storage.Client.from_service_account_json(self._credentials_path)
+            self._bucket = self._client.get_bucket(bucket_name)
+        else:
+            self._credentials_path = None
+            self._bucket = bucket_name
 
-    def get_file_uri(self, filename: Union[str, Path], **kwargs) -> str:
+    def _get_file_uri_with_creds(self, filename: Union[str, Path]) -> str:
         # Resolve path
         filename = Path(filename).resolve().name
 
         # Create blob
-        blob = self.bucket.blob(filename)
+        blob = self._bucket.blob(filename)
 
         # Check if file exists
         if blob.exists():
-            return f"gs://{self.bucket.name}/{filename}"
+            return f"gs://{self._bucket.name}/{filename}"
         else:
             raise FileNotFoundError(filename)
+
+    def _get_file_uri_no_creds(self, filename: Union[str, Path]) -> str:
+        # Resolve path
+        filename = Path(filename).resolve().name
+
+        # Open request
+        uri = GCS_URI.format(bucket=self._bucket, filename=filename)
+        response = requests.get(uri)
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError:
+            raise FileNotFoundError(filename)
+
+        # Existed
+        return uri
+
+    def get_file_uri(self, filename: Union[str, Path], **kwargs) -> str:
+        # With credentials
+        if self._credentials_path:
+            return self._get_file_uri_with_creds(filename)
+
+        return self._get_file_uri_no_creds(filename)
 
     def upload_file(
         self,
@@ -52,6 +95,10 @@ class GCSFileStore(FileStore):
         remove: bool = False,
         **kwargs,
     ) -> str:
+        # Reject any upload without credentials
+        if self._credentials_path is None:
+            raise exceptions.MissingCredentialsError()
+
         # Resolve the path to enforce path complete
         filepath = Path(filepath).resolve(strict=True)
 
@@ -70,11 +117,17 @@ class GCSFileStore(FileStore):
             raise FileNotFoundError(filepath)
 
         # Save url is bucket name + save_name
-        save_url = f"gs://{self.bucket.name}/{save_name}"
+        save_url = f"gs://{self._bucket.name}/{save_name}"
+
+        # Match content type
+        if filepath.suffix in SUFFIX_CONTENT_TYPE_MAP:
+            content_type = SUFFIX_CONTENT_TYPE_MAP[filepath.suffix]
+        else:
+            content_type = None
 
         # Actual copy operation
         log.debug(f"Beginning file copy for: {filepath}")
-        blob = self.bucket.blob(save_name)
+        blob = self._bucket.blob(save_name)
         blob.upload_from_filename(str(filepath), content_type=content_type)
         log.debug(f"Completed file copy for: {filepath}")
         log.info(f"Stored file: {save_url}")
@@ -86,7 +139,7 @@ class GCSFileStore(FileStore):
         # Return path after copy
         return save_url
 
-    def download_file(self, filename: str, save_path: Optional[Union[str, Path]] = None, **kwargs) -> Path:
+    def _download_file_with_creds(self, filename: str, save_path: Optional[Union[str, Path]] = None) -> Path:
         # Fix name
         filename = Path(filename).resolve()
 
@@ -104,8 +157,33 @@ class GCSFileStore(FileStore):
 
         # Begin download
         log.debug(f"Beginning file download for: {filename}")
-        blob = self.bucket.blob(filename.name)
+        blob = self._bucket.blob(filename.name)
         blob.download_to_filename(str(save_path))
         log.debug(f"Completed file download for: {filename}")
 
         return save_path
+
+    def _download_file_no_creds(self, filename: str, save_path: Optional[Union[str, Path]] = None) -> Path:
+        # Resolve path
+        filename = Path(filename).resolve().name
+
+        # Format request
+        uri = GCS_URI.format(bucket=self._bucket, filename=filename)
+        return self._external_resource_copy(uri, save_path)
+
+    def download_file(self, filename: str, save_path: Optional[Union[str, Path]] = None, **kwargs) -> Path:
+        # With credentials
+        if self._credentials_path:
+            return self._download_file_with_creds(filename, save_path)
+
+        return self._download_file_no_creds(filename, save_path)
+
+    def __str__(self):
+        # With credentials
+        if self._credentials_path:
+            return f"<GCSFileStore [{self._bucket.name}]>"
+
+        return f"<GCSFileStore [{self._bucket}]>"
+
+    def __repr__(self):
+        return str(self)

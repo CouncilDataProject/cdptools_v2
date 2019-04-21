@@ -8,7 +8,7 @@
         "module_path": "cdptools.databases.cloud_firestore_database",
         "object_name": "CloudFirestoreDatabase",
         "object_kwargs": {
-            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_firestore_stg.json"
+            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json"
         }
     },
     "file_store": {

@@ -5,7 +5,7 @@ import logging
 from pathlib import Path
 from typing import Union
 
-from google.cloud import speech
+from google.cloud import speech_v1p1beta1 as speech
 
 from .sr_model import SRModel
 
@@ -39,7 +39,8 @@ class GoogleCloudSRModel(SRModel):
         config = speech.types.RecognitionConfig(
             encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
-            language_code="en-US"
+            language_code="en-US",
+            enable_automatic_punctuation=True
         )
         audio = speech.types.RecognitionAudio(uri=audio_uri)
 
@@ -51,9 +52,27 @@ class GoogleCloudSRModel(SRModel):
         response = operation.result(timeout=4000)
 
         # Select highest confidence transcripts
-        full_transcript = " ".join([
-            result.alternatives[0].transcript for result in response.results if len(result.alternatives) > 0
-        ])
+        full_transcript = None
+        confidence_sum = 0
+        segments = 0
+        for result in response.results:
+            # Some portions of audio may not have text
+            if len(result.alternatives) > 0:
+                # Check length of transcript result
+                transcript_result = result.alternatives[0].transcript
+                if len(transcript_result) > 0:
+                    # Initial start
+                    if full_transcript:
+                        full_transcript = f"{full_transcript} {transcript_result}"
+                    else:
+                        full_transcript = transcript_result
+
+                    # Update confidence stats
+                    confidence_sum += result.alternatives[0].confidence
+                    segments += 1
+
+        # Compute mean confidence
+        confidence = confidence_sum / segments
         log.info(f"Completed transcription for: {audio_uri}")
 
         # Store transcript
@@ -62,4 +81,4 @@ class GoogleCloudSRModel(SRModel):
         log.debug(f"Stored transcript at: {transcript_save_path}")
 
         # Return the save path
-        return transcript_save_path
+        return transcript_save_path, confidence

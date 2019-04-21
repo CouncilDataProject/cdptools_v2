@@ -9,6 +9,7 @@ import shutil
 from typing import Optional, Union
 
 import appdirs
+
 from .file_store import FileStore
 
 ###############################################################################
@@ -26,7 +27,7 @@ class AppDirsFileStore(FileStore):
 
     def __init__(self, name: str = "cdp_filestore", owner: str = "cdp", **kwargs):
         # Initialize app dir if not already made
-        self.root = Path(appdirs.user_data_dir(name, owner))
+        self._root = Path(appdirs.user_data_dir(name, owner))
 
     def _locate_file(self, filename: Union[str, Path]) -> Path:
         log.debug(f"Locating file: {filename}")
@@ -37,7 +38,7 @@ class AppDirsFileStore(FileStore):
         sub_dirs = [key[i:i+2] for i in range(0, len(key), 2)]
 
         # Construct path parent
-        path_parent = self.root
+        path_parent = self._root
         for sub_dir in sub_dirs:
             path_parent /= sub_dir
 
@@ -120,3 +121,9 @@ class AppDirsFileStore(FileStore):
         saved_path = Path(shutil.copyfile(save_path))
         log.debug(f"Completed file copy for: {filename}")
         return saved_path
+
+    def __str__(self):
+        return f"<AppDirsFileStore [{self._root}]>"
+
+    def __repr__(self):
+        return str(self)

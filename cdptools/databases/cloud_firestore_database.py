@@ -4,7 +4,7 @@
 from datetime import datetime
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 import firebase_admin
@@ -13,6 +13,7 @@ from firebase_admin import firestore
 import requests
 
 from .database import Database, OrderCondition, WhereCondition
+from ..utils import exceptions
 from . import errors
 
 ###############################################################################
@@ -106,22 +107,23 @@ class CloudFirestoreDatabase(Database):
                     type_and_value[NoCredResponseTypes.dt],
                     "%Y-%m-%dT%H:%M:%S.%fZ"
                 )
+            else:
+                formatted[k] = type_and_value
 
         return formatted
 
-    def get_row(self, table: str, id: str) -> Dict:
-        # With credentials
-        if self._credentials_path:
-            # Get result
-            result = self._root.collection(table).document(id).get().to_dict()
+    def _select_row_by_id_with_creds(self, table: str, id: str) -> Dict:
+        # Get result
+        result = self._root.collection(table).document(id).get().to_dict()
 
-            # Found, return expansion
-            if result:
-                return {"id": id, **result}
+        # Found, return expansion
+        if result:
+            return {"id": id, **result}
 
-            # Not found, return None
-            return None
+        # Not found, return None
+        return None
 
+    def _select_row_by_id_no_creds(self, table: str, id: str) -> Dict:
         # Fill target uri
         target_uri = f"{self._db_uri}/{table}/{id}"
         response = requests.get(target_uri).json()
@@ -132,6 +134,13 @@ class CloudFirestoreDatabase(Database):
             return {"id": id, **self._jsonify_firestore_response(response["fields"])}
 
         raise KeyError(f"No row with id: {id} exists.")
+
+    def select_row_by_id(self, table: str, id: str) -> Dict:
+        # With credentials
+        if self._credentials_path:
+            return self._select_row_by_id_with_creds(table=table, id=id)
+
+        return self._select_row_by_id_no_creds(table=table, id=id)
 
     @staticmethod
     def _construct_where_condition(filt: Union[WhereCondition, List, Tuple]):
@@ -166,38 +175,44 @@ class CloudFirestoreDatabase(Database):
         else:
             raise errors.UnknownTypeOrderConditionError(by)
 
-    def get_rows(
+    def _select_rows_as_list_with_creds(
+        self,
+        table: str,
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
+        order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
+        limit: Optional[int] = None
+    ) -> Dict:
+        # Create base table ref
+        ref = self._root.collection(table)
+
+        # Apply filters
+        if filters:
+            for f in filters:
+                # Construct WhereCondition
+                f = self._construct_where_condition(f)
+                # Apply
+                ref = ref.where(f.column_name, f.operator, f.value)
+
+        # Apply order by
+        if order_by:
+            order_by = self._construct_orderby_condition(order_by)
+            ref = ref.order_by(order_by.column_name, order_by.operator)
+
+        # Apply limit
+        if limit:
+            ref = ref.limit(limit)
+
+        # Get and expand
+        return [{"id": i.id, **i.to_dict()} for i in ref.stream()]
+
+    def _select_rows_as_list_no_creds(
         self,
         table: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
         limit: Optional[int] = None
     ) -> List[Dict]:
-        # With credentials
-        if self._credentials_path:
-            # Create base table ref
-            ref = self._root.collection(table)
-
-            # Apply filters
-            if filters:
-                for f in filters:
-                    # Construct WhereCondition
-                    f = self._construct_where_condition(f)
-                    # Apply
-                    ref = ref.where(f.column_name, f.operator, f.value)
-
-            # Apply order by
-            if order_by:
-                order_by = self._construct_orderby_condition(order_by)
-                ref = ref.order_by(order_by.column_name, order_by.operator)
-
-            # Apply limit
-            if limit:
-                ref = ref.limit(limit)
-
-            # Get and expand
-            return [{"id": i.id, **i.to_dict()} for i in ref.stream()]
-
+        # Construct target uri base
         target_uri = f"{self._db_uri}/{table}"
         response = requests.get(target_uri).json()
 
@@ -213,7 +228,20 @@ class CloudFirestoreDatabase(Database):
 
         raise KeyError(f"No table with name: {table} exits.")
 
-    def _get_rows_with_max_results_expectation(
+    def select_rows_as_list(
+        self,
+        table: str,
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
+        order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
+        limit: Optional[int] = None
+    ) -> List[Dict]:
+        # With credentials
+        if self._credentials_path:
+            return self._select_rows_as_list_with_creds(table=table, filters=filters, order_by=order_by, limit=limit)
+
+        return self._select_rows_as_list_no_creds(table=table, filters=filters, order_by=order_by, limit=limit)
+
+    def _select_rows_with_max_results_expectation(
         self,
         table: str,
         pks: List[Union[WhereCondition, List, Tuple]],
@@ -221,7 +249,7 @@ class CloudFirestoreDatabase(Database):
     ):
         # Find matching
         pks = [self._construct_where_condition(pk) for pk in pks]
-        matching = self.get_rows(table=table, filters=pks)
+        matching = self.select_rows_as_list(table=table, filters=pks)
 
         # Handle expectation
         if len(matching) > expected_max_rows:
@@ -229,22 +257,22 @@ class CloudFirestoreDatabase(Database):
         elif len(matching) == 0:
             return None
         else:
-            return matching[0]
+            return matching
 
     def _get_or_upload_row(self, table: str, pks: List[Union[WhereCondition, List, Tuple]], values: Dict) -> Dict:
         # Reject any upload without credentials
         if self._credentials_path is None:
-            raise errors.MissingCredentialsError()
+            raise exceptions.MissingCredentialsError()
 
         # Fast return for already stored
-        found = self._get_rows_with_max_results_expectation(
+        found = self._select_rows_with_max_results_expectation(
             table=table,
             pks=pks,
             expected_max_rows=1
         )
         # Return or upload
         if found:
-            return found
+            return found[0]
         else:
             # Create id
             id = str(uuid4())
@@ -265,12 +293,23 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
+    def get_event(self, video_uri: str) -> Dict:
+        # Try find
+        found = self._select_rows_with_max_results_expectation(
+            table="event",
+            pks=[("video_uri", video_uri)],
+            expected_max_rows=1
+        )
+        if found:
+            return found[0]
+
+        return None
+
     def get_or_upload_event(
         self,
-        body_id: int,
-        event_datetime: datetime,
+        body_id: str,
+        event_datetime: str,
         source_uri: str,
-        thumbnail_uri: str,
         video_uri: str
     ) -> Dict:
         return self._get_or_upload_row(
@@ -280,8 +319,24 @@ class CloudFirestoreDatabase(Database):
                 "body_id": body_id,
                 "event_datetime": event_datetime,
                 "source_uri": source_uri,
-                "thumbnail_uri": thumbnail_uri,
                 "video_uri": video_uri,
+                "created": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_transcript(
+        self,
+        event_id: str,
+        file_id: str,
+        confidence: Optional[float] = None
+    ) -> Dict:
+        return self._get_or_upload_row(
+            table="transcript",
+            pks=[("event_id", event_id), ("file_id", file_id)],
+            values={
+                "event_id": event_id,
+                "file_id": file_id,
+                "confidence": confidence,
                 "created": datetime.utcnow()
             }
         )
@@ -305,11 +360,93 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
+    def get_or_upload_run(self, algorithm_id: str, begin: datetime, completed: datetime) -> Dict:
+        return self._get_or_upload_row(
+            table="run",
+            pks=[("algorithm_id", algorithm_id), ("begin", begin), ("completed", completed)],
+            values={
+                "algorithm_id": algorithm_id,
+                "begin": begin,
+                "completed": completed
+            }
+        )
+
+    def get_or_upload_file(self, uri: str, filename: Optional[str] = None) -> Dict:
+        """
+        Get or upload a file.
+        """
+        if filename is None:
+            filename = uri.split("/")[-1]
+
+        return self._get_or_upload_row(
+            table="file",
+            pks=[("uri", uri)],
+            values={
+                "uri": uri,
+                "filename": filename,
+                "created": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_run_input(self, run_id: str, type: str, value: Any) -> Dict:
+        """
+        Get or upload a run input.
+        """
+        return self._get_or_upload_row(
+            table="run_input",
+            pks=[("run_id", run_id), ("type", type), ("value", value)],
+            values={
+                "run_id": run_id,
+                "type": type,
+                "value": value
+            }
+        )
+
+    def get_or_upload_run_input_file(self, run_id: str, file_id: str) -> Dict:
+        """
+        Get or upload a run input file.
+        """
+        return self._get_or_upload_row(
+            table="run_input_file",
+            pks=[("run_id", run_id), ("file_id", file_id)],
+            values={
+                "run_id": run_id,
+                "file_id": file_id
+            }
+        )
+
+    def get_or_upload_run_output(self, run_id: str, type: str, value: Any) -> Dict:
+        """
+        Get or upload a run output.
+        """
+        return self._get_or_upload_row(
+            table="run_output",
+            pks=[("run_id", run_id), ("type", type), ("value", value)],
+            values={
+                "run_id": run_id,
+                "type": type,
+                "value": value
+            }
+        )
+
+    def get_or_upload_run_output_file(self, run_id: str, file_id: str) -> Dict:
+        """
+        Get or upload a run output file.
+        """
+        return self._get_or_upload_row(
+            table="run_output_file",
+            pks=[("run_id", run_id), ("file_id", file_id)],
+            values={
+                "run_id": run_id,
+                "file_id": file_id
+            }
+        )
+
     def __str__(self):
         if self._credentials_path:
             return f"<FirebaseDatabase [{self._credentials_path}]>"
 
-        return f"<FirebaseDatabase [{self._project_id}]"
+        return f"<FirebaseDatabase [{self._project_id}]>"
 
     def __repr__(self):
         return str(self)

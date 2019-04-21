@@ -42,14 +42,10 @@ class FFmpegAudioSplitter(AudioSplitter):
         log.debug(f"Completed audio separation for: {video_read_path}")
         log.debug(f"Stored audio at: {audio_save_path}")
 
-        # Find base log target
-        save_name = audio_save_path.with_suffix("").name
-        log_target = audio_save_path.parent / f"{save_name}_log"
-
         # Store logs
-        with open(log_target.with_suffix(".out"), "wb") as write_out:
+        with open(audio_save_path.with_suffix(".out"), "wb") as write_out:
             write_out.write(out)
-        with open(log_target.with_suffix(".err"), "wb") as write_err:
+        with open(audio_save_path.with_suffix(".err"), "wb") as write_err:
             write_err.write(err)
 
         return audio_save_path

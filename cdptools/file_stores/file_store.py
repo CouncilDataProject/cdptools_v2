@@ -36,7 +36,10 @@ class FileStore(ABC):
             return True
 
     @staticmethod
-    def _external_resource_copy(url: str, dst: Union[str, Path]) -> Path:
+    def _external_resource_copy(url: str, dst: Optional[Union[str, Path]] = None) -> Path:
+        if dst is None:
+            dst = url.split("/")[-1]
+
         # Ensure dst doesn't exist
         dst = Path(dst).resolve()
         if dst.is_file():

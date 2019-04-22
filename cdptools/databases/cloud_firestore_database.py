@@ -444,9 +444,9 @@ class CloudFirestoreDatabase(Database):
 
     def __str__(self):
         if self._credentials_path:
-            return f"<FirebaseDatabase [{self._credentials_path}]>"
+            return f"<CloudFirestoreDatabase [{self._credentials_path}]>"
 
-        return f"<FirebaseDatabase [{self._project_id}]>"
+        return f"<CloudFirestoreDatabase [{self._project_id}]>"
 
     def __repr__(self):
         return str(self)

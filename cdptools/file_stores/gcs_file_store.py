@@ -71,14 +71,14 @@ class GCSFileStore(FileStore):
 
         # Open request
         uri = GCS_URI.format(bucket=self._bucket, filename=filename)
-        response = requests.get(uri)
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError:
-            raise FileNotFoundError(filename)
+        with requests.get(uri, stream=True) as response:
+            try:
+                response.raise_for_status()
+            except requests.exceptions.HTTPError:
+                raise FileNotFoundError(filename)
 
-        # Existed
-        return uri
+            # Existed
+            return uri
 
     def get_file_uri(self, filename: Union[str, Path], **kwargs) -> str:
         # With credentials
@@ -108,6 +108,10 @@ class GCSFileStore(FileStore):
 
         # Try to get the file first
         try:
+            # Check remove before returning
+            if remove:
+                os.remove(filepath)
+
             return self.get_file_uri(filename=save_name)
         except FileNotFoundError:
             pass

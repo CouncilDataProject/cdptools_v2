@@ -73,6 +73,10 @@ class AppDirsFileStore(FileStore):
 
         # Try to get the file first
         try:
+            # Check remove before returning
+            if remove:
+                os.remove(filepath)
+
             return self.get_file_uri(filename=save_name)
         except FileNotFoundError:
             pass

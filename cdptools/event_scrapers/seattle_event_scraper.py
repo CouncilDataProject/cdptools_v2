@@ -147,12 +147,14 @@ class SeattleEventScraper(EventScraper):
         # Find event details
         event_details = event_container.find("div", class_="col-xs-12 col-sm-8 col-md-9")
         body = event_details.find("h2").text.replace("\n", "")
+        body = body.replace(" - Special Meeting", "")
+        body = body.replace(" Special Meeting - Public Hearing", "")
         date = event_details.find("div", class_="videoDate").text
 
         # Split date into components
         month, day, year = tuple(date.split("/"))
         # Create datetime string
-        event_dt = datetime(int(year), int(month), int(day))
+        event_dt = datetime(int(year), int(month), int(day)).isoformat()
 
         # Agendas have mixed formatting
         try:
@@ -204,7 +206,7 @@ class SeattleEventScraper(EventScraper):
         event = {
             "agenda_items": [SeattleEventScraper._clean_string(item) for item in agenda],
             "body": SeattleEventScraper._clean_string(body),
-            "event_datetime": str(event_dt).replace(" ", "T"),
+            "event_datetime": event_dt,
             "source_uri": SeattleEventScraper._resolve_route(complete_sibling, seattle_channel_page),
             "video_uri": video.replace(" ", "")
         }

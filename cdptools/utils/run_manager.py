@@ -46,12 +46,10 @@ class RunManager():
         self._remove_files = remove_files
 
         # Get or upload algorithm details
-        self._algorithm_details = self._db.get_or_upload_algorithm(
-            name=algorithm_name,
-            version=algorithm_version,
-            description=algorithm_description,
-            source=algorithm_source
-        )
+        self._algorithm_name = algorithm_name
+        self._algorithm_version = algorithm_version
+        self._algorithm_description = algorithm_description
+        self._algorithm_source = algorithm_source
 
         # Create empty file lists
         self._input_files = []
@@ -139,8 +137,15 @@ class RunManager():
             output_files.append(self._db.get_or_upload_file(uri))
         log.debug(f"Stored {len(self._output_files)} output files in {self._fs}")
 
+        algorithm_details = self._db.get_or_upload_algorithm(
+            name=self._algorithm_name,
+            version=self._algorithm_version,
+            description=self._algorithm_description,
+            source=self._algorithm_source
+        )
+
         # Create run
-        run_details = self._db.get_or_upload_run(self._algorithm_details["id"], self._began, self._completed)
+        run_details = self._db.get_or_upload_run(algorithm_details["id"], self._began, self._completed)
         log.debug(f"Created run: {run_details}")
 
         # Create file inputs and outputs in db

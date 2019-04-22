@@ -135,7 +135,7 @@ class CloudFirestoreDatabase(Database):
 
         raise KeyError(f"No row with id: {id} exists.")
 
-    def select_row_by_id(self, table: str, id: str) -> Dict:
+    def select_row_by_id(self, table: str, id: str, **kwargs) -> Dict:
         # With credentials
         if self._credentials_path:
             return self._select_row_by_id_with_creds(table=table, id=id)
@@ -181,7 +181,7 @@ class CloudFirestoreDatabase(Database):
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
         limit: Optional[int] = None
-    ) -> Dict:
+    ) -> List[Dict]:
         # Create base table ref
         ref = self._root.collection(table)
 
@@ -233,7 +233,8 @@ class CloudFirestoreDatabase(Database):
         table: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
+        **kwargs
     ) -> List[Dict]:
         # With credentials
         if self._credentials_path:

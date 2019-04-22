@@ -9,7 +9,6 @@ Welcome to cdptools's documentation!
    installation
    usage
    modules
-   contributing
    authors
    history
 

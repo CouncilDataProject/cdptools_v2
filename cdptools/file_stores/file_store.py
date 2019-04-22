@@ -36,13 +36,13 @@ class FileStore(ABC):
             return True
 
     @staticmethod
-    def _external_resource_copy(url: str, dst: Optional[Union[str, Path]] = None) -> Path:
+    def _external_resource_copy(url: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False) -> Path:
         if dst is None:
             dst = url.split("/")[-1]
 
         # Ensure dst doesn't exist
         dst = Path(dst).resolve()
-        if dst.is_file():
+        if dst.is_file() and not overwrite:
             raise FileExistsError(dst)
 
         # Open requests connection to url as a stream
@@ -78,7 +78,13 @@ class FileStore(ABC):
         return ""
 
     @abstractmethod
-    def download_file(self, filename: str, save_path: Optional[Union[str, Path]] = None, **kwargs) -> Path:
+    def download_file(
+        self,
+        filename: str,
+        save_path: Optional[Union[str, Path]] = None,
+        overwrite: bool = False,
+        **kwargs
+    ) -> Path:
         """
         Download the file if neccessary and return the Path.
         """

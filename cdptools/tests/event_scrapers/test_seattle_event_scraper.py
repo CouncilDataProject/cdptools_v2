@@ -53,13 +53,11 @@ def test_clean_string(s, expected):
 
 now = SeattleEventScraper.pstnow()
 MOCK_EVENT = {
-    "agenda": ["Public Comment", "CB 999999"],
+    "agenda_items": ["Public Comment", "CB 999999"],
     "body": "Example Body on Tests",
-    "event_datetime": str(datetime(now.year, now.month, now.day)).replace(" ", "T"),
-    "key": "60dc627c8e09774262d5cf839c228e7a0ba3080821bd0979a581519752d756de",
-    "source_url": "http://www.seattlechannel.org/testing?videoid=x99999",
-    "thumbnail_url": "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",
-    "video_url": "http://video.seattle.gov:8080/media/council/tests_032919.mp4"
+    "event_datetime": datetime(now.year, now.month, now.day).isoformat(),
+    "source_uri": "http://www.seattlechannel.org/testing?videoid=x99999",
+    "video_uri": "http://video.seattle.gov:8080/media/council/tests_032919.mp4"
 }
 m_d_y = "{}/{}/{}".format(now.month, now.day, now.year)
 m_d_sy = "{}/{}/{}".format(now.month, now.day, str(now.year)[2:])
@@ -70,9 +68,6 @@ SIBLING_ROUTE = "http://www.seattlechannel.org/CityCouncil"
 
 def test_parse_seattle_channel_event():
     event = SeattleEventScraper._parse_seattle_channel_event(MOCK_EVENT_SOUP, SIBLING_ROUTE)
-
-    # Ignore parsed datetime
-    event.pop("parsed_datetime")
 
     assert event == MOCK_EVENT
 

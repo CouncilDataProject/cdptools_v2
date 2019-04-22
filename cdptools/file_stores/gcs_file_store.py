@@ -143,7 +143,12 @@ class GCSFileStore(FileStore):
         # Return path after copy
         return save_url
 
-    def _download_file_with_creds(self, filename: str, save_path: Optional[Union[str, Path]] = None) -> Path:
+    def _download_file_with_creds(
+        self,
+        filename: str,
+        save_path: Optional[Union[str, Path]] = None,
+        overwrite: bool = False
+    ) -> Path:
         # Fix name
         filename = Path(filename).resolve()
 
@@ -156,7 +161,7 @@ class GCSFileStore(FileStore):
 
         # Check save path
         save_path = Path(save_path).resolve()
-        if save_path.is_file():
+        if save_path.is_file() and not overwrite:
             raise FileExistsError(save_path)
 
         # Begin download
@@ -167,20 +172,31 @@ class GCSFileStore(FileStore):
 
         return save_path
 
-    def _download_file_no_creds(self, filename: str, save_path: Optional[Union[str, Path]] = None) -> Path:
+    def _download_file_no_creds(
+        self,
+        filename: str,
+        save_path: Optional[Union[str, Path]] = None,
+        overwrite: bool = False
+    ) -> Path:
         # Resolve path
         filename = Path(filename).resolve().name
 
         # Format request
         uri = GCS_URI.format(bucket=self._bucket, filename=filename)
-        return self._external_resource_copy(uri, save_path)
+        return self._external_resource_copy(uri, save_path, overwrite)
 
-    def download_file(self, filename: str, save_path: Optional[Union[str, Path]] = None, **kwargs) -> Path:
+    def download_file(
+        self,
+        filename: str,
+        save_path: Optional[Union[str, Path]] = None,
+        overwrite: bool = False,
+        **kwargs
+    ) -> Path:
         # With credentials
         if self._credentials_path:
-            return self._download_file_with_creds(filename, save_path)
+            return self._download_file_with_creds(filename, save_path, overwrite)
 
-        return self._download_file_no_creds(filename, save_path)
+        return self._download_file_no_creds(filename, save_path, overwrite)
 
     def __str__(self):
         # With credentials

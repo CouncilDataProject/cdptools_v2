@@ -104,7 +104,13 @@ class AppDirsFileStore(FileStore):
         # Return path after copy
         return str(save_path)
 
-    def download_file(self, filename: str, save_path: Optional[Union[str, Path]] = None, **kwargs) -> Path:
+    def download_file(
+        self,
+        filename: str,
+        save_path: Optional[Union[str, Path]] = None,
+        overwrite: bool = False,
+        **kwargs
+    ) -> Path:
         # Fix name
         filename = Path(filename).resolve().name
 
@@ -117,7 +123,7 @@ class AppDirsFileStore(FileStore):
 
         # Check save path
         save_path = Path(save_path).resolve()
-        if save_path.is_file():
+        if save_path.is_file() and not overwrite:
             raise FileExistsError(save_path)
 
         # Copy file to save path

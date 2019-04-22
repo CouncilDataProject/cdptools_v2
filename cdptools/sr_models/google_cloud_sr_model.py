@@ -3,7 +3,7 @@
 
 import logging
 from pathlib import Path
-from typing import Union
+from typing import Tuple, Union
 
 from google.cloud import speech_v1p1beta1 as speech
 
@@ -26,7 +26,7 @@ class GoogleCloudSRModel(SRModel):
         # Resolve credentials
         self.credentials_path = Path(credentials_path).resolve(strict=True)
 
-    def transcribe(self, audio_uri: str, transcript_save_path: Union[str, Path]) -> Path:
+    def transcribe(self, audio_uri: str, transcript_save_path: Union[str, Path]) -> Tuple[Path, float]:
         # Check path
         transcript_save_path = Path(transcript_save_path).resolve()
         if transcript_save_path.is_file():
@@ -40,7 +40,8 @@ class GoogleCloudSRModel(SRModel):
             encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
             language_code="en-US",
-            enable_automatic_punctuation=True
+            enable_automatic_punctuation=True,
+            model="video"
         )
         audio = speech.types.RecognitionAudio(uri=audio_uri)
 

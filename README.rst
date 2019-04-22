@@ -9,23 +9,19 @@ cdptools
 .. image:: https://img.shields.io/travis/CouncilDataProject/cdptools.svg
         :target: https://travis-ci.org/CouncilDataProject/cdptools
 
-.. image:: https://readthedocs.org/projects/cdptools/badge/?version=latest
-        :target: https://cdptools.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
 
 Tools used to run Council Data Project pipelines.
 
 
 * Free software: MIT license
 
-* Documentation: https://cdptools.readthedocs.io.
 
+Quickstart Documentation
+--------------------------
 
-Features
---------
+Please view the `examples` directory for example jupyter notebooks on how to use CDP databases and file stores.
 
-* TODO
+For additional information on system design, look at `docs/system_design.md`.
 
 
 Credits

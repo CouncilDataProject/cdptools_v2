@@ -3,7 +3,7 @@
 
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Dict, NamedTuple, Optional, Union
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
 
 ###############################################################################
 
@@ -22,13 +22,39 @@ class OrderCondition(NamedTuple):
 class Database(ABC):
 
     @abstractmethod
-    def get_or_upload_body(
+    def select_row_by_id(self, table: str, id: str) -> Dict:
+        """
+        Get row from a table by looking up it's id.
+        """
+
+        return {}
+
+    @abstractmethod
+    def select_rows_as_list(
         self,
-        name: str,
-        description: Optional[str]
-    ) -> Dict:
+        table: str,
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
+        order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
+        limit: Optional[int] = None
+    ) -> List[Dict]:
+        """
+        Get a list of rows from a table optionally using filters, ordering, and limit.
+        """
+
+        return []
+
+    @abstractmethod
+    def get_or_upload_body(self, name: str, description: Optional[str]) -> Dict:
         """
         Get or upload a body.
+        """
+
+        return {}
+
+    @abstractmethod
+    def get_event(self, video_uri: str) -> Dict:
+        """
+        Find an event using the video uri.
         """
 
         return {}
@@ -44,6 +70,14 @@ class Database(ABC):
     ) -> Dict:
         """
         Get or upload an event.
+        """
+
+        return {}
+
+    @abstractmethod
+    def get_or_upload_transcript(event_id: str, file_id: str, confidence: Optional[float] = None) -> Dict:
+        """
+        Get or upload a transcript.
         """
 
         return {}
@@ -69,7 +103,7 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_file(self, uri: str) -> Dict:
+    def get_or_upload_file(self, uri: str, filename: Optional[str] = None) -> Dict:
         """
         Get or upload a file.
         """

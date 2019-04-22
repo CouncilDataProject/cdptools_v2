@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=cdppipeline
+set SPHINXPROJ=cdptools
 
 if "%1" == "" goto help
 

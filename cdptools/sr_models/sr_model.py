@@ -3,7 +3,7 @@
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Union
+from typing import Tuple, Union
 
 ###############################################################################
 
@@ -11,7 +11,7 @@ from typing import Union
 class SRModel(ABC):
 
     @abstractmethod
-    def transcribe(self, audio_read_path: Union[str, Path], transcript_save_path: Union[str, Path]) -> Path:
+    def transcribe(self, audio_uri: Union[str, Path], transcript_save_path: Union[str, Path]) -> Tuple[Path, float]:
         """
         Transcribe audio from file and store in text file.
         """

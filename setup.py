@@ -15,6 +15,7 @@ requirements = [
     'beautifulsoup4>=4.7.1',
     'ffmpeg-python>=0.1.17',
     'fuzzywuzzy[speedup]>=0.17.0',
+    'pandas',
     'requests>=2.21.0',
     'schedule>=0.6.0'
 ]
@@ -29,19 +30,35 @@ google_cloud_requires = [
     'google-cloud-storage>=1.14.0'
 ]
 
+dev_requires = [
+    'pip>=19.0.3',
+    'bumpversion>=0.5.3',
+    'wheel>=0.33.1',
+    'flake8>=3.7.7',
+    'tox>=3.5.2',
+    'coverage>=5.0a4',
+    'Sphinx>=2.0.0b1',
+    'twine>=1.13.0',
+    'pytest>=4.3.0',
+    'pytest-cov==2.6.1',
+    'pytest-raises>=0.10',
+    'pytest-runner>=4.4',
+]
+
 setup_requirements = [
-    'pytest-runner'
+    'pytest-runner>=4.4',
 ]
 
 test_requirements = [
-    'pytest',
-    'pytest-cov',
-    'pytest-raises'
+    'pytest>=4.3.0',
+    'pytest-cov==2.6.1',
+    'pytest-raises>=0.10',
 ]
 
 extra_requirements = {
     'test': test_requirements,
     'setup': setup_requirements,
+    'dev': dev_requires,
     'local': local_requires,
     'google-cloud': google_cloud_requires
 }

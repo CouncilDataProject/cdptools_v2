@@ -146,14 +146,18 @@ class SeattleEventScraper(EventScraper):
         """
         # Find event details
         event_details = event_container.find("div", class_="col-xs-12 col-sm-8 col-md-9")
+
+        # Find and clean body name
         body = event_details.find("h2").text.replace("\n", "")
         body = body.replace(" - Special Meeting", "")
         body = body.replace(" Special Meeting - Public Hearing", "")
-        date = event_details.find("div", class_="videoDate").text
+        body_includes_date = re.search(r"[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}$", body)
+        if body_includes_date:
+            body = body.replace(f" {body_includes_date.group(0)}", "")
 
-        # Split date into components
+        # Find and clean date
+        date = event_details.find("div", class_="videoDate").text
         month, day, year = tuple(date.split("/"))
-        # Create datetime string
         event_dt = datetime(int(year), int(month), int(day)).isoformat()
 
         # Agendas have mixed formatting

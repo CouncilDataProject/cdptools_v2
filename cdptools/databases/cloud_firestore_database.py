@@ -24,7 +24,8 @@ logging.basicConfig(
 )
 log = logging.getLogger(__file__)
 
-FIRESTORE_URI = "https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents"
+FIRESTORE_BASE_URI = "https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents"
+FIRESTORE_QUERY_ADDITIONS = "{table}?{attachments}&fields=documents(fields%2Cname)"
 
 ###############################################################################
 
@@ -82,7 +83,7 @@ class CloudFirestoreDatabase(Database):
         elif project_id:
             self._credentials_path = None
             self._project_id = project_id
-            self._db_uri = FIRESTORE_URI.format(project_id=project_id)
+            self._db_uri = FIRESTORE_BASE_URI.format(project_id=project_id)
         else:
             raise errors.MissingParameterError(["project_id", "credentials_path"])
 
@@ -196,7 +197,7 @@ class CloudFirestoreDatabase(Database):
         # Apply order by
         if order_by:
             order_by = self._construct_orderby_condition(order_by)
-            ref = ref.order_by(order_by.column_name, order_by.operator)
+            ref = ref.order_by(order_by.column_name, direction=order_by.operator)
 
         # Apply limit
         if limit:
@@ -210,10 +211,40 @@ class CloudFirestoreDatabase(Database):
         table: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
-        limit: Optional[int] = None
+        limit: int = 1000
     ) -> List[Dict]:
-        # Construct target uri base
-        target_uri = f"{self._db_uri}/{table}"
+        # Warn filters
+        if filters:
+            log.warning(f"Filters are not currently supported for no credentials databases. Recieved: {filters}")
+
+        # Format order by
+        if order_by:
+            if isinstance(order_by, str):
+                order_by = f"orderBy={order_by}"
+            else:
+                raise TypeError(
+                    f"order_by parameter value must be a string for no credentials databases. Recieved {order_by}"
+                )
+        else:
+            order_by = ""
+
+        # Override limit from None to default 1000
+        if limit is None:
+            limit = 1000
+
+        # Format limit
+        limit = f"pageSize={limit}"
+
+        # Format attachments
+        attachments = [order_by, limit]
+
+        # Only attach if there was a value sent
+        attachments = "&".join([a for a in attachments if len(a) > 0])
+
+        # Construct query
+        target_uri = f"{self._db_uri}/{FIRESTORE_QUERY_ADDITIONS}".format(table=table, attachments=attachments)
+
+        # Get
         response = requests.get(target_uri).json()
 
         # Check for error
@@ -224,7 +255,6 @@ class CloudFirestoreDatabase(Database):
                     **self._jsonify_firestore_response(d["fields"])
                 } for d in response["documents"]
             ]
-            return [{"id": d["name"], **self._jsonify_firestore_response(d["fields"])} for d in response["documents"]]
 
         raise KeyError(f"No table with name: {table} exits.")
 

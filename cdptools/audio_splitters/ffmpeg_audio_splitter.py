@@ -30,7 +30,9 @@ class FFmpegAudioSplitter(AudioSplitter):
         video_read_path = Path(video_read_path).resolve(strict=True)
         audio_save_path = Path(audio_save_path).resolve()
         if audio_save_path.is_file():
-            return audio_save_path
+            raise FileExistsError(audio_save_path)
+        else:
+            raise IsADirectoryError(audio_save_path)
 
         # Construct ffmpeg dag
         stream = ffmpeg.input(video_read_path)

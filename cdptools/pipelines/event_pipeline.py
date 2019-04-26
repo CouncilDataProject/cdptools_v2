@@ -67,6 +67,86 @@ class EventPipeline(Pipeline):
             object_kwargs=self.config["speech_recognition_model"].get("object_kwargs", {})
         )
 
+    def task_audio_get_or_copy(self, key: str, video_uri: str) -> str:
+        """
+        Get or copy and return audio resource uri provied key and video uri.
+        """
+        with RunManager(
+            database=self.database,
+            file_store=self.file_store,
+            algorithm_name="EventPipeline.task_audio_get_or_copy",
+            algorithm_version=get_module_version(),
+            inputs=[key, video_uri],
+            remove_files=True
+        ) as run:
+            # Check if audio already exists in file store
+            tmp_audio_filepath = f"{key}_audio.wav"
+            try:
+                audio_uri = self.file_store.get_file_uri(filename=tmp_audio_filepath)
+            except FileNotFoundError:
+                # Store the video in temporary file
+                tmp_video_filepath = f"tmp_{key}_video"
+                tmp_video_filepath = self.file_store._external_resource_copy(
+                    url=video_uri,
+                    dst=tmp_video_filepath
+                )
+
+                # Split and store the audio in temporary file prior to upload
+                tmp_audio_filepath = self.audio_splitter.split(
+                    video_read_path=tmp_video_filepath,
+                    audio_save_path=tmp_audio_filepath
+                )
+                tmp_audio_log_out_filepath = tmp_audio_filepath.with_suffix(".out")
+                tmp_audio_log_err_filepath = tmp_audio_filepath.with_suffix(".err")
+
+                # Remove tmp video file
+                os.remove(tmp_video_filepath)
+
+                # Store audio and logs
+                audio_uri = self.file_store.upload_file(filepath=tmp_audio_filepath)
+                audio_log_out_uri = self.file_store.upload_file(filepath=tmp_audio_log_out_filepath)
+                audio_log_err_uri = self.file_store.upload_file(filepath=tmp_audio_log_err_filepath)
+                # Store database records
+                self.database.get_or_upload_file(audio_uri)
+                self.database.get_or_upload_file(audio_log_out_uri)
+                self.database.get_or_upload_file(audio_log_err_uri)
+                # Register audio files with run manager
+                run.register_output(tmp_audio_filepath)
+                run.register_output(tmp_audio_filepath.with_suffix(".out"))
+                run.register_output(tmp_audio_filepath.with_suffix(".err"))
+
+            return audio_uri
+
+    def task_transcript_get_or_create(self, key: str, audio_uri: str):
+        """
+        Get or create and return transcript resource uri provied key.
+        """
+        with RunManager(
+            database=self.database,
+            file_store=self.file_store,
+            algorithm_name="EventPipeline.task_audio_get_or_copy",
+            algorithm_version=get_module_version(),
+            inputs=[key, audio_uri],
+            remove_files=True
+        ) as run:
+            # Check if transcript already exists in file store
+            tmp_transcript_filepath = f"{key}_transcript_0.txt"
+            try:
+                self.file_store.get_file_uri(filename=tmp_transcript_filepath)
+            except FileNotFoundError:
+                # Transcribe audio
+                tmp_transcript_filepath, confidence = self.sr_model.transcribe(
+                    audio_uri=audio_uri,
+                    transcript_save_path=tmp_transcript_filepath
+                )
+
+                # Store and register transcript
+                transcript_uri = self.file_store.upload_file(filepath=tmp_transcript_filepath)
+                transcript_file_details = self.database.get_or_upload_file(transcript_uri)
+                run.register_output(tmp_transcript_filepath)
+
+            return transcript_file_details, confidence
+
     def process_event(self, event: Dict) -> str:
         # Create a key for the event
         key = hashlib.sha256(event["video_uri"].encode("utf8")).hexdigest()
@@ -79,7 +159,7 @@ class EventPipeline(Pipeline):
             algorithm_version=get_module_version(),
             inputs=[event],
             remove_files=True
-        ) as run:
+        ):
             # Check event already exists in database
             found_event = self.database.get_event(event["video_uri"])
             if found_event:
@@ -87,57 +167,11 @@ class EventPipeline(Pipeline):
             else:
                 log.info("Processing event: {} ({})".format(key, event["video_uri"]))
 
-                # Check if audio already exists in file store
-                tmp_audio_filepath = f"{key}_audio.wav"
-                try:
-                    audio_uri = self.file_store.get_file_uri(filename=tmp_audio_filepath)
-                except FileNotFoundError:
-                    # Store the video in temporary file
-                    tmp_video_filepath = f"tmp_{key}_video"
-                    tmp_video_filepath = self.file_store._external_resource_copy(
-                        url=event["video_uri"],
-                        dst=tmp_video_filepath
-                    )
+                # Run audio task
+                audio_uri = self.task_audio_get_or_copy(key, event["video_uri"])
 
-                    # Split and store the audio in temporary file prior to upload
-                    tmp_audio_filepath = self.audio_splitter.split(
-                        video_read_path=tmp_video_filepath,
-                        audio_save_path=tmp_audio_filepath
-                    )
-                    tmp_audio_log_out_filepath = tmp_audio_filepath.with_suffix(".out")
-                    tmp_audio_log_err_filepath = tmp_audio_filepath.with_suffix(".err")
-
-                    # Remove tmp video file
-                    os.remove(tmp_video_filepath)
-
-                    # Store audio and logs
-                    audio_uri = self.file_store.upload_file(filepath=tmp_audio_filepath)
-                    audio_log_out_uri = self.file_store.upload_file(filepath=tmp_audio_log_out_filepath)
-                    audio_log_err_uri = self.file_store.upload_file(filepath=tmp_audio_log_err_filepath)
-                    # Store database records
-                    self.database.get_or_upload_file(audio_uri)
-                    self.database.get_or_upload_file(audio_log_out_uri)
-                    self.database.get_or_upload_file(audio_log_err_uri)
-                    # Register audio files with run manager
-                    run.register_output(tmp_audio_filepath)
-                    run.register_output(tmp_audio_filepath.with_suffix(".out"))
-                    run.register_output(tmp_audio_filepath.with_suffix(".err"))
-
-                # Check if transcript already exists in file store
-                tmp_transcript_filepath = f"{key}_transcript_0.txt"
-                try:
-                    self.file_store.get_file_uri(filename=tmp_transcript_filepath)
-                except FileNotFoundError:
-                    # Transcribe audio
-                    tmp_transcript_filepath, confidence = self.sr_model.transcribe(
-                        audio_uri=audio_uri,
-                        transcript_save_path=tmp_transcript_filepath
-                    )
-
-                    # Store and register transcript
-                    transcript_uri = self.file_store.upload_file(filepath=tmp_transcript_filepath)
-                    transcript_file_details = self.database.get_or_upload_file(transcript_uri)
-                    run.register_output(tmp_transcript_filepath)
+                # Run transcript task
+                transcript_file_details, confidence = self.task_transcript_get_or_create(key, audio_uri)
 
                 # Store or get body details
                 body = event.pop("body")
@@ -158,6 +192,8 @@ class EventPipeline(Pipeline):
                     confidence=confidence
                 )
 
+                log.info("Uploaded event details: {} ({})".format(event_details["id"], key))
+
             # Update progress
             log.info("Completed event: {} ({})".format(key, event["video_uri"]))
 
@@ -167,7 +203,7 @@ class EventPipeline(Pipeline):
         events = self.event_scraper.get_events()
 
         # For testing
-        events = random.sample(events, 5)
+        events = random.sample(events, 3)
 
         # Multiprocess each event found
         with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version()):

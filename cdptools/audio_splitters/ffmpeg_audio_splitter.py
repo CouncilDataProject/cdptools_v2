@@ -25,13 +25,18 @@ class FFmpegAudioSplitter(AudioSplitter):
     def __init__(self, **kwargs):
         pass
 
-    def split(self, video_read_path: Union[str, Path], audio_save_path: Union[str, Path]) -> Path:
+    def split(
+        self,
+        video_read_path: Union[str, Path],
+        audio_save_path: Union[str, Path],
+        overwrite: bool = False
+    ) -> Path:
         # Check paths
         video_read_path = Path(video_read_path).resolve(strict=True)
         audio_save_path = Path(audio_save_path).resolve()
-        if audio_save_path.is_file():
+        if audio_save_path.is_file() and not overwrite:
             raise FileExistsError(audio_save_path)
-        else:
+        if audio_save_path.is_dir():
             raise IsADirectoryError(audio_save_path)
 
         # Construct ffmpeg dag

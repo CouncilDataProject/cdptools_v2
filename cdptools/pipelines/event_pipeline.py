@@ -203,7 +203,7 @@ class EventPipeline(Pipeline):
         events = self.event_scraper.get_events()
 
         # For testing
-        events = random.sample(events, 3)
+        events = random.sample(events, 1)
 
         # Multiprocess each event found
         with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version()):

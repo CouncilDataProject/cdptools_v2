@@ -14,7 +14,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'beautifulsoup4>=4.7.1',
     'ffmpeg-python>=0.1.17',
-    'fuzzywuzzy[speedup]>=0.17.0',
+    'fuzzywuzzy>=0.17.0',
     'pandas',
     'requests>=2.21.0',
     'schedule>=0.6.0'

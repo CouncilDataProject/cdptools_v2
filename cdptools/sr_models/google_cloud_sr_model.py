@@ -40,8 +40,7 @@ class GoogleCloudSRModel(SRModel):
             encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
             language_code="en-US",
-            enable_automatic_punctuation=True,
-            model="video"
+            enable_automatic_punctuation=True
         )
         audio = speech.types.RecognitionAudio(uri=audio_uri)
 

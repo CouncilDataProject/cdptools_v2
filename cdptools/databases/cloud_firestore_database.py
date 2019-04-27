@@ -13,8 +13,7 @@ from firebase_admin import firestore
 import requests
 
 from .database import Database, OrderCondition, WhereCondition
-from ..utils import exceptions
-from . import errors
+from . import exceptions
 
 ###############################################################################
 
@@ -30,20 +29,6 @@ FIRESTORE_QUERY_ADDITIONS = "{table}?{attachments}&fields=documents(fields%2Cnam
 ###############################################################################
 
 
-class WhereOperators:
-    eq: str = "=="
-    contains: str = "array_contains"
-    gt: str = ">"
-    lt: str = "<"
-    gteq: str = ">="
-    lteq: str = "<="
-
-
-class OrderOperators:
-    desc: str = "DESCENDING"
-    asce: str = "ASCENDING"
-
-
 class NoCredResponseTypes:
     boolean: str = "booleanValue"
     double: str = "doubleValue"
@@ -55,6 +40,24 @@ class NoCredResponseTypes:
 
 class CloudFirestoreDatabase(Database):
 
+    def _initialize_creds_db(self, credentials_path: Union[str, Path], name: Optional[str] = None):
+        # Resolve credentials
+        credentials_path = Path(credentials_path).resolve(strict=True)
+
+        # Initialize database reference
+        cred = credentials.Certificate(str(credentials_path))
+
+        # Check name
+        # This is done as if the name is None we just want to initialize the main connection
+        if name:
+            firebase_admin.initialize_app(cred, name=name)
+        else:
+            firebase_admin.initialize_app(cred)
+
+        # Store configuration
+        self._credentials_path = credentials_path
+        self._root = firestore.client()
+
     def __init__(
         self,
         project_id: Optional[str] = None,
@@ -64,28 +67,13 @@ class CloudFirestoreDatabase(Database):
     ):
         # With credentials:
         if credentials_path:
-            # Resolve credentials
-            credentials_path = Path(credentials_path).resolve(strict=True)
-
-            # Initialize database reference
-            cred = credentials.Certificate(str(credentials_path))
-
-            # Check name
-            # This is done as if the name is None we just want to initialize the main connection
-            if name:
-                firebase_admin.initialize_app(cred, name=name)
-            else:
-                firebase_admin.initialize_app(cred)
-
-            # Store configuration
-            self._credentials_path = credentials_path
-            self._root = firestore.client()
+            self._initialize_creds_db(credentials_path, name)
         elif project_id:
             self._credentials_path = None
             self._project_id = project_id
             self._db_uri = FIRESTORE_BASE_URI.format(project_id=project_id)
         else:
-            raise errors.MissingParameterError(["project_id", "credentials_path"])
+            raise exceptions.MissingParameterError(["project_id", "credentials_path"])
 
     @staticmethod
     def _jsonify_firestore_response(fields: Dict) -> Dict:
@@ -119,7 +107,7 @@ class CloudFirestoreDatabase(Database):
 
         # Found, return expansion
         if result:
-            return {"id": id, **result}
+            return {f"{table}_id": id, **result}
 
         # Not found, return None
         return None
@@ -127,12 +115,20 @@ class CloudFirestoreDatabase(Database):
     def _select_row_by_id_no_creds(self, table: str, id: str) -> Dict:
         # Fill target uri
         target_uri = f"{self._db_uri}/{table}/{id}"
-        response = requests.get(target_uri).json()
+
+        # Get
+        response = requests.get(target_uri)
+
+        # Raise errors
+        response.raise_for_status()
+
+        # To json
+        response = response.json()
 
         # Check for error
         if "fields" in response:
             # Format response
-            return {"id": id, **self._jsonify_firestore_response(response["fields"])}
+            return {f"{table}_id": id, **self._jsonify_firestore_response(response["fields"])}
 
         raise KeyError(f"No row with id: {id} exists.")
 
@@ -142,39 +138,6 @@ class CloudFirestoreDatabase(Database):
             return self._select_row_by_id_with_creds(table=table, id=id)
 
         return self._select_row_by_id_no_creds(table=table, id=id)
-
-    @staticmethod
-    def _construct_where_condition(filt: Union[WhereCondition, List, Tuple]):
-        if isinstance(filt, WhereCondition):
-            return filt
-        elif isinstance(filt, (list, tuple)):
-            # Assume equal
-            if len(filt) == 2:
-                return WhereCondition(filt[0], WhereOperators.eq, filt[1])
-            elif len(filt) == 3:
-                return WhereCondition(*filt)
-            else:
-                raise errors.UnstructuredWhereConditionError(filt)
-        else:
-            raise errors.UnknownTypeWhereConditionError(filt)
-
-    @staticmethod
-    def _construct_orderby_condition(by: Union[List, OrderCondition, str, Tuple]):
-        if isinstance(by, OrderCondition):
-            return by
-        if isinstance(by, str):
-            # Assume descending
-            return OrderCondition(by, OrderOperators.desc)
-        elif isinstance(by, (list, tuple)):
-            # Assume descending
-            if len(by) == 1:
-                return OrderCondition(by[0], OrderOperators.desc)
-            elif len(by) == 2:
-                return OrderCondition(*by)
-            else:
-                raise errors.UnstructuredOrderConditionError(by)
-        else:
-            raise errors.UnknownTypeOrderConditionError(by)
 
     def _select_rows_as_list_with_creds(
         self,
@@ -204,7 +167,7 @@ class CloudFirestoreDatabase(Database):
             ref = ref.limit(limit)
 
         # Get and expand
-        return [{"id": i.id, **i.to_dict()} for i in ref.stream()]
+        return [{f"{table}_id": i.id, **i.to_dict()} for i in ref.stream()]
 
     def _select_rows_as_list_no_creds(
         self,
@@ -245,18 +208,24 @@ class CloudFirestoreDatabase(Database):
         target_uri = f"{self._db_uri}/{FIRESTORE_QUERY_ADDITIONS}".format(table=table, attachments=attachments)
 
         # Get
-        response = requests.get(target_uri).json()
+        response = requests.get(target_uri)
+
+        # Raise errors
+        response.raise_for_status()
+
+        # To json
+        response = response.json()
 
         # Check for error
         if "documents" in response:
             return [
                 {
-                    "id": d["name"].split("/")[-1],  # Get last item in the uri
+                    f"{table}_id": d["name"].split("/")[-1],  # Get last item in the uri
                     **self._jsonify_firestore_response(d["fields"])
                 } for d in response["documents"]
             ]
 
-        raise KeyError(f"No table with name: {table} exits.")
+        raise KeyError(f"No table with name: '{table}' exits.")
 
     def select_rows_as_list(
         self,
@@ -284,7 +253,7 @@ class CloudFirestoreDatabase(Database):
 
         # Handle expectation
         if len(matching) > expected_max_rows:
-            raise errors.UniquenessError(table, [pk.column_name for pk in pks], matching)
+            raise exceptions.UniquenessError(table, [pk.column_name for pk in pks], matching)
         elif len(matching) == 0:
             return None
         else:
@@ -311,7 +280,7 @@ class CloudFirestoreDatabase(Database):
             self._root.collection(table).document(id).set(values)
 
             # Return row
-            return {"id": id, **values}
+            return {f"{table}_id": id, **values}
 
     def get_or_upload_body(self, name: str, description: Optional[str] = None) -> Dict:
         return self._get_or_upload_row(

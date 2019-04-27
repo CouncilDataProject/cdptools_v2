@@ -10,7 +10,7 @@ from google.cloud import storage
 import requests
 
 from .file_store import FileStore
-from ..utils import exceptions
+from . import exceptions
 
 ###############################################################################
 

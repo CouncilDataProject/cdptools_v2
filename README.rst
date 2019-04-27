@@ -19,9 +19,12 @@ Tools used to run Council Data Project pipelines.
 Quickstart Documentation
 --------------------------
 
-Please view the `examples` directory for example jupyter notebooks on how to use CDP databases and file stores.
+Please view the examples_ directory for example jupyter notebooks on how to use CDP databases and file stores.
 
-For additional information on system design, look at `docs/system_design.md`.
+For additional information on system design, look at docs/system_design.md_.
+
+.. _examples: https://github.com/CouncilDataProject/cdptools/tree/master/examples
+.. _docs/system_design.md: https://github.com/CouncilDataProject/cdptools/blob/master/docs/system_design.md
 
 
 Credits

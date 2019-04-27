@@ -9,6 +9,9 @@ cdptools
 .. image:: https://img.shields.io/travis/CouncilDataProject/cdptools.svg
         :target: https://travis-ci.org/CouncilDataProject/cdptools
 
+.. image:: https://codecov.io/gh/CouncilDataProject/cdptools/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/CouncilDataProject/cdptools
+
 
 Tools used to run Council Data Project pipelines.
 

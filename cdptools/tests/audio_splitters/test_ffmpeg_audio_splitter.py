@@ -8,22 +8,6 @@ from unittest import mock
 from cdptools.audio_splitters.ffmpeg_audio_splitter import FFmpegAudioSplitter
 
 
-@pytest.fixture
-def example_video(data_dir) -> Path:
-    return data_dir / "example.mp4"
-
-
-def test_real_audio_split(tmpdir, example_video):
-    # Initialize splitter
-    splitter = FFmpegAudioSplitter()
-
-    # Create fake out path
-    fake_save_path = tmpdir / "fake.wav"
-
-    # Split
-    splitter.split(video_read_path=example_video, audio_save_path=fake_save_path)
-
-
 @pytest.mark.parametrize("audio_save_path", [
     ("test.wav"),
     (Path("test.wav")),

@@ -12,10 +12,11 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 test_requirements = [
+    'codecov',
+    'flake8',
     'pytest',
     'pytest-cov',
     'pytest-raises',
-    'flake8',
 ]
 
 setup_requirements = ['pytest-runner', ]

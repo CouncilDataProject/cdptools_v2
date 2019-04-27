@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
 
+from . import exceptions
+
 ###############################################################################
 
 
@@ -19,7 +21,56 @@ class OrderCondition(NamedTuple):
     operator: str
 
 
+class WhereOperators:
+    eq: str = "=="
+    contains: str = "array_contains"
+    gt: str = ">"
+    lt: str = "<"
+    gteq: str = ">="
+    lteq: str = "<="
+
+
+class OrderOperators:
+    desc: str = "DESCENDING"
+    asce: str = "ASCENDING"
+
+###############################################################################
+
+
 class Database(ABC):
+
+    @staticmethod
+    def _construct_where_condition(filt: Union[WhereCondition, List, Tuple]):
+        if isinstance(filt, WhereCondition):
+            return filt
+        elif isinstance(filt, (list, tuple)):
+            # Assume equal
+            if len(filt) == 2:
+                return WhereCondition(filt[0], WhereOperators.eq, filt[1])
+            elif len(filt) == 3:
+                return WhereCondition(*filt)
+            else:
+                raise exceptions.UnstructuredWhereConditionError(filt)
+        else:
+            raise exceptions.UnknownTypeWhereConditionError(filt)
+
+    @staticmethod
+    def _construct_orderby_condition(by: Union[List, OrderCondition, str, Tuple]):
+        if isinstance(by, OrderCondition):
+            return by
+        if isinstance(by, str):
+            # Assume descending
+            return OrderCondition(by, OrderOperators.desc)
+        elif isinstance(by, (list, tuple)):
+            # Assume descending
+            if len(by) == 1:
+                return OrderCondition(by[0], OrderOperators.desc)
+            elif len(by) == 2:
+                return OrderCondition(*by)
+            else:
+                raise exceptions.UnstructuredOrderConditionError(by)
+        else:
+            raise exceptions.UnknownTypeOrderConditionError(by)
 
     @abstractmethod
     def select_row_by_id(self, table: str, id: str) -> Dict:

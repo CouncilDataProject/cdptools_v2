@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABC, abstractmethod
+import hashlib
 import logging
 from pathlib import Path
 import shutil
@@ -23,17 +24,36 @@ log = logging.getLogger(__file__)
 class FileStore(ABC):
 
     @staticmethod
+    def compute_sha256_for_file(filepath: Union[str, Path], block_size: int = 1024 * 1024) -> Path:
+        # Resolve filepath
+        filepath = Path(filepath).resolve(strict=True)
+        if not filepath.is_file():
+            raise IsADirectoryError(filepath)
+
+        # Compute the md5
+        func = hashlib.sha256()
+        pos = 0
+
+        # Open the file and compute md5 in chunks
+        with open(filepath, mode='rb') as f:
+            while True:
+                f.seek(pos)
+                chunk = f.read(block_size)
+                if not chunk:
+                    break
+                func.update(chunk)
+                pos += block_size
+
+        return func.hexdigest()
+
+    @staticmethod
     def _path_is_local(path: Union[str, Path]) -> bool:
         # Convert path
         path = str(path)
 
-        # Start checks
-        if path.startswith("http://"):
-            return False
-        elif path.startswith("https://"):
-            return False
-        else:
-            return True
+        # Check for external headers
+        external_headers = ["http://", "https://", "gc://", "s3://"]
+        return not any(path.startswith(h) for h in external_headers)
 
     @staticmethod
     def _external_resource_copy(url: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False) -> Path:
@@ -48,6 +68,7 @@ class FileStore(ABC):
         # Open requests connection to url as a stream
         log.debug(f"Beginning external resource copy from: {url}")
         with requests.get(url, stream=True) as streamed_read:
+            streamed_read.raise_for_status()
             with open(dst, "wb") as streamed_write:
                 shutil.copyfileobj(streamed_read.raw, streamed_write)
         log.debug(f"Completed external resource copy from: {url}")

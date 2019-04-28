@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import hashlib
 import logging
 import os
 from pathlib import Path
@@ -32,7 +31,7 @@ class AppDirsFileStore(FileStore):
     def _locate_file(self, filename: Union[str, Path]) -> Path:
         log.debug(f"Locating file: {filename}")
         # Generate key
-        key = hashlib.sha256(str(filename).encode("utf8")).hexdigest()
+        key = self.compute_sha256_for_file(filename)
 
         # Split key into pairs of two characters
         sub_dirs = [key[i:i+2] for i in range(0, len(key), 2)]
@@ -73,11 +72,13 @@ class AppDirsFileStore(FileStore):
 
         # Try to get the file first
         try:
+            uri = self.get_file_uri(filename=save_name)
+
             # Check remove before returning
             if remove:
                 os.remove(filepath)
 
-            return self.get_file_uri(filename=save_name)
+            return uri
         except FileNotFoundError:
             pass
 
@@ -128,7 +129,7 @@ class AppDirsFileStore(FileStore):
 
         # Copy file to save path
         log.debug(f"Beginning file copy for: {filename}")
-        saved_path = Path(shutil.copyfile(save_path))
+        saved_path = Path(shutil.copyfile(stored_uri, save_path))
         log.debug(f"Completed file copy for: {filename}")
         return saved_path
 

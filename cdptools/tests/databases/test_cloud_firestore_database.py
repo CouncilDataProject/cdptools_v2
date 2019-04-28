@@ -29,7 +29,8 @@ class MockedDocument:
     def get(self):
         return self
 
-    def set(self):
+    def set(self, values):
+        self.json_data = values
         return self
 
     def to_dict(self):
@@ -41,6 +42,9 @@ class MockedCollection:
         self.items = items
 
     def document(self, id):
+        if len(self.items) == 0:
+            return MockedDocument("new_doc", {})
+
         return self.items[0]
 
     def where(self, col, op, val):
@@ -113,6 +117,17 @@ def creds_db() -> CloudFirestoreDatabase:
         return db
 
 
+@pytest.fixture
+def empty_creds_db() -> CloudFirestoreDatabase:
+    with mock.patch("cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"):
+        db = CloudFirestoreDatabase("/fake/path/to/creds.json")
+        db._credentials_path = "/fake/path/to/creds.json"
+        db._root = mock.Mock(firestore.Client)
+        db._root.collection.return_value = MockedCollection([])
+
+        return db
+
+
 @pytest.mark.parametrize("project_id, credentials_path", [
     ("stg-cdp-seattle", None),
     pytest.param(None, "/this/path/doesnt/exist.json", marks=pytest.mark.raises(exception=FileNotFoundError)),
@@ -126,11 +141,12 @@ def test_cloud_firestore_database_init(project_id, credentials_path):
     ([("video_uri", "does_not_exist")]),
     ([("video_uri", "http://video.seattle.gov:8080/media/council/gen_062717V.mp4")])
 ])
-def test_get_or_upload_row(no_creds_db, creds_db, pks):
+def test_get_or_upload_row(no_creds_db, creds_db, empty_creds_db, pks):
     with pytest.raises(exceptions.MissingCredentialsError):
         no_creds_db._get_or_upload_row("event", pks, EVENT_VALUES)
 
     creds_db._get_or_upload_row("event", pks, EVENT_VALUES)
+    empty_creds_db._get_or_upload_row("event", pks, EVENT_VALUES)
 
 
 def test_cloud_firestore_database_select_row(no_creds_db, creds_db, mock_response_item):

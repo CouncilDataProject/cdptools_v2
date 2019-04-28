@@ -26,13 +26,22 @@ SUFFIX_CONTENT_TYPE_MAP = {
     ".wav": "audio/wav",
     ".txt": "text/plain",
     ".err": "text/plain",
-    ".out": "text/plain"
+    ".out": "text/plain",
+    ".mp4": "video/mp4"
 }
 
 ###############################################################################
 
 
 class GCSFileStore(FileStore):
+
+    def _initialize_creds_fs(self, bucket_name: str, credentials_path: Union[str, Path]):
+        # Resolve credentials
+        self._credentials_path = Path(credentials_path).resolve(strict=True)
+
+        # Initialize client
+        self._client = storage.Client.from_service_account_json(self._credentials_path)
+        self._bucket = self._client.get_bucket(bucket_name)
 
     def __init__(
         self,
@@ -42,12 +51,7 @@ class GCSFileStore(FileStore):
     ):
         # With credentials:
         if credentials_path:
-            # Resolve credentials
-            self._credentials_path = Path(credentials_path).resolve(strict=True)
-
-            # Initialize client
-            self._client = storage.Client.from_service_account_json(self._credentials_path)
-            self._bucket = self._client.get_bucket(bucket_name)
+            self._initialize_creds_fs(bucket_name, credentials_path)
         else:
             self._credentials_path = None
             self._bucket = bucket_name
@@ -108,11 +112,13 @@ class GCSFileStore(FileStore):
 
         # Try to get the file first
         try:
+            uri = self.get_file_uri(filename=save_name)
+
             # Check remove before returning
             if remove:
                 os.remove(filepath)
 
-            return self.get_file_uri(filename=save_name)
+            return uri
         except FileNotFoundError:
             pass
 
@@ -124,10 +130,9 @@ class GCSFileStore(FileStore):
         save_url = f"gs://{self._bucket.name}/{save_name}"
 
         # Match content type
-        if filepath.suffix in SUFFIX_CONTENT_TYPE_MAP:
-            content_type = SUFFIX_CONTENT_TYPE_MAP[filepath.suffix]
-        else:
-            content_type = None
+        if content_type is None:
+            if filepath.suffix in SUFFIX_CONTENT_TYPE_MAP:
+                content_type = SUFFIX_CONTENT_TYPE_MAP[filepath.suffix]
 
         # Actual copy operation
         log.debug(f"Beginning file copy for: {filepath}")

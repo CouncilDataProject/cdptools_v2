@@ -163,7 +163,7 @@ class EventPipeline(Pipeline):
             # Check event already exists in database
             found_event = self.database.get_event(event["video_uri"])
             if found_event:
-                log.info("Skipping event: {} ({})".format(key, found_event["id"]))
+                log.info("Skipping event: {} ({})".format(key, found_event["event_id"]))
             else:
                 log.info("Processing event: {} ({})".format(key, event["video_uri"]))
 
@@ -179,7 +179,7 @@ class EventPipeline(Pipeline):
 
                 # Store event
                 event_details = self.database.get_or_upload_event(
-                    body_id=body_details["id"],
+                    body_id=body_details["body_id"],
                     event_datetime=event["event_datetime"],
                     source_uri=event["source_uri"],
                     video_uri=event["video_uri"]
@@ -187,12 +187,12 @@ class EventPipeline(Pipeline):
 
                 # Link event to transcript
                 self.database.get_or_upload_transcript(
-                    event_id=event_details["id"],
-                    file_id=transcript_file_details["id"],
+                    event_id=event_details["event_id"],
+                    file_id=transcript_file_details["file_id"],
                     confidence=confidence
                 )
 
-                log.info("Uploaded event details: {} ({})".format(event_details["id"], key))
+                log.info("Uploaded event details: {} ({})".format(event_details["event_id"], key))
 
             # Update progress
             log.info("Completed event: {} ({})".format(key, event["video_uri"]))

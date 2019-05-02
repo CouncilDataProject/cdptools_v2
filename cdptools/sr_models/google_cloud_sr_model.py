@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import logging
 from pathlib import Path
 from typing import Tuple, Union
@@ -40,7 +41,8 @@ class GoogleCloudSRModel(SRModel):
             encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
             language_code="en-US",
-            enable_automatic_punctuation=True
+            enable_automatic_punctuation=True,
+            enable_word_time_offsets=True
         )
         audio = speech.types.RecognitionAudio(uri=audio_uri)
 
@@ -55,11 +57,16 @@ class GoogleCloudSRModel(SRModel):
         full_transcript = None
         confidence_sum = 0
         segments = 0
+        timestamped_transcript = {}
         for result in response.results:
             # Some portions of audio may not have text
             if len(result.alternatives) > 0:
                 # Check length of transcript result
                 transcript_result = result.alternatives[0].transcript
+                word_details = result.alternatives[0].words
+                if len(word_details) > 0:
+                    start_time = word_details[0].start_time.seconds + word_details[0].start_time.nanos * 1e-9
+                    timestamped_transcript[start_time] = " ".join([wd.word for wd in word_details])
                 if len(transcript_result) > 0:
                     # Initial start
                     if full_transcript:
@@ -70,6 +77,9 @@ class GoogleCloudSRModel(SRModel):
                     # Update confidence stats
                     confidence_sum += result.alternatives[0].confidence
                     segments += 1
+
+        with open("timestamped_transcript.json", "w") as write_out:
+            json.dump(timestamped_transcript, write_out)
 
         # Compute mean confidence
         confidence = confidence_sum / segments

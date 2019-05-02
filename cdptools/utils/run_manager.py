@@ -145,21 +145,21 @@ class RunManager():
         )
 
         # Create run
-        run_details = self._db.get_or_upload_run(algorithm_details["id"], self._began, self._completed)
+        run_details = self._db.get_or_upload_run(algorithm_details["algorithm_id"], self._began, self._completed)
         log.debug(f"Created run: {run_details}")
 
         # Create file inputs and outputs in db
         for fi in input_files:
-            self._db.get_or_upload_run_input_file(run_details["id"], fi["id"])
+            self._db.get_or_upload_run_input_file(run_details["run_id"], fi["file_id"])
         for fo in output_files:
-            self._db.get_or_upload_run_output_file(run_details["id"], fo["id"])
+            self._db.get_or_upload_run_output_file(run_details["run_id"], fo["file_id"])
         log.debug("Linked run to I/O files")
 
         # Create other inputs and outputs in db
         for i in self._inputs:
-            self._db.get_or_upload_run_input(run_details["id"], i.type, i.value)
+            self._db.get_or_upload_run_input(run_details["run_id"], i.type, i.value)
         for o in self._outputs:
-            self._db.get_or_upload_run_output(run_details["id"], o.type, o.value)
+            self._db.get_or_upload_run_output(run_details["run_id"], o.type, o.value)
         log.debug("Linked run to I/O values")
 
     def __enter__(self):

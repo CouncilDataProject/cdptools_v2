@@ -93,6 +93,7 @@ setup(
     entry_points={
         'console_scripts': [
             'run_cdp_pipeline=cdptools.bin.run_cdp_pipeline:main',
+            'test_cdp_pipeline=cdptools.bin.test_cdp_pipeline:main',
         ],
     },
     install_requires=requirements,

@@ -30,5 +30,17 @@
         "object_kwargs": {
             "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json"
         }
-    }
+    },
+    "mocks": [
+        {
+            "path": "cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_events",
+            "return_value": [{
+                "agenda_items": ["Public Comment", "CB 999999"],
+                "body": "Example Body on Tests",
+                "event_datetime": "2019-05-05T00:00:00",
+                "source_uri": "http://www.seattlechannel.org/testing?videoid=x99999",
+                "video_uri": "http://video.seattle.gov:8080/media/council/council_041119_2021928V.mp4"
+            }]
+        }
+    ]
 }

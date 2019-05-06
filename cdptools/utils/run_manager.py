@@ -170,7 +170,7 @@ class RunManager():
         # Handle exception
         if exception_type:
             # Write traceback to file
-            traceback_path = Path(f"exception_log_{str(uuid4())}.log")
+            traceback_path = Path(f"exception_log_{str(uuid4())}.err")
             with open(traceback_path, "w") as exception_log:
                 exception_log.write(traceback.format_exc())
 

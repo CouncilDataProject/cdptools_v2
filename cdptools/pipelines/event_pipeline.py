@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# For testing
-import random
-
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
@@ -129,23 +126,42 @@ class EventPipeline(Pipeline):
             inputs=[key, audio_uri],
             remove_files=True
         ) as run:
-            # Check if transcript already exists in file store
-            tmp_transcript_filepath = f"{key}_transcript_0.txt"
-            try:
-                self.file_store.get_file_uri(filename=tmp_transcript_filepath)
-            except FileNotFoundError:
-                # Transcribe audio
-                tmp_transcript_filepath, confidence = self.sr_model.transcribe(
-                    audio_uri=audio_uri,
-                    transcript_save_path=tmp_transcript_filepath
-                )
+            tmp_raw_transcript_filepath = f"{key}_raw_transcript_0.txt"
+            tmp_ts_words_transcript_filepath = f"{key}_ts_words_transcript_0.txt"
+            tmp_ts_sentences_transcript_filepath = f"{key}_ts_sentences_transcript_0.txt"
+            # Transcribe audio
+            outputs = self.sr_model.transcribe(
+                audio_uri=audio_uri,
+                raw_transcript_save_path=tmp_raw_transcript_filepath,
+                timestamped_words_save_path=tmp_ts_words_transcript_filepath,
+                timestamped_sentences_save_path=tmp_ts_sentences_transcript_filepath,
+            )
 
-                # Store and register transcript
-                transcript_uri = self.file_store.upload_file(filepath=tmp_transcript_filepath)
-                transcript_file_details = self.database.get_or_upload_file(transcript_uri)
-                run.register_output(tmp_transcript_filepath)
+            # Store and register transcript files
+            raw_transcript_uri = self.file_store.upload_file(filepath=outputs.raw_path)
+            raw_transcript_file_details = self.database.get_or_upload_file(raw_transcript_uri)
+            run.register_output(raw_transcript_uri)
 
-            return transcript_file_details, confidence
+            # Default to using the raw output as main transcript
+            main_transcript_details = raw_transcript_file_details
+
+            # Timestamped transcripts are optional
+            # If available store them but also set as main transcript
+            if outputs.timestamped_words_path:
+                ts_words_transcript_uri = self.file_store.upload_file(filepath=outputs.timestamped_words_path)
+                ts_words_transcript_file_details = self.database.get_or_upload_file(ts_words_transcript_uri)
+                run.register_output(ts_words_transcript_uri)
+                main_transcript_details = ts_words_transcript_file_details
+
+            # Timestamped sentences provide a nicer viewing experience
+            # If available store them but also set as main transcript
+            if outputs.timestamped_sentences_path:
+                ts_sentences_transcript_uri = self.file_store.upload_file(filepath=outputs.timestamped_sentences_path)
+                ts_sentences_transcript_file_details = self.database.get_or_upload_file(ts_sentences_transcript_uri)
+                run.register_output(ts_sentences_transcript_uri)
+                main_transcript_details = ts_sentences_transcript_file_details
+
+            return main_transcript_details, outputs.confidence
 
     def process_event(self, event: Dict) -> str:
         # Create a key for the event
@@ -201,9 +217,6 @@ class EventPipeline(Pipeline):
         # Get events
         log.info("Starting event processing.")
         events = self.event_scraper.get_events()
-
-        # For testing
-        events = random.sample(events, 1)
 
         # Multiprocess each event found
         with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version()):

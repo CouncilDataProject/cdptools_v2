@@ -35,10 +35,10 @@
         {
             "path": "cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_events",
             "return_value": [{
-                "agenda_items": ["Public Comment", "CB 999999"],
-                "body": "Example Body on Tests",
-                "event_datetime": "2019-05-05T00:00:00",
-                "source_uri": "http://www.seattlechannel.org/testing?videoid=x99999",
+                "agenda_items": ["Executive Session to discuss Pending, Potential, or Actual Litigation, and to Evaluate the Qualifications of Candidates for Appointment to Elective Office to fill the City Council Position 4 vacancy (in District 4), previously held by Councilmember Rob Johnson."],
+                "body": "Full Council",
+                "event_datetime": "2019-04-11T00:00:00",
+                "source_uri": "https://www.seattlechannel.org/FullCouncil/?videoid=x103419",
                 "video_uri": "http://video.seattle.gov:8080/media/council/council_041119_2021928V.mp4"
             }]
         }

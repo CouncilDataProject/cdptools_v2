@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 import logging
-import requests
 from typing import Dict, List
+
+from fuzzywuzzy import fuzz
+import requests
 
 ###############################################################################
 
@@ -12,16 +14,24 @@ log = logging.getLogger(__name__)
 LEGISTAR_EVENT_BASE = "http://webapi.legistar.com/v1/{client}/events"
 
 
+class AgendaMatchResults:
+    def __init__(self, selected_event: Dict, match_scores: Dict):
+        self.selected_event = selected_event
+        self.match_scores = match_scores
+
+###############################################################################
+
+
 def get_legistar_events_for_timespan(
     client: str,
-    begin: datetime = datetime.utcnow() - timedelta(days=1),
-    end: datetime = datetime.utcnow()
+    begin: datetime = (datetime.utcnow() - timedelta(days=1)),
+    end: datetime = (datetime.utcnow() + timedelta(days=1))
 ) -> List[Dict]:
     """
     Get all legistar events for a client for a given timespan.
     :param client: Which legistar client to target. Ex: "Seattle", "Tacoma", etc.
-    :param begin: The timespan begin datetime. Default: Today (datetime.utcnow())
-    :param end: The timespan end datetime. Default: Yesterday (datetime.utcnow() - timedelta(days=1))
+    :param begin: The timespan begin datetime. Default: Today (datetime.utcnow()) - timedelta(days=1))
+    :param end: The timespan end datetime. Default: Yesterday (datetime.utcnow() + timedelta(days=1))
     :return: A list of dictionaries of event details.
     """
     # The unformatted request parts
@@ -49,8 +59,44 @@ def get_legistar_events_for_timespan(
             )
         ).json()
 
-    log.info(f"Collected {len(response)} Legistar events")
+    log.debug(f"Collected {len(response)} Legistar events")
     return response
+
+
+def get_matching_legistar_event_by_agenda_match(
+    agenda_items_provided: List[str],
+    legistar_events: List[Dict]
+) -> AgendaMatchResults:
+    # Quick return
+    if len(legistar_events) == 1:
+        return AgendaMatchResults(legistar_events[0], {legistar_events[0]["EventId"]: 100})
+
+    # Calculate fuzzy match agenda list of string
+    elif len(legistar_events) > 1:
+        # Clean all strings
+        agenda_items_provided = [aip.lower() for aip in agenda_items_provided]
+
+        # Create rankings for each event
+        max_score = 0.0
+        selected_event = None
+        scores = {}
+        for event in legistar_events:
+            event_agenda_items = [str(ei["EventItemTitle"]).lower() for ei in event["EventItems"]]
+            match_score = fuzz.token_sort_ratio(agenda_items_provided, event_agenda_items)
+
+            # Add score to map
+            scores[event["EventId"]] = match_score
+
+            # Update selected
+            if match_score > max_score:
+                max_score = match_score
+                selected_event = event
+
+        return AgendaMatchResults(selected_event, scores)
+
+    else:
+        return AgendaMatchResults({}, {})
+
 
 #######################################################################################################################
 # Used to join legistar details with basic event info
@@ -79,19 +125,7 @@ def get_legistar_events_for_timespan(
 #             log.error(e)
 #
 # @staticmethod
-# def _shared_items_in_list_exist_and_ordered(a: List, b: List):
-#     # Check if one is subset of other
-#     set_a = set(a)
-#     set_b = set(b)
 #
-#     if set_a.issubset(b):
-#         indices = [b.index(item) for item in a]
-#     elif set_b.issubset(a):
-#         indices = [a.index(item) for item in b]
-#     else:
-#         return False
-#
-#     return all(indices[i] < indices[i+1] for i in range(len(indices)-1))
 #
 # @staticmethod
 # def _attach_legistar_details(event: Dict, legistar_events: List[Dict]) -> Dict:

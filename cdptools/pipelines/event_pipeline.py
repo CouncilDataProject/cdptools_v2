@@ -212,12 +212,15 @@ class EventPipeline(Pipeline):
     def run(self):
         # Get events
         log.info("Starting event processing.")
-        events = self.event_scraper.get_events()
-
-        # Multiprocess each event found
         with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version()):
+            events = self.event_scraper.get_events()
+
+            print(events[0])
+            raise ValueError("break")
+
+            # Multiprocess each event found
             with ThreadPoolExecutor(self.n_workers) as exe:
                 exe.map(self.process_event, events)
 
-        log.info("Completed event processing.")
-        log.info("=" * 80)
+            log.info("Completed event processing.")
+            log.info("=" * 80)

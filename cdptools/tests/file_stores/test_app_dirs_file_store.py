@@ -19,7 +19,7 @@ def fs(tmpdir):
 
 @pytest.fixture
 def example_video(data_dir):
-    return Path(data_dir) / "example.mp4"
+    return Path(data_dir) / "example_video.mp4"
 
 
 @pytest.fixture

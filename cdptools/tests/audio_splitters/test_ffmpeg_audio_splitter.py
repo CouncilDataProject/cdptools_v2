@@ -10,7 +10,7 @@ from cdptools.audio_splitters.ffmpeg_audio_splitter import FFmpegAudioSplitter
 
 @pytest.fixture
 def example_video(data_dir) -> Path:
-    return data_dir / "example.mp4"
+    return data_dir / "example_video.mp4"
 
 
 @pytest.mark.parametrize("audio_save_path", [

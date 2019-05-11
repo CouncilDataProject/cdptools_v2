@@ -14,7 +14,7 @@ from cdptools.file_stores import exceptions
 
 @pytest.fixture
 def example_video(data_dir):
-    return data_dir / "example.mp4"
+    return data_dir / "example_video.mp4"
 
 
 class MockedResponse:

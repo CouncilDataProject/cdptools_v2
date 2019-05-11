@@ -59,7 +59,7 @@ class GoogleCloudSRModel(SRModel):
         # Select highest confidence transcripts
         confidence_sum = 0
         segments = 0
-        timestamped_words = {}
+        timestamped_words = []
         for result in response.results:
             # Some portions of audio may not have text
             if len(result.alternatives) > 0:
@@ -68,35 +68,38 @@ class GoogleCloudSRModel(SRModel):
                 if len(word_list) > 0:
                     for word in word_list:
                         start_time = word.start_time.seconds + word.start_time.nanos * 1e-9
-                        timestamped_words[start_time] = word.word
+                        end_time = word.end_time.seconds + word.end_time.nanos * 1e-9
+                        timestamped_words.append({"word": word.word, "start_time": start_time, "end_time": end_time})
 
                     # Update confidence stats
                     confidence_sum += result.alternatives[0].confidence
                     segments += 1
 
         # Create timestamped sentences
-        timestamped_sentences = {}
-        current_start_time = None
-        for start_time, word in timestamped_words.items():
-            # Update current start time
-            if current_start_time is None:
-                current_start_time = start_time
-
-            # Create or update sentence
-            if current_start_time in timestamped_sentences:
-                timestamped_sentences[current_start_time] += f" {word}"
+        timestamped_sentences = []
+        current_sentence = None
+        for word_details in timestamped_words:
+            # Create new sentence
+            if current_sentence is None:
+                current_sentence = {"sentence": word_details["word"], "start_time": word_details["start_time"]}
+            # Update current sentence
             else:
-                timestamped_sentences[current_start_time] = word
+                current_sentence["sentence"] += " {}".format(word_details["word"])
 
-            # Reset current start time if sentence end
-            if word[-1] == ".":
-                current_start_time = None
+            # End current sentence and reset
+            if word_details["word"][-1] == ".":
+                current_sentence["end_time"] = word_details["end_time"]
+                timestamped_sentences.append(current_sentence)
+                current_sentence = None
 
         # Create raw transcript
-        raw_transcript = " ".join(timestamped_words.values())
+        raw_transcript = " ".join([word_details["word"] for word_details in timestamped_words])
 
         # Compute mean confidence
-        confidence = confidence_sum / segments
+        if segments > 0:
+            confidence = confidence_sum / segments
+        else:
+            confidence = 0.0
         log.info(f"Completed transcription for: {audio_uri}. Confidence: {confidence}")
 
         # Write files

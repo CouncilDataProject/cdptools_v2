@@ -1,0 +1,29 @@
+{
+    "event_scraper": {
+        "module_path": "cdptools.event_scrapers.seattle_event_scraper",
+        "object_name": "SeattleEventScraper",
+        "object_kwargs": {}
+    },
+    "database": {
+        "module_path": "cdptools.databases.cloud_firestore_database",
+        "object_name": "CloudFirestoreDatabase",
+        "object_kwargs": {}
+    },
+    "file_store": {
+        "module_path": "cdptools.file_stores.app_dirs_file_store",
+        "object_name": "AppDirsFileStore",
+        "object_kwargs": {}
+    },
+    "audio_splitter": {
+        "module_path": "cdptools.audio_splitters.ffmpeg_audio_splitter",
+        "object_name": "FFmpegAudioSplitter",
+        "object_kwargs": {}
+    },
+    "speech_recognition_model": {
+        "module_path": "cdptools.sr_models.google_cloud_sr_model",
+        "object_name": "GoogleCloudSRModel",
+        "object_kwargs": {
+            "credentials_path": "/no/credentials.json"
+        }
+    }
+}

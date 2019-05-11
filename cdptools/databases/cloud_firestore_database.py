@@ -17,11 +17,7 @@ from . import exceptions
 
 ###############################################################################
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
-)
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 FIRESTORE_BASE_URI = "https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents"
 FIRESTORE_QUERY_ADDITIONS = "{table}?{attachments}&fields=documents(fields%2Cname)"

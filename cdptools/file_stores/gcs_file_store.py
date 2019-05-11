@@ -14,11 +14,7 @@ from . import exceptions
 
 ###############################################################################
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
-)
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 GCS_URI = "https://storage.googleapis.com/{bucket}/{filename}"
 

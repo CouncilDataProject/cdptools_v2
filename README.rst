@@ -6,7 +6,7 @@ cdptools
 .. image:: https://img.shields.io/pypi/v/cdptools.svg
         :target: https://pypi.python.org/pypi/cdptools
 
-.. image:: https://img.shields.io/travis/CouncilDataProject/cdptools.svg?branch=master
+.. image:: https://travis-ci.org/CouncilDataProject/cdptools.svg?branch=master
         :target: https://travis-ci.org/CouncilDataProject/cdptools
 
 .. image:: https://codecov.io/gh/CouncilDataProject/cdptools/branch/master/graph/badge.svg

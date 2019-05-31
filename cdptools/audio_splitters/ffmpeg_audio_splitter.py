@@ -43,7 +43,7 @@ class FFmpegAudioSplitter(AudioSplitter):
         log.debug(f"Beginning audio separation for: {video_read_path}")
         out, err = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
         log.debug(f"Completed audio separation for: {video_read_path}")
-        log.debug(f"Stored audio at: {audio_save_path}")
+        log.info(f"Stored audio: {audio_save_path}")
 
         # Store logs
         with open(audio_save_path.with_suffix(".out"), "wb") as write_out:

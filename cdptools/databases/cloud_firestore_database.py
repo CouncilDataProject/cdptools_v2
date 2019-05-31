@@ -88,10 +88,16 @@ class CloudFirestoreDatabase(Database):
             elif NoCredResponseTypes.integer in type_and_value:
                 formatted[k] = int(type_and_value[NoCredResponseTypes.integer])
             elif NoCredResponseTypes.dt in type_and_value:
-                formatted[k] = datetime.strptime(
-                    type_and_value[NoCredResponseTypes.dt],
-                    "%Y-%m-%dT%H:%M:%S.%fZ"
-                )
+                if "." in type_and_value[NoCredResponseTypes.dt]:
+                    formatted[k] = datetime.strptime(
+                        type_and_value[NoCredResponseTypes.dt],
+                        "%Y-%m-%dT%H:%M:%S.%fZ"
+                    )
+                else:
+                    formatted[k] = datetime.strptime(
+                        type_and_value[NoCredResponseTypes.dt],
+                        "%Y-%m-%dT%H:%M:%SZ"
+                    )
             else:
                 formatted[k] = type_and_value
 

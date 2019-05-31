@@ -78,7 +78,12 @@ class EventPipeline(Pipeline):
                 audio_uri = self.file_store.get_file_uri(filename=tmp_audio_filepath)
             except FileNotFoundError:
                 # Store the video in temporary file
-                tmp_video_filepath = f"tmp_{key}_video"
+                filename = video_uri.split("/")[-1]
+                if "." in filename:
+                    suffix = filename.split(".")[-1]
+                else:
+                    suffix = ""
+                tmp_video_filepath = f"tmp_{key}_video.{suffix}"
                 tmp_video_filepath = self.file_store._external_resource_copy(
                     url=video_uri,
                     dst=tmp_video_filepath
@@ -117,11 +122,12 @@ class EventPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="EventPipeline.task_audio_get_or_copy",
+            algorithm_name="EventPipeline.task_transcript_get_or_create",
             algorithm_version=get_module_version(),
             inputs=[key, audio_uri],
             remove_files=True
         ) as run:
+            # Setup temporary filenames
             tmp_raw_transcript_filepath = f"{key}_raw_transcript_0.txt"
             tmp_ts_words_transcript_filepath = f"{key}_ts_words_transcript_0.txt"
             tmp_ts_sentences_transcript_filepath = f"{key}_ts_sentences_transcript_0.txt"
@@ -136,7 +142,7 @@ class EventPipeline(Pipeline):
             # Store and register transcript files
             raw_transcript_uri = self.file_store.upload_file(filepath=outputs.raw_path)
             raw_transcript_file_details = self.database.get_or_upload_file(raw_transcript_uri)
-            run.register_output(raw_transcript_uri)
+            run.register_output(outputs.raw_path)
 
             # Default to using the raw output as main transcript
             main_transcript_details = raw_transcript_file_details
@@ -146,7 +152,7 @@ class EventPipeline(Pipeline):
             if outputs.timestamped_words_path:
                 ts_words_transcript_uri = self.file_store.upload_file(filepath=outputs.timestamped_words_path)
                 ts_words_transcript_file_details = self.database.get_or_upload_file(ts_words_transcript_uri)
-                run.register_output(ts_words_transcript_uri)
+                run.register_output(outputs.timestamped_words_path)
                 main_transcript_details = ts_words_transcript_file_details
 
             # Timestamped sentences provide a nicer viewing experience
@@ -154,7 +160,7 @@ class EventPipeline(Pipeline):
             if outputs.timestamped_sentences_path:
                 ts_sentences_transcript_uri = self.file_store.upload_file(filepath=outputs.timestamped_sentences_path)
                 ts_sentences_transcript_file_details = self.database.get_or_upload_file(ts_sentences_transcript_uri)
-                run.register_output(ts_sentences_transcript_uri)
+                run.register_output(outputs.timestamped_sentences_path)
                 main_transcript_details = ts_sentences_transcript_file_details
 
             return main_transcript_details, outputs.confidence
@@ -215,8 +221,9 @@ class EventPipeline(Pipeline):
         with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version()):
             events = self.event_scraper.get_events()
 
-            print(events[0])
-            raise ValueError("break")
+            # FIXME: remove this from testing
+            # import random
+            # events = random.sample(events, 4)
 
             # Multiprocess each event found
             with ThreadPoolExecutor(self.n_workers) as exe:

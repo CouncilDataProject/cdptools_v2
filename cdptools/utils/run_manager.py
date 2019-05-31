@@ -171,7 +171,7 @@ class RunManager():
                 exception_log.write(traceback.format_exc())
 
             # Register additional error outputs
-            self.register_output(RunIO(str(exception_type), exception_value))
+            self.register_output(RunIO(str(exception_type), str(exception_value)))
             self.register_output(traceback_path)
 
         # Close the run

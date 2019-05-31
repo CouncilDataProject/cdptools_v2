@@ -390,16 +390,16 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
-    def get_or_upload_run_input(self, run_id: str, type: str, value: Any) -> Dict:
+    def get_or_upload_run_input(self, run_id: str, dtype: str, value: Any) -> Dict:
         """
         Get or upload a run input.
         """
         return self._get_or_upload_row(
             table="run_input",
-            pks=[("run_id", run_id), ("type", type), ("value", value)],
+            pks=[("run_id", run_id), ("dtype", dtype), ("value", value)],
             values={
                 "run_id": run_id,
-                "type": type,
+                "dtype": dtype,
                 "value": value
             }
         )
@@ -417,16 +417,16 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
-    def get_or_upload_run_output(self, run_id: str, type: str, value: Any) -> Dict:
+    def get_or_upload_run_output(self, run_id: str, dtype: str, value: Any) -> Dict:
         """
         Get or upload a run output.
         """
         return self._get_or_upload_row(
             table="run_output",
-            pks=[("run_id", run_id), ("type", type), ("value", value)],
+            pks=[("run_id", run_id), ("dtype", dtype), ("value", value)],
             values={
                 "run_id": run_id,
-                "type": type,
+                "dtype": dtype,
                 "value": value
             }
         )

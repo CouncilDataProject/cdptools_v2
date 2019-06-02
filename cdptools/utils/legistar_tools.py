@@ -11,7 +11,11 @@ log = logging.getLogger(__name__)
 
 ###############################################################################
 
-LEGISTAR_EVENT_BASE = "http://webapi.legistar.com/v1/{client}/events"
+LEGISTAR_BASE = "http://webapi.legistar.com/v1/{client}"
+LEGISTAR_VOTE_BASE = LEGISTAR_BASE + "/EventItems"
+LEGISTAR_EVENT_BASE = LEGISTAR_BASE + "/Events"
+LEGISTAR_MATTER_BASE = LEGISTAR_BASE + "/Matters"
+LEGISTAR_PERSON_BASE = LEGISTAR_BASE + "/Persons"
 
 
 class AgendaMatchResults:
@@ -49,15 +53,35 @@ def get_legistar_events_for_timespan(
     ).json()
 
     # Get all event items for each event
-    request_format = LEGISTAR_EVENT_BASE + "/{event_id}/EventItems?AgendaNote=1&MinutesNote=1&Attachments=1"
+    item_request_format = LEGISTAR_EVENT_BASE + "/{event_id}/EventItems?AgendaNote=1&MinutesNote=1&Attachments=1"
     for event in response:
         # Attach the Event Items to the event
         event["EventItems"] = requests.get(
-            request_format.format(
+            item_request_format.format(
                 client=client,
                 event_id=event["EventId"]
             )
         ).json()
+
+        # Get vote information
+        for event_item in event["EventItems"]:
+            vote_request_format = LEGISTAR_VOTE_BASE + "/{event_item_id}/Votes"
+            event_item["EventItemVoteInfo"] = requests.get(
+                vote_request_format.format(
+                    client=client,
+                    event_item_id=event_item["EventItemId"]
+                )
+            ).json()
+
+            # Get person information
+            for vote_info in event_item["EventItemVoteInfo"]:
+                person_request_format = LEGISTAR_PERSON_BASE + "/{person_id}"
+                vote_info["PersonInfo"] = requests.get(
+                    person_request_format.format(
+                        client=client,
+                        person_id=vote_info["VotePersonId"]
+                    )
+                ).json()
 
     log.debug(f"Collected {len(response)} Legistar events")
     return response
@@ -98,95 +122,69 @@ def get_matching_legistar_event_by_agenda_match(
         return AgendaMatchResults({}, {})
 
 
-#######################################################################################################################
-# Used to join legistar details with basic event info
+def parse_legistar_event_details(legistar_event_details: Dict) -> Dict:
+    # Parse official datetime
+    event_date = legistar_event_details["EventDate"].split("T")[0]
+    event_dt = "{}T{}".format(event_date, legistar_event_details["EventTime"])
+    event_dt = datetime.strptime(event_dt, "%Y-%m-%dT%I:%M %p")
 
-# # Get Legistar events
-# legistar_events = legistar_tools.get_legistar_events_for_timespan(
-#     self.legistar_client,
-#     begin=self.pstnow() - timedelta(days=self.delta),
-#     end=self.pstnow()
-# )
-#
-# # Expand results only when legistar details are available
-# results = ParsedEvents()
-# for body_results in seattle_channel_results:
-#     for event in body_results.success:
-#         try:
-#             # Attach legistar details by look up
-#             result = self._attach_legistar_details(event, legistar_events)
-#
-#             # Successful attach
-#             results.success.append(result)
-#
-#         except errors.LegistarLookupError as e:
-#             # For logging purposes, return the errors
-#             results.error.append((event, e))
-#             log.error(e)
-#
-# @staticmethod
-#
-#
-# @staticmethod
-# def _attach_legistar_details(event: Dict, legistar_events: List[Dict]) -> Dict:
-#     # Create a list of events that match bodies
-#     body_matches = []
-#     for legistar_event in legistar_events:
-#         # Because of style differences in naming conventions on legistar vs seattle channel we must
-#         # compute a diff ratio to detect for body similarity. The 85 threshold is arbitrary but works well.
-#         # Generally, the style differences come down to "and" vs "&" and similar.
-#         if fuzz.ratio(event["body"], legistar_event["EventBodyName"]) >= 85:
-#             body_matches.append(legistar_event)
-#
-#     # It may be a body match, but there are occasionally multiple events by the same body on the same day.
-#     # In this case we should
-#     log.debug("Found {} body matches for event: {} {}".format(
-#         len(body_matches), event["body"], event["event_datetime"])
-#     )
-#
-#     # Find the correct event match when multiple events from same body
-#     if len(body_matches) > 1:
-#         # Check for agenda matches
-#         agenda_matches = []
-#         for body_match in body_matches:
-#             # TODO:
-#             # Consider using a text diff ratio on the agenda sets too
-#
-#             # Check if agenda matches
-#             if SeattleEventScraper._shared_items_in_list_exist_and_ordered(
-#                 event["agenda"],
-#                 [e["EventItemTitle"] for e in body_match["EventItems"]]
-#             ):
-#                 # Add this body match to the agenda matches
-#                 agenda_matches.append(body_match)
-#
-#         # Handle multiple or no agenda matches by raising error
-#         if len(agenda_matches) > 1 or len(agenda_matches) == 0:
-#             raise errors.LegistarLookupError(event["body"], event["event_datetime"])
-#         # Found a single match: attach the details
-#         else:
-#             event["legistar_details"] = agenda_matches[0]
-#
-#     # Check if no matching bodies were found
-#     elif len(body_matches) == 0:
-#         raise errors.LegistarLookupError(event["body"], event["event_datetime"])
-#     # Only a single body match was found: attach the details
-#     else:
-#         event["legistar_details"] = body_matches[0]
-#
-#     # Fix event datetime with legistar datetime
-#     # Event date comes as a string datetime but with no time attachment, this splits the date and time portions
-#     # and grabs only the date portion
-#     event_date = event["legistar_details"]["EventDate"].split("T")[0]
-#     event_time = event["legistar_details"]["EventTime"]
-#
-#     # Get the datetime from the formatted string
-#     event_datetime = datetime.strptime(f"{event_date} {event_time}", "%Y-%m-%d %I:%M %p")
-#
-#     # Save a formatted string
-#     event["event_datetime"] = str(event_datetime).replace(" ", "T")
-#
-#     # Save parsed datetime
-#     event["parsed_datetime"] = str(datetime.utcnow()).replace(" ", "T")
-#
-#     return event
+    # Parse event items
+    minutes_items = []
+    for legistar_event_item in legistar_event_details["EventItems"]:
+        minutes_item = {
+            "name": legistar_event_item["EventItemTitle"],
+            "index": int(legistar_event_item["EventItemMinutesSequence"]),
+            "legistar_event_item_id": int(legistar_event_item["EventItemId"])
+        }
+
+        # Parse attachments
+        item_attachments = []
+        for matter_attachment in legistar_event_item["EventItemMatterAttachments"]:
+            item_attachment = {
+                "name": matter_attachment["MatterAttachmentName"],
+                "uri": matter_attachment["MatterAttachmentHyperlink"],
+                "legistar_matter_attachment_id": int(matter_attachment["MatterAttachmentId"])
+            }
+            item_attachments.append(item_attachment)
+
+        # Parse votes
+        votes = []
+        if legistar_event_item["EventItemPassedFlagName"]:
+            for vote_info in legistar_event_item["EventItemVoteInfo"]:
+                votes.append({
+                    "decision": vote_info["VoteValueName"],
+                    "legistar_event_item_vote_id": int(vote_info["VoteId"]),
+                    "person": {
+                        "first_name": vote_info["PersonInfo"]["PersonFirstName"],
+                        "last_name": vote_info["PersonInfo"]["PersonLastName"],
+                        "email": vote_info["PersonInfo"]["PersonEmail"],
+                        "phone": vote_info["PersonInfo"]["PersonPhone"],
+                        "website": vote_info["PersonInfo"]["PersonWWW"],
+                        "legistar_person_id": vote_info["PersonInfo"]["PersonId"]
+                    }
+                })
+                minutes_item["decision"] = legistar_event_item["EventItemPassedFlagName"]
+        else:
+            minutes_item["decision"] = None
+
+        minutes_item["votes"] = votes
+
+        # Update and add the agenda item
+        minutes_item["attachments"] = item_attachments
+        minutes_items.append(minutes_item)
+
+    # Sort by index
+    minutes_items = sorted(minutes_items, key=lambda i: i["index"])
+
+    # Store the details
+    parsed_details = {
+        "agenda_file_uri": legistar_event_details["EventAgendaFile"],
+        "body": legistar_event_details["EventBodyName"],
+        "event_datetime": event_dt,
+        "minutes_items": minutes_items,
+        "legistar_event_id": int(legistar_event_details["EventId"]),
+        "legistar_event_link": legistar_event_details["EventInSiteURL"],
+        "minutes_file_uri": legistar_event_details["EventMinutesFile"]
+    }
+
+    return parsed_details

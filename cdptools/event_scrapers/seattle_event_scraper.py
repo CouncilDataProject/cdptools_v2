@@ -141,11 +141,16 @@ class SeattleEventScraper(EventScraper):
         return s
 
     @staticmethod
-    def _parse_seattle_channel_event(event_container: BeautifulSoup, complete_sibling: str) -> Dict:
+    def _parse_seattle_channel_event(
+        event_container: BeautifulSoup,
+        complete_sibling: str,
+        ignore_date: bool = False
+    ) -> Dict:
         """
         Parse a single event from the html of a Seattle Channel event block.
         :param event_container: A BeautifulSoup object created from reading a single event div block.
         :param complete_sibling: A complete sibling to the sub route currently being processed.
+        :param ignore_date: Should a date ever be considered out of time bounds.
         :return: A dictionary of event details that have been parsed from the provided html block.
         """
         # Find event details
@@ -205,10 +210,11 @@ class SeattleEventScraper(EventScraper):
             raise errors.EventParseError(body, event_dt)
 
         # If the event was not today, ignore it.
-        # now = SeattleEventScraper.pstnow()
-        # yesterday = now - timedelta(days=1)
-        # if not (dt > yesterday and dt < now):
-        #     raise errors.EventOutOfTimeboundsError(dt, yesterday, now)
+        if not ignore_date:
+            now = SeattleEventScraper.pstnow()
+            yesterday = now - timedelta(days=3)
+            if not (event_dt > yesterday and event_dt < now):
+                raise errors.EventOutOfTimeboundsError(event_dt, yesterday, now)
 
         # Construct event
         event = {
@@ -271,7 +277,7 @@ class SeattleEventScraper(EventScraper):
         results = ParsedEvents(success, warning, error)
 
         # Attach legistar agenda item details
-        for event in results.success[:10]:
+        for event in results.success:
             # Get all legistar events surrounding the provided event date
             legistar_events = legistar_tools.get_legistar_events_for_timespan(
                 "seattle",
@@ -279,19 +285,43 @@ class SeattleEventScraper(EventScraper):
                 event["event_datetime"] + timedelta(days=1)
             )
 
-            # Reduce events to only matching body
-            legistar_events = [e for e in legistar_events if e["EventBodyName"] == event["body"]]
+            # Fast return for only one event returned
+            if len(legistar_events) == 1:
+                selected_event = legistar_events[0]
+            else:
+                # Reduce events to only matching body
+                body_reduced = [e for e in legistar_events if e["EventBodyName"] == event["body"]]
 
-            # Run agenda matching against the events
-            agenda_match_details = legistar_tools.get_matching_legistar_event_by_agenda_match(
-                event["agenda_items"],
-                legistar_events
-            )
+                # Sometimes the body names don't perfectly match
+                # In this case, we want to make sure that we can agenda match based off at least some events
+                if len(body_reduced) > 0:
+                    legistar_events = body_reduced
 
-            # Add the details
-            event["legistar_event"] = agenda_match_details.selected_event["EventId"]
-            event["legistar_agenda_match_scores"] = agenda_match_details.match_scores
-            log.debug("attached legistar event details to event")
+                # Run agenda matching against the events
+                agenda_match_details = legistar_tools.get_matching_legistar_event_by_agenda_match(
+                    event["agenda_items"],
+                    legistar_events
+                )
+
+                # Add the details
+                selected_event = agenda_match_details.selected_event
+
+            # Parse details
+            parsed_details = legistar_tools.parse_legistar_event_details(selected_event)
+
+            from pprint import pprint
+
+            # Format the event details
+            formatted_event_details = {
+                **parsed_details,
+                "source_uri": event["source_uri"],
+                "video_uri": event["video_uri"]
+            }
+
+            # Set the full event details
+            event = formatted_event_details
+            pprint(formatted_event_details)
+            log.debug("Attached legistar event details to event")
 
         log.info(f"Collected: {len(results.success)}. "
                  f"Ignored: {len(results.warning)}. "

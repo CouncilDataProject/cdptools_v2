@@ -218,12 +218,13 @@ class EventPipeline(Pipeline):
     def run(self):
         # Get events
         log.info("Starting event processing.")
-        with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version()):
+        with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version(), remove_files=True):
             events = self.event_scraper.get_events()
 
             # FIXME: remove this from testing
             # import random
             # events = random.sample(events, 4)
+            raise ValueError("testing events")
 
             # Multiprocess each event found
             with ThreadPoolExecutor(self.n_workers) as exe:

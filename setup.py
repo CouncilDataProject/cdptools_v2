@@ -46,6 +46,7 @@ requirements = [
     'ffmpeg-python>=0.1.17',
     'fuzzywuzzy>=0.17.0',
     'pandas',
+    'python-Levenshtein>=0.12.0',
     'requests>=2.21.0',
     'schedule>=0.6.0'
 ]

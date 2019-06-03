@@ -87,8 +87,8 @@ def get_legistar_events_for_timespan(
     return response
 
 
-def get_matching_legistar_event_by_agenda_match(
-    agenda_items_provided: List[str],
+def get_matching_legistar_event_by_minutes_match(
+    minutes_items_provided: List[str],
     legistar_events: List[Dict]
 ) -> AgendaMatchResults:
     # Quick return
@@ -98,15 +98,15 @@ def get_matching_legistar_event_by_agenda_match(
     # Calculate fuzzy match agenda list of string
     elif len(legistar_events) > 1:
         # Clean all strings
-        agenda_items_provided = [aip.lower() for aip in agenda_items_provided]
+        minutes_items_provided = [aip.lower() for aip in minutes_items_provided]
 
         # Create rankings for each event
         max_score = 0.0
         selected_event = None
         scores = {}
         for event in legistar_events:
-            event_agenda_items = [str(ei["EventItemTitle"]).lower() for ei in event["EventItems"]]
-            match_score = fuzz.token_sort_ratio(agenda_items_provided, event_agenda_items)
+            event_minutes_items = [str(ei["EventItemTitle"]).lower() for ei in event["EventItems"]]
+            match_score = fuzz.token_sort_ratio(minutes_items_provided, event_minutes_items)
 
             # Add score to map
             scores[event["EventId"]] = match_score
@@ -155,8 +155,7 @@ def parse_legistar_event_details(legistar_event_details: Dict) -> Dict:
                     "decision": vote_info["VoteValueName"],
                     "legistar_event_item_vote_id": int(vote_info["VoteId"]),
                     "person": {
-                        "first_name": vote_info["PersonInfo"]["PersonFirstName"],
-                        "last_name": vote_info["PersonInfo"]["PersonLastName"],
+                        "full_name": vote_info["PersonInfo"]["PersonFullName"],
                         "email": vote_info["PersonInfo"]["PersonEmail"],
                         "phone": vote_info["PersonInfo"]["PersonPhone"],
                         "website": vote_info["PersonInfo"]["PersonWWW"],

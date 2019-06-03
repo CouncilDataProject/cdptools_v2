@@ -7,7 +7,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Dict, Union
+from typing import Any, Dict, Union
 
 from .pipeline import Pipeline
 from ..utils import RunManager
@@ -165,6 +165,80 @@ class EventPipeline(Pipeline):
 
             return main_transcript_details, outputs.confidence
 
+    def task_parse_and_upload_constructed_event(self, event: Dict[str, Any]):
+        with RunManager(
+            database=self.database,
+            file_store=self.file_store,
+            algorithm_name="EventPipeline.task_parse_and_upload_constructed_event",
+            algorithm_version=get_module_version(),
+            inputs=[event["source_uri"]]
+        ):
+            # Store or get body details
+            body_details = self.database.get_or_upload_body(event["body"])
+
+            # Store event
+            event_details = self.database.get_or_upload_event(
+                body_id=body_details["body_id"],
+                event_datetime=event["event_datetime"],
+                source_uri=event["source_uri"],
+                video_uri=event["video_uri"],
+                agenda_file_uri=event["agenda_file_uri"],
+                minutes_file_uri=event["minutes_file_uri"],
+                legistar_event_id=event["legistar_event_id"],
+                legistar_event_link=event["legistar_event_link"]
+            )
+
+            # Store or get all minute_items
+            for m_item in event["minutes_items"]:
+                # Store or get minutes item
+                minutes_item_details = self.database.get_or_upload_minutes_item(
+                    name=m_item["name"],
+                    legistar_event_item_id=m_item["legistar_event_item_id"]
+                )
+
+                # Store any attachments
+                for attachment in m_item["attachments"]:
+                    self.database.get_or_upload_minutes_item_file(
+                        minutes_item_id=minutes_item_details["minutes_item_id"],
+                        uri=attachment["uri"],
+                        name=attachment["name"],
+                        legistar_matter_attachment_id=attachment["legistar_matter_attachment_id"]
+                    )
+
+                # Attach minutes item to event
+                event_minutes_item_details = self.database.get_or_upload_event_minutes_item(
+                    event_id=event_details["event_id"],
+                    minutes_item_id=minutes_item_details["minutes_item_id"],
+                    index=m_item["index"],
+                    decision=m_item["decision"]
+                )
+
+                # Store any votes and persons
+                for vote in m_item["votes"]:
+                    person_details = self.database.get_or_upload_person(
+                        full_name=vote["person"]["full_name"],
+                        email=vote["person"]["email"],
+                        phone=vote["person"]["phone"],
+                        website=vote["person"]["website"],
+                        legistar_person_id=vote["person"]["legistar_person_id"]
+                    )
+
+                    self.database.get_or_upload_vote(
+                        person_id=person_details["person_id"],
+                        event_minutes_item_id=event_minutes_item_details["event_minutes_item_id"],
+                        decision=vote["decision"],
+                        legistar_event_item_vote_id=vote["legistar_event_item_vote_id"]
+                    )
+
+            # Link event to transcript
+            self.database.get_or_upload_transcript(
+                event_id=event_details["event_id"],
+                file_id=event["transcript_details"]["transcript_file_details"]["file_id"],
+                confidence=event["transcript_details"]["confidence"]
+            )
+
+            return event_details
+
     def process_event(self, event: Dict) -> str:
         # Create a key for the event
         key = hashlib.sha256(event["video_uri"].encode("utf8")).hexdigest()
@@ -175,7 +249,7 @@ class EventPipeline(Pipeline):
             file_store=self.file_store,
             algorithm_name="EventPipeline.process_event",
             algorithm_version=get_module_version(),
-            inputs=[event],
+            inputs=[event["source_uri"]],
             remove_files=True
         ):
             # Check event already exists in database
@@ -191,25 +265,14 @@ class EventPipeline(Pipeline):
                 # Run transcript task
                 transcript_file_details, confidence = self.task_transcript_get_or_create(key, audio_uri)
 
-                # Store or get body details
-                body = event.pop("body")
-                body_details = self.database.get_or_upload_body(body)
+                # Attach transcript details to event
+                event["transcript_details"] = {
+                    "transcript_file_details": transcript_file_details,
+                    "confidence": confidence
+                }
 
-                # Store event
-                event_details = self.database.get_or_upload_event(
-                    body_id=body_details["body_id"],
-                    event_datetime=event["event_datetime"],
-                    source_uri=event["source_uri"],
-                    video_uri=event["video_uri"]
-                )
-
-                # Link event to transcript
-                self.database.get_or_upload_transcript(
-                    event_id=event_details["event_id"],
-                    file_id=transcript_file_details["file_id"],
-                    confidence=confidence
-                )
-
+                # Event details
+                event_details = self.task_parse_and_upload_constructed_event(event)
                 log.info("Uploaded event details: {} ({})".format(event_details["event_id"], key))
 
             # Update progress
@@ -224,7 +287,6 @@ class EventPipeline(Pipeline):
             # FIXME: remove this from testing
             # import random
             # events = random.sample(events, 4)
-            raise ValueError("testing events")
 
             # Multiprocess each event found
             with ThreadPoolExecutor(self.n_workers) as exe:

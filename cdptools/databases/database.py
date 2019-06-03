@@ -77,7 +77,6 @@ class Database(ABC):
         """
         Get row from a table by looking up it's id.
         """
-
         return {}
 
     @abstractmethod
@@ -91,7 +90,6 @@ class Database(ABC):
         """
         Get a list of rows from a table optionally using filters, ordering, and limit.
         """
-
         return []
 
     @abstractmethod
@@ -99,7 +97,27 @@ class Database(ABC):
         """
         Get or upload a body.
         """
+        return {}
 
+    @abstractmethod
+    def get_or_upload_minutes_item(self, name: str, legistar_event_item_id: Optional[int] = None) -> Dict:
+        """
+        Get or upload a minutes item. In Legistar this is commonly referred to as an event item.
+        (Minutes item, in my opinion, is a better definition for the goals of CDP.)
+        """
+        return {}
+
+    @abstractmethod
+    def get_or_upload_minutes_item_file(
+        self,
+        minutes_item_id: str,
+        uri: str,
+        name: Optional[str] = None,
+        legistar_matter_attachment_id: Optional[int] = None
+    ) -> Dict:
+        """
+        Get or upload a minutes item file.
+        """
         return {}
 
     @abstractmethod
@@ -107,7 +125,6 @@ class Database(ABC):
         """
         Find an event using the video uri.
         """
-
         return {}
 
     @abstractmethod
@@ -116,13 +133,68 @@ class Database(ABC):
         body_id: str,
         event_datetime: datetime,
         source_uri: str,
-        thumbnail_uri: str,
-        video_uri: str
+        video_uri: str,
+        agenda_file_uri: Optional[str] = None,
+        minutes_file_uri: Optional[str] = None,
+        legistar_event_id: Optional[int] = None,
+        legistar_event_link: Optional[int] = None
     ) -> Dict:
         """
         Get or upload an event.
         """
+        return {}
 
+    @abstractmethod
+    def get_or_upload_event_minutes_item(
+        self,
+        event_id: str,
+        minutes_item_id: str,
+        index: int,
+        decision: Optional[str] = None
+    ) -> Dict:
+        """
+        Get or upload the join of an event and a minutes item.
+        """
+        return {}
+
+    @abstractmethod
+    def get_or_upload_person(
+        self,
+        full_name: str,
+        email: str,
+        phone: Optional[str] = None,
+        website: Optional[str] = None,
+        legistar_person_id: Optional[int] = None
+    ) -> Dict:
+        """
+        Get or upload a person.
+        """
+        return {}
+
+    @abstractmethod
+    def get_or_upload_vote(
+        self,
+        person_id: str,
+        event_minutes_item_id: str,
+        decision: str,
+        legistar_event_item_vote_id: Optional[int] = None
+    ) -> Dict:
+        """
+        Get or upload a person's vote on a minutes item.
+        """
+        return {}
+
+    @abstractmethod
+    def get_or_upload_file(
+        self,
+        uri: str,
+        filename: Optional[str] = None,
+        description: Optional[str] = None,
+        content_type: Optional[str] = None
+    ) -> Dict:
+        """
+        Get or upload a file.
+        """
         return {}
 
     @abstractmethod
@@ -130,7 +202,6 @@ class Database(ABC):
         """
         Get or upload a transcript.
         """
-
         return {}
 
     @abstractmethod
@@ -154,13 +225,6 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_file(self, uri: str, filename: Optional[str] = None) -> Dict:
-        """
-        Get or upload a file.
-        """
-        return {}
-
-    @abstractmethod
     def get_or_upload_run_input(self, run_id: str, type: str, value: Any) -> Dict:
         """
         Get or upload a run input.
@@ -168,7 +232,7 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_run_input_file(self, run_input_id: str, file_id: str) -> Dict:
+    def get_or_upload_run_input_file(self, run_id: str, file_id: str) -> Dict:
         """
         Get or upload a run input file.
         """
@@ -182,7 +246,7 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_run_output_file(self, run_output_id: str, file_id: str) -> Dict:
+    def get_or_upload_run_output_file(self, run_id: str, file_id: str) -> Dict:
         """
         Get or upload a run output file.
         """

@@ -295,6 +295,36 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
+    def get_or_upload_minutes_item(self, name: str, legistar_event_item_id: Optional[int] = None) -> Dict:
+        return self._get_or_upload_row(
+            table="minutes_item",
+            pks=[("name", name)],
+            values={
+                "name": name,
+                "legistar_event_item_id": legistar_event_item_id,
+                "created": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_minutes_item_file(
+        self,
+        minutes_item_id: str,
+        uri: str,
+        name: Optional[str] = None,
+        legistar_matter_attachment_id: Optional[int] = None
+    ) -> Dict:
+        return self._get_or_upload_row(
+            table="minutes_item_file",
+            pks=[("minutes_item_id", minutes_item_id), ("uri", uri)],
+            values={
+                "minutes_item_id": minutes_item_id,
+                "name": name,
+                "uri": uri,
+                "legistar_matter_attachment_id": legistar_matter_attachment_id,
+                "created": datetime.utcnow()
+            }
+        )
+
     def get_event(self, video_uri: str) -> Dict:
         # Try find
         found = self._select_rows_with_max_results_expectation(
@@ -310,9 +340,13 @@ class CloudFirestoreDatabase(Database):
     def get_or_upload_event(
         self,
         body_id: str,
-        event_datetime: str,
+        event_datetime: datetime,
         source_uri: str,
-        video_uri: str
+        video_uri: str,
+        agenda_file_uri: Optional[str] = None,
+        minutes_file_uri: Optional[str] = None,
+        legistar_event_id: Optional[int] = None,
+        legistar_event_link: Optional[int] = None
     ) -> Dict:
         return self._get_or_upload_row(
             table="event",
@@ -322,6 +356,94 @@ class CloudFirestoreDatabase(Database):
                 "event_datetime": event_datetime,
                 "source_uri": source_uri,
                 "video_uri": video_uri,
+                "agenda_file_uri": agenda_file_uri,
+                "minutes_file_uri": minutes_file_uri,
+                "legistar_event_id": legistar_event_id,
+                "legistar_event_link": legistar_event_link,
+                "created": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_event_minutes_item(
+        self,
+        event_id: str,
+        minutes_item_id: str,
+        index: int,
+        decision: Optional[str] = None
+    ) -> Dict:
+        return self._get_or_upload_row(
+            table="event_minutes_item",
+            pks=[("event_id", event_id), ("minutes_item_id", minutes_item_id)],
+            values={
+                "event_id": event_id,
+                "minutes_item_id": minutes_item_id,
+                "index": index,
+                "decision": decision,
+                "created": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_person(
+        self,
+        full_name: str,
+        email: str,
+        phone: Optional[str] = None,
+        website: Optional[str] = None,
+        legistar_person_id: Optional[int] = None
+    ) -> Dict:
+        return self._get_or_upload_row(
+            table="person",
+            pks=[("full_name", full_name), ("email", email)],
+            values={
+                "full_name": full_name,
+                "email": email,
+                "phone": phone,
+                "website": website,
+                "legistar_person_id": legistar_person_id,
+                "created": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_vote(
+        self,
+        person_id: str,
+        event_minutes_item_id: str,
+        decision: str,
+        legistar_event_item_vote_id: Optional[int] = None
+    ) -> Dict:
+        return self._get_or_upload_row(
+            table="vote",
+            pks=[("person_id", person_id), ("event_minutes_item_id", event_minutes_item_id)],
+            values={
+                "person_id": person_id,
+                "event_minutes_item_id": event_minutes_item_id,
+                "decision": decision,
+                "legistar_event_item_vote_id": legistar_event_item_vote_id,
+                "created": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_file(
+        self,
+        uri: str,
+        filename: Optional[str] = None,
+        description: Optional[str] = None,
+        content_type: Optional[str] = None
+    ) -> Dict:
+        """
+        Get or upload a file.
+        """
+        if filename is None:
+            filename = uri.split("/")[-1]
+
+        return self._get_or_upload_row(
+            table="file",
+            pks=[("uri", uri)],
+            values={
+                "uri": uri,
+                "filename": filename,
+                "description": description,
+                "content_type": content_type,
                 "created": datetime.utcnow()
             }
         )
@@ -370,23 +492,6 @@ class CloudFirestoreDatabase(Database):
                 "algorithm_id": algorithm_id,
                 "begin": begin,
                 "completed": completed
-            }
-        )
-
-    def get_or_upload_file(self, uri: str, filename: Optional[str] = None) -> Dict:
-        """
-        Get or upload a file.
-        """
-        if filename is None:
-            filename = uri.split("/")[-1]
-
-        return self._get_or_upload_row(
-            table="file",
-            pks=[("uri", uri)],
-            values={
-                "uri": uri,
-                "filename": filename,
-                "created": datetime.utcnow()
             }
         )
 

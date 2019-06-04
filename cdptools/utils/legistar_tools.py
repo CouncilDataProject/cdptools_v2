@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from datetime import datetime, timedelta
 import logging
 from typing import Dict, List
@@ -122,7 +125,7 @@ def get_matching_legistar_event_by_minutes_match(
         return AgendaMatchResults({}, {})
 
 
-def parse_legistar_event_details(legistar_event_details: Dict) -> Dict:
+def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_items: List[str] = []) -> Dict:
     # Parse official datetime
     event_date = legistar_event_details["EventDate"].split("T")[0]
     event_dt = "{}T{}".format(event_date, legistar_event_details["EventTime"])
@@ -131,46 +134,55 @@ def parse_legistar_event_details(legistar_event_details: Dict) -> Dict:
     # Parse event items
     minutes_items = []
     for legistar_event_item in legistar_event_details["EventItems"]:
-        minutes_item = {
-            "name": legistar_event_item["EventItemTitle"],
-            "index": int(legistar_event_item["EventItemMinutesSequence"]),
-            "legistar_event_item_id": int(legistar_event_item["EventItemId"])
-        }
-
-        # Parse attachments
-        item_attachments = []
-        for matter_attachment in legistar_event_item["EventItemMatterAttachments"]:
-            item_attachment = {
-                "name": matter_attachment["MatterAttachmentName"],
-                "uri": matter_attachment["MatterAttachmentHyperlink"],
-                "legistar_matter_attachment_id": int(matter_attachment["MatterAttachmentId"])
-            }
-            item_attachments.append(item_attachment)
-
-        # Parse votes
-        votes = []
-        if legistar_event_item["EventItemPassedFlagName"]:
-            for vote_info in legistar_event_item["EventItemVoteInfo"]:
-                votes.append({
-                    "decision": vote_info["VoteValueName"],
-                    "legistar_event_item_vote_id": int(vote_info["VoteId"]),
-                    "person": {
-                        "full_name": vote_info["PersonInfo"]["PersonFullName"],
-                        "email": vote_info["PersonInfo"]["PersonEmail"],
-                        "phone": vote_info["PersonInfo"]["PersonPhone"],
-                        "website": vote_info["PersonInfo"]["PersonWWW"],
-                        "legistar_person_id": vote_info["PersonInfo"]["PersonId"]
-                    }
-                })
-                minutes_item["decision"] = legistar_event_item["EventItemPassedFlagName"]
+        # Choose name based off available data
+        if legistar_event_item["EventItemMatterName"]:
+            minutes_item_name = legistar_event_item["EventItemMatterName"]
         else:
-            minutes_item["decision"] = None
+            minutes_item_name = legistar_event_item["EventItemTitle"]
 
-        minutes_item["votes"] = votes
+        # Only continue if the minutes item name is not ignored
+        if minutes_item_name not in ignore_minutes_items:
+            # Construct minutes item
+            minutes_item = {
+                "name": minutes_item_name,
+                "index": int(legistar_event_item["EventItemMinutesSequence"]),
+                "legistar_event_item_id": int(legistar_event_item["EventItemId"])
+            }
 
-        # Update and add the agenda item
-        minutes_item["attachments"] = item_attachments
-        minutes_items.append(minutes_item)
+            # Parse attachments
+            item_attachments = []
+            for matter_attachment in legistar_event_item["EventItemMatterAttachments"]:
+                item_attachment = {
+                    "name": matter_attachment["MatterAttachmentName"],
+                    "uri": matter_attachment["MatterAttachmentHyperlink"],
+                    "legistar_matter_attachment_id": int(matter_attachment["MatterAttachmentId"])
+                }
+                item_attachments.append(item_attachment)
+
+            # Parse votes
+            votes = []
+            if legistar_event_item["EventItemPassedFlagName"]:
+                for vote_info in legistar_event_item["EventItemVoteInfo"]:
+                    votes.append({
+                        "decision": vote_info["VoteValueName"],
+                        "legistar_event_item_vote_id": int(vote_info["VoteId"]),
+                        "person": {
+                            "full_name": vote_info["PersonInfo"]["PersonFullName"],
+                            "email": vote_info["PersonInfo"]["PersonEmail"],
+                            "phone": vote_info["PersonInfo"]["PersonPhone"],
+                            "website": vote_info["PersonInfo"]["PersonWWW"],
+                            "legistar_person_id": vote_info["PersonInfo"]["PersonId"]
+                        }
+                    })
+                    minutes_item["decision"] = legistar_event_item["EventItemPassedFlagName"]
+            else:
+                minutes_item["decision"] = None
+
+            minutes_item["votes"] = votes
+
+            # Update and add the agenda item
+            minutes_item["attachments"] = item_attachments
+            minutes_items.append(minutes_item)
 
     # Sort by index
     minutes_items = sorted(minutes_items, key=lambda i: i["index"])

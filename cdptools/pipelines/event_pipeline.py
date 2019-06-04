@@ -284,10 +284,6 @@ class EventPipeline(Pipeline):
         with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version(), remove_files=True):
             events = self.event_scraper.get_events()
 
-            # FIXME: remove this from testing
-            # import random
-            # events = random.sample(events, 4)
-
             # Multiprocess each event found
             with ThreadPoolExecutor(self.n_workers) as exe:
                 exe.map(self.process_event, events)

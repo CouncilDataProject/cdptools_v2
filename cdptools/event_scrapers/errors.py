@@ -24,16 +24,6 @@ class LegistarLookupError(Exception):
         return f"Could not find Legistar event for: {self.body} {self.dt}"
 
 
-class ExecutiveSessionError(Exception):
-    def __init__(self, body: str, dt: datetime, **kwargs):
-        super().__init__(**kwargs)
-        self.body = body
-        self.dt = dt
-
-    def __str__(self):
-        return f"Event is an executive session: {self.body} {self.dt}"
-
-
 class EventOutOfTimeboundsError(Exception):
     def __init__(self, current: datetime, begin: datetime, end: datetime, **kwargs):
         super().__init__(**kwargs)

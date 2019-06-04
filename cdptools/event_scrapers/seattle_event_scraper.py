@@ -3,6 +3,7 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
+from functools import partial
 import logging
 import os
 import re
@@ -45,6 +46,7 @@ class SeattleEventScraper(EventScraper):
     def __init__(
         self,
         main_route: str = "http://www.seattlechannel.org/CityCouncil",
+        ignore_minutes_items: List[str] = [],
         legistar_client: str = "seattle",
         max_concurrent_requests: int = None,
         **kwargs
@@ -52,6 +54,7 @@ class SeattleEventScraper(EventScraper):
         # Store configuration
         self.main_route = main_route
         self.legistar_client = legistar_client
+        self.ignore_minutes_items = ignore_minutes_items
         if max_concurrent_requests:
             self.max_concurrent_requests = max_concurrent_requests
         else:
@@ -178,10 +181,6 @@ class SeattleEventScraper(EventScraper):
             except AttributeError:
                 raise errors.EventParseError(body, event_dt)
 
-        # Check executive session
-        if "executive session" in agenda.lower():
-            raise errors.ExecutiveSessionError(body, event_dt)
-
         # The agenda is returned as a single string
         # Clean it and split it into its parts
         agenda = agenda.replace("Agenda:", "")
@@ -249,7 +248,7 @@ class SeattleEventScraper(EventScraper):
                 # Successful parse
                 events.success.append(event)
 
-            except (errors.EventOutOfTimeboundsError, errors.ExecutiveSessionError) as e:
+            except (errors.EventOutOfTimeboundsError) as e:
                 # For logging purposes, return the errors
                 events.warning.append((container, e))
 
@@ -262,7 +261,7 @@ class SeattleEventScraper(EventScraper):
         return events
 
     @staticmethod
-    def _attach_legistar_details_to_event(event: Dict[str, Any]) -> Dict:
+    def _attach_legistar_details_to_event(event: Dict[str, Any], ignore_minutes_items: List[str] = []) -> Dict:
         # Get all legistar events surrounding the provided event date
         legistar_events = legistar_tools.get_legistar_events_for_timespan(
             "seattle",
@@ -293,7 +292,7 @@ class SeattleEventScraper(EventScraper):
             selected_event = agenda_match_details.selected_event
 
         # Parse details
-        parsed_details = legistar_tools.parse_legistar_event_details(selected_event)
+        parsed_details = legistar_tools.parse_legistar_event_details(selected_event, ignore_minutes_items)
 
         # Format the event details
         formatted_event_details = {
@@ -321,7 +320,8 @@ class SeattleEventScraper(EventScraper):
 
         # Attach legistar agenda item details
         with ThreadPoolExecutor(min(self.max_concurrent_requests, os.cpu_count() * 5)) as exe:
-            parsed_events = list(exe.map(self._attach_legistar_details_to_event, results.success))
+            f = partial(self._attach_legistar_details_to_event, ignore_minutes_items=self.ignore_minutes_items)
+            parsed_events = list(exe.map(f, results.success))
 
         log.info(f"Collected: {len(results.success)}. "
                  f"Ignored: {len(results.warning)}. "

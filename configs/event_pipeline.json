@@ -2,7 +2,13 @@
     "event_scraper": {
         "module_path": "cdptools.event_scrapers.seattle_event_scraper",
         "object_name": "SeattleEventScraper",
-        "object_kwargs": {}
+        "object_kwargs": {
+            "ignore_minutes_items": [
+                "This meeting also constitutes a meeting of the City Council, provided that the meeting shall be conducted as a committee meeting under the Council Rules and Procedures, and Council action shall be limited to committee business.",
+                "City Council Agenda",
+                "Please Note: Times listed are estimated"
+            ]
+        }
     },
     "database": {
         "module_path": "cdptools.databases.cloud_firestore_database",

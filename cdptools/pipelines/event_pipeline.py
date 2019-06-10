@@ -7,7 +7,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict, Union
+from typing import Any, Dict, List, Optional, Union
 
 from .pipeline import Pipeline
 from ..utils import RunManager
@@ -115,7 +115,7 @@ class EventPipeline(Pipeline):
 
             return audio_uri
 
-    def task_transcript_get_or_create(self, key: str, audio_uri: str):
+    def task_transcript_get_or_create(self, key: str, audio_uri: str, phrases: Optional[List[str]] = None):
         """
         Get or create and return transcript resource uri provied key.
         """
@@ -131,9 +131,11 @@ class EventPipeline(Pipeline):
             tmp_raw_transcript_filepath = f"{key}_raw_transcript_0.txt"
             tmp_ts_words_transcript_filepath = f"{key}_ts_words_transcript_0.txt"
             tmp_ts_sentences_transcript_filepath = f"{key}_ts_sentences_transcript_0.txt"
+
             # Transcribe audio
             outputs = self.sr_model.transcribe(
                 audio_uri=audio_uri,
+                phrases=phrases,
                 raw_transcript_save_path=tmp_raw_transcript_filepath,
                 timestamped_words_save_path=tmp_ts_words_transcript_filepath,
                 timestamped_sentences_save_path=tmp_ts_sentences_transcript_filepath,
@@ -262,8 +264,11 @@ class EventPipeline(Pipeline):
                 # Run audio task
                 audio_uri = self.task_audio_get_or_copy(key, event["video_uri"])
 
+                # Create list of phrases to send to sr model
+                phrases = [item["name"] for item in event["minutes_items"]]
+
                 # Run transcript task
-                transcript_file_details, confidence = self.task_transcript_get_or_create(key, audio_uri)
+                transcript_file_details, confidence = self.task_transcript_get_or_create(key, audio_uri, phrases)
 
                 # Attach transcript details to event
                 event["transcript_details"] = {

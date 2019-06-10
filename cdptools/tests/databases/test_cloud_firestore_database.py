@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from firebase_admin import firestore
 import pytest
 from unittest import mock
+
+from firebase_admin import firestore
 
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.databases import exceptions

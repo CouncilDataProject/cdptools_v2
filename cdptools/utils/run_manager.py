@@ -93,7 +93,7 @@ class RunManager():
             # Make serializable
             serializable_value = self._make_serializable_type(value[1], io_type)
             if serializable_value:
-                return RunIO(value[0], serializable_value, io_type)
+                return RunIO(str(value[0]), serializable_value)
 
         # Provided a single value
         # Make serializable

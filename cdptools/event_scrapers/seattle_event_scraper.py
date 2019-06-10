@@ -265,7 +265,7 @@ class SeattleEventScraper(EventScraper):
         # Get all legistar events surrounding the provided event date
         legistar_events = legistar_tools.get_legistar_events_for_timespan(
             "seattle",
-            event["event_datetime"] - timedelta(days=1),
+            event["event_datetime"],
             event["event_datetime"] + timedelta(days=1)
         )
         log.debug("Pulled legistar details for event: {}".format(event["source_uri"]))
@@ -274,13 +274,18 @@ class SeattleEventScraper(EventScraper):
         if len(legistar_events) == 1:
             selected_event = legistar_events[0]
         else:
+            # Reduce events to not include cancelled events
+            cancelled_reduced = [e for e in legistar_events if e["EventAgendaStatusName"] != "Cancelled"]
+
             # Reduce events to only matching body
-            body_reduced = [e for e in legistar_events if e["EventBodyName"] == event["body"]]
+            body_reduced = [e for e in cancelled_reduced if e["EventBodyName"] == event["body"]]
 
             # Sometimes the body names don't perfectly match
             # In this case, we want to make sure that we can agenda match based off at least some events
             if len(body_reduced) > 0:
                 legistar_events = body_reduced
+            else:
+                legistar_events = cancelled_reduced
 
             # Run agenda matching against the events
             agenda_match_details = legistar_tools.get_matching_legistar_event_by_minutes_match(

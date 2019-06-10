@@ -4,7 +4,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Union
+from typing import List, Optional, Union
 
 from google.cloud import speech_v1p1beta1 as speech
 
@@ -29,6 +29,7 @@ class GoogleCloudSRModel(SRModel):
         raw_transcript_save_path: Union[str, Path],
         timestamped_words_save_path: Union[str, Path],
         timestamped_sentences_save_path: Union[str, Path],
+        phrases: Optional[List[str]] = None,
         **kwargs
     ) -> SRModelOutputs:
         # Check paths
@@ -39,13 +40,34 @@ class GoogleCloudSRModel(SRModel):
         # Create client
         client = speech.SpeechClient.from_service_account_json(self.credentials_path)
 
+        # Create basic metadata
+        metadata = speech.types.RecognitionMetadata()
+        metadata.interaction_type = speech.enums.RecognitionMetadata.InteractionType.DISCUSSION
+
+        # Add phrases
+        if phrases:
+            # Clean and apply usage limits
+            cleaned = []
+            total_character_count = 0
+            for phrase in phrases[:500]:
+                if total_character_count < 10000:
+                    cleaned_phrase = phrase[:100]
+                    cleaned.append(cleaned_phrase[:cleaned_phrase.rfind(" ")])
+
+            # Send to speech context
+            speech_context = speech.types.SpeechContext(phrases=cleaned)
+        else:
+            speech_context = speech.types.SpeechContext()
+
         # Prepare for transcription
         config = speech.types.RecognitionConfig(
             encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
             language_code="en-US",
             enable_automatic_punctuation=True,
-            enable_word_time_offsets=True
+            enable_word_time_offsets=True,
+            speech_contexts=[speech_context],
+            metadata=metadata
         )
         audio = speech.types.RecognitionAudio(uri=audio_uri)
 

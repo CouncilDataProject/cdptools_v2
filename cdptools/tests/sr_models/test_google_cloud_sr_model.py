@@ -16,21 +16,6 @@ def example_audio(data_dir):
 
 
 @pytest.fixture
-def example_transcript_raw(data_dir):
-    return data_dir / "example_transcript_raw.txt"
-
-
-@pytest.fixture
-def example_transcript_sentences(data_dir):
-    return data_dir / "example_transcript_sentences.json"
-
-
-@pytest.fixture
-def example_transcript_words(data_dir):
-    return data_dir / "example_transcript_words.txt"
-
-
-@pytest.fixture
 def fake_creds_path(data_dir):
     return data_dir / "fake_creds.json"
 

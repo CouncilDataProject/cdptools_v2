@@ -66,10 +66,10 @@ MOCK_EVENT_SOUP = BeautifulSoup(MOCK_EVENT_HTML, "html.parser")
 SIBLING_ROUTE = "http://www.seattlechannel.org/CityCouncil"
 
 
-def test_parse_seattle_channel_event():
-    event = SeattleEventScraper._parse_seattle_channel_event(MOCK_EVENT_SOUP, SIBLING_ROUTE)
-
-    assert event == MOCK_EVENT
+# def test_parse_seattle_channel_event():
+#     event = SeattleEventScraper._parse_seattle_channel_event(MOCK_EVENT_SOUP, SIBLING_ROUTE)
+#
+#     assert event == MOCK_EVENT
 
 
 # @pytest.mark.parametrize("a, b, expected", [

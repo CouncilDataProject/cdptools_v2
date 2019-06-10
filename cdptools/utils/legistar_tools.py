@@ -108,8 +108,16 @@ def get_matching_legistar_event_by_minutes_match(
         selected_event = None
         scores = {}
         for event in legistar_events:
-            event_minutes_items = [str(ei["EventItemTitle"]).lower() for ei in event["EventItems"]]
-            match_score = fuzz.token_sort_ratio(minutes_items_provided, event_minutes_items)
+            # Choose name based off available data
+            event_minutes_items = []
+            for ei in event["EventItems"]:
+                if ei["EventItemMatterName"]:
+                    event_minutes_items.append(ei["EventItemMatterName"])
+                else:
+                    event_minutes_items.append(ei["EventItemTitle"])
+
+            # Token sort ratio
+            match_score = fuzz.token_set_ratio(minutes_items_provided, event_minutes_items)
 
             # Add score to map
             scores[event["EventId"]] = match_score

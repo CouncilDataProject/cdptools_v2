@@ -23,6 +23,28 @@ class GoogleCloudSRModel(SRModel):
         # Resolve credentials
         self.credentials_path = Path(credentials_path).resolve(strict=True)
 
+    @staticmethod
+    def _clean_phrases(phrases: Optional[List[str]] = None) -> List[str]:
+        if phrases:
+            # Clean and apply usage limits
+            cleaned = []
+            total_character_count = 0
+            for phrase in phrases[:500]:
+                if total_character_count <= 9900:
+                    cleaned_phrase = phrase[:100]
+
+                    # Make the phrase a bit nicer by chunking to nearest complete word
+                    if " " in cleaned_phrase:
+                        cleaned_phrase = cleaned_phrase[:cleaned_phrase.rfind(" ")]
+
+                    # Append cleaned phrase and increase character count
+                    cleaned.append(cleaned_phrase)
+                    total_character_count += len(cleaned_phrase)
+
+            return cleaned
+        else:
+            return []
+
     def transcribe(
         self,
         audio_uri: Union[str, Path],
@@ -45,19 +67,7 @@ class GoogleCloudSRModel(SRModel):
         metadata.interaction_type = speech.enums.RecognitionMetadata.InteractionType.DISCUSSION
 
         # Add phrases
-        if phrases:
-            # Clean and apply usage limits
-            cleaned = []
-            total_character_count = 0
-            for phrase in phrases[:500]:
-                if total_character_count < 10000:
-                    cleaned_phrase = phrase[:100]
-                    cleaned.append(cleaned_phrase[:cleaned_phrase.rfind(" ")])
-
-            # Send to speech context
-            speech_context = speech.types.SpeechContext(phrases=cleaned)
-        else:
-            speech_context = speech.types.SpeechContext()
+        speech_context = speech.types.SpeechContext(phrases=self._clean_phrases(phrases))
 
         # Prepare for transcription
         config = speech.types.RecognitionConfig(

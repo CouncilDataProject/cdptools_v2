@@ -83,25 +83,23 @@ def test_make_serializable_type(empty_creds_db, empty_creds_fs, data_dir, exampl
 
     # Test with non existent path
     with pytest.raises(FileNotFoundError):
-        with RunManager(
+        run = RunManager(
             database=empty_creds_db,
             file_store=empty_creds_fs,
             algorithm_name="fake",
             algorithm_version="1.1.1",
             inputs=[Path("/this/will/fail.mp4")]
-        ):
-            pass
+        )
 
     # Test with directory
     with pytest.raises(IsADirectoryError):
-        with RunManager(
+        run = RunManager(
             database=empty_creds_db,
             file_store=empty_creds_fs,
             algorithm_name="fake",
             algorithm_version="1.1.1",
             inputs=[data_dir]
-        ):
-            pass
+        )
 
     # With any other type
     with RunManager(

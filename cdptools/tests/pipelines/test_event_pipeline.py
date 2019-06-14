@@ -161,8 +161,6 @@ def test_event_pipeline_no_backfill(
             # This should never be ran because example html files only include past events.
             pipeline.process_event.assert_not_called()
 
-# TODO:
-# The test returns the wrong legistar event details for the provided seattle channel event
 
 def test_event_pipeline_with_backfill(
     empty_creds_db,
@@ -203,3 +201,6 @@ def test_event_pipeline_with_backfill(
             ]
 
             pipeline.run()
+
+            # TODO:
+            # The test returns the wrong legistar event details for the provided seattle channel event

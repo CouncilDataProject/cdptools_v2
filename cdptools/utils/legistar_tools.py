@@ -31,7 +31,7 @@ class AgendaMatchResults:
 
 def get_legistar_events_for_timespan(
     client: str,
-    begin: datetime = (datetime.utcnow() - timedelta(days=1)),
+    begin: datetime = (datetime.utcnow()),
     end: datetime = (datetime.utcnow() + timedelta(days=1))
 ) -> List[Dict]:
     """

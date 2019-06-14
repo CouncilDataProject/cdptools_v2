@@ -46,6 +46,7 @@ class SeattleEventScraper(EventScraper):
     def __init__(
         self,
         main_route: str = "http://www.seattlechannel.org/CityCouncil",
+        backfill: bool = False,
         ignore_minutes_items: List[str] = [],
         legistar_client: str = "seattle",
         max_concurrent_requests: int = None,
@@ -53,6 +54,7 @@ class SeattleEventScraper(EventScraper):
     ):
         # Store configuration
         self.main_route = main_route
+        self.backfill = backfill
         self.legistar_client = legistar_client
         self.ignore_minutes_items = ignore_minutes_items
         if max_concurrent_requests:
@@ -243,7 +245,7 @@ class SeattleEventScraper(EventScraper):
         for container in event_containers:
             try:
                 # Parse event details from html
-                event = self._parse_seattle_channel_event(container, self.main_route)
+                event = self._parse_seattle_channel_event(container, self.main_route, self.backfill)
 
                 # Successful parse
                 events.success.append(event)

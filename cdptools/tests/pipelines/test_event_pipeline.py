@@ -189,7 +189,7 @@ def test_event_pipeline_with_backfill(
         event_items_one = RequestReturn(example_legistar_tools_event_items_1)
 
         with mock.patch("requests.get") as mock_requests:
-            # Back means we need to mock every request call including all the legistar calls
+            # Backfill means we need to mock every request call including all the legistar calls
             mock_requests.side_effect = [
                 RequestReturn(example_seattle_routes),
                 RequestReturn(example_seattle_route),

@@ -4,12 +4,11 @@
 import argparse
 import json
 import logging
-from pathlib import Path
 import sys
 import traceback
+from pathlib import Path
 from typing import Callable, Dict, List
 from unittest import mock
-
 
 from .run_cdp_pipeline import run_cdp_pipeline
 

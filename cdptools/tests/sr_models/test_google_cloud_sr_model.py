@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import pytest
 import random
 from unittest import mock
 
+import pytest
 from google.cloud import speech_v1p1beta1 as speech
 
 from cdptools.sr_models.google_cloud_sr_model import GoogleCloudSRModel

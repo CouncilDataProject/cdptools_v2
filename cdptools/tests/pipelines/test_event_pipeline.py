@@ -3,10 +3,10 @@
 
 import json
 from pathlib import Path
-import pytest
 from typing import Union
 from unittest import mock
 
+import pytest
 from firebase_admin import firestore
 from google.cloud import storage
 
@@ -15,7 +15,8 @@ from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.event_scrapers.seattle_event_scraper import SeattleEventScraper
 from cdptools.file_stores.gcs_file_store import GCSFileStore
 from cdptools.pipelines import EventPipeline
-from cdptools.sr_models.google_cloud_sr_model import GoogleCloudSRModel, SRModelOutputs
+from cdptools.sr_models.google_cloud_sr_model import (GoogleCloudSRModel,
+                                                      SRModelOutputs)
 
 from ..databases.test_cloud_firestore_database import MockedCollection
 from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket

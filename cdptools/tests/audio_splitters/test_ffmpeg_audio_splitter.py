@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-import pytest
 from unittest import mock
+
+import pytest
 
 from cdptools.audio_splitters.ffmpeg_audio_splitter import FFmpegAudioSplitter
 

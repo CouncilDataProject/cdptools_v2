@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-import pytest
 from unittest import mock
+
+import pytest
 
 from cdptools.file_stores.file_store import FileStore
 

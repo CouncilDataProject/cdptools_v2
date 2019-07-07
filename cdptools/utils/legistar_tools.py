@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
 import logging
+from datetime import datetime, timedelta
 from typing import Dict, List
 
-from fuzzywuzzy import fuzz
 import requests
+from fuzzywuzzy import fuzz
 
 ###############################################################################
 

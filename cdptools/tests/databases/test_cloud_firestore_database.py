@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-import pytest
 from unittest import mock
 
+import pytest
 from firebase_admin import firestore
 
-from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.databases import exceptions
+from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 
 
 class MockedResponse:

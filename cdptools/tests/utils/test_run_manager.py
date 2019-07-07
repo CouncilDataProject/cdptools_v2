@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-import pytest
 from unittest import mock
 
+import pytest
 from firebase_admin import firestore
 from google.cloud import storage
 

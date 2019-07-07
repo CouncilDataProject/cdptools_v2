@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
 import logging
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
 import requests
+from firebase_admin import credentials, firestore
 
-from .database import Database, OrderCondition, WhereCondition
 from . import exceptions
+from .database import Database, OrderCondition, WhereCondition
 
 ###############################################################################
 

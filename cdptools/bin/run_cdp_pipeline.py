@@ -3,11 +3,12 @@
 
 import argparse
 import logging
-from pathlib import Path
-import schedule
 import sys
 import time
 import traceback
+from pathlib import Path
+
+import schedule
 
 from cdptools import get_module_version, pipelines
 

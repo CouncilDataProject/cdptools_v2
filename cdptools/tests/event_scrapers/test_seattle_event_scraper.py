@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-import pytest
 
+import pytest
 from bs4 import BeautifulSoup
 
 from cdptools.event_scrapers.seattle_event_scraper import SeattleEventScraper

@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 import logging
 import os
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from .pipeline import Pipeline
-from ..utils import RunManager
 from .. import get_module_version
+from ..utils import RunManager
+from .pipeline import Pipeline
 
 ###############################################################################
 

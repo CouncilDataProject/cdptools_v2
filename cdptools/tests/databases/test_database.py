@@ -3,8 +3,10 @@
 
 import pytest
 
-from cdptools.databases.database import Database, WhereCondition, WhereOperators, OrderCondition, OrderOperators
 from cdptools.databases import exceptions
+from cdptools.databases.database import (Database, OrderCondition,
+                                         OrderOperators, WhereCondition,
+                                         WhereOperators)
 
 
 @pytest.mark.parametrize("filt", [

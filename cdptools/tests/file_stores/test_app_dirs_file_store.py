@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pathlib import Path
-import pytest
 import shutil
+from pathlib import Path
 from unittest import mock
+
+import pytest
 
 from cdptools.file_stores.app_dirs_file_store import AppDirsFileStore
 

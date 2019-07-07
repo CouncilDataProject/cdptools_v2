@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from abc import ABC, abstractmethod
 import importlib
 import logging
+from abc import ABC, abstractmethod
 from typing import Dict, List, Union
 
 ###############################################################################

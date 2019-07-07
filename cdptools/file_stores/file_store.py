@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from abc import ABC, abstractmethod
 import hashlib
 import logging
-from pathlib import Path
 import shutil
+from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Optional, Union
 
 import requests

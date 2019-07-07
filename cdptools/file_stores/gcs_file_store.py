@@ -6,11 +6,11 @@ import os
 from pathlib import Path
 from typing import Optional, Union
 
-from google.cloud import storage
 import requests
+from google.cloud import storage
 
-from .file_store import FileStore
 from . import exceptions
+from .file_store import FileStore
 
 ###############################################################################
 

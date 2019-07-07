@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta
-from functools import partial
 import logging
 import os
 import re
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta
+from functools import partial
 from typing import Any, Dict, List, Union
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
+from fuzzywuzzy import process
 
+from ..utils import legistar_tools
 from . import errors
 from .event_scraper import EventScraper
-from ..utils import legistar_tools
-
 
 ###############################################################################
 

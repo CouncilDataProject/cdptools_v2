@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pathlib import Path
-import pytest
 import shutil
+from pathlib import Path
 from unittest import mock
 
+import pytest
 from google.cloud import storage
 
-from cdptools.file_stores.gcs_file_store import GCSFileStore
 from cdptools.file_stores import exceptions
+from cdptools.file_stores.gcs_file_store import GCSFileStore
 
 
 @pytest.fixture

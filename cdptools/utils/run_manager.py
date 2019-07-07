@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
 import logging
-from pathlib import Path
 import traceback
+from datetime import datetime
+from pathlib import Path
 from typing import Any, List, NamedTuple, Optional, Tuple, Union
 from uuid import uuid4
 

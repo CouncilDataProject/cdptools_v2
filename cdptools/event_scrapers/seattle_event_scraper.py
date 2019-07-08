@@ -279,15 +279,18 @@ class SeattleEventScraper(EventScraper):
             # Reduce events to not include cancelled events
             cancelled_reduced = [e for e in legistar_events if e["EventAgendaStatusName"] != "Cancelled"]
 
-            # Reduce events to only matching body
-            body_reduced = [e for e in cancelled_reduced if e["EventBodyName"] == event["body"]]
+            # Get body names
+            available_bodies = set([e["EventBodyName"] for e in cancelled_reduced])
 
-            # Sometimes the body names don't perfectly match
-            # In this case, we want to make sure that we can agenda match based off at least some events
-            if len(body_reduced) > 0:
-                legistar_events = body_reduced
+            # Check if the Seattle Channel body name (basically a "display name") is present in the list
+            # If so, choose the events with that exact body name
+            if event["body"] in available_bodies:
+                legistar_events = [e for e in cancelled_reduced if e["EventBodyName"] == event["body"]]
+            # No exact match available, find the closest body name by text diff
             else:
-                legistar_events = cancelled_reduced
+                # Returns the closest name and the score that made it the closest
+                closest_body_name, score = process.extractOne(event["body"], available_bodies)
+                legistar_events = [e for e in cancelled_reduced if e["EventBodyName"] == closest_body_name]
 
             # Run agenda matching against the events
             agenda_match_details = legistar_tools.get_matching_legistar_event_by_minutes_match(

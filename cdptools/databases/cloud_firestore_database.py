@@ -490,7 +490,8 @@ class CloudFirestoreDatabase(Database):
             values={
                 "algorithm_id": algorithm_id,
                 "begin": begin,
-                "completed": completed
+                "completed": completed,
+                "created": datetime.utcnow()
             }
         )
 
@@ -504,7 +505,8 @@ class CloudFirestoreDatabase(Database):
             values={
                 "run_id": run_id,
                 "dtype": dtype,
-                "value": value
+                "value": value,
+                "created": datetime.utcnow()
             }
         )
 
@@ -517,7 +519,8 @@ class CloudFirestoreDatabase(Database):
             pks=[("run_id", run_id), ("file_id", file_id)],
             values={
                 "run_id": run_id,
-                "file_id": file_id
+                "file_id": file_id,
+                "created": datetime.utcnow()
             }
         )
 
@@ -531,7 +534,8 @@ class CloudFirestoreDatabase(Database):
             values={
                 "run_id": run_id,
                 "dtype": dtype,
-                "value": value
+                "value": value,
+                "created": datetime.utcnow()
             }
         )
 
@@ -544,7 +548,8 @@ class CloudFirestoreDatabase(Database):
             pks=[("run_id", run_id), ("file_id", file_id)],
             values={
                 "run_id": run_id,
-                "file_id": file_id
+                "file_id": file_id,
+                "created": datetime.utcnow()
             }
         )
 

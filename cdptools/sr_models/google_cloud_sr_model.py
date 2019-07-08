@@ -29,7 +29,7 @@ class GoogleCloudSRModel(SRModel):
             # Clean and apply usage limits
             cleaned = []
             total_character_count = 0
-            for phrase in phrases[:500]:
+            for phrase in [p for p in phrases[:500] if isinstance(p, str)]:
                 if total_character_count <= 9900:
                     cleaned_phrase = phrase[:100]
 

@@ -116,7 +116,7 @@ def get_matching_legistar_event_by_minutes_match(
                 else:
                     event_minutes_items.append(ei["EventItemTitle"])
 
-            # Token sort ratio
+            # Token set ratio
             match_score = fuzz.token_set_ratio(minutes_items_provided, event_minutes_items)
 
             # Add score to map
@@ -150,10 +150,21 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
 
         # Only continue if the minutes item name is not ignored
         if minutes_item_name not in ignore_minutes_items:
+            # Sometimes this is missing...
+            # Not sure why
+            index = legistar_event_item["EventItemMinutesSequence"]
+
+            # In the case it is present, add it
+            if index:
+                index = int(index)
+            # In the case it isn't. Default to -1
+            else:
+                index = -1
+
             # Construct minutes item
             minutes_item = {
                 "name": minutes_item_name,
-                "index": int(legistar_event_item["EventItemMinutesSequence"]),
+                "index": index,
                 "legistar_event_item_id": int(legistar_event_item["EventItemId"])
             }
 

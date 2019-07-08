@@ -132,40 +132,66 @@ class EventPipeline(Pipeline):
             tmp_ts_words_transcript_filepath = f"{key}_ts_words_transcript_0.txt"
             tmp_ts_sentences_transcript_filepath = f"{key}_ts_sentences_transcript_0.txt"
 
-            # Transcribe audio
-            outputs = self.sr_model.transcribe(
-                audio_uri=audio_uri,
-                phrases=phrases,
-                raw_transcript_save_path=tmp_raw_transcript_filepath,
-                timestamped_words_save_path=tmp_ts_words_transcript_filepath,
-                timestamped_sentences_save_path=tmp_ts_sentences_transcript_filepath,
-            )
+            # Check if raw transcript already exists in file store
+            try:
+                # Try get the best variant of transcript
+                # Timestamped sentences first
+                try:
+                    main_transcript_uri = self.file_store.get_file_uri(filename=tmp_ts_sentences_transcript_filepath)
+                except FileNotFoundError:
+                    # Timestamped words second
+                    try:
+                        main_transcript_uri = self.file_store.get_file_uri(filename=tmp_ts_words_transcript_filepath)
+                    # Default to raw transcript
+                    # If this isn't found, the first try except block will break and entirely new transcripts will be
+                    # generated.
+                    except FileNotFoundError:
+                        main_transcript_uri = self.file_store.get_file_uri(filename=tmp_raw_transcript_filepath)
 
-            # Store and register transcript files
-            raw_transcript_uri = self.file_store.upload_file(filepath=outputs.raw_path)
-            raw_transcript_file_details = self.database.get_or_upload_file(raw_transcript_uri)
-            run.register_output(outputs.raw_path)
+                main_transcript_details = self.database.get_or_upload_file(main_transcript_uri)
+                confidence = self.database.select_rows_as_list(
+                    table="transcript",
+                    filters=["file_id", main_transcript_details["file_id"]],
+                    limit=1
+                )[0]["confidence"]
+            except FileNotFoundError:
+                # Transcribe audio
+                outputs = self.sr_model.transcribe(
+                    audio_uri=audio_uri,
+                    phrases=phrases,
+                    raw_transcript_save_path=tmp_raw_transcript_filepath,
+                    timestamped_words_save_path=tmp_ts_words_transcript_filepath,
+                    timestamped_sentences_save_path=tmp_ts_sentences_transcript_filepath,
+                )
 
-            # Default to using the raw output as main transcript
-            main_transcript_details = raw_transcript_file_details
+                # Store and register transcript files
+                raw_transcript_uri = self.file_store.upload_file(filepath=outputs.raw_path)
+                raw_transcript_file_details = self.database.get_or_upload_file(raw_transcript_uri)
+                run.register_output(outputs.raw_path)
 
-            # Timestamped transcripts are optional
-            # If available store them but also set as main transcript
-            if outputs.timestamped_words_path:
-                ts_words_transcript_uri = self.file_store.upload_file(filepath=outputs.timestamped_words_path)
-                ts_words_transcript_file_details = self.database.get_or_upload_file(ts_words_transcript_uri)
-                run.register_output(outputs.timestamped_words_path)
-                main_transcript_details = ts_words_transcript_file_details
+                # Default to using the raw output as main transcript
+                main_transcript_details = raw_transcript_file_details
+                confidence = outputs.confidence
 
-            # Timestamped sentences provide a nicer viewing experience
-            # If available store them but also set as main transcript
-            if outputs.timestamped_sentences_path:
-                ts_sentences_transcript_uri = self.file_store.upload_file(filepath=outputs.timestamped_sentences_path)
-                ts_sentences_transcript_file_details = self.database.get_or_upload_file(ts_sentences_transcript_uri)
-                run.register_output(outputs.timestamped_sentences_path)
-                main_transcript_details = ts_sentences_transcript_file_details
+                # Timestamped transcripts are optional
+                # If available store them but also set as main transcript
+                if outputs.timestamped_words_path:
+                    ts_words_transcript_uri = self.file_store.upload_file(filepath=outputs.timestamped_words_path)
+                    ts_words_transcript_file_details = self.database.get_or_upload_file(ts_words_transcript_uri)
+                    run.register_output(outputs.timestamped_words_path)
+                    main_transcript_details = ts_words_transcript_file_details
 
-            return main_transcript_details, outputs.confidence
+                # Timestamped sentences provide a nicer viewing experience
+                # If available store them but also set as main transcript
+                if outputs.timestamped_sentences_path:
+                    ts_sentences_transcript_uri = self.file_store.upload_file(
+                        filepath=outputs.timestamped_sentences_path
+                    )
+                    ts_sentences_transcript_file_details = self.database.get_or_upload_file(ts_sentences_transcript_uri)
+                    run.register_output(outputs.timestamped_sentences_path)
+                    main_transcript_details = ts_sentences_transcript_file_details
+
+            return main_transcript_details, confidence
 
     def task_parse_and_upload_constructed_event(self, event: Dict[str, Any]):
         with RunManager(
@@ -287,11 +313,12 @@ class EventPipeline(Pipeline):
         # Get events
         log.info("Starting event processing.")
         with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version(), remove_files=True):
-            events = self.event_scraper.get_events()
+            with RunManager(self.database, self.file_store, "EventScraper.get_events", get_module_version()):
+                events = self.event_scraper.get_events()
 
             # Multiprocess each event found
             with ThreadPoolExecutor(self.n_workers) as exe:
                 exe.map(self.process_event, events)
 
-            log.info("Completed event processing.")
-            log.info("=" * 80)
+        log.info("Completed event processing.")
+        log.info("=" * 80)

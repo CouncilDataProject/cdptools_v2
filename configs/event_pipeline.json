@@ -1,4 +1,5 @@
 {
+    "max_synchronous_jobs": 8,
     "event_scraper": {
         "module_path": "cdptools.event_scrapers.seattle_event_scraper",
         "object_name": "SeattleEventScraper",
@@ -6,7 +7,11 @@
             "ignore_minutes_items": [
                 "This meeting also constitutes a meeting of the City Council, provided that the meeting shall be conducted as a committee meeting under the Council Rules and Procedures, and Council action shall be limited to committee business.",
                 "City Council Agenda",
-                "Please Note: Times listed are estimated"
+                "Please Note: Times listed are estimated",
+                "Please Note: Times listed are estimated and public comment is not accepted during this meeting.",
+                "*Executive Sessions are closed to the public",
+                "Executive Sessions are closed to the public",
+                null
             ]
         }
     },
@@ -36,17 +41,5 @@
         "object_kwargs": {
             "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json"
         }
-    },
-    "mocks": [
-        {
-            "path": "cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_events",
-            "return_value": [{
-                "agenda_items": ["Executive Session to discuss Pending, Potential, or Actual Litigation, and to Evaluate the Qualifications of Candidates for Appointment to Elective Office to fill the City Council Position 4 vacancy (in District 4), previously held by Councilmember Rob Johnson."],
-                "body": "Full Council",
-                "event_datetime": "2019-04-11T00:00:00",
-                "source_uri": "https://www.seattlechannel.org/FullCouncil/?videoid=x103419",
-                "video_uri": "http://video.seattle.gov:8080/media/council/council_041119_2021928V.mp4"
-            }]
-        }
-    ]
+    }
 }

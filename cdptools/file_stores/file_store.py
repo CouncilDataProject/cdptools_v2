@@ -52,22 +52,24 @@ class FileStore(ABC):
         return not any(path.startswith(h) for h in external_headers)
 
     @staticmethod
-    def _external_resource_copy(url: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False) -> Path:
+    def _external_resource_copy(uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False) -> Path:
         if dst is None:
-            dst = url.split("/")[-1]
+            dst = uri.split("/")[-1]
 
         # Ensure dst doesn't exist
         dst = Path(dst).resolve()
+        if dst.is_dir():
+            dst = dst / uri.split("/")[-1]
         if dst.is_file() and not overwrite:
             raise FileExistsError(dst)
 
-        # Open requests connection to url as a stream
-        log.debug(f"Beginning external resource copy from: {url}")
-        with requests.get(url, stream=True) as streamed_read:
+        # Open requests connection to uri as a stream
+        log.debug(f"Beginning external resource copy from: {uri}")
+        with requests.get(uri, stream=True) as streamed_read:
             streamed_read.raise_for_status()
             with open(dst, "wb") as streamed_write:
                 shutil.copyfileobj(streamed_read.raw, streamed_write)
-        log.debug(f"Completed external resource copy from: {url}")
+        log.debug(f"Completed external resource copy from: {uri}")
         log.info(f"Stored external resource copy: {dst}")
 
         return dst

@@ -42,6 +42,7 @@ requirements = [
     "beautifulsoup4>=4.7.1",
     "ffmpeg-python>=0.1.17",
     "fuzzywuzzy>=0.17.0",
+    "nltk>=3.4.4",
     "pandas",
     "python-Levenshtein>=0.12.0",
     "requests>=2.21.0",

@@ -53,7 +53,7 @@ def download_most_recent_transcripts(db: Database, fs: FileStore, save_dir: Opti
 
     # Begin storage
     most_recent.apply(
-        lambda r: fs.download_file(r["filename"], save_dir / r["filename"], overwrite=True),
+        lambda r: fs.download_file(r["filename"], save_dir, overwrite=True),
         axis=1
     )
 

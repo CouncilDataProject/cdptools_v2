@@ -106,3 +106,6 @@ ENV/
 
 # Credentials
 credentials/
+
+# Common files
+workbench.ipynb

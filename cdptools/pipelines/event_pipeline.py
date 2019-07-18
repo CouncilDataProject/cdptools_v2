@@ -33,7 +33,7 @@ class EventPipeline(Pipeline):
         # Get workers
         self.n_workers = self.config.get("max_synchronous_jobs")
 
-        # Load event scraper
+        # Load modules
         self.event_scraper = self.load_custom_object(
             module_path=self.config["event_scraper"]["module_path"],
             object_name=self.config["event_scraper"]["object_name"],
@@ -310,9 +310,9 @@ class EventPipeline(Pipeline):
             log.info("Completed event: {} ({})".format(key, event["video_uri"]))
 
     def run(self):
-        # Get events
         log.info("Starting event processing.")
         with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version(), remove_files=True):
+            # Get events
             with RunManager(self.database, self.file_store, "EventScraper.get_events", get_module_version()):
                 events = self.event_scraper.get_events()
 

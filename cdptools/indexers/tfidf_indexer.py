@@ -2,22 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from pathlib import Path
-from typing import Union
+from concurrent.futures import ThreadPoolExecutor
+from typing import Dict
 
-import nltk
 import pandas as pd
 
 from .indexer import Indexer
-
-# Ensure stopwords are downloaded
-try:
-    from nltk.corpus import stopwords
-    STOPWORDS = stopwords.words("english")
-except LookupError:
-    nltk.download("stopwords")
-    from nltk.corpus import stopwords
-    STOPWORDS = stopwords.words("english")
 
 ###############################################################################
 
@@ -32,5 +22,14 @@ class TFIDFIndexer(Indexer):
         # Set state
         self.n_workers = max_synchronous_jobs
 
+    @staticmethod
+    def count_unique_words(cleaned_transcript_text: str):
+        return {}
+
     def generate_word_event_scores(self, generate_word_event_scores: pd.DataFrame) -> Dict[str, Dict[str, float]]:
+        # Instead of using sklearn CountVectorizer/ TfidfVectorizer, we want to do this one transcript at a time
+        # to save on memory and storage of the running machine
+        # with ThreadPoolExecutor(max_workers=self.n_workers) as exe:
+        #     pass
+
         return {}

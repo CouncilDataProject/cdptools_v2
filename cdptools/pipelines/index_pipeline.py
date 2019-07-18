@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import hashlib
 import json
 import logging
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Dict, Union
+
+import pandas as pd
 
 from .. import get_module_version
 from ..utils import RunManager, research_utils
@@ -91,7 +92,6 @@ class IndexPipeline(Pipeline):
 
             # Upload word event scores
             self.task_upload_word_event_scores(word_event_scores)
-
 
         log.info("Completed index creation.")
         log.info("=" * 80)

@@ -3,7 +3,9 @@
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, NamedTuple, Optional, Union
+from typing import Any, Dict, List, NamedTuple, Optional, Union
+
+from . import constants
 
 ###############################################################################
 
@@ -17,6 +19,20 @@ class SRModelOutputs(NamedTuple):
 
 
 class SRModel(ABC):
+
+    @staticmethod
+    def wrap_and_format_transcript_data(
+        data: constants.TranscriptDataJSON,
+        transcript_format: str,
+        confidence: float,
+        annotations: List[Dict[str, Any]] = []
+    ) -> Dict[str, Union[str, constants.TranscriptDataJSON]]:
+        return {
+            "format": transcript_format,
+            "annotations": annotations,
+            "confidence": confidence,
+            "data": data
+        }
 
     @abstractmethod
     def transcribe(
@@ -34,6 +50,6 @@ class SRModel(ABC):
         return SRModelOutputs(
             Path(raw_transcript_save_path),
             1.0,
-            timestamped_words_save_path,
-            timestamped_sentences_save_path
+            Path(timestamped_words_save_path),
+            Path(timestamped_sentences_save_path)
         )

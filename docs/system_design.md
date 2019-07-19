@@ -90,6 +90,8 @@ transcripts for city council meetings, maybe you will write a module that simply
 already high quality transcript back, no need for any processing. These are both valid speech recognition models, it's
 simply that one of them produces transcripts that have 100% confidence.
 
+If you want to develop your own speech recognition model, please first read about [supported transcript formats](transcript_formats.md).
+
 ### Pipelines
 Finally we arrive at pipelines. Pipelines should, similarly to modules, follow the `pipelines.Pipeline` abstract base
 class specification, but they really simply are just a task graph that gets carried out with each task being one of the

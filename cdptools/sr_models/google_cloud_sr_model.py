@@ -8,6 +8,7 @@ from typing import List, Optional, Union
 
 from google.cloud import speech_v1p1beta1 as speech
 
+from . import constants
 from .sr_model import SRModel, SRModelOutputs
 
 ###############################################################################
@@ -101,7 +102,7 @@ class GoogleCloudSRModel(SRModel):
                     for word in word_list:
                         start_time = word.start_time.seconds + word.start_time.nanos * 1e-9
                         end_time = word.end_time.seconds + word.end_time.nanos * 1e-9
-                        timestamped_words.append({"word": word.word, "start_time": start_time, "end_time": end_time})
+                        timestamped_words.append({"text": word.word, "start_time": start_time, "end_time": end_time})
 
                     # Update confidence stats
                     confidence_sum += result.alternatives[0].confidence
@@ -113,19 +114,20 @@ class GoogleCloudSRModel(SRModel):
         for word_details in timestamped_words:
             # Create new sentence
             if current_sentence is None:
-                current_sentence = {"sentence": word_details["word"], "start_time": word_details["start_time"]}
+                current_sentence = {"text": word_details["text"], "start_time": word_details["start_time"]}
             # Update current sentence
             else:
-                current_sentence["sentence"] += " {}".format(word_details["word"])
+                current_sentence["text"] += " {}".format(word_details["text"])
 
             # End current sentence and reset
-            if word_details["word"][-1] == ".":
+            if word_details["text"][-1] == ".":
                 current_sentence["end_time"] = word_details["end_time"]
                 timestamped_sentences.append(current_sentence)
                 current_sentence = None
 
         # Create raw transcript
-        raw_transcript = " ".join([word_details["word"] for word_details in timestamped_words])
+        raw_transcript = " ".join([sentence_details["text"] for sentence_details in timestamped_sentences])
+        raw_transcript = {"start_time": 0, "text": raw_transcript, "end_time": timestamped_words[-1]["end_time"]}
 
         # Compute mean confidence
         if segments > 0:
@@ -133,6 +135,23 @@ class GoogleCloudSRModel(SRModel):
         else:
             confidence = 0.0
         log.info(f"Completed transcription for: {audio_uri}. Confidence: {confidence}")
+
+        # Wrap each transcript in the standard format
+        raw_transcript = self.wrap_and_format_transcript_data(
+            data=raw_transcript,
+            transcript_format=constants.TranscriptFormats.raw,
+            confidence=confidence
+        )
+        timestamped_words = self.wrap_and_format_transcript_data(
+            data=timestamped_words,
+            transcript_format=constants.TranscriptFormats.timestamped_words,
+            confidence=confidence
+        )
+        timestamped_sentences = self.wrap_and_format_transcript_data(
+            data=timestamped_sentences,
+            transcript_format=constants.TranscriptFormats.timestamped_sentences,
+            confidence=confidence
+        )
 
         # Write files
         with open(timestamped_words_save_path, "w") as write_out:
@@ -142,7 +161,7 @@ class GoogleCloudSRModel(SRModel):
             json.dump(timestamped_sentences, write_out)
 
         with open(raw_transcript_save_path, "w") as write_out:
-            write_out.write(raw_transcript)
+            json.dump(raw_transcript, write_out)
 
         # Return the save path
         return SRModelOutputs(

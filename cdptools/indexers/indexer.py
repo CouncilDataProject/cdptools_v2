@@ -126,16 +126,14 @@ class Indexer(ABC):
         return cleaned_transcript
 
     @abstractmethod
-    def generate_word_event_scores(self, transcript_manifest: pd.DataFrame, **kwargs) -> Dict[str, Dict[str, float]]:
+    def generate_word_event_scores(self, event_corpus_map: Dict[str, str], **kwargs) -> Dict[str, Dict[str, float]]:
         """
-        Given a transcript manifest (cdptools.utils.research_utils.get_most_recent_transcript_manifest),
-        compute word event scores that will act as a search index.
+        Given an event corpus map, compute word event scores that will act as a search index.
 
         Parameters
         ----------
-        transcript_manifest: pandas.DataFrame
-            A manifest of the most recent primary transcript for each event stored in the CDP instance.
-            Created from cdptools.utils.research_utils.get_most_recent_transcript_manifest
+        event_corpus_map: Dict[str, str]
+            A dictionary that maps event id to a local path with transcript to use for indexing.
 
         Returns
         -------

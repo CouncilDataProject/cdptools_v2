@@ -3,9 +3,8 @@
 
 import logging
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from typing import Dict
-
-import pandas as pd
 
 from .indexer import Indexer
 
@@ -26,10 +25,13 @@ class TFIDFIndexer(Indexer):
     def count_unique_words(cleaned_transcript_text: str):
         return {}
 
-    def generate_word_event_scores(self, generate_word_event_scores: pd.DataFrame) -> Dict[str, Dict[str, float]]:
+    def _generate_word_event_scores_single(transcript_details: Dict[str, Path]) -> Dict[str, Dict[str, float]]:
+        return {}
+
+    def generate_word_event_scores(self, event_corpus_map: Dict[str, str]) -> Dict[str, Dict[str, float]]:
         # Instead of using sklearn CountVectorizer/ TfidfVectorizer, we want to do this one transcript at a time
         # to save on memory and storage of the running machine
-        # with ThreadPoolExecutor(max_workers=self.n_workers) as exe:
-        #     pass
+        with ThreadPoolExecutor(max_workers=self.n_workers) as exe:
+            results = exe.map(self._generate_word_event_scores_single, event_corpus_map)
 
-        return {}
+        return list(results)

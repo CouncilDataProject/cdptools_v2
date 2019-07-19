@@ -53,31 +53,26 @@ class Indexer(ABC):
         # Enforce path
         transcipt_path = Path(transcipt_path).expanduser().resolve(strict=True)
 
-        # Because we aren't sure which type of transcript was passed to the function
-        # check the suffix to determine how to handle it.
+        # Check that the transcript follows a known format
         if transcipt_path.suffix == ".json":
             with open(transcipt_path, "r") as read_in:
                 transcript = json.load(read_in)
 
-            # Join all the sentences into a single string
-            # The transcript was a json annotated transcript but we still do not know which version of annotation it is
-            # If it is timestamped words or timestamped sentences
-            # Easy to figure out by which key is available
-            if "word" in transcript[0]:
-                transcript = " ".join([word_details["word"] for word_details in transcript])
-            elif "sentence" in transcript[0]:
-                transcript = " ".join([sentence_details["sentence"] for sentence_details in transcript])
-            else:
-                raise TypeError(f"Unsure how to handle annotated JSON transcript provided: {transcipt_path}")
-
-        # Handle raw transcript
-        elif transcipt_path.suffix == ".txt":
-            with open(transcipt_path, "r") as read_in:
-                transcript = read_in.read()
+            # Join all text items into a single string
+            try:
+                transcript = " ".join([portion["text"] for portion in transcript["data"]])
+            except KeyError:
+                raise TypeError(
+                    f"Unsure how to handle annotated JSON transcript provided: {transcipt_path}"
+                    f"Please refer to the `transcript_formats.md` file in the documentation for details."
+                )
 
         # Raise error for all other file formats
         else:
-            raise TypeError(f"Unsure how to handle transcript file format: {transcipt_path.suffix}")
+            raise TypeError(
+                f"Unsure how to handle transcript file format: {transcipt_path.suffix}"
+                f"Please refer to the `transcript_formats.md` file in the documentation for details."
+            )
 
         return transcript
 

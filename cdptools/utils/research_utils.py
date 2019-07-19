@@ -60,4 +60,11 @@ def download_most_recent_transcripts(db: Database, fs: FileStore, save_dir: Opti
     # Write manifest
     most_recent.to_csv(save_dir / "transcript_manifest.csv", index=False)
 
-    return save_dir
+    # Create event corpus map
+    event_corpus_map = {}
+    for transcript_details in most_recent.to_dict("records"):
+        event_corpus_map[transcript_details["event_id"]] = Path(
+            save_dir / transcript_details["filename"]
+        ).resolve(strict=False)
+
+    return event_corpus_map

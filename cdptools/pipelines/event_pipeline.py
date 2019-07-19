@@ -85,7 +85,7 @@ class EventPipeline(Pipeline):
                     suffix = ""
                 tmp_video_filepath = f"tmp_{key}_video.{suffix}"
                 tmp_video_filepath = self.file_store._external_resource_copy(
-                    url=video_uri,
+                    uri=video_uri,
                     dst=tmp_video_filepath
                 )
 
@@ -128,9 +128,9 @@ class EventPipeline(Pipeline):
             remove_files=True
         ) as run:
             # Setup temporary filenames
-            tmp_raw_transcript_filepath = f"{key}_raw_transcript_0.txt"
-            tmp_ts_words_transcript_filepath = f"{key}_ts_words_transcript_0.txt"
-            tmp_ts_sentences_transcript_filepath = f"{key}_ts_sentences_transcript_0.txt"
+            tmp_raw_transcript_filepath = f"{key}_raw_transcript_0.json"
+            tmp_ts_words_transcript_filepath = f"{key}_ts_words_transcript_0.json"
+            tmp_ts_sentences_transcript_filepath = f"{key}_ts_sentences_transcript_0.json"
 
             # Check if raw transcript already exists in file store
             try:

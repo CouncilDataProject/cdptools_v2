@@ -8,7 +8,6 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Dict, Union
 
-import pandas as pd
 from nltk.stem import PorterStemmer
 
 # Ensure stopwords are downloaded
@@ -83,7 +82,7 @@ class Indexer(ABC):
         return transcript
 
     @staticmethod
-    def clean_transcript_text(raw_transcript: str) -> str:
+    def clean_text_for_indexing(raw_transcript: str) -> str:
         """
         Run basic cleaning operations against the raw text of the transcript.
 
@@ -102,9 +101,6 @@ class Indexer(ABC):
 
         # Remove punctuation
         cleaned_transcript = re.sub(f"[{re.escape(string.punctuation)}]", "", cleaned_transcript)
-
-        # Remove words with mixed alphanumeric
-        cleaned_transcript = re.sub(r"\w*\d\w*", "", cleaned_transcript)
 
         # Remove stopwords
         joined_stopwords = "|".join(STOPWORDS)

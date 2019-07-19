@@ -3,8 +3,8 @@
 
 import json
 import logging
-import tempfile
-from concurrent.futures import ThreadPoolExecutor
+# import tempfile
+# from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Dict, Union
 
@@ -78,7 +78,7 @@ class IndexPipeline(Pipeline):
     def run(self):
         log.info("Starting index creation.")
         with RunManager(self.database, self.file_store, "IndexPipeline.run", get_module_version()):
-            # Get transcript manifest
+            # Get most recent transcripts
             with RunManager(
                 database=self.database,
                 file_store=self.file_store,

@@ -62,26 +62,26 @@ class MockedCollection:
 
 
 RESPONSE_ITEM = {
-    'name': 'projects/stg-cdp-seattle/databases/(default)/documents/event/0e3bd59c-3f07-452c-83cf-e9eebeb73af2',
-    'fields': {
-        'video_uri': {'stringValue': 'http://video.seattle.gov:8080/media/council/gen_062717V.mp4'},
-        'created': {'timestampValue': '2019-04-21T23:58:04.832481Z'},
-        'event_datetime': {'stringValue': '2017-06-27T00:00:00'},
-        'body_id': {'stringValue': '6f38a688-2e96-4e33-841c-883738f9f03d'},
-        'source_uri': {'stringValue': 'http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448'},  # noqa: E501
-        'test_boolean_value': {'booleanValue': True},
-        'test_null_value': {'nullValue': None},
-        'test_float_value': {'doubleValue': '12.12'},
-        'test_integer_value': {'integerValue': '12'}
+    "name": "projects/stg-cdp-seattle/databases/(default)/documents/event/0e3bd59c-3f07-452c-83cf-e9eebeb73af2",
+    "fields": {
+        "video_uri": {"stringValue": "http://video.seattle.gov:8080/media/council/gen_062717V.mp4"},
+        "created": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
+        "event_datetime": {"stringValue": "2017-06-27T00:00:00"},
+        "body_id": {"stringValue": "6f38a688-2e96-4e33-841c-883738f9f03d"},
+        "source_uri": {"stringValue": "http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448"},  # noqa: E501
+        "test_boolean_value": {"booleanValue": True},
+        "test_null_value": {"nullValue": None},
+        "test_float_value": {"doubleValue": "12.12"},
+        "test_integer_value": {"integerValue": "12"}
     }
 }
 
 EVENT_VALUES = {
-    'source_uri': 'http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448',  # noqa: E501
-    'created': datetime.utcnow(),
-    'video_uri': 'http://video.seattle.gov:8080/media/council/gen_062717V.mp4',
-    'event_datetime': '2017-06-27T00:00:00',
-    'body_id': '6f38a688-2e96-4e33-841c-883738f9f03d'
+    "source_uri": "http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448",  # noqa: E501
+    "created": datetime.utcnow(),
+    "video_uri": "http://video.seattle.gov:8080/media/council/gen_062717V.mp4",
+    "event_datetime": "2017-06-27T00:00:00",
+    "body_id": "6f38a688-2e96-4e33-841c-883738f9f03d"
 }
 
 
@@ -95,7 +95,7 @@ def mock_response_item():
 @pytest.fixture
 def mock_response_items():
     with mock.patch("requests.get") as MockRequest:
-        MockRequest.return_value = MockedResponse({'documents': [RESPONSE_ITEM]})
+        MockRequest.return_value = MockedResponse({"documents": [RESPONSE_ITEM]})
         yield MockRequest
 
 
@@ -111,7 +111,7 @@ def creds_db() -> CloudFirestoreDatabase:
         db._credentials_path = "/fake/path/to/creds.json"
         db._root = mock.Mock(firestore.Client)
         db._root.collection.return_value = MockedCollection([MockedDocument(
-            '0e3bd59c-3f07-452c-83cf-e9eebeb73af2',
+            "0e3bd59c-3f07-452c-83cf-e9eebeb73af2",
             EVENT_VALUES
         )])
 

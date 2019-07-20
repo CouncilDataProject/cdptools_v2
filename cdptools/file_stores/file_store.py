@@ -31,7 +31,7 @@ class FileStore(ABC):
         pos = 0
 
         # Open the file and compute md5 in chunks
-        with open(filepath, mode='rb') as f:
+        with open(filepath, mode="rb") as f:
             while True:
                 f.seek(pos)
                 chunk = f.read(block_size)

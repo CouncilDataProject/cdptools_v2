@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 from fuzzywuzzy import process
 
 from ..utils import legistar_tools
-from . import errors
+from . import exceptions
 from .event_scraper import EventScraper
 
 ###############################################################################
@@ -29,8 +29,8 @@ class ParsedEvents(object):
     def __init__(
         self,
         success: List[Dict] = None,
-        warning: List[errors.EventOutOfTimeboundsError] = None,
-        error: List[Union[errors.EventParseError, errors.LegistarLookupError]] = None
+        warning: List[exceptions.EventOutOfTimeboundsError] = None,
+        error: List[Union[exceptions.EventParseError, exceptions.LegistarLookupError]] = None
     ):
         self.success = success if success else []
         self.warning = warning if warning else []
@@ -174,7 +174,7 @@ class SeattleEventScraper(EventScraper):
             try:
                 agenda = event_details.find("div", class_="titleExcerptText").text
             except AttributeError:
-                raise errors.EventParseError(body, event_dt)
+                raise exceptions.EventParseError(body, event_dt)
 
         # The agenda is returned as a single string
         # Clean it and split it into its parts
@@ -201,14 +201,14 @@ class SeattleEventScraper(EventScraper):
             # regex search pattern.
             video = re.search(r"http://video\.seattle\.gov\:8080[a-zA-Z0-9\/_ ]*\.(mp4|flv)", video).group(0)
         except AttributeError:
-            raise errors.EventParseError(body, event_dt)
+            raise exceptions.EventParseError(body, event_dt)
 
         # If the event was not today, ignore it.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
             yesterday = now - timedelta(days=1)
             if not (event_dt > yesterday and event_dt < now):
-                raise errors.EventOutOfTimeboundsError(event_dt, yesterday, now)
+                raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 
         # Construct event
         event = {
@@ -243,11 +243,11 @@ class SeattleEventScraper(EventScraper):
                 # Successful parse
                 events.success.append(event)
 
-            except (errors.EventOutOfTimeboundsError) as e:
+            except (exceptions.EventOutOfTimeboundsError) as e:
                 # For logging purposes, return the errors
                 events.warning.append((container, e))
 
-            except errors.EventParseError as e:
+            except exceptions.EventParseError as e:
                 # For logging purposes, return the errors
                 events.error.append((container, e))
 

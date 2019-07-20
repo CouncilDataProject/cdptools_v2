@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import json
 import tempfile
 from datetime import datetime
 from unittest import mock
@@ -71,12 +70,3 @@ def test_download_most_recent_transcripts(example_transcript):
 
             # Assert structure
             assert len(event_corpus_map) == 1
-
-            # Open and check contents
-            with open(event_corpus_map["0a8fcd28-b920-4088-bd73-ceacb304db0f"], "r") as read_in:
-                copied_transcript = json.load(read_in)
-
-            with open(example_transcript, "r") as read_in:
-                example_transcript = json.load(read_in)
-
-            assert copied_transcript == example_transcript

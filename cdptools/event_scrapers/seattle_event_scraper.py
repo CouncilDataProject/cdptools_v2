@@ -283,6 +283,15 @@ class SeattleEventScraper(EventScraper):
             else:
                 # Returns the closest name and the score that made it the closest
                 closest_body_name, score = process.extractOne(event["body"], available_bodies)
+
+                # For reasons somewhat unknown to me, SeattleChannel has videos for events that don't exist in legistar
+                # We can somewhat detect this by filtering out body names that are drastically different
+                # In the case that the closest body name is less than a 50% match, return None to be cleaned up after
+                # The body names shouldn't be _that_ different which is why we are just ignoring for now
+                if score < 50:
+                    return None
+
+                # Otherwise, use the found body name
                 legistar_events = [e for e in cancelled_reduced if e["EventBodyName"] == closest_body_name]
 
             # Run agenda matching against the events
@@ -325,6 +334,10 @@ class SeattleEventScraper(EventScraper):
         with ThreadPoolExecutor(min(self.max_concurrent_requests, os.cpu_count() * 5)) as exe:
             f = partial(self._attach_legistar_details_to_event, ignore_minutes_items=self.ignore_minutes_items)
             parsed_events = list(exe.map(f, results.success))
+
+        # Parsed events can be "None" in the case where legistar lookup failed
+        # Clean out the "None"s
+        parsed_events = [event for event in parsed_events if event is not None]
 
         log.info(f"Collected: {len(results.success)}. "
                  f"Ignored: {len(results.warning)}. "

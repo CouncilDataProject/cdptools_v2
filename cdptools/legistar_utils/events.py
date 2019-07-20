@@ -148,6 +148,12 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
         else:
             minutes_item_name = legistar_event_item["EventItemTitle"]
 
+        # Choose matter name based off available data
+        if legistar_event_item["EventItemMatterName"]:
+            minutes_item_matter = legistar_event_item["EventItemMatterName"]
+        else:
+            minutes_item_matter = legistar_event_item["EventItemMatterFile"]
+
         # Only continue if the minutes item name is not ignored
         if minutes_item_name not in ignore_minutes_items:
             # Sometimes this is missing...
@@ -164,6 +170,7 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
             # Construct minutes item
             minutes_item = {
                 "name": minutes_item_name,
+                "matter": minutes_item_matter,
                 "index": index,
                 "legistar_event_item_id": int(legistar_event_item["EventItemId"])
             }

@@ -9,7 +9,7 @@ import pytest
 
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.file_stores.gcs_file_store import GCSFileStore
-from cdptools.utils import research_utils
+from cdptools.research_utils import transcripts as transcript_tools
 
 
 @pytest.fixture
@@ -66,7 +66,7 @@ def test_download_most_recent_transcripts(example_transcript):
                 mocked_download.return_value = example_transcript
 
             # Get the event corpus map
-            event_corpus_map = research_utils.download_most_recent_transcripts(db, fs, tmpdir)
+            event_corpus_map = transcript_tools.download_most_recent_transcripts(db, fs, tmpdir)
 
             # Assert structure
             assert len(event_corpus_map) == 1

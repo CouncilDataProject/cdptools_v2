@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import os
 from pathlib import Path
 from typing import Union
 from unittest import mock
@@ -201,7 +202,16 @@ def test_event_pipeline_with_backfill(
                 *([RequestReturn(example_legistar_tools_event_item_vote)] * len(event_items_one.content))
             ]
 
-            pipeline.run()
+            # Mock the video copy
+            with mock.patch("cdptools.file_stores.FileStore._external_resource_copy") as mocked_resource_copy:
+                mocked_resource_copy.return_value = example_video
 
-            # TODO:
-            # The test returns the wrong legistar event details for the provided seattle channel event
+                # Interupt calls to os.remove because it deletes test data otherwise
+                with mock.patch("os.remove") as mocked_remove:
+                    mocked_remove.return_value = None
+
+                    pipeline.run()
+
+    # Post test clean up for files created but that weren't cleaned up because os.remove patch
+    for out_file in [".wav", ".out", ".err"]:
+        os.remove(f"937bf82d28b503b38c9e54bbcb96e57bca74d9dc594d5d1c6daa470d9d1f06cc_audio{out_file}")

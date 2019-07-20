@@ -70,7 +70,7 @@ class Indexer(ABC):
         # Raise error for all other file formats
         else:
             raise TypeError(
-                f"Unsure how to handle transcript file format: {transcipt_path.suffix}"
+                f"Unsure how to handle transcript file format: {transcipt_path}"
                 f"Please refer to the `transcript_formats.md` file in the documentation for details."
             )
 

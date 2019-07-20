@@ -1,0 +1,57 @@
+ffmpeg version 3.4.6-0ubuntu0.18.04.1 Copyright (c) 2000-2019 the FFmpeg developers
+  built with gcc 7 (Ubuntu 7.3.0-16ubuntu3)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.18.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-gpl --disable-stripping --enable-avresample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librubberband --enable-librsvg --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libopencv --enable-libx264 --enable-shared
+  libavutil      55. 78.100 / 55. 78.100
+  libavcodec     57.107.100 / 57.107.100
+  libavformat    57. 83.100 / 57. 83.100
+  libavdevice    57. 10.100 / 57. 10.100
+  libavfilter     6.107.100 /  6.107.100
+  libavresample   3.  7.  0 /  3.  7.  0
+  libswscale      4.  8.100 /  4.  8.100
+  libswresample   2.  9.100 /  2.  9.100
+  libpostproc    54.  7.100 / 54.  7.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/home/maxfield/active/cdp/cdptools/cdptools/tests/data/example_video.mp4':
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 0
+    compatible_brands: mp42isomavc1
+    creation_time   : 2017-10-04T16:51:05.000000Z
+    compilation     : 0
+    encoder         : Sorenson Squeeze
+    comment         : Encoded by Mr. Daryl Peck
+  Duration: 00:03:01.15, start: 0.000000, bitrate: 724 kb/s
+    Stream #0:0(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 96 kb/s (default)
+    Metadata:
+      creation_time   : 2017-10-04T16:51:05.000000Z
+      handler_name    : soun
+    Stream #0:1(und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(tv, bt470bg/bt470bg/unknown), 640x360, 623 kb/s, 29.97 fps, 29.97 tbr, 30k tbn, 59.94 tbc (default)
+    Metadata:
+      creation_time   : 2017-10-04T16:51:05.000000Z
+      handler_name    : vide
+      encoder         : AVC Coding
+    Stream #0:2(und): Data: none (mp4s / 0x7334706D) (default)
+    Metadata:
+      creation_time   : 2017-10-04T16:51:06.000000Z
+      handler_name    : sdsm
+    Stream #0:3(und): Data: none (mp4s / 0x7334706D) (default)
+    Metadata:
+      creation_time   : 2017-10-04T16:51:06.000000Z
+      handler_name    : odsm
+Stream mapping:
+  Stream #0:0 -> #0:0 (aac (native) -> pcm_s16le (native))
+Press [q] to stop, [?] for help
+Output #0, wav, to '/home/maxfield/active/cdp/cdptools/937bf82d28b503b38c9e54bbcb96e57bca74d9dc594d5d1c6daa470d9d1f06cc_audio.wav':
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 0
+    compatible_brands: mp42isomavc1
+    ICMT            : Encoded by Mr. Daryl Peck
+    compilation     : 0
+    ISFT            : Lavf57.83.100
+    Stream #0:0(und): Audio: pcm_s16le ([1][0][0][0] / 0x0001), 16000 Hz, mono, s16, 256 kb/s (default)
+    Metadata:
+      creation_time   : 2017-10-04T16:51:05.000000Z
+      handler_name    : soun
+      encoder         : Lavc57.107.100 pcm_s16le
+size=    5661kB time=00:03:01.13 bitrate= 256.0kbits/s speed= 838x    
+video:0kB audio:5661kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.001932%

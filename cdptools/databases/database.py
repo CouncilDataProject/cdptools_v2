@@ -100,7 +100,7 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_minutes_item(self, name: str, legistar_event_item_id: Optional[int] = None) -> Dict:
+    def get_or_upload_minutes_item(self, name: str, matter: str, legistar_event_item_id: Optional[int] = None) -> Dict:
         """
         Get or upload a minutes item. In Legistar this is commonly referred to as an event item.
         (Minutes item, in my opinion, is a better definition for the goals of CDP.)

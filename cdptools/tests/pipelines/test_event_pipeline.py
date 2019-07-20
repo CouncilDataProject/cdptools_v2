@@ -34,7 +34,7 @@ def example_config(data_dir) -> Path:
 
 @pytest.fixture
 def example_transcript_raw(data_dir) -> Path:
-    return data_dir / "example_transcript_raw.txt"
+    return data_dir / "example_transcript_raw.json"
 
 
 @pytest.fixture

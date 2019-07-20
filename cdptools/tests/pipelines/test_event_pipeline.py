@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import json
-import os
 from pathlib import Path
 from typing import Union
 from unittest import mock
@@ -26,6 +25,11 @@ from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket
 @pytest.fixture
 def example_video(data_dir) -> Path:
     return data_dir / "example_video.mp4"
+
+
+@pytest.fixture
+def example_audio(data_dir) -> Path:
+    return data_dir / "example_audio.wav"
 
 
 @pytest.fixture
@@ -68,6 +72,13 @@ def empty_creds_fs() -> GCSFileStore:
         fs._bucket = MockedBucket("fake_bucket", [MockedBlob("example.mp4", exists=False)])
 
         return fs
+
+
+@pytest.fixture
+def mocked_splitter(example_audio) -> FFmpegAudioSplitter:
+    mocked_splitter = mock.Mock(FFmpegAudioSplitter())
+    mocked_splitter.split.return_value = example_audio
+    return mocked_splitter
 
 
 @pytest.fixture
@@ -167,6 +178,7 @@ def test_event_pipeline_no_backfill(
 def test_event_pipeline_with_backfill(
     empty_creds_db,
     empty_creds_fs,
+    mocked_splitter,
     mocked_sr_model,
     example_config,
     example_seattle_routes,
@@ -180,7 +192,7 @@ def test_event_pipeline_with_backfill(
     # Configure all mocks
     with mock.patch("cdptools.pipelines.pipeline.Pipeline.load_custom_object") as mock_loader:
         mock_loader.side_effect = [
-            SeattleEventScraper(backfill=True), empty_creds_db, empty_creds_fs, FFmpegAudioSplitter(), mocked_sr_model
+            SeattleEventScraper(backfill=True), empty_creds_db, empty_creds_fs, mocked_splitter, mocked_sr_model
         ]
 
         # Initialize pipeline
@@ -207,11 +219,5 @@ def test_event_pipeline_with_backfill(
                 mocked_resource_copy.return_value = example_video
 
                 # Interupt calls to os.remove because it deletes test data otherwise
-                with mock.patch("os.remove") as mocked_remove:
-                    mocked_remove.return_value = None
-
+                with mock.patch("os.remove"):
                     pipeline.run()
-
-    # Post test clean up for files created but that weren't cleaned up because os.remove patch
-    for out_file in [".wav", ".out", ".err"]:
-        os.remove(f"937bf82d28b503b38c9e54bbcb96e57bca74d9dc594d5d1c6daa470d9d1f06cc_audio{out_file}")

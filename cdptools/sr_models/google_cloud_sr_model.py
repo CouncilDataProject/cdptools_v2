@@ -127,7 +127,7 @@ class GoogleCloudSRModel(SRModel):
 
         # Create raw transcript
         raw_transcript = " ".join([sentence_details["text"] for sentence_details in timestamped_sentences])
-        raw_transcript = {"start_time": 0, "text": raw_transcript, "end_time": timestamped_words[-1]["end_time"]}
+        raw_transcript = [{"start_time": 0, "text": raw_transcript, "end_time": timestamped_words[-1]["end_time"]}]
 
         # Compute mean confidence
         if segments > 0:

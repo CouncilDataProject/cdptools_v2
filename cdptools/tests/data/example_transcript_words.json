@@ -1,7 +1,7 @@
 {
     "format": "timestamped-words",
     "annotations": [],
-    "confidence": 0.9500351306554433,
+    "confidence": 0.9498944201984921,
     "data": [{
         "text": "Okay.",
         "start_time": 14.4,
@@ -2955,12 +2955,8 @@
         "start_time": 301.9,
         "end_time": 302.5
     }, {
-        "text": "Finance",
+        "text": "financing",
         "start_time": 302.5,
-        "end_time": 303.1
-    }, {
-        "text": "in",
-        "start_time": 303.1,
         "end_time": 303.2
     }, {
         "text": "neighborhood",
@@ -13319,7 +13315,7 @@
         "start_time": 1204.3,
         "end_time": 1204.4
     }, {
-        "text": "experienced",
+        "text": "experience",
         "start_time": 1204.4,
         "end_time": 1205.0
     }, {
@@ -16907,8 +16903,12 @@
         "start_time": 1512.6,
         "end_time": 1512.8
     }, {
-        "text": "rolling",
+        "text": "a",
         "start_time": 1512.8,
+        "end_time": 1512.9
+    }, {
+        "text": "rolling",
+        "start_time": 1512.9,
         "end_time": 1513.3
     }, {
         "text": "out",

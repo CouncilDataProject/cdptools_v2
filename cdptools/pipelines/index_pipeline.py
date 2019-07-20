@@ -11,7 +11,8 @@ from typing import Dict, Union
 import pandas as pd
 
 from .. import get_module_version
-from ..utils import RunManager, research_utils
+from ..dev_utils import RunManager
+from ..research_utils import transcripts as transcript_tools
 from .pipeline import Pipeline
 
 ###############################################################################
@@ -82,10 +83,10 @@ class IndexPipeline(Pipeline):
             with RunManager(
                 database=self.database,
                 file_store=self.file_store,
-                algorithm_name="cdptools.utils.research_utils.get_most_recent_transcript_manifest",
+                algorithm_name="cdptools.research_utils.transcripts.get_most_recent_transcript_manifest",
                 algorithm_version=get_module_version()
             ):
-                transcript_manifest = research_utils.get_most_recent_transcript_manifest(db=self.database)
+                transcript_manifest = transcript_tools.get_most_recent_transcript_manifest(db=self.database)
 
             # Compute word event scores
             word_event_scores = self.task_generate_word_event_scores(transcript_manifest)

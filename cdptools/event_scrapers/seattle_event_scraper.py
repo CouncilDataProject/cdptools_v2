@@ -13,7 +13,7 @@ import requests
 from bs4 import BeautifulSoup
 from fuzzywuzzy import process
 
-from ..utils import legistar_tools
+from ..legistar_utils import events as legistar_event_tools
 from . import exceptions
 from .event_scraper import EventScraper
 
@@ -258,7 +258,7 @@ class SeattleEventScraper(EventScraper):
     @staticmethod
     def _attach_legistar_details_to_event(event: Dict[str, Any], ignore_minutes_items: List[str] = []) -> Dict:
         # Get all legistar events surrounding the provided event date
-        legistar_events = legistar_tools.get_legistar_events_for_timespan(
+        legistar_events = legistar_event_tools.get_legistar_events_for_timespan(
             "seattle",
             event["event_datetime"],
             event["event_datetime"] + timedelta(days=1)
@@ -295,7 +295,7 @@ class SeattleEventScraper(EventScraper):
                 legistar_events = [e for e in cancelled_reduced if e["EventBodyName"] == closest_body_name]
 
             # Run agenda matching against the events
-            agenda_match_details = legistar_tools.get_matching_legistar_event_by_minutes_match(
+            agenda_match_details = legistar_event_tools.get_matching_legistar_event_by_minutes_match(
                 event["minutes_items"],
                 legistar_events
             )
@@ -304,7 +304,7 @@ class SeattleEventScraper(EventScraper):
             selected_event = agenda_match_details.selected_event
 
         # Parse details
-        parsed_details = legistar_tools.parse_legistar_event_details(selected_event, ignore_minutes_items)
+        parsed_details = legistar_event_tools.parse_legistar_event_details(selected_event, ignore_minutes_items)
 
         # Format the event details
         formatted_event_details = {

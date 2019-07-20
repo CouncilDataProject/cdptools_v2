@@ -221,6 +221,7 @@ class EventPipeline(Pipeline):
                 # Store or get minutes item
                 minutes_item_details = self.database.get_or_upload_minutes_item(
                     name=m_item["name"],
+                    matter=m_item["matter"],
                     legistar_event_item_id=m_item["legistar_event_item_id"]
                 )
 

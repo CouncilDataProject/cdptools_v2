@@ -91,13 +91,6 @@ class SeattleEventScraper(EventScraper):
             # Expand route
             return f"{parent}/{route}"
 
-    @staticmethod
-    def match_partial_event_to_legistar(partial: Dict, legistar_events: List[Dict]) -> Dict:
-        # Find body matches
-        body_matches = [l_event for l_event in legistar_events if l_event["EventBodyName"] == partial["body"]]
-
-        return body_matches
-
     def get_routes(self) -> List[str]:
         # Get page
         response = requests.get(self.main_route)

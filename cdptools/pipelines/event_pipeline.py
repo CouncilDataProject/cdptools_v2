@@ -151,7 +151,7 @@ class EventPipeline(Pipeline):
                 main_transcript_details = self.database.get_or_upload_file(main_transcript_uri)
                 confidence = self.database.select_rows_as_list(
                     table="transcript",
-                    filters=["file_id", main_transcript_details["file_id"]],
+                    filters=[("file_id", main_transcript_details["file_id"])],
                     limit=1
                 )[0]["confidence"]
             except FileNotFoundError:

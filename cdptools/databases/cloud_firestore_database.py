@@ -11,8 +11,10 @@ import firebase_admin
 import requests
 from firebase_admin import credentials, firestore
 
+from ..indexers import Indexer
 from . import exceptions
-from .database import Database, OrderCondition, WhereCondition
+from .database import (Database, EventMatch, EventTerm, OrderCondition,
+                       WhereCondition)
 
 ###############################################################################
 
@@ -627,6 +629,42 @@ class CloudFirestoreDatabase(Database):
 
         # Return the newly created row
         return {f"index_term_id": id, **values}
+
+    def search_events(self, query: str):
+        # Clean and tokenize the query
+        query = Indexer.clean_text_for_indexing(query)
+        query_terms = query.split(" ")
+
+        # If creds are available we can use server side filtering
+        if self._credentials_path:
+            # First query for the terms
+            event_results = {}
+            for term in query_terms:
+                term_results = self.select_rows_as_list("index_term", filters=[("term", term)])
+
+                # Join the results into a main results dictionary where they top level key is the event id
+                for term_result in term_results:
+                    if term_result["event_id"] in event_results:
+                        event_results[term_result["event_id"]].append(term_result)
+                    else:
+                        event_results[term_result["event_id"]] = [term_result]
+
+            # Clean and format the results
+            event_matches = []
+            for event_id, term_results in event_results.items():
+                event_matches.append(EventMatch(
+                    event_id=event_id,
+                    event_terms=[
+                        EventTerm(term=t["term"], contribution=t["value"]) for t in term_results
+                    ]
+                ))
+        else:
+            event_matches = []
+
+        # Sort by relevance
+        event_matches = sorted(event_matches, key=lambda em: em.relevance, reverse=True)
+
+        return event_matches
 
     def __str__(self):
         if self._credentials_path:

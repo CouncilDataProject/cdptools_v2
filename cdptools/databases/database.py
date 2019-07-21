@@ -34,6 +34,36 @@ class OrderOperators:
     desc: str = "DESCENDING"
     asce: str = "ASCENDING"
 
+
+class EventTerm(NamedTuple):
+    term: str
+    contribution: float
+
+
+class EventMatch:
+    def __init__(self, event_id, event_terms: List[EventTerm]):
+        self._event_id = event_id
+        self._terms = event_terms
+
+    @property
+    def event_id(self):
+        return self._event_id
+
+    @property
+    def terms(self):
+        return self._terms
+
+    @property
+    def relevance(self):
+        return sum(t.contribution for t in self.terms)
+
+    def __str__(self):
+        return f"<EventMatch [event_id: {self.event_id}, relevance: {self.relevance}]>"
+
+    def __repr__(self):
+        return str(self)
+
+
 ###############################################################################
 
 
@@ -265,3 +295,10 @@ class Database(ABC):
         Upload or update a single index term.
         """
         return {}
+
+    @abstractmethod
+    def search_events(self, query: str) -> List[EventMatch]:
+        """
+        Use the stored index terms to query for events given a query.
+        """
+        return []

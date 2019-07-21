@@ -251,3 +251,17 @@ class Database(ABC):
         Get or upload a run output file.
         """
         return {}
+
+    @abstractmethod
+    def get_index_term(self, term: str, event_id: str) -> Dict:
+        """
+        Get a single index term.
+        """
+        return {}
+
+    @abstractmethod
+    def upload_or_update_index_term(self, term: str, event_id: str, value: float) -> Dict:
+        """
+        Upload or update a single index term.
+        """
+        return {}

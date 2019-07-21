@@ -554,6 +554,50 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
+    def get_index_term(self, term: str, event_id: str) -> Dict:
+        # Try find
+        found = self._select_rows_with_max_results_expectation(
+            table="index_term",
+            pks=[("term", term), ("event_id", event_id)],
+            expected_max_rows=1
+        )
+        if found:
+            return found[0]
+
+        return None
+
+    def upload_or_update_index_term(self, term: str, event_id: str, value: float) -> Dict:
+        """
+        Upload or update a single index term.
+        """
+        # Reject any upload without credentials
+        if self._credentials_path is None:
+            raise exceptions.MissingCredentialsError()
+
+        # Check if index term already exists
+        found = self.get_index_term(term, event_id)
+
+        # If found, use the already stored id
+        if found:
+            id = found["index_term_id"]
+        # Else, create a new id
+        else:
+            id = str(uuid4())
+
+        # Create values dictionary
+        values = {
+            "term": term,
+            "event_id": event_id,
+            "value": value,
+            "updated": datetime.utcnow()
+        }
+
+        # Store the row
+        self._root.collection("index_term").document(id).set(values)
+
+        # Return the newly created row
+        return {f"index_term_id": id, **values}
+
     def __str__(self):
         if self._credentials_path:
             return f"<CloudFirestoreDatabase [{self._credentials_path}]>"

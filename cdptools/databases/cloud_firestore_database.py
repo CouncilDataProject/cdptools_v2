@@ -177,6 +177,36 @@ class CloudFirestoreDatabase(Database):
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
         limit: int = 1000
     ) -> List[Dict]:
+        # This is how to structure requests using "run query"
+        # YES
+        # response = requests.post(
+        #     "https://firestore.googleapis.com/v1/projects/stg-cdp-seattle/databases/(default)/documents:runQuery",
+        #     data=json.dumps({
+        #         "structuredQuery": {
+        #             "select": {
+        #                 "fields": []
+        #             },
+        #             "from": [
+        #                 {
+        #                     "collectionId": "index_term",
+        #                     "allDescendants": False
+        #                 }
+        #             ],
+        #             "where": {
+        #                 "fieldFilter": {
+        #                     "field": {
+        #                         "fieldPath": "term"
+        #                     },
+        #                     "op": "EQUAL",
+        #                     "value": {
+        #                         "stringValue": "histor"
+        #                     }
+        #                 }
+        #             }
+        #         }
+        #     })
+        # )
+
         # Warn filters
         if filters:
             log.warning(f"Filters are not currently supported for no credentials databases. Recieved: {filters}")

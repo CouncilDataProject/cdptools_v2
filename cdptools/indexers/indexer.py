@@ -141,9 +141,9 @@ class Indexer(ABC):
         return cleaned_transcript
 
     @abstractmethod
-    def generate_word_event_scores(self, event_corpus_map: Dict[str, str], **kwargs) -> Dict[str, Dict[str, float]]:
+    def generate_index(self, event_corpus_map: Dict[str, Path], **kwargs) -> Dict[str, Dict[str, float]]:
         """
-        Given an event corpus map, compute word event scores that will act as a search index.
+        Given an event corpus map, compute word event values that will act as a search index.
 
         Parameters
         ----------
@@ -153,7 +153,7 @@ class Indexer(ABC):
         Returns
         -------
         word_event_scores: Dict[str, Dict[str, float]]
-            A dictionary of scores per word per event that will be stored in the CDP instance's database and used as a
+            A dictionary of values per event per word that will be stored in the CDP instance's database and used as a
             method for searching for events.
 
             Example:

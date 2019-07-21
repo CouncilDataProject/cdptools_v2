@@ -94,26 +94,6 @@ class Indexer(ABC):
         # Send to lowercase
         cleaned_transcript = raw_transcript.lower()
 
-        # Unlike normal indexing steps that remove all punctuation
-        # it is somewhat useful for city council meetings to actually replace specific punctuation with the word
-        # Replacement can't just be done with re.sub, need to loop through matches and replace instances
-        # in the transcript as we discover them
-
-        # Find all instances of numeric one plus times followed by percent sign and replace with "{numeric} percent"
-        for match in re.findall(r"([0-9]*[\.]*[0-9]+)(\%)", cleaned_transcript):
-            numeric, _ = match
-            cleaned_transcript = cleaned_transcript.replace(f"{numeric}%", f"{numeric} percent")
-
-        # Find all instances of dollar sign followed by numeric one plus times and replace with "{numeric} dollar"
-        for match in re.findall(r"(\$)([0-9]*[\.]*[0-9]+)", cleaned_transcript):
-            _, numeric = match
-            cleaned_transcript = cleaned_transcript.replace(f"${numeric}", f"{numeric} dollar")
-
-        # Find all instances of floats and replace with "{numeric} point {decimal}"
-        for match in re.findall(r"([0-9]*)(\.)([0-9]+)", cleaned_transcript):
-            numeric, _, decimal = match
-            cleaned_transcript = cleaned_transcript.replace(f"{numeric}.{decimal}", f"{numeric} point {decimal}")
-
         # Remove punctuation
         cleaned_transcript = re.sub(f"[{re.escape(string.punctuation)}]", "", cleaned_transcript)
 

@@ -108,6 +108,7 @@ class IndexPipeline(Pipeline):
             # Store the transcripts locally in a temporary directory
             with tempfile.TemporaryDirectory() as tmpdir:
                 # Get the event corpus map and download most recent transcripts to local machine
+                log.info("Downloading most recent transcripts")
                 event_corpus_map = transcript_tools.download_most_recent_transcripts(
                     db=self.database,
                     fs=self.file_store,
@@ -115,9 +116,11 @@ class IndexPipeline(Pipeline):
                 )
 
                 # Compute word event scores
+                log.info("Generating index")
                 index = self.task_generate_index(event_corpus_map)
 
             # Upload word event scores
+            log.info("Uploading index")
             self.task_upload_index(index)
 
         log.info("Completed index creation.")

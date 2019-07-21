@@ -3,12 +3,10 @@
 
 import json
 import logging
-# import tempfile
-# from concurrent.futures import ThreadPoolExecutor
+import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Dict, Union
-
-import pandas as pd
 
 from .. import get_module_version
 from ..dev_utils import RunManager
@@ -20,6 +18,17 @@ from .pipeline import Pipeline
 log = logging.getLogger(__name__)
 
 ###############################################################################
+
+
+class EventValuesForTerm:
+    """
+    Used for multithreaded uploaded of index terms.
+    Can't use NamedTuple here because dictionaries are mutuable.
+    """
+
+    def __init__(self, term: str, event_values: Dict[str, float]):
+        self.term = term
+        self.event_values = event_values
 
 
 class IndexPipeline(Pipeline):
@@ -52,47 +61,64 @@ class IndexPipeline(Pipeline):
             object_kwargs=self.config["indexer"].get("object_kwargs", {})
         )
 
-    def task_generate_word_event_scores(self, transcript_manifest: pd.DataFrame) -> Dict[str, Dict[str, float]]:
+    def task_generate_index(self, event_corpus_map: Dict[str, Path]) -> Dict[str, Dict[str, float]]:
         """
         Generate word event scores dictionary.
         """
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="IndexPipeline.task_generate_word_event_scores",
+            algorithm_name="IndexPipeline.task_generate_index",
             algorithm_version=get_module_version()
         ):
-            return self.indexer.generate_word_event_scores(transcript_manifest)
+            return self.indexer.generate_index(event_corpus_map)
 
-    def task_upload_word_event_scores(self, word_event_scores: Dict[str, Dict[str, float]]):
+    def _upload_index_term_event_values(self, evft: EventValuesForTerm):
+        # Loop through each event and value tied to this term and upload to database
+        for event_id, value in evft.event_values.items():
+            self.database.upload_or_update_index_term(
+                term=evft.term,
+                event_id=event_id,
+                value=value
+            )
+
+    def task_upload_index(self, index: Dict[str, Dict[str, float]]):
         """
         Upload a word event scores dictionary. This will completely replace a previous index.
         """
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="IndexPipeline.task_upload_word_event_scores",
+            algorithm_name="IndexPipeline.task_upload_index",
             algorithm_version=get_module_version()
         ):
-            return
+            # Create upload items
+            # This list of objects is just useful for making it easier to multithread the upload
+            index_term_event_values = []
+            for term, event_values in index.items():
+                index_term_event_values.append(EventValuesForTerm(term, event_values))
+
+            # Multithread the upload/ update of the index
+            with ThreadPoolExecutor(self.n_workers) as exe:
+                exe.map(self._upload_index_term_event_values, index_term_event_values)
 
     def run(self):
         log.info("Starting index creation.")
         with RunManager(self.database, self.file_store, "IndexPipeline.run", get_module_version()):
-            # Get most recent transcripts
-            with RunManager(
-                database=self.database,
-                file_store=self.file_store,
-                algorithm_name="cdptools.research_utils.transcripts.get_most_recent_transcript_manifest",
-                algorithm_version=get_module_version()
-            ):
-                transcript_manifest = transcript_tools.get_most_recent_transcript_manifest(db=self.database)
+            # Store the transcripts locally in a temporary directory
+            with tempfile.TemporaryDirectory() as tmpdir:
+                # Get the event corpus map and download most recent transcripts to local machine
+                event_corpus_map = transcript_tools.download_most_recent_transcripts(
+                    db=self.database,
+                    fs=self.file_store,
+                    save_dir=tmpdir
+                )
 
-            # Compute word event scores
-            word_event_scores = self.task_generate_word_event_scores(transcript_manifest)
+                # Compute word event scores
+                index = self.task_generate_index(event_corpus_map)
 
             # Upload word event scores
-            self.task_upload_word_event_scores(word_event_scores)
+            self.task_upload_index(index)
 
         log.info("Completed index creation.")
         log.info("=" * 80)

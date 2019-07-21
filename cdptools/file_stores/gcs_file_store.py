@@ -150,24 +150,27 @@ class GCSFileStore(FileStore):
         save_path: Optional[Union[str, Path]] = None,
         overwrite: bool = False
     ) -> Path:
-        # Fix name
-        filename = Path(filename).resolve()
-
         # Check for existance
-        self.get_file_uri(filename.name)
+        self.get_file_uri(filename)
 
         # No save path, set it to received filename
         if save_path is None:
             save_path = filename
 
+        # Resolve save path
+        save_path = Path(save_path).expanduser().resolve()
+
+        # If the save path is a directory, attach the filename to the path
+        if save_path.is_dir():
+            save_path = save_path / filename
+
         # Check save path
-        save_path = Path(save_path).resolve()
         if save_path.is_file() and not overwrite:
             raise FileExistsError(save_path)
 
         # Begin download
         log.debug(f"Beginning file download for: {filename}")
-        blob = self._bucket.blob(filename.name)
+        blob = self._bucket.blob(filename)
         blob.download_to_filename(str(save_path))
         log.debug(f"Completed file download for: {filename}")
 

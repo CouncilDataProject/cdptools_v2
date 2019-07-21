@@ -43,7 +43,7 @@ def download_most_recent_transcripts(db: Database, fs: FileStore, save_dir: Opti
         save_dir = "."
 
     # Resolve save directory
-    save_dir = Path(save_dir).resolve()
+    save_dir = Path(save_dir).expanduser().resolve()
 
     # Make the save directory if not already exists
     save_dir.mkdir(parents=True, exist_ok=True)

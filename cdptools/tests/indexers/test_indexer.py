@@ -73,14 +73,12 @@ def test_get_raw_transcript_formats(
     ("The quick brown fox jumps over the running ant", "quick brown fox jump run ant"),
     ("thE quICk BROwn Fox JuMps OVER the RUNning ANt", "quick brown fox jump run ant"),
     ("1 billion", "1 billion"),
-    ("98%", "98 percent"),
-    ("1.4 Million", "1 point 4 million"),
+    ("98%", "98"),
+    # Would love to learn better methods for handling cases like this but I don't think it matters too much
+    ("1.4 Million", "14 million"),
     ("Will this remove punctuation?!%'", "remov punctuat"),
-    ("$10 10.5% $5.5 2%", "10 dollar 10 point 5 percent 5 point 5 dollar 2 percent"),
-    # Unsure how to handle this to the best case, but works okay for now
-    # Best case: "study report cost 14 point 8 thousand dollar"
-    # Best case: dollar is placed after thousand
-    ("The study will reportedly cost $14.8 thousand", "studi reportedli cost 14 point 8 dollar thousand")
+    ("$10 10.5% $5.5 2%", "10 105 55 2"),
+    ("The study will reportedly cost $14.8 thousand", "studi reportedli cost 148 thousand")
 ])
 def test_clean_text_for_indexing(text, expected):
     result = Indexer.clean_text_for_indexing(text)

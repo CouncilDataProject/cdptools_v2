@@ -181,6 +181,7 @@ class CloudFirestoreDatabase(Database):
     ) -> List[Dict]:
         # This is how to structure requests using "run query"
         # YES
+        # https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents/runQuery
         # response = requests.post(
         #     "https://firestore.googleapis.com/v1/projects/stg-cdp-seattle/databases/(default)/documents:runQuery",
         #     data=json.dumps({
@@ -636,6 +637,9 @@ class CloudFirestoreDatabase(Database):
         query_terms = query.split(" ")
 
         # If creds are available we can use server side filtering
+        # TODO:
+        # With the update to no creds requests, we will be able to use filters on no creds requests
+        # Meaning: we don't have to have separate functions for these two operations 🎉
         if self._credentials_path:
             # First query for the terms
             event_results = {}

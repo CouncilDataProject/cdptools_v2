@@ -3,4 +3,5 @@
 """Databases package for cdptools."""
 
 
-from .database import Database  # noqa: F401
+from .database import (Database, OrderCondition, OrderOperators,  # noqa: F401
+                       WhereCondition, WhereOperators)

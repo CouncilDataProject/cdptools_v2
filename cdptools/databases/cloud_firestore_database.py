@@ -242,6 +242,11 @@ class CloudFirestoreDatabase(Database):
                 # Construct WhereCondition
                 f = self._construct_where_condition(f)
 
+                # Handle datetimes
+                filter_val = f.value
+                if isinstance(filter_val, datetime):
+                    filter_val = f"{filter_val.isoformat()}Z"
+
                 # Add filter to structuredQuery
                 constructed_filters.append({
                     "fieldFilter": {
@@ -250,7 +255,7 @@ class CloudFirestoreDatabase(Database):
                         },
                         "op": self._convert_base_where_operator_to_cloud_firestore_where_operator(f.operator),
                         "value": {
-                            self._get_cloud_firestore_value_type(f.value): f.value
+                            self._get_cloud_firestore_value_type(f.value): filter_val
                         }
                     }
                 })

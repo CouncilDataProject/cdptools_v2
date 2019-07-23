@@ -57,6 +57,15 @@ class UnknownTypeOrderConditionError(Exception):
         return f"OrderCondition's can be created using list, string, or tuple. Received: {type(self.by)}, {self.by}"
 
 
+class FailedRequestError(Exception):
+    def __init__(self, response: str, **kwargs):
+        super().__init__(**kwargs)
+        self.response = response
+
+    def __str__(self):
+        return f"Request failed. Response: {self.response}"
+
+
 class UniquenessError(Exception):
     def __init__(self, table: str, pks: List[str], results: List[Dict], **kwargs):
         super().__init__(**kwargs)

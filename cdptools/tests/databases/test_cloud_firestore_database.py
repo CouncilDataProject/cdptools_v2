@@ -7,8 +7,9 @@ from unittest import mock
 import pytest
 from firebase_admin import firestore
 
-from cdptools.databases import exceptions
-from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
+from cdptools.databases import WhereOperators, exceptions
+from cdptools.databases.cloud_firestore_database import (
+    CloudFirestoreDatabase, CloudFirestoreWhereOperators, NoCredResponseTypes)
 
 
 class MockedResponse:
@@ -76,6 +77,11 @@ RESPONSE_ITEM = {
     }
 }
 
+
+RESPONSE_ITEMS = [{
+    "document": RESPONSE_ITEM
+}]
+
 EVENT_VALUES = {
     "source_uri": "http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448",  # noqa: E501
     "created": datetime.utcnow(),
@@ -83,20 +89,6 @@ EVENT_VALUES = {
     "event_datetime": "2017-06-27T00:00:00",
     "body_id": "6f38a688-2e96-4e33-841c-883738f9f03d"
 }
-
-
-@pytest.fixture
-def mock_response_item():
-    with mock.patch("requests.get") as MockRequest:
-        MockRequest.return_value = MockedResponse(RESPONSE_ITEM)
-        yield MockRequest
-
-
-@pytest.fixture
-def mock_response_items():
-    with mock.patch("requests.get") as MockRequest:
-        MockRequest.return_value = MockedResponse({"documents": [RESPONSE_ITEM]})
-        yield MockRequest
 
 
 @pytest.fixture
@@ -150,8 +142,12 @@ def test_get_or_upload_row(no_creds_db, creds_db, empty_creds_db, pks):
     empty_creds_db._get_or_upload_row("event", pks, EVENT_VALUES)
 
 
-def test_cloud_firestore_database_select_row(no_creds_db, creds_db, mock_response_item):
-    no_creds_db.select_row_by_id("event", "0e3bd59c-3f07-452c-83cf-e9eebeb73af2")
+def test_cloud_firestore_database_select_row(no_creds_db, creds_db):
+    # Mock requests
+    with mock.patch("requests.get") as mocked_request:
+        mocked_request.return_value = MockedResponse(RESPONSE_ITEM)
+        no_creds_db.select_row_by_id("event", "0e3bd59c-3f07-452c-83cf-e9eebeb73af2")
+
     creds_db.select_row_by_id("event", "0e3bd59c-3f07-452c-83cf-e9eebeb73af2")
 
 
@@ -164,11 +160,41 @@ def test_cloud_firestore_database_select_row(no_creds_db, creds_db, mock_respons
     (None, "video_uri", None),
     (None, "video_uri", 10),
     (None, None, 10),
-    pytest.param(None, 12, None, marks=pytest.mark.raises(exception=TypeError))
+    pytest.param(None, 12, None, marks=pytest.mark.raises(exception=exceptions.UnknownTypeOrderConditionError))
 ])
-def test_cloud_firestore_database_select_rows(no_creds_db, creds_db, mock_response_items, filters, order_by, limit):
-    no_creds_db.select_rows_as_list("event", filters, order_by, limit)
+def test_cloud_firestore_database_select_rows(no_creds_db, creds_db, filters, order_by, limit):
+    # Mock requests
+    with mock.patch("requests.post") as mocked_request:
+        mocked_request.return_value = MockedResponse(RESPONSE_ITEMS)
+        no_creds_db.select_rows_as_list("event", filters, order_by, limit)
+
     creds_db.select_rows_as_list("event", filters, order_by, limit)
+
+
+@pytest.mark.parametrize("op, expected", [
+    (WhereOperators.eq, CloudFirestoreWhereOperators.eq),
+    (WhereOperators.contains, CloudFirestoreWhereOperators.contains),
+    (WhereOperators.gt, CloudFirestoreWhereOperators.gt),
+    (WhereOperators.lt, CloudFirestoreWhereOperators.lt),
+    (WhereOperators.gteq, CloudFirestoreWhereOperators.gteq),
+    (WhereOperators.lteq, CloudFirestoreWhereOperators.lteq),
+    pytest.param("hello world", None, marks=pytest.mark.raises(exception=ValueError))
+])
+def test_convert_base_where_operator_to_cloud_firestore_where_operator(op, expected):
+    assert CloudFirestoreDatabase._convert_base_where_operator_to_cloud_firestore_where_operator(op) == expected
+
+
+@pytest.mark.parametrize("val, expected", [
+    (True, NoCredResponseTypes.boolean),
+    (0.1, NoCredResponseTypes.double),
+    (datetime.utcnow(), NoCredResponseTypes.dt),
+    (1, NoCredResponseTypes.integer),
+    ("hello world", NoCredResponseTypes.string),
+    (None, NoCredResponseTypes.null),
+    pytest.param(("hello", "world"), None, marks=pytest.mark.raises(exception=ValueError))
+])
+def test_get_cloud_firestore_value_type(val, expected):
+    assert CloudFirestoreDatabase._get_cloud_firestore_value_type(val) == expected
 
 
 @pytest.mark.parametrize("pks, n_expected", [

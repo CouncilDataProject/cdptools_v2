@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -14,7 +15,7 @@ from firebase_admin import credentials, firestore
 from ..indexers import Indexer
 from . import exceptions
 from .database import (Database, EventMatch, EventTerm, OrderCondition,
-                       WhereCondition)
+                       WhereCondition, WhereOperators)
 
 ###############################################################################
 
@@ -33,6 +34,15 @@ class NoCredResponseTypes:
     integer: str = "integerValue"
     null: str = "nullValue"
     string: str = "stringValue"
+
+
+class CloudFirestoreWhereOperators:
+    eq: str = "EQUAL"
+    contains: str = "ARRAY_CONTAINS"
+    gt: str = "GREATER_THAN"
+    lt: str = "LESS_THAN"
+    gteq: str = "GREATER_THAN_OR_EQUAL"
+    lteq: str = "LESS_THAN_OR_EQUAL"
 
 
 class CloudFirestoreDatabase(Database):
@@ -172,6 +182,41 @@ class CloudFirestoreDatabase(Database):
         # Get and expand
         return [{f"{table}_id": i.id, **i.to_dict()} for i in ref.stream()]
 
+    @staticmethod
+    def _convert_base_where_operator_to_cloud_firestore_where_operator(op: str) -> str:
+        if op == WhereOperators.eq:
+            return CloudFirestoreWhereOperators.eq
+        if op == WhereOperators.contains:
+            return CloudFirestoreWhereOperators.contains
+        if op == WhereOperators.gt:
+            return CloudFirestoreWhereOperators.gt
+        if op == WhereOperators.lt:
+            return CloudFirestoreWhereOperators.lt
+        if op == WhereOperators.gteq:
+            return CloudFirestoreWhereOperators.gteq
+        if op == WhereOperators.lteq:
+            return CloudFirestoreWhereOperators.lteq
+
+        raise ValueError(f"Unsure how to convert where operator: {op}. "
+                         f"No mapping exists between base operators and cloud firestore specific operators.")
+
+    @staticmethod
+    def _get_cloud_firestore_value_type(val: Union[bool, float, datetime, int, str, None]) -> str:
+        if isinstance(val, bool):
+            return NoCredResponseTypes.boolean
+        if isinstance(val, float):
+            return NoCredResponseTypes.double
+        if isinstance(val, datetime):
+            return NoCredResponseTypes.dt
+        if isinstance(val, int):
+            return NoCredResponseTypes.integer
+        if isinstance(val, str):
+            return NoCredResponseTypes.string
+        if val is None:
+            return NoCredResponseTypes.null
+
+        raise ValueError(f"Unsure how to determine cloud firestore type from object: {val} (type: {type(val)})")
+
     def _select_rows_as_list_no_creds(
         self,
         table: str,
@@ -179,87 +224,88 @@ class CloudFirestoreDatabase(Database):
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
         limit: int = 1000
     ) -> List[Dict]:
-        # This is how to structure requests using "run query"
-        # YES
         # https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents/runQuery
-        # response = requests.post(
-        #     "https://firestore.googleapis.com/v1/projects/stg-cdp-seattle/databases/(default)/documents:runQuery",
-        #     data=json.dumps({
-        #         "structuredQuery": {
-        #             "select": {
-        #                 "fields": []
-        #             },
-        #             "from": [
-        #                 {
-        #                     "collectionId": "index_term",
-        #                     "allDescendants": False
-        #                 }
-        #             ],
-        #             "where": {
-        #                 "fieldFilter": {
-        #                     "field": {
-        #                         "fieldPath": "term"
-        #                     },
-        #                     "op": "EQUAL",
-        #                     "value": {
-        #                         "stringValue": "histor"
-        #                     }
-        #                 }
-        #             }
-        #         }
-        #     })
-        # )
+        structuredQuery = {
+            "from": [
+                {
+                    "collectionId": table,
+                    "allDescendants": False
+                }
+            ]
+        }
 
-        # Warn filters
+        # Apply filters
         if filters:
-            log.warning(f"Filters are not currently supported for no credentials databases. Recieved: {filters}")
+            # Empty list to store constructed filters in
+            constructed_filters = []
+            for f in filters:
+                # Construct WhereCondition
+                f = self._construct_where_condition(f)
+
+                # Add filter to structuredQuery
+                constructed_filters.append({
+                    "fieldFilter": {
+                        "field": {
+                            "fieldPath": f.column_name
+                        },
+                        "op": self._convert_base_where_operator_to_cloud_firestore_where_operator(f.operator),
+                        "value": {
+                            self._get_cloud_firestore_value_type(f.value): f.value
+                        }
+                    }
+                })
+
+            # Add filters to the structuredQuery
+            structuredQuery["where"] = {
+                "compositeFilter": {
+                    "op": "AND",
+                    "filters": constructed_filters
+                }
+            }
 
         # Format order by
         if order_by:
-            if isinstance(order_by, str):
-                order_by = f"orderBy={order_by}"
-            else:
-                raise TypeError(
-                    f"order_by parameter value must be a string for no credentials databases. Recieved {order_by}"
-                )
-        else:
-            order_by = ""
+            order_condition = self._construct_orderby_condition(order_by)
+            structuredQuery["orderBy"] = [
+                {
+                    "field": {
+                        "fieldPath": order_condition.column_name
+                    },
+                    "direction": order_condition.operator
+                }
+            ]
 
         # Override limit from None to default 1000
         if limit is None:
             limit = 1000
 
         # Format limit
-        limit = f"pageSize={limit}"
+        structuredQuery["limit"] = limit
 
-        # Format attachments
-        attachments = [order_by, limit]
-
-        # Only attach if there was a value sent
-        attachments = "&".join([a for a in attachments if len(a) > 0])
-
-        # Construct query
-        target_uri = f"{self._db_uri}/{FIRESTORE_QUERY_ADDITIONS}".format(table=table, attachments=attachments)
-
-        # Get
-        response = requests.get(target_uri)
+        # Post
+        response = requests.post(
+            f"{self._db_uri}:runQuery",
+            data=json.dumps({
+                "structuredQuery": structuredQuery
+            })
+        )
 
         # Raise errors
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError:
+            raise exceptions.FailedRequestError(response.json())
 
         # To json
         response = response.json()
 
-        # Check for error
-        if "documents" in response:
-            return [
-                {
-                    f"{table}_id": d["name"].split("/")[-1],  # Get last item in the uri
-                    **self._jsonify_firestore_response(d["fields"])
-                } for d in response["documents"]
-            ]
-
-        raise KeyError(f"No table with name: '{table}' exits.")
+        # Return formatted
+        return [
+            {
+                f"{table}_id": document["document"]["name"].split("/")[-1],  # Get last item in the uri
+                **self._jsonify_firestore_response(document["document"]["fields"])
+            } for document in response
+        ]
 
     def select_rows_as_list(
         self,

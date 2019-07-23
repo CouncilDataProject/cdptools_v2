@@ -23,7 +23,7 @@ class OrderCondition(NamedTuple):
 
 class WhereOperators:
     eq: str = "=="
-    contains: str = "array_contains"
+    contains: str = "in"
     gt: str = ">"
     lt: str = "<"
     gteq: str = ">="

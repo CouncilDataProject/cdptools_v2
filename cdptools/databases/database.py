@@ -118,7 +118,7 @@ class Database(ABC):
         limit: Optional[int] = None
     ) -> List[Dict]:
         """
-        Get a list of rows from a table optionally using filters, ordering, and limit.
+        Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.
         """
         return []
 

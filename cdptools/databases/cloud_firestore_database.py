@@ -682,34 +682,27 @@ class CloudFirestoreDatabase(Database):
         query = Indexer.clean_text_for_indexing(query)
         query_terms = query.split(" ")
 
-        # If creds are available we can use server side filtering
-        # TODO:
-        # With the update to no creds requests, we will be able to use filters on no creds requests
-        # Meaning: we don't have to have separate functions for these two operations 🎉
-        if self._credentials_path:
-            # First query for the terms
-            event_results = {}
-            for term in query_terms:
-                term_results = self.select_rows_as_list("index_term", filters=[("term", term)])
+        # First query for the terms
+        event_results = {}
+        for term in query_terms:
+            term_results = self.select_rows_as_list("index_term", filters=[("term", term)])
 
-                # Join the results into a main results dictionary where they top level key is the event id
-                for term_result in term_results:
-                    if term_result["event_id"] in event_results:
-                        event_results[term_result["event_id"]].append(term_result)
-                    else:
-                        event_results[term_result["event_id"]] = [term_result]
+            # Join the results into a main results dictionary where they top level key is the event id
+            for term_result in term_results:
+                if term_result["event_id"] in event_results:
+                    event_results[term_result["event_id"]].append(term_result)
+                else:
+                    event_results[term_result["event_id"]] = [term_result]
 
-            # Clean and format the results
-            event_matches = []
-            for event_id, term_results in event_results.items():
-                event_matches.append(EventMatch(
-                    event_id=event_id,
-                    event_terms=[
-                        EventTerm(term=t["term"], contribution=t["value"]) for t in term_results
-                    ]
-                ))
-        else:
-            event_matches = []
+        # Clean and format the results
+        event_matches = []
+        for event_id, term_results in event_results.items():
+            event_matches.append(EventMatch(
+                event_id=event_id,
+                event_terms=[
+                    EventTerm(term=t["term"], contribution=t["value"]) for t in term_results
+                ]
+            ))
 
         # Sort by relevance
         event_matches = sorted(event_matches, key=lambda em: em.relevance, reverse=True)

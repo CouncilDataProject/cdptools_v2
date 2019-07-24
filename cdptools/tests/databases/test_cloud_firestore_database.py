@@ -78,9 +78,42 @@ EVENT_ITEM = {
 }
 
 
-RESPONSE_ITEMS = [{
-    "document": RESPONSE_ITEM
+EVENT_ITEMS = [{
+    "document": EVENT_ITEM
 }]
+
+INDEX_TERM_ITEMS_HELLO = [
+    {"document": {
+        "name": "projects/stg-cdp-seattle/databases/(default)/documents/index_term/000",
+        "fields": {
+            "event_id": {"stringValue": "event_id_123"},
+            "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
+            "term": {"stringValue": "hello"},
+            "value": {"doubleValue": 0.2}
+        }
+    }},
+    {"document": {
+        "name": "projects/stg-cdp-seattle/databases/(default)/documents/index_term/111",
+        "fields": {
+            "event_id": {"stringValue": "event_id_234"},
+            "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
+            "term": {"stringValue": "hello"},
+            "value": {"doubleValue": 0.4}
+        }
+    }}
+]
+
+INDEX_TERM_ITEMS_WORLD = [
+    {"document": {
+        "name": "projects/stg-cdp-seattle/databases/(default)/documents/index_term/222",
+        "fields": {
+            "event_id": {"stringValue": "event_id_234"},
+            "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
+            "term": {"stringValue": "world"},
+            "value": {"doubleValue": 0.4}
+        }
+    }}
+]
 
 EVENT_VALUES = {
     "source_uri": "http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448",  # noqa: E501
@@ -145,7 +178,7 @@ def test_get_or_upload_row(no_creds_db, creds_db, empty_creds_db, pks):
 def test_cloud_firestore_database_select_row(no_creds_db, creds_db):
     # Mock requests
     with mock.patch("requests.get") as mocked_request:
-        mocked_request.return_value = MockedResponse(RESPONSE_ITEM)
+        mocked_request.return_value = MockedResponse(EVENT_ITEM)
         no_creds_db.select_row_by_id("event", "0e3bd59c-3f07-452c-83cf-e9eebeb73af2")
 
     creds_db.select_row_by_id("event", "0e3bd59c-3f07-452c-83cf-e9eebeb73af2")
@@ -165,7 +198,7 @@ def test_cloud_firestore_database_select_row(no_creds_db, creds_db):
 def test_cloud_firestore_database_select_rows(no_creds_db, creds_db, filters, order_by, limit):
     # Mock requests
     with mock.patch("requests.post") as mocked_request:
-        mocked_request.return_value = MockedResponse(RESPONSE_ITEMS)
+        mocked_request.return_value = MockedResponse(EVENT_ITEMS)
         no_creds_db.select_rows_as_list("event", filters, order_by, limit)
 
     creds_db.select_rows_as_list("event", filters, order_by, limit)

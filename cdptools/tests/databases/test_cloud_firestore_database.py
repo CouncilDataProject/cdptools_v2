@@ -239,4 +239,30 @@ def test_get_cloud_firestore_value_type(val, expected):
     )
 ])
 def test_cloud_firestore_database_max_expectation(no_creds_db, creds_db, pks, n_expected):
+    # Mock requests
+    with mock.patch("requests.post") as mocked_request:
+        mocked_request.return_value = MockedResponse(EVENT_ITEMS)
+        no_creds_db._select_rows_with_max_results_expectation("event", pks, n_expected)
+
     creds_db._select_rows_with_max_results_expectation("event", pks, n_expected)
+
+
+def test_search_events(no_creds_db):
+    # Mock requests
+    with mock.patch("requests.post") as mocked_request:
+        mocked_request.side_effect = [MockedResponse(INDEX_TERM_ITEMS_HELLO), MockedResponse(INDEX_TERM_ITEMS_WORLD)]
+
+        # Generate results
+        results = no_creds_db.search_events("hello world")
+
+        # Check results
+        # Two events returned
+        assert len(results) == 2
+
+        # Check individual event results
+        # We know the order they should be returned in is highest match to lowest match order
+        # Check to make sure that is the case
+        assert results[0].event_id == "event_id_234"
+        assert results[0].relevance == 0.8
+        assert results[1].event_id == "event_id_123"
+        assert results[1].relevance == 0.2

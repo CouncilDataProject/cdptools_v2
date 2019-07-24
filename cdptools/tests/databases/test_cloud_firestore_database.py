@@ -62,12 +62,12 @@ class MockedCollection:
         return self.items
 
 
-RESPONSE_ITEM = {
+EVENT_ITEM = {
     "name": "projects/stg-cdp-seattle/databases/(default)/documents/event/0e3bd59c-3f07-452c-83cf-e9eebeb73af2",
     "fields": {
         "video_uri": {"stringValue": "http://video.seattle.gov:8080/media/council/gen_062717V.mp4"},
         "created": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
-        "event_datetime": {"stringValue": "2017-06-27T00:00:00"},
+        "event_datetime": {"timestampValue": "2017-06-27T00:00:00Z"},
         "body_id": {"stringValue": "6f38a688-2e96-4e33-841c-883738f9f03d"},
         "source_uri": {"stringValue": "http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448"},  # noqa: E501
         "test_boolean_value": {"booleanValue": True},
@@ -93,7 +93,7 @@ EVENT_VALUES = {
 
 @pytest.fixture
 def no_creds_db() -> CloudFirestoreDatabase:
-    return CloudFirestoreDatabase("stg-cdp-seattle")
+    return CloudFirestoreDatabase("this-is-a-fake-bucket-hi")
 
 
 @pytest.fixture

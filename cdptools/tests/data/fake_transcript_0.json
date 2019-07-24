@@ -1,0 +1,10 @@
+{
+    "format": "timestamped-sentences",
+    "annotations": [],
+    "confidence": 0.9498944201984921,
+    "data": [{
+        "text": "Hello world, my name is Jackson.",
+        "start_time": 14.4,
+        "end_time": 16.5
+    }]
+}

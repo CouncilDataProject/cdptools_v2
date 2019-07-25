@@ -10,7 +10,7 @@ Making City Council data more accessible and actions taken by city council membe
 * From video -> storing audio -> generating and storing transcripts -> indexing -> analysis.
 * Modular system for gathering city council events, transcribing, and indexing them to make searchable.
 * Data pipelines are highly customizable to fit your cities needs.
-* Database schema allows for
+* Database schema allows for simple querying of event, body, member, or voting history of a city council.
 
 
 ## Quickstart Documentation

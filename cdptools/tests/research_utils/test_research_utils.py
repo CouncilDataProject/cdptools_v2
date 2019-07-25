@@ -65,8 +65,8 @@ def test_download_most_recent_transcripts(example_transcript):
             with mock.patch("cdptools.file_stores.gcs_file_store.GCSFileStore.download_file") as mocked_download:
                 mocked_download.return_value = example_transcript
 
-            # Get the event corpus map
-            event_corpus_map = transcript_tools.download_most_recent_transcripts(db, fs, tmpdir)
+                # Get the event corpus map
+                event_corpus_map = transcript_tools.download_most_recent_transcripts(db, fs, tmpdir)
 
-            # Assert structure
-            assert len(event_corpus_map) == 1
+                # Assert structure
+                assert len(event_corpus_map) == 1

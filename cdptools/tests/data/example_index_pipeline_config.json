@@ -1,0 +1,25 @@
+{
+    "max_synchronous_jobs": 8,
+    "database": {
+        "module_path": "cdptools.databases.cloud_firestore_database",
+        "object_name": "CloudFirestoreDatabase",
+        "object_kwargs": {
+            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json"
+        }
+    },
+    "file_store": {
+        "module_path": "cdptools.file_stores.gcs_file_store",
+        "object_name": "GCSFileStore",
+        "object_kwargs": {
+            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json",
+            "bucket_name": "hello-world.appspot.com"
+        }
+    },
+    "indexer": {
+        "module_path": "cdptools.indexers.tfidf_indexer",
+        "object_name": "TFIDFIndexer",
+        "object_kwargs": {
+            "max_synchronous_jobs": 8
+        }
+    }
+}

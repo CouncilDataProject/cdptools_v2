@@ -5,7 +5,7 @@
 
 from setuptools import find_packages, setup
 
-with open("README.rst") as readme_file:
+with open("README.md") as readme_file:
     readme = readme_file.read()
 
 test_requirements = [
@@ -78,15 +78,16 @@ extra_requirements = {
 }
 
 setup(
-    author="Jackson Maxfield Brown",
-    author_email="jmaxfieldbrown@gmail.com",
+    author="Jackson Maxfield Brown, Nicholas Weber",
+    author_email="jmaxfieldbrown@gmail.com, nmweber@uw.edu",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: BSD License",
         "Natural Language :: English",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Topic :: Utilities"
     ],
     description="Tools used to run Council Data Project pipelines.",
     entry_points={
@@ -95,7 +96,7 @@ setup(
         ],
     },
     install_requires=requirements,
-    license="MIT license",
+    license="BSD-3-Clause",
     long_description=readme,
     include_package_data=True,
     keywords="Council Data Project Pipeline Tools",

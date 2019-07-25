@@ -31,10 +31,23 @@ all_events = db.select_rows_as_list("event")
 
 ## Installation
 ```bash
-pip install git+https://github.com/CouncilDataProject/cdptools.git
+git clone https://github.com/CouncilDataProject/cdptools.git
+cd cdptools
+pip install -e .
 ```
 
-Please view the [examples](/examples) directory for Jupyter notebooks on how to use CDP databases and file stores.
+Depending on how your city's CDP instance is deployed, install dependencies specific
+to your CDP instance.
+
+For Seattle this means installing `google-cloud` dependencies:
+```bash
+git clone https://github.com/CouncilDataProject/cdptools.git
+cd cdptools
+pip install -e .[google-cloud]
+```
+
+Please view the [examples](/examples) directory which contains Jupyter notebooks with more examples on how to use CDP
+databases and file stores.
 
 For additional information on system design, look at [system_design.md](docs/system_design.md).
 

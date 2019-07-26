@@ -24,6 +24,14 @@ class RunIO(NamedTuple):
 
 
 class RunManager():
+    """
+    A RunManager can be used to track the IO of an algorithm and log begin and completed times. Additionally, will
+    gracefully handle when an algorithm errors. Depending on IO type, if any IO is a pathlib.Path, the full file will be
+    linked to the run.
+
+    A context manager of this class is available and the preffered method of interaction with this object. In the case
+    an error occurs during the run, the context manager will catch the error and store it as an output.
+    """
 
     def __init__(
         self,
@@ -36,6 +44,34 @@ class RunManager():
         algorithm_source: Optional[str] = None,
         remove_files: bool = False
     ):
+        """
+        Construct a RunManager object to track algorithm IO.
+
+        Parameters
+        ----------
+        database: Database
+            A cdptools.database.Database connection that has full credentials to upload new data.
+        file_store: FileStore
+            A cdptools.file_store.FileStore connection that has full credentials to upload new data.
+        algorithm_name: str
+            The name of the algorithm about to run. Preffered: the full module path.
+        algorithm_version: str
+            The version string of the algorithm about to run.
+        inputs: Optional[Union[List, Tuple, RunIO]]
+            Inputs that are already known prior to the start of the algorithm run. If provided a List of List or a List
+            of Tuple, each object in the outer List will be converted to RunIO objects.
+        algorithm_description: Optional[str]
+            Optionally, a description for the algorithm about to run.
+        algorithm_source: Optional[str]
+            Optionally, a uri to view the source of the algorithm about to run.
+        remove_files: bool
+            Boolean representing whether or not generated output files should be cleaned up after the algorithm
+            completes. Default: False (Do not remove files)
+
+        Returns
+        -------
+        self: The constructed RunManager.
+        """
         # Save db reference
         self._db = database
         self._fs = file_store
@@ -59,7 +95,25 @@ class RunManager():
         # Create empty outputs list
         self._outputs = []
 
-    def _make_serializable_type(self, value: Any, io_type: str = "input"):
+    def _make_serializable_type(self, value: Any, io_type: str = "input") -> Optional[Any]:
+        """
+        Make an IO value serializable.
+
+        Parameters
+        ----------
+        value: Any
+            The value that needs to be made serializable.
+        io_type: str
+            A string (either "input" or "output") to dictate where to send this IO in the case that the value is a Path.
+
+        Returns
+        -------
+        value: Optional[Any]
+            If the value is already a boolean, None, string, float, integer, or datetime, simply returns the value.
+            If the value is a Path, ensure that the Path isn't a directory, and then send the value to the input or
+            output files list based off the passed io_type and return None.
+            If neither of the above occured, return the to string of the value provided.
+        """
         # Standard acceptable types
         if isinstance(value, (bool, type(None), str, float, int, datetime)):
             return value
@@ -78,7 +132,43 @@ class RunManager():
 
         return str(value)
 
-    def _create_io(self, value: Union[Any, List, Tuple, RunIO], io_type: str = "input") -> RunIO:
+    def _create_io(self, value: Union[Any, List, Tuple, RunIO], io_type: str = "input") -> Optional[RunIO]:
+        """
+        Create a RunIO object from the provided value.
+
+        Parameters
+        ----------
+        value: Union[Any, List, Tuple, RunIO]
+            The value to convert to a RunIo object.
+        io_type: str
+            A string (either "input" or "output") to dictate where to send this IO in the case that the value is a Path.
+
+        Returns
+        -------
+        io: Optional[RunIO]
+            The constructed RunIO object.
+            If received an already constructed RunIO object, simply returns the provided object.
+            If received a single value, returns a RunIO object with the value and stores the value's type.
+            If received a List or Tuple of length one, returns a RunIO object with the single value in the list.
+            If received a List or Tuple of length two, returns a RunIO object with the values provided. The format of
+                the List or Tuple must follow, [{value_type}, {value_to_store}].
+
+        Examples
+        --------
+        ```
+        io = RunManager._create_io(RunIO(
+            type="<class 'str'>",
+            value="hello world"
+        ))
+        # Returns the same RunIO that was passed in
+
+        io = RunManager._create_io("hello world")
+        # Returns the same RunIO as above
+
+        io = RunManager._create_io([str, "hello world"])
+        # Returns the same RunIO as above
+        ```
+        """
         # Fast create
         if isinstance(value, RunIO):
             return value
@@ -104,6 +194,19 @@ class RunManager():
         return None
 
     def register_input(self, input: Union[Any, List, Tuple, RunIO]) -> RunIO:
+        """
+        Register a value or RunIO as an input to the run.
+
+        Parameters
+        ----------
+        input: Union[Any, List, Tuple, RunIO]
+            The input value that will use `RunManager._create_io` prior to adding the value to the inputs list.
+
+        Returns
+        -------
+        input: RunIO
+            The RunIO object that was stored in the inputs list.
+        """
         # Make serializable
         input = self._create_io(input)
         # If it was a filepath, it will return None
@@ -113,6 +216,19 @@ class RunManager():
         return input
 
     def register_output(self, output: Union[Any, List, Tuple, RunIO]) -> RunIO:
+        """
+        Register a value or RunIO as an output to the run.
+
+        Parameters
+        ----------
+        output: Union[Any, List, Tuple, RunIO]
+            The output value that will use `RunManager._create_io` prior to adding the value to the outputs list.
+
+        Returns
+        -------
+        output: RunIO
+            The RunIO object that was stored in the outputs list.
+        """
         # Make serializable
         output = self._create_io(output, "output")
         # If it was a filepath, it will return None
@@ -120,6 +236,13 @@ class RunManager():
             self._outputs.append(output)
 
     def register_run(self):
+        """
+        Uploads the information stored in the RunManager's instance state.
+
+        Creates a row in the Run table of the database, and uploads and links all run inputs (and run input files) and
+        all run outputs (an run output files). Additionally, links the run to the algorithm id created or found from
+        the details provided on RunManager instance creation.
+        """
         # Store files before database
         input_files = []
         for f in self._input_files:

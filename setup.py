@@ -98,6 +98,7 @@ setup(
     install_requires=requirements,
     license="BSD-3-Clause",
     long_description=readme,
+    long_description_content_type="text/markdown",
     include_package_data=True,
     keywords="Council Data Project Pipeline Tools",
     name="cdptools",
@@ -107,6 +108,6 @@ setup(
     tests_require=test_requirements,
     extras_require=extra_requirements,
     url="https://github.com/JacksonMaxfield/cdptools",
-    version="0.1.0",
+    version="2.0.0",
     zip_safe=False,
 )

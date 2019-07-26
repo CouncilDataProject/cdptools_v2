@@ -17,14 +17,25 @@ script:
 # Assuming you have installed the travis-ci CLI tool, after you
 # create the Github repo and add it to Travis, run the
 # following command to finish PyPI deployment setup:
-# $ travis encrypt --add deploy.password
+# If your project is built on travis-ci.org you can use
+# $ travis encrypt your-password-here --add deploy.password
+# Or just use this website:
+# Repository name: CouncilDataProject/cdptools
+# http://rkh.github.io/travis-encrypt/public/index.html
+# If your project is built on travis-ci.com you can use
+# $ travis encrypt your-password-here --add deploy.password --com
+#
+# Details here:
+# https://docs.travis-ci.com/user/deployment/pypi/
 deploy:
+  skip_cleanup: true
+  skip_existing: true
   provider: pypi
   distributions: sdist bdist_wheel
   user: CouncilDataProject
   password:
-    secure: PLEASE_REPLACE_ME
+    secure: zD6swAHPSP3g0iQWPZMJBEHR0f1gBun9OiRScKDh6bIWXfLitng7CYccHEtp4kN7VIptx9fFItTxPOzu1DeIeFz5aVNI8ewx+qGsNBY1pw/v7/E3LVRVOfFD77CDahWITgiBoPoXpKQkllZI2Zpva2YUVO/4eqIbAMR/qCUPuPFTTk60005drgy0PECAR8iYozegnom0+Jk4pgd9JCK3wMViYhC3GI1TLxkAQP9KGxKtr2jW8wab6Tp/Oc5Svu7gmSjzs72jB/i66UfiA0YmvEaQOSKTv0Cd7ElAR0qmXOcBeMs8gccmLsye5gaZrz7NUseaELuY4+GQxNmc7268k05crS3RUWXIiUmqnA1Rvyjxywe6cmZeiP3kepyWWPdMtzXexkr1Sio+jy4zC4nCySeSQsMujn5QngQID3OTPzq2J/Ywqfcd9YXgKdhV+LU1LNWQmR3NSEOvXp+BHegRMcFgw1LJbuDQ1HRYLh7++K5Ye62RUkIiIz9oGM316n6UyNem8XOPpfNHru7P5I+DdPZnw1bgCGWgnibRNbrVSQ2kZsfa4WtBvn7atNFVM1pDMLv66rjGcxVcNGV1PYMwcV/4V6kLCTBjzML3no/Rgw9uvtb9A/WccqmQT8TgIkQ7jRK0UEfs+VmcseBaWpOl7LksBtZLGx0PUhLTYG2z8Tg=
   on:
-    tags: true
+    branch: stable
     repo: CouncilDataProject/cdptools
     python: 3.7

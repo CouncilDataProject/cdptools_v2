@@ -16,7 +16,7 @@ from cdptools import get_module_version, pipelines
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s'
+    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s"
 )
 log = logging.getLogger(__name__)
 
@@ -30,14 +30,14 @@ class Args(argparse.Namespace):
 
     def __parse(self):
         p = argparse.ArgumentParser(
-            prog='run_cdp_pipeline',
-            description='Initialize and run a cdp pipeline.'
+            prog="run_cdp_pipeline",
+            description="Initialize and run a CDP pipeline."
         )
-        p.add_argument('pipeline_type', help='Which pipeline to launch.')
-        p.add_argument('config_path', type=Path, help='Path to a configuration file with details for the pipeline.')
-        p.add_argument('--nm', '--run-every-n-minutes', action='store', dest='schedule', type=int, default=None,
-                       help='Integer to run the specified pipeline every n minutes. Default: Run pipeline once.')
-        p.add_argument('--debug', action='store_true', dest='debug', help='Show traceback if the script were to fail.')
+        p.add_argument("pipeline_type", help="Which pipeline to launch.")
+        p.add_argument("config_path", type=Path, help="Path to a configuration file with details for the pipeline.")
+        p.add_argument("--nm", "--run-every-n-minutes", action="store", dest="schedule", type=int, default=None,
+                       help="Integer to run the specified pipeline every n minutes. Default: Run pipeline once.")
+        p.add_argument("--debug", action="store_true", dest="debug", help="Show traceback if the script were to fail.")
         p.parse_args(namespace=self)
 
 
@@ -90,5 +90,5 @@ def main():
 ###############################################################################
 # Allow caller to directly run this module (usually in development scenarios)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

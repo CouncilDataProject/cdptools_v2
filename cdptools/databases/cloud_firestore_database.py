@@ -3,6 +3,7 @@
 
 import json
 import logging
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -682,22 +683,30 @@ class CloudFirestoreDatabase(Database):
         # Return the newly created row
         return {f"index_term_id": id, **values}
 
+    def _search_for_term(self, term: str) -> List[Dict[str, Union[str, float, datetime]]]:
+        """
+        Helper function for multithreaded query of events.
+        """
+        return self.select_rows_as_list("index_term", filters=[("term", term)])
+
     def search_events(self, query: str):
         # Clean and tokenize the query
         query = Indexer.clean_text_for_indexing(query)
         query_terms = query.split(" ")
 
         # First query for the terms
-        event_results = {}
-        for term in query_terms:
-            term_results = self.select_rows_as_list("index_term", filters=[("term", term)])
+        with ThreadPoolExecutor() as exe:
+            term_results = list(exe.map(self._search_for_term, query_terms))
 
+        # Combine the term results into event results
+        event_results = {}
+        for term_result in term_results:
             # Join the results into a main results dictionary where they top level key is the event id
-            for term_result in term_results:
-                if term_result["event_id"] in event_results:
-                    event_results[term_result["event_id"]].append(term_result)
+            for term_details in term_result:
+                if term_details["event_id"] in event_results:
+                    event_results[term_details["event_id"]].append(term_details)
                 else:
-                    event_results[term_result["event_id"]] = [term_result]
+                    event_results[term_details["event_id"]] = [term_details]
 
         # Clean and format the results
         event_matches = []

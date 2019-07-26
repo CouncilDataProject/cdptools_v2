@@ -73,6 +73,18 @@ class IndexPipeline(Pipeline):
         ):
             return self.indexer.generate_index(event_corpus_map)
 
+    def task_clean_index(self, index: Dict[str, Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+        """
+        Clean the generated index prior to upload.
+        """
+        with RunManager(
+            database=self.database,
+            file_store=self.file_store,
+            algorithm_name="IndexPipeline.task_clean_index",
+            algorithm_version=get_module_version()
+        ):
+            return self.indexer.drop_terms_from_index_below_value(index)
+
     def _upload_index_term_event_values(self, evft: EventValuesForTerm):
         # Loop through each event and value tied to this term and upload to database
         for event_id, value in evft.event_values.items():
@@ -118,6 +130,10 @@ class IndexPipeline(Pipeline):
                 # Compute word event scores
                 log.info("Generating index")
                 index = self.task_generate_index(event_corpus_map)
+
+                # Clean the index
+                log.info("Droping event terms with limited value")
+                index = self.task_clean_index(index)
 
             # Upload word event scores
             log.info("Uploading index")

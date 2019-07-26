@@ -34,6 +34,60 @@ def example_event_pipeline_config(data_dir) -> Path:
     return data_dir / "example_event_pipeline_config.json"
 
 
+@pytest.fixture
+def indexed_results():
+    return {
+        "hello": {
+            "event_0": 0.0,
+            "event_1": 0.0
+        },
+        "world": {
+            "event_0": 0.0,
+            "event_1": 0.0
+        },
+        "name": {
+            "event_0": 0.6931471805599453
+        },
+        "jackson": {
+            "event_0": 0.6931471805599453
+        },
+        "internet": {
+            "event_1": 0.6931471805599453
+        },
+        "gener": {
+            "event_1": 0.6931471805599453
+        },
+        "go": {
+            "event_1": 0.6931471805599453
+        },
+        "maxfield": {
+            "event_1": 0.6931471805599453
+        }
+    }
+
+
+DROPPED_ZEROS_INDEX = {
+    "name": {
+        "event_0": 0.6931471805599453
+    },
+    "jackson": {
+        "event_0": 0.6931471805599453
+    },
+    "internet": {
+        "event_1": 0.6931471805599453
+    },
+    "gener": {
+        "event_1": 0.6931471805599453
+    },
+    "go": {
+        "event_1": 0.6931471805599453
+    },
+    "maxfield": {
+        "event_1": 0.6931471805599453
+    }
+}
+
+
 def test_get_raw_transcript_formats(
     example_transcript_raw,
     example_transcript_words,
@@ -82,4 +136,13 @@ def test_get_raw_transcript_formats(
 ])
 def test_clean_text_for_indexing(text, expected):
     result = Indexer.clean_text_for_indexing(text)
+    assert result == expected
+
+
+@pytest.mark.parametrize("min_value, expected", [
+    (0.0, DROPPED_ZEROS_INDEX),
+    (1.0, {})
+])
+def test_drop_terms_from_index_below_value(indexed_results, min_value, expected):
+    result = Indexer.drop_terms_from_index_below_value(indexed_results, min_value)
     assert result == expected

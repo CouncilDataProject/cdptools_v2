@@ -120,6 +120,44 @@ class Indexer(ABC):
 
         return cleaned_transcript
 
+    @staticmethod
+    def drop_terms_from_index_below_value(
+        index: Dict[str, Dict[str, float]],
+        minimum_value_allowed: float = 0.0
+    ) -> Dict[str, Dict[str, float]]:
+        """
+        Drop any terms from an index that have a value less than or equal to the provided.
+
+        Parameters
+        ----------
+        index: Dict[str, Dict[str, float]]
+            An index dictionary, the output of an `Indexer.generate_index` run.
+
+        minimum_value_allowed: float
+            The float value that all term event values should be compared against. Any term event value less than or
+            equal to the received value will be dropped from the index.
+
+        Returns
+        -------
+        cleaned_index: Dict[str, Dict[str, float]]
+            The cleaned index that has had values removed based off the received minimum value allowed.
+        """
+        cleaned = {}
+        # For each term in the index
+        for term in index:
+            # For each event value given to that term
+            for event_id, value in index[term].items():
+                # If the value is strictly greater than the minimum value allowed
+                if value > minimum_value_allowed:
+                    # If the term is already in the cleaned index, add the event and value as a new pair
+                    if term in cleaned:
+                        cleaned[term][event_id] = value
+                    # If the term is not already in the cleaned index, add a new dictionary to store the pair
+                    else:
+                        cleaned[term] = {event_id: value}
+
+        return cleaned
+
     @abstractmethod
     def generate_index(self, event_corpus_map: Dict[str, Path], **kwargs) -> Dict[str, Dict[str, float]]:
         """

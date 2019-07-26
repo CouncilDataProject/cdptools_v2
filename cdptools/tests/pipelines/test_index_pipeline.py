@@ -44,11 +44,22 @@ def example_config(data_dir):
 
 
 @pytest.fixture
-def example_transcript_sentences(data_dir):
+def example_transcript_sentences_0(data_dir):
     return data_dir / "example_transcript_sentences.json"
 
 
-def test_index_pipeline(empty_creds_db, empty_creds_fs, example_config, example_transcript_sentences):
+@pytest.fixture
+def example_transcript_sentences_1(data_dir):
+    return data_dir / "example_transcript_sentences_1.json"
+
+
+def test_index_pipeline(
+    empty_creds_db,
+    empty_creds_fs,
+    example_config,
+    example_transcript_sentences_0,
+    example_transcript_sentences_1
+):
     # Configure all mocks
     with mock.patch("cdptools.pipelines.pipeline.Pipeline.load_custom_object") as mock_loader:
         mock_loader.side_effect = [
@@ -60,6 +71,9 @@ def test_index_pipeline(empty_creds_db, empty_creds_fs, example_config, example_
 
         # Mock the transcript manifest get
         with mock.patch("cdptools.research_utils.transcripts.download_most_recent_transcripts") as mock_transcript_get:
-            mock_transcript_get.return_value = {"event_0": example_transcript_sentences}
+            mock_transcript_get.return_value = {
+                "event_0": example_transcript_sentences_0,
+                "event_1": example_transcript_sentences_1
+            }
 
             pipeline.run()

@@ -695,7 +695,7 @@ class CloudFirestoreDatabase(Database):
     def search_events(self, query: str):
         # Clean and tokenize the query
         query = Indexer.clean_text_for_indexing(query)
-        query_terms = query.split(" ")
+        query_terms = set(query.split(" "))
 
         # First query for the terms
         with ThreadPoolExecutor() as exe:

@@ -518,9 +518,6 @@ class CloudFirestoreDatabase(Database):
         description: Optional[str] = None,
         content_type: Optional[str] = None
     ) -> Dict:
-        """
-        Get or upload a file.
-        """
         if filename is None:
             filename = uri.split("/")[-1]
 
@@ -585,9 +582,6 @@ class CloudFirestoreDatabase(Database):
         )
 
     def get_or_upload_run_input(self, run_id: str, dtype: str, value: Any) -> Dict:
-        """
-        Get or upload a run input.
-        """
         return self._get_or_upload_row(
             table="run_input",
             pks=[("run_id", run_id), ("dtype", dtype), ("value", value)],
@@ -600,9 +594,6 @@ class CloudFirestoreDatabase(Database):
         )
 
     def get_or_upload_run_input_file(self, run_id: str, file_id: str) -> Dict:
-        """
-        Get or upload a run input file.
-        """
         return self._get_or_upload_row(
             table="run_input_file",
             pks=[("run_id", run_id), ("file_id", file_id)],
@@ -614,9 +605,6 @@ class CloudFirestoreDatabase(Database):
         )
 
     def get_or_upload_run_output(self, run_id: str, dtype: str, value: Any) -> Dict:
-        """
-        Get or upload a run output.
-        """
         return self._get_or_upload_row(
             table="run_output",
             pks=[("run_id", run_id), ("dtype", dtype), ("value", value)],
@@ -629,9 +617,6 @@ class CloudFirestoreDatabase(Database):
         )
 
     def get_or_upload_run_output_file(self, run_id: str, file_id: str) -> Dict:
-        """
-        Get or upload a run output file.
-        """
         return self._get_or_upload_row(
             table="run_output_file",
             pks=[("run_id", run_id), ("file_id", file_id)],
@@ -655,9 +640,6 @@ class CloudFirestoreDatabase(Database):
         return None
 
     def upload_or_update_index_term(self, term: str, event_id: str, value: float) -> Dict:
-        """
-        Upload or update a single index term.
-        """
         # Reject any upload without credentials
         if self._credentials_path is None:
             raise exceptions.MissingCredentialsError()

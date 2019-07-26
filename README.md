@@ -1,6 +1,6 @@
 # cdptools
 
-[![build status](https://travis-ci.org/CouncilDataProject/cdptools.svg?branch=master)](https://travis-ci.org/CouncilDataProject/cdptools)
+[![build status](https://travis-ci.com/CouncilDataProject/cdptools.svg?branch=master)](https://travis-ci.com/CouncilDataProject/cdptools)
 [![codecov](https://codecov.io/gh/CouncilDataProject/cdptools/branch/master/graph/badge.svg)](https://codecov.io/gh/CouncilDataProject/cdptools)
 
 

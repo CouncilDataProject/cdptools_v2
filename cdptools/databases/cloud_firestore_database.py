@@ -306,12 +306,15 @@ class CloudFirestoreDatabase(Database):
         response = response.json()
 
         # Return formatted
-        return [
-            {
-                f"{table}_id": document["document"]["name"].split("/")[-1],  # Get last item in the uri
-                **self._jsonify_firestore_response(document["document"]["fields"])
-            } for document in response
-        ]
+        try:
+            return [
+                {
+                    f"{table}_id": document["document"]["name"].split("/")[-1],  # Get last item in the uri
+                    **self._jsonify_firestore_response(document["document"]["fields"])
+                } for document in response
+            ]
+        except KeyError:
+            return []
 
     def select_rows_as_list(
         self,

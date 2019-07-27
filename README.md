@@ -30,10 +30,9 @@ all_events = db.select_rows_as_list("event")
 ```
 
 ## Installation
+`cdptools` is available on [pypi.org](https://pypi.org/project/cdptools/). To install simply run:
 ```bash
-git clone https://github.com/CouncilDataProject/cdptools.git
-cd cdptools
-pip install -e .
+pip install cdptools
 ```
 
 Depending on how your city's CDP instance is deployed, install dependencies specific
@@ -41,9 +40,12 @@ to your CDP instance.
 
 For Seattle this means installing `google-cloud` dependencies:
 ```bash
-git clone https://github.com/CouncilDataProject/cdptools.git
-cd cdptools
-pip install -e .[google-cloud]
+pip install cdptools[google-cloud]
+```
+
+If you just want to install all dependencies regardless of which city you may interact with:
+```bash
+pip install cdptools[all]
 ```
 
 Please view the [examples](/examples) directory which contains Jupyter notebooks with more examples on how to use CDP

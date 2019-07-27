@@ -21,6 +21,21 @@ class FileStore(ABC):
 
     @staticmethod
     def compute_sha256_for_file(filepath: Union[str, Path], block_size: int = 1024 * 1024) -> Path:
+        """
+        Compute a SHA256 hexdigest for a file. Works for large files.
+
+        Parameters
+        ----------
+        filepath: Union[str, Path]
+            The path to the file to compute a SHA256 hexdigest for.
+        block_size: int
+            How many bytes to read at a time to add to the hashing algorithm.
+
+        Returns
+        -------
+        digest: str
+            The result of completing the SHA256 hash and taking the hexdigest.
+        """
         # Resolve filepath
         filepath = Path(filepath).resolve(strict=True)
         if not filepath.is_file():
@@ -44,6 +59,19 @@ class FileStore(ABC):
 
     @staticmethod
     def _path_is_local(path: Union[str, Path]) -> bool:
+        """
+        Check to make sure that a path provided is on the local machine. Simply checks for common external uri headers.
+
+        Parameters
+        ----------
+        path: Union[str, Path]
+            The filepath to check for local existance.
+
+        Returns
+        -------
+        is_local: bool
+            A boolean value informing whether or not the provided path is a local resource or not.
+        """
         # Convert path
         path = str(path)
 
@@ -53,6 +81,25 @@ class FileStore(ABC):
 
     @staticmethod
     def _external_resource_copy(uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False) -> Path:
+        """
+        Copy an external resource to a local destination on the machine.
+
+        Parameters
+        ----------
+        uri: str
+            The uri for the external resource to copy.
+        dst: Optional[Union[str, Path]]
+            A specific destination to where the copy should be placed. If None provided stores the resource in the
+            current working directory.
+        overwrite: bool
+            Boolean value indicating whether or not to overwrite a local resource with the same name if it already
+            exists.
+
+        Returns
+        -------
+        saved_path: Path
+            The path of where the resource ended up getting copied to.
+        """
         if dst is None:
             dst = uri.split("/")[-1]
 
@@ -77,7 +124,17 @@ class FileStore(ABC):
     @abstractmethod
     def get_file_uri(self, filename: str, **kwargs) -> str:
         """
-        Get a file path/ uri.
+        Get a file path/ uri given a filename.
+
+        Parameters
+        ----------
+        filename: str
+            The file you are requesting a file uri for.
+
+        Returns
+        -------
+        uri: str
+            If the file is found, the file uri is returned as a string. If it isn't a FileNotFoundError is raised.
         """
 
         return ""
@@ -92,6 +149,20 @@ class FileStore(ABC):
     ) -> str:
         """
         Store a file.
+
+        Parameters
+        ----------
+        filepath: Union[str, Path]
+            The filepath to the file you want to store.
+        save_name: Optional[str]
+            An optional save name to store the file as instead of it's current name.
+        remove: bool
+            Boolean value indicating whether or not to remove the local file after storage in the file store.
+
+        Returns
+        -------
+        uri: str
+            The uri for the stored file.
         """
 
         return ""
@@ -106,6 +177,20 @@ class FileStore(ABC):
     ) -> Path:
         """
         Download the file if neccessary and return the Path.
+
+        Parameters
+        ----------
+        filename: str
+            The name of the file in the file store that you want to download.
+        save_path: Optional[Union[str, Path]] = None
+            An optional save path / destination to store the file locally.
+        overwrite: bool
+            Boolean value indicating whether or not to overwrite a file that already exists in the destination.
+
+        Returns
+        -------
+        save_path: Path
+            The local path of the downloaded file.
         """
 
         return Path("/tmp/file.tmp")

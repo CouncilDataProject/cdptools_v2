@@ -132,7 +132,7 @@ class IndexPipeline(Pipeline):
                 index = self.task_generate_index(event_corpus_map)
 
                 # Clean the index
-                log.info("Droping event terms with limited value")
+                log.info("Dropping event terms with limited value")
                 index = self.task_clean_index(index)
 
             # Upload word event scores

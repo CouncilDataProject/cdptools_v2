@@ -7,7 +7,7 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from functools import partial
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -66,11 +66,20 @@ class SeattleEventScraper(EventScraper):
     def _resolve_route(complete_sibling: str, route: str) -> str:
         """
         Resolve a url route.
-        If "http" or "https" is found in the route it is assumed the route is already complete.
-        If not, the sibling is split, tail removed, and the route is attached.
-        :param complete_sibling: A complete sibling route to retrieve the complete parent from.
-        :param route: A route to attach to the parent of the sibling.
-        :return: The parent of sibling joined with route as a child.
+
+        Parameters
+        ----------
+        complete_sibling: str
+            A completed sibling route that can be used to find mutual parents or other contextual information.
+        route: str
+            The route to resolve.
+
+        Returns
+        -------
+        resolved_route: str
+            If "http" or "https" is found in the route it is assumed the route is already complete.
+            If not, the sibling is split, tail removed, and the route is attached.
+            Returned is the parent sibling joined with the provided route as a child.
         """
         # Check if route is already resolved
         if "http://" in route or "https://" in route:
@@ -118,8 +127,16 @@ class SeattleEventScraper(EventScraper):
     def _clean_string(s: str) -> str:
         """
         Simply remove any leading and trailing spaces and punctuation.
-        :param s: The string to clean.
-        :return: The cleaned string.
+
+        Parameters
+        ----------
+        s: str
+            The string to be cleaned.
+
+        Returns
+        -------
+        cleaned: str
+            The cleaned string that has had leading and trailing spaces and punctuation removed.
         """
         # Basic cleaning
         s = s.replace("\n", "")
@@ -143,13 +160,23 @@ class SeattleEventScraper(EventScraper):
         event_container: BeautifulSoup,
         complete_sibling: str,
         ignore_date: bool = False
-    ) -> Dict:
+    ) -> Dict[str, Any]:
         """
         Parse a single event from the html of a Seattle Channel event block.
-        :param event_container: A BeautifulSoup object created from reading a single event div block.
-        :param complete_sibling: A complete sibling to the sub route currently being processed.
-        :param ignore_date: Should a date ever be considered out of time bounds.
-        :return: A dictionary of event details that have been parsed from the provided html block.
+
+        Parameters
+        ----------
+        event_container: BeautifulSoup
+            A BeautifulSoup object created from reading a single event div block from SeattleChannel.
+        complete_sibling: str
+            A complete sibling to the current event containers host page.
+        ignore_date: bool
+            A boolean information whether or not to ignore the parsed event based of the parsed date.
+
+        Returns
+        -------
+        event_details: Dict[str, Any]
+            The fully parsed event details.
         """
         # Find event details
         event_details = event_container.find("div", class_="col-xs-12 col-sm-8 col-md-9")
@@ -256,7 +283,26 @@ class SeattleEventScraper(EventScraper):
         return events
 
     @staticmethod
-    def _attach_legistar_details_to_event(event: Dict[str, Any], ignore_minutes_items: List[str] = []) -> Dict:
+    def _attach_legistar_details_to_event(
+        event: Dict[str, Any],
+        ignore_minutes_items: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
+        """
+        Query for and attach the best matching legistar event information to the provided event details.
+
+        Parameters
+        ----------
+        event: Dict[str, Any]
+            The parsed event details from the SeattleChannel website.
+        ignore_minutes_items: Optional[List[str]]
+            A list of minute item names to ignore when parsing the minutes items from legistar.
+            Useful for minute items that are so commonly used they lack specific value.
+
+        Returns
+        -------
+        joined: Dict[str, Any]
+            The base event details object combined with the found legistar data.
+        """
         # Get all legistar events surrounding the provided event date
         legistar_events = legistar_event_tools.get_legistar_events_for_timespan(
             "seattle",
@@ -304,6 +350,8 @@ class SeattleEventScraper(EventScraper):
             selected_event = agenda_match_details.selected_event
 
         # Parse details
+        if ignore_minutes_items is None:
+            ignore_minutes_items = []
         parsed_details = legistar_event_tools.parse_legistar_event_details(selected_event, ignore_minutes_items)
 
         # Format the event details

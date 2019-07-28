@@ -19,10 +19,20 @@ class Pipeline(ABC):
     def load_custom_object(module_path: Union[str, List[str]], object_name: str, object_kwargs: Dict) -> object:
         """
         Load a custom object with kwargs.
-        :param module_path: Python path or list of path parts to a custom module. (Ex: "cdptools.pipeline")
-        :param object_name: Name of the object from the module. (Ex: "Pipeline")
-        :param object_kwargs: Keyword arguments to pass to the object during initialization.
-        :return: The initialized object.
+
+        Parameters
+        ----------
+        module_path: Union[str, List[str]]
+            Python module path or list of path parts to a custom module. Ex: "cptools.pipeline"
+        object_name: str
+            Name of the object to retrieve from the module. Ex: "Pipeline"
+        object_kwargs: Dict
+            Any kwargs to pass to the object.
+
+        Returns
+        -------
+        obj: object
+            The initialized object.
         """
         # Convert module path to string
         if isinstance(module_path, list):

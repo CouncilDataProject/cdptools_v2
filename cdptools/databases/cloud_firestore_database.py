@@ -367,6 +367,11 @@ class CloudFirestoreDatabase(Database):
             id = str(uuid4())
             # Store the row
             self._root.collection(table).document(id).set(values)
+            log.debug(
+                f"Uploaded values: {values} "
+                f"To id: {id} "
+                f"On table: {table}"
+            )
 
             # Return row
             return {f"{table}_id": id, **values}

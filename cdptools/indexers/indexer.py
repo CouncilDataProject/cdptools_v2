@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import logging
 import re
 import string
 from abc import ABC, abstractmethod
@@ -10,6 +11,10 @@ from typing import Dict, Union
 
 from nltk.stem import PorterStemmer
 
+###############################################################################
+
+log = logging.getLogger(__name__)
+
 # Ensure stopwords are downloaded
 try:
     from nltk.corpus import stopwords
@@ -17,6 +22,7 @@ try:
 except LookupError:
     import nltk
     nltk.download("stopwords")
+    log.info("Downloaded nltk stopwords")
     from nltk.corpus import stopwords
     STOPWORDS = stopwords.words("english")
 
@@ -143,6 +149,7 @@ class Indexer(ABC):
             The cleaned index that has had values removed based off the received minimum value allowed.
         """
         cleaned = {}
+        dropped_count = 0
         # For each term in the index
         for term in index:
             # For each event value given to that term
@@ -155,7 +162,10 @@ class Indexer(ABC):
                     # If the term is not already in the cleaned index, add a new dictionary to store the pair
                     else:
                         cleaned[term] = {event_id: value}
+                else:
+                    dropped_count += 1
 
+        log.debug(f"Dropped {dropped_count} terms during index cleaning")
         return cleaned
 
     @abstractmethod

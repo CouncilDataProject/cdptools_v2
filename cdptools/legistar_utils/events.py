@@ -3,7 +3,7 @@
 
 import logging
 from datetime import datetime, timedelta
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import requests
 from fuzzywuzzy import fuzz
@@ -165,6 +165,13 @@ def get_matching_legistar_event_by_minutes_match(
         return AgendaMatchResults({}, {})
 
 
+def _clean_legistar_string_data(text: Union[str, None]) -> Union[str, None]:
+    if text:
+        return str(text).replace("\r", "").replace("\n", "").replace("_", "")
+
+    return text
+
+
 def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_items: List[str] = []) -> Dict:
     """
     Parse the full legistar event details and format into the CDP ready JSON dictionary for upload.
@@ -192,15 +199,15 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
     for legistar_event_item in legistar_event_details["EventItems"]:
         # Choose name based off available data
         if legistar_event_item["EventItemMatterName"]:
-            minutes_item_name = legistar_event_item["EventItemMatterName"]
+            minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemMatterName"])
         else:
-            minutes_item_name = legistar_event_item["EventItemTitle"]
+            minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemTitle"])
 
         # Choose matter name based off available data
         if legistar_event_item["EventItemMatterName"]:
-            minutes_item_matter = legistar_event_item["EventItemMatterName"]
+            minutes_item_matter = _clean_legistar_string_data(legistar_event_item["EventItemMatterName"])
         else:
-            minutes_item_matter = legistar_event_item["EventItemMatterFile"]
+            minutes_item_matter = _clean_legistar_string_data(legistar_event_item["EventItemMatterFile"])
 
         # Only continue if the minutes item name is not ignored
         if minutes_item_name not in ignore_minutes_items:
@@ -227,7 +234,7 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
             item_attachments = []
             for matter_attachment in legistar_event_item["EventItemMatterAttachments"]:
                 item_attachment = {
-                    "name": matter_attachment["MatterAttachmentName"],
+                    "name": _clean_legistar_string_data(matter_attachment["MatterAttachmentName"]),
                     "uri": matter_attachment["MatterAttachmentHyperlink"],
                     "legistar_matter_attachment_id": int(matter_attachment["MatterAttachmentId"])
                 }

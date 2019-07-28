@@ -26,7 +26,27 @@ class SRModel(ABC):
         transcript_format: str,
         confidence: float,
         annotations: List[Dict[str, Any]] = []
-    ) -> Dict[str, Union[str, constants.TranscriptDataJSON]]:
+    ) -> Dict[str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]]:
+        """
+        A very simple function to just make sure that a transcript has all the details neccessary prior to storing as a
+        JSON file.
+
+        Parameters
+        ----------
+        data: constants.TranscriptDataJSON
+            The list of dictionaries that act as the transcript data.
+        transcript_format: str
+            One of the transcript formats available from constants.TranscriptFormats.
+        confidence: float
+            The overall confidence that the transcript is accurate.
+        annotations: List[Dict[str, Any]]
+            A list of dictionaries to act as annotations for the transcript.
+
+        Returns
+        -------
+        storage_ready: Dict[str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]]
+            The in memory version of a transcript file about to be dumped to JSON.
+        """
         return {
             "format": transcript_format,
             "annotations": annotations,
@@ -45,6 +65,23 @@ class SRModel(ABC):
     ) -> SRModelOutputs:
         """
         Transcribe audio from file and store in text file.
+
+        Parameters
+        ----------
+        audio_uri: Union[str, Path]
+            The uri to the audio file to transcribe.
+        raw_transcript_save_path: Union[str, Path]
+            Where the raw transcript should be saved to.
+        timestamped_words_save_path: Optional[Union[str, Path]]
+            If a timestamped words formatted transcript is produced, where it should be saved to.
+        timestamped_sentences_save_path: Optional[Union[str, Path]]
+            If a timestamped sentences formatted transcript is produced, where it should be saved to.
+
+        Returns
+        -------
+        outputs: SRModelOutputs
+            The outputs of the transcribe operation. Stores all available transcript paths as attributes as well as the
+            overall confidence of the transciption accuracy.
         """
 
         return SRModelOutputs(

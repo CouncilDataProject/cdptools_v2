@@ -35,11 +35,23 @@ def get_legistar_events_for_timespan(
     end: datetime = (datetime.utcnow() + timedelta(days=1))
 ) -> List[Dict]:
     """
-    Get all legistar events for a client for a given timespan.
-    :param client: Which legistar client to target. Ex: "Seattle", "Tacoma", etc.
-    :param begin: The timespan begin datetime. Default: Today (datetime.utcnow()) - timedelta(days=1))
-    :param end: The timespan end datetime. Default: Yesterday (datetime.utcnow() + timedelta(days=1))
-    :return: A list of dictionaries of event details.
+    Get all legistar events and each events minutes items, people, and votes, for a client for a given timespan.
+
+    Parameters
+    ----------
+    client: str
+        Which legistar client to target. Ex: "seattle"
+    begin: datetime
+        The timespan beginning datetime to query for events after.
+    end: datetime
+        The timespan end datetime to query for events before.
+
+    Returns
+    -------
+    events: List[Dict]
+        All legistar events that occur between the datetimes provided for the client provided. Additionally, requests
+        and attaches agenda items, minutes items, any attachments, called "EventItems", requests votes for any of these
+        "EventItems", and requests person information for any vote.
     """
     # The unformatted request parts
     filter_datetime_format = "EventDate+{op}+datetime%27{dt}%27"
@@ -94,6 +106,26 @@ def get_matching_legistar_event_by_minutes_match(
     minutes_items_provided: List[str],
     legistar_events: List[Dict]
 ) -> AgendaMatchResults:
+    """
+    Provided a list of strings that represent "display name" minutes items, find the closest matching legistar event
+    for the list provided. An example of this function being used may be found in SeattleEventScraper, but as a general
+    use case, this will be used when a city has two separate systems for storing video and storing legistar data and
+    you need to match up the video data with the legistar data. Event matching is determined by minutes item text set
+    difference. For details, on that algorithm, look at `fuzzywuzzy.fuzz.token_set_ratio`.
+
+    Parameters
+    ----------
+    minutes_items_provided: List[str]
+        The minutes items provided from the non-legistar system.
+    legistar_events: List[Dict]
+        The legistar events list produced from `get_legistar_events_for_timespan`.
+
+    Returns
+    -------
+    match_details: AgendaMatchResults
+        An object to store the match results. Which contains an attribute for the highest matching and then the scores
+        for the rest of the checked event.
+    """
     # Quick return
     if len(legistar_events) == 1:
         return AgendaMatchResults(legistar_events[0], {legistar_events[0]["EventId"]: 100})
@@ -134,6 +166,22 @@ def get_matching_legistar_event_by_minutes_match(
 
 
 def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_items: List[str] = []) -> Dict:
+    """
+    Parse the full legistar event details and format into the CDP ready JSON dictionary for upload.
+
+    Parameters
+    ----------
+    legistar_event_details: Dict
+        The full legistar event details with source and video URIs added.
+    ignore_minutes_items: List[str]
+        It is fairly common to have minutes items that can be ignored. Any strings added to this list will be dropped
+        during the formatting of the CDP ready JSON object.
+
+    Returns
+    -------
+    formatted: Dict
+        The parsed and CDP storage ready formatted JSON object to upload.
+    """
     # Parse official datetime
     event_date = legistar_event_details["EventDate"].split("T")[0]
     event_dt = "{}T{}".format(event_date, legistar_event_details["EventTime"])

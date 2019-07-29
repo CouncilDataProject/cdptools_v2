@@ -8,7 +8,8 @@
     4. [Databases](#databases)
         * [Database Schema Diagram](#database-schema-diagram)
     5. [Speech Recognition Models](#speech-recognition-models)
-    6. [Pipelines](#pipelines)
+    6. [Indexers](#indexers)
+    7. [Pipelines](#pipelines)
 3. [Why not Airflow?](#why-not-airflow)
 
 ---
@@ -90,7 +91,16 @@ transcripts for city council meetings, maybe you will write a module that simply
 already high quality transcript back, no need for any processing. These are both valid speech recognition models, it's
 simply that one of them produces transcripts that have 100% confidence.
 
-If you want to develop your own speech recognition model, please first read about [supported transcript formats](transcript_formats.md).
+If you want to develop your own speech recognition model, please first read about
+[supported transcript formats](transcript_formats.md).
+
+### Indexers
+Indexer objects are used to generate a term value to terms in a corpus. A single document in this corpus could be a
+single transcript, for indexing by events, or could be the merge of many documents to a single string for indexing by
+a different reference, minutes items for example. They need a corpus map which is whatever primary key to a local path
+to a document in the corpus to run. This is a made a module because indexing is a hotly debated topic on "how best to
+index documents" and so while a basic `TFIDFIndexer` is made available as default, if you want to write or implement a
+different indexing algorithm please feel free to do so.
 
 ### Pipelines
 Finally we arrive at pipelines. Pipelines should, similarly to modules, follow the `pipelines.Pipeline` abstract base

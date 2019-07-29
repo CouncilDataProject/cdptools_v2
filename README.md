@@ -17,10 +17,10 @@ Making City Council data more accessible and actions taken by city council membe
 
 **For Seattle:**
 ```python
-from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
+from cdptools.databases import CloudFirestoreDatabase
 
-db = CloudFirestoreDatabase("stg-cdp-seattle")
-matching_events = db.search_events("bicycle and mobility infrastructure, greenways")
+db = CloudFirestoreDatabase("cdp-seattle")
+matching_events = db.search_events("bicycle infrastructure, pedestrian mobility, greenways")
 # Returns list of EventMatch objects
 # [EventMatch, EventMatch, ...]
 

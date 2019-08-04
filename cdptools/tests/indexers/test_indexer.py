@@ -128,6 +128,7 @@ def test_get_raw_transcript_formats(
     ("thE quICk BROwn Fox JuMps OVER the RUNning ANt", "quick brown fox jump run ant"),
     ("1 billion", "1 billion"),
     ("98%", "98"),
+    ("\n\n\n\nMEMORANDUM\n\nHello\n\tSPR", "memorandum hello spr"),
     # Would love to learn better methods for handling cases like this but I don't think it matters too much
     ("1.4 Million", "14 million"),
     ("Will this remove punctuation?!%'", "remov punctuat"),

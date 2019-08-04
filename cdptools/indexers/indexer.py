@@ -100,6 +100,9 @@ class Indexer(ABC):
         # Send to lowercase
         cleaned_transcript = raw_transcript.lower()
 
+        # Remove new line and tab characters
+        cleaned_transcript = cleaned_transcript.replace("\n", " ").replace("\t", " ")
+
         # Remove punctuation
         cleaned_transcript = re.sub(f"[{re.escape(string.punctuation)}]", "", cleaned_transcript)
 

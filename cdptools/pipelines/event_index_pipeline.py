@@ -31,7 +31,7 @@ class EventValuesForTerm:
         self.event_values = event_values
 
 
-class IndexPipeline(Pipeline):
+class EventIndexPipeline(Pipeline):
 
     def __init__(self, config_path: Union[str, Path]):
         # Resolve config path
@@ -68,7 +68,7 @@ class IndexPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="IndexPipeline.task_generate_index",
+            algorithm_name="EventIndexPipeline.task_generate_index",
             algorithm_version=get_module_version()
         ):
             return self.indexer.generate_index(event_corpus_map)
@@ -80,15 +80,15 @@ class IndexPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="IndexPipeline.task_clean_index",
+            algorithm_name="EventIndexPipeline.task_clean_index",
             algorithm_version=get_module_version()
         ):
             return self.indexer.drop_terms_from_index_below_value(index)
 
-    def _upload_index_term_event_values(self, evft: EventValuesForTerm):
+    def _upload_indexed_event_term_event_values(self, evft: EventValuesForTerm):
         # Loop through each event and value tied to this term and upload to database
         for event_id, value in evft.event_values.items():
-            self.database.upload_or_update_index_term(
+            self.database.upload_or_update_indexed_event_term(
                 term=evft.term,
                 event_id=event_id,
                 value=value
@@ -101,22 +101,22 @@ class IndexPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="IndexPipeline.task_upload_index",
+            algorithm_name="EventIndexPipeline.task_upload_index",
             algorithm_version=get_module_version()
         ):
             # Create upload items
             # This list of objects is just useful for making it easier to multithread the upload
-            index_term_event_values = []
+            indexed_event_term_event_values = []
             for term, event_values in index.items():
-                index_term_event_values.append(EventValuesForTerm(term, event_values))
+                indexed_event_term_event_values.append(EventValuesForTerm(term, event_values))
 
             # Multithread the upload/ update of the index
             with ThreadPoolExecutor(self.n_workers) as exe:
-                exe.map(self._upload_index_term_event_values, index_term_event_values)
+                exe.map(self._upload_indexed_event_term_event_values, indexed_event_term_event_values)
 
     def run(self):
         log.info("Starting index creation.")
-        with RunManager(self.database, self.file_store, "IndexPipeline.run", get_module_version()):
+        with RunManager(self.database, self.file_store, "EventIndexPipeline.run", get_module_version()):
             # Store the transcripts locally in a temporary directory
             with tempfile.TemporaryDirectory() as tmpdir:
                 # Get the event corpus map and download most recent transcripts to local machine

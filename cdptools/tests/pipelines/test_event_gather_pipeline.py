@@ -14,7 +14,7 @@ from cdptools.audio_splitters.ffmpeg_audio_splitter import FFmpegAudioSplitter
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.event_scrapers.seattle_event_scraper import SeattleEventScraper
 from cdptools.file_stores.gcs_file_store import GCSFileStore
-from cdptools.pipelines import EventPipeline
+from cdptools.pipelines import EventGatherPipeline
 from cdptools.sr_models.google_cloud_sr_model import (GoogleCloudSRModel,
                                                       SRModelOutputs)
 
@@ -163,7 +163,7 @@ def test_event_pipeline_no_backfill(
         ]
 
         # Initialize pipeline
-        pipeline = mock.Mock(EventPipeline(example_config))
+        pipeline = mock.Mock(EventGatherPipeline(example_config))
 
         with mock.patch("requests.get") as mock_requests:
             # No backfill means only routes will be gathered because example html file only includes past events.
@@ -196,7 +196,7 @@ def test_event_pipeline_with_backfill(
         ]
 
         # Initialize pipeline
-        pipeline = EventPipeline(example_config)
+        pipeline = EventGatherPipeline(example_config)
 
         # Pre read event item returns
         event_items_zero = RequestReturn(example_legistar_tools_event_items_0)

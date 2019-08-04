@@ -631,7 +631,7 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_index_term(self, term: str, event_id: str) -> Dict:
+    def get_indexed_event_term(self, term: str, event_id: str) -> Dict:
         """
         Get a single index term.
 
@@ -650,7 +650,7 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def upload_or_update_index_term(self, term: str, event_id: str, value: float) -> Dict:
+    def upload_or_update_indexed_event_term(self, term: str, event_id: str, value: float) -> Dict:
         """
         Upload or update a single index term.
 

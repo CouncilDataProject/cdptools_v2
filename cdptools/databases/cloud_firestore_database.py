@@ -632,10 +632,10 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
-    def get_index_term(self, term: str, event_id: str) -> Dict:
+    def get_indexed_event_term(self, term: str, event_id: str) -> Dict:
         # Try find
         found = self._select_rows_with_max_results_expectation(
-            table="index_term",
+            table="indexed_event_term",
             pks=[("term", term), ("event_id", event_id)],
             expected_max_rows=1
         )
@@ -644,17 +644,17 @@ class CloudFirestoreDatabase(Database):
 
         return None
 
-    def upload_or_update_index_term(self, term: str, event_id: str, value: float) -> Dict:
+    def upload_or_update_indexed_event_term(self, term: str, event_id: str, value: float) -> Dict:
         # Reject any upload without credentials
         if self._credentials_path is None:
             raise exceptions.MissingCredentialsError()
 
         # Check if index term already exists
-        found = self.get_index_term(term, event_id)
+        found = self.get_indexed_event_term(term, event_id)
 
         # If found, use the already stored id
         if found:
-            id = found["index_term_id"]
+            id = found["indexed_event_term_id"]
         # Else, create a new id
         else:
             id = str(uuid4())
@@ -668,16 +668,16 @@ class CloudFirestoreDatabase(Database):
         }
 
         # Store the row
-        self._root.collection("index_term").document(id).set(values)
+        self._root.collection("indexed_event_term").document(id).set(values)
 
         # Return the newly created row
-        return {f"index_term_id": id, **values}
+        return {f"indexed_event_term_id": id, **values}
 
     def _search_for_term(self, term: str) -> List[Dict[str, Union[str, float, datetime]]]:
         """
         Helper function for multithreaded query of events.
         """
-        return self.select_rows_as_list("index_term", filters=[("term", term)])
+        return self.select_rows_as_list("indexed_event_term", filters=[("term", term)])
 
     def search_events(self, query: str):
         # Clean and tokenize the query

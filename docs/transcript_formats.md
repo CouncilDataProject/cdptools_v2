@@ -53,7 +53,7 @@ is a single sentence (including any punctuation returned from the model).
 
 ---
 ## Notes
-The `EventPipeline` will set the "primary" transcript for each event gathered to `timestamped-sentences` if available.
-If `timestamped-sentences` was not returned by the speech recognition model in the outputs object, it will then choose,
-`timestamped-words`. Again if `timestamped-words` is not available, it will default to `raw` which should always be
-available regardless of which speech recognition model you choose or create.
+The `EventGatherPipeline` will set the "primary" transcript for each event gathered to `timestamped-sentences` if
+available. If `timestamped-sentences` was not returned by the speech recognition model in the outputs object, it will
+then choose, `timestamped-words`. Again if `timestamped-words` is not available, it will default to `raw` which should
+always be available regardless of which speech recognition model you choose or create.

@@ -30,23 +30,13 @@ all_events = db.select_rows_as_list("event")
 ```
 
 ## Installation
-`cdptools` is available on [pypi.org](https://pypi.org/project/cdptools/). To install simply run:
-```bash
-pip install cdptools
-```
+`cdptools` is available on [pypi.org](https://pypi.org/project/cdptools/).
 
-Depending on how your city's CDP instance is deployed, install dependencies specific
-to your CDP instance.
+#### Per city installation:
+* Seattle: `pip install cdptools[google-cloud]`
 
-For Seattle this means installing `google-cloud` dependencies:
-```bash
-pip install cdptools[google-cloud]
-```
-
-If you just want to install all dependencies regardless of which city you may interact with:
-```bash
-pip install cdptools[all]
-```
+#### All city installation:
+`pip install cdptools[all]`
 
 Please view the [examples](/examples) directory which contains Jupyter notebooks with more examples on how to use CDP
 databases and file stores.

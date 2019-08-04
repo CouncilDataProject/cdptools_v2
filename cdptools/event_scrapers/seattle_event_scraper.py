@@ -222,11 +222,12 @@ class SeattleEventScraper(EventScraper):
         # Onclick returns a javascript function
         # Try to find the url the function redirects to
         try:
-            # All seattle channel videos are hosted at "video.seattle.gov:8080/..."
+            # All seattle channel videos are hosted at "video.seattle.gov/..."
             # This will find the true url by searching for a substring that matches the above pattern
             # Note: some of the urls have spaces in the video filename which is why the space is included in the
             # regex search pattern.
-            video = re.search(r"http://video\.seattle\.gov\:8080[a-zA-Z0-9\/_ ]*\.(mp4|flv)", video).group(0)
+            video = re.search(r"video\.seattle\.gov[a-zA-Z0-9\/_ ]*\.(mp4|flv)", video).group(0)
+            video = f"https://{video}"
         except AttributeError:
             raise exceptions.EventParseError(body, event_dt)
 
@@ -279,7 +280,12 @@ class SeattleEventScraper(EventScraper):
                 events.error.append((container, e))
 
         # Return processed events
-        log.debug(f"Collected {len(events.success)}. Errors: {len(events.error)}. {url}")
+        log.debug(
+            f"Collected {len(events.success)}. "
+            f"Warnings: {len(events.warning)}. "
+            f"Errors: {len(events.error)}. "
+            f"from sub-route: {url}"
+        )
         return events
 
     @staticmethod
@@ -377,6 +383,7 @@ class SeattleEventScraper(EventScraper):
             warning += body_result.warning
             error += body_result.error
         results = ParsedEvents(success, warning, error)
+        log.info(f"Found {len(results.success)} events from initial gather.")
 
         # Attach legistar agenda item details
         with ThreadPoolExecutor(min(self.max_concurrent_requests, os.cpu_count() * 5)) as exe:

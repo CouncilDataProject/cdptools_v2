@@ -46,7 +46,8 @@ requirements = [
     "pandas",
     "python-Levenshtein>=0.12.0",
     "requests>=2.21.0",
-    "schedule>=0.6.0"
+    "schedule>=0.6.0",
+    "tika>=1.19"
 ]
 
 local_requirements = [

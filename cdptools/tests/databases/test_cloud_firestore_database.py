@@ -82,9 +82,9 @@ EVENT_ITEMS = [{
     "document": EVENT_ITEM
 }]
 
-INDEX_TERM_ITEMS_HELLO = [
+INDEXED_EVENT_TERM_ITEMS_HELLO = [
     {"document": {
-        "name": "projects/stg-cdp-seattle/databases/(default)/documents/index_term/000",
+        "name": "projects/stg-cdp-seattle/databases/(default)/documents/indexed_event_term/000",
         "fields": {
             "event_id": {"stringValue": "event_id_123"},
             "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -93,7 +93,7 @@ INDEX_TERM_ITEMS_HELLO = [
         }
     }},
     {"document": {
-        "name": "projects/stg-cdp-seattle/databases/(default)/documents/index_term/111",
+        "name": "projects/stg-cdp-seattle/databases/(default)/documents/indexed_event_term/111",
         "fields": {
             "event_id": {"stringValue": "event_id_234"},
             "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -103,9 +103,9 @@ INDEX_TERM_ITEMS_HELLO = [
     }}
 ]
 
-INDEX_TERM_ITEMS_WORLD = [
+INDEXED_EVENT_TERM_ITEMS_WORLD = [
     {"document": {
-        "name": "projects/stg-cdp-seattle/databases/(default)/documents/index_term/222",
+        "name": "projects/stg-cdp-seattle/databases/(default)/documents/indexed_event_term/222",
         "fields": {
             "event_id": {"stringValue": "event_id_234"},
             "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -250,7 +250,10 @@ def test_cloud_firestore_database_max_expectation(no_creds_db, creds_db, pks, n_
 def test_search_events(no_creds_db):
     # Mock requests
     with mock.patch("requests.post") as mocked_request:
-        mocked_request.side_effect = [MockedResponse(INDEX_TERM_ITEMS_HELLO), MockedResponse(INDEX_TERM_ITEMS_WORLD)]
+        mocked_request.side_effect = [
+            MockedResponse(INDEXED_EVENT_TERM_ITEMS_HELLO),
+            MockedResponse(INDEXED_EVENT_TERM_ITEMS_WORLD)
+        ]
 
         # Generate results
         results = no_creds_db.search_events("hello world")

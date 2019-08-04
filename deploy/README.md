@@ -23,12 +23,13 @@ still producing high quality data. Quick math says that running a CDP instance s
 $50 - $100 / month. This includes all server, database, transcription, and storage costs but this will vary depending
 on which back-end hosting provider you choose and how much traffic your system receives.
 
-There are currently two pipelines you will want to run, the event gathering pipeline (`EventPipeline`) and the event
-indexing pipeline (`EventIndexPipeline`). The core of the system is very much the `EventPipeline` as it is what actually
-gathers the data from your city, produces a transcript, and standardizes all the retrieved and generated data into the
-CDP database and storage formats. The `EventIndexPipeline` is the first of many downstream processing pipelines. It
-indexes the transcripts in relation to events to allow for fast plain text search of events. Technically, this is not a
-required pipeline to run but plain text search is a leg up on a lot of civic systems and generally a nice tool.
+There are currently two pipelines you will want to run, the event gathering pipeline (`EventGatherPipeline`) and the
+event indexing pipeline (`EventIndexPipeline`). The core of the system is very much the `EventGatherPipeline` as it is
+what actually gathers the data from your city, produces a transcript, and standardizes all the retrieved and generated
+data into the CDP database and storage formats. The `EventIndexPipeline` is the first of many downstream processing
+pipelines. It indexes the transcripts in relation to events to allow for fast plain text search of events. Technically,
+this is not a required pipeline to run but plain text search is a leg up on a lot of civic systems and generally a nice
+tool.
 
 Each of these pipelines runs in their own process on their own schedule (as determined by you). We will get more into
 this in the [configuration and setup](#configuration-and-setup) section but note that because each pipeline runs on it's
@@ -185,13 +186,13 @@ of the credentials file you downloaded anywhere where there is the key `"credent
 29. To start a single gathering of events run:
 
 ```bash
-run_cdp_pipeline EventPipeline cdptools/configs/seattle-event-pipeline.json
+run_cdp_pipeline EventGatherPipeline cdptools/configs/seattle-event-gather-pipeline.json
 ```
 
 Or to run the pipeline every `n` minutes run:
 
 ```bash
-run_cdp_pipeline EventPipeline cdptools/configs/seattle-event-pipeline.json --nm 20
+run_cdp_pipeline EventGatherPipeline cdptools/configs/seattle-event-gather-pipeline.json --nm 20
 ```
 
 In the above case, the pipeline will run every 20 minutes (`--nm 20`).
@@ -237,9 +238,9 @@ Second, specifying `google-cloud` over `all` means there will be less dependenci
 If you have made it this far in the deployment README, I applaud you. The last couple comments to add are about running
 pipelines. Currently at `v2.0.0` launch of the project, the idea of _"backfilling"_ was pushed to a later date because
 of how costly this can be (upwards of $10,000). Instead, pipelines at `v2.0.0` launch only have forward gathering,
-in this case, CDP-Seattle, runs the `EventPipeline` continuously on a high network speed, low CPU, low storage, Google
-Cloud server every fifteen minutes and the `EventIndexPipeline` and `DecisionItemIndexPipeline` each on their own
-servers but the same server configuration as the `EventPipeline` every two days. These schedules can and should be
+in this case, CDP-Seattle, runs the `EventGatherPipeline` continuously on a high network speed, low CPU, low storage,
+Google Cloud server every fifteen minutes and the `EventIndexPipeline` and `DecisionItemIndexPipeline` each on their own
+servers but the same server configuration as the `EventGatherPipeline` every two days. These schedules can and should be
 adjusted to fit your needs.
 
 ---

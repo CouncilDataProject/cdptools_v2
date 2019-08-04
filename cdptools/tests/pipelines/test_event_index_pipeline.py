@@ -10,7 +10,7 @@ from google.cloud import storage
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.file_stores.gcs_file_store import GCSFileStore
 from cdptools.indexers.tfidf_indexer import TFIDFIndexer
-from cdptools.pipelines import IndexPipeline
+from cdptools.pipelines import EventIndexPipeline
 
 from ..databases.test_cloud_firestore_database import MockedCollection
 from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket
@@ -67,7 +67,7 @@ def test_index_pipeline(
         ]
 
         # Initialize pipeline
-        pipeline = IndexPipeline(example_config)
+        pipeline = EventIndexPipeline(example_config)
 
         # Mock the transcript manifest get
         with mock.patch("cdptools.research_utils.transcripts.download_most_recent_transcripts") as mock_transcript_get:

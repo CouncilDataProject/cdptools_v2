@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-class EventPipeline(Pipeline):
+class EventGatherPipeline(Pipeline):
 
     def __init__(self, config_path: Union[str, Path]):
         # Resolve config path
@@ -67,7 +67,7 @@ class EventPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="EventPipeline.task_audio_get_or_copy",
+            algorithm_name="EventGatherPipeline.task_audio_get_or_copy",
             algorithm_version=get_module_version(),
             inputs=[key, video_uri],
             remove_files=True
@@ -122,7 +122,7 @@ class EventPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="EventPipeline.task_transcript_get_or_create",
+            algorithm_name="EventGatherPipeline.task_transcript_get_or_create",
             algorithm_version=get_module_version(),
             inputs=[key, audio_uri],
             remove_files=True
@@ -197,7 +197,7 @@ class EventPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="EventPipeline.task_parse_and_upload_constructed_event",
+            algorithm_name="EventGatherPipeline.task_parse_and_upload_constructed_event",
             algorithm_version=get_module_version(),
             inputs=[event["source_uri"]]
         ):
@@ -276,7 +276,7 @@ class EventPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="EventPipeline.process_event",
+            algorithm_name="EventGatherPipeline.process_event",
             algorithm_version=get_module_version(),
             inputs=[event["source_uri"]],
             remove_files=True
@@ -312,7 +312,13 @@ class EventPipeline(Pipeline):
 
     def run(self):
         log.info("Starting event processing.")
-        with RunManager(self.database, self.file_store, "EventPipeline.run", get_module_version(), remove_files=True):
+        with RunManager(
+            self.database,
+            self.file_store,
+            "EventGatherPipeline.run",
+            get_module_version(),
+            remove_files=True
+        ):
             # Get events
             with RunManager(self.database, self.file_store, "EventScraper.get_events", get_module_version()):
                 events = self.event_scraper.get_events()

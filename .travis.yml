@@ -18,12 +18,12 @@ script:
 # create the Github repo and add it to Travis, run the
 # following command to finish PyPI deployment setup:
 # If your project is built on travis-ci.org you can use
-# $ travis encrypt your-password-here --add deploy.password
+# $ travis encrypt 'your-password-here' --add deploy.password
 # Or just use this website:
 # Repository name: CouncilDataProject/cdptools
 # http://rkh.github.io/travis-encrypt/public/index.html
 # If your project is built on travis-ci.com you can use
-# $ travis encrypt your-password-here --add deploy.password --com
+# $ travis encrypt 'your-password-here' --add deploy.password --com
 #
 # Details here:
 # https://docs.travis-ci.com/user/deployment/pypi/
@@ -34,7 +34,7 @@ deploy:
   distributions: sdist bdist_wheel
   user: CouncilDataProject
   password:
-    secure: po8kxlGffOAogU/7nJl6URgY9wIPldvF6x793GbpXPPwGZ2BpcWAMbXTEHXCrEfnTLZ0MNO9h39mwLiCZJC4gYd5/jYFGASoH4tXEnMHDTF7FCHdn53EetBYyNkHj0LPaqecY3uA65hlkvnKsWw7z5rCOXwoARr3fcaZXlEX+UmjfEeP+obxGLr7PhItnfO4wvpI1YHvIT4LC4oMqPyMz4FTbC9I4kzMBzaM4Uz6rP0hQCVDaCkzAjSHszsF7ZNh2AG9IPZjJV+5CV+unRXtMihz4a7tLP6WYLtRkpdhSn6yLndMjsqU3m3RjeMVZ/fxmEGc2qGHdtEZ3rhZhClrDSd0UCAl90X5K8+JkaRl91lzs3yrV1N+VR94au2J0wx9Qzj+TUNsd3NPy/cvqB68cvdzg0cykAcQckpHDKVMlOTof7XhN3Y4DFHQA1XmBNky+XpMbAdAYDbn6wl0mPC1gjl2pXd4xURM42gQgk0/xh9YNbP5D4InOeEEyHrW374gw21p9ddd3MY+mQEumR4zpLaHb4JgbjKTGF6liEGzfXuFx1ccB6f8AD26x2K9wXQNHxwSm8QeAQv76bM0AM/ty9QoIxW0OObAJ0zDj05RVyVmxWFB1F/lWE3LcLcFceCabLTK0ly3eEyHLxiP/cLxmbesMWVHwZokCNQ+Peol61M=
+    secure: NtJqQQHDS1suefUOciMtE2zAv/ArTq9bbqexGdioF9FZ1oK9pqXoCyRaSGcKnZFrxWevLG38fe+N1SQthXR/+pOd7LHu87qOr8JVGSjqqtmZGD8o9xWbg/dVn5CmSm3w3GiJ3PzGOgUzRKPA6wgGxxW/cOu9almShEWCgbnr+pc5jhS2nX9UJRSuJlCf+/hF9RD5M2VELY8+t2hzqzs94behIf3ZZCzZ7sV3JntGH7c6nHSDBQGLtnIMpPNHmctIGM3hqtuydf/bImXY10APvNQATKuqR6oq21S58yOyEsHsNp9Bcmj7p+CEk52YToosk7O3WLB7oHyx0LXJTUXZLj8E8bUcJc+BZbRtSSmrGZH/mdWgA4V21NNtUeI1NqCcT1Cgy0+jPO8v/vy39GeoVnR02Z2KRMqKrgYbsP3yQoGQx0RpNc/V/iWrU9FRB2TUh3AJBHXBwpq7poI0rUmxIujbf61UZkDH7dzaYe46tVW1arhkCvtM+scZb30VjsVEnmH0Yso3EatlIvOrKwB5MLDao1RIr6Y1qLwwgsbdL2+Zo3BrKysFwHMNspB9hD/h3Q8GCSFs1Wyhjz5eO/ZXst/MyKLYL7/dD0Gdcq7UuA5HKqcfCmzheURey2Af+sQy4eNfT974zsVyUsR+eS67h2XUi5U9I2oEumPyX7zdTDo=
   on:
     branch: master
     repo: CouncilDataProject/cdptools

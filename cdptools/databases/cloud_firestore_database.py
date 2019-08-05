@@ -5,6 +5,7 @@ import json
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
+from functools import partial
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
@@ -15,7 +16,7 @@ from firebase_admin import credentials, firestore
 
 from ..indexers import Indexer
 from . import exceptions
-from .database import (Database, EventMatch, EventTerm, OrderCondition,
+from .database import (Database, Match, OrderCondition, TermResult,
                        WhereCondition, WhereOperators)
 
 ###############################################################################
@@ -673,45 +674,58 @@ class CloudFirestoreDatabase(Database):
         # Return the newly created row
         return {f"indexed_event_term_id": id, **values}
 
-    def _search_for_term(self, term: str) -> List[Dict[str, Union[str, float, datetime]]]:
+    def _search_for_term(self, term: str, table: str) -> List[Dict[str, Union[str, float, datetime]]]:
         """
-        Helper function for multithreaded query of events.
+        Helper function for multithreaded query of terms.
         """
-        return self.select_rows_as_list("indexed_event_term", filters=[("term", term)])
+        return self.select_rows_as_list(table, filters=[("term", term)])
 
-    def search_events(self, query: str):
+    def _search(self, query: str, table: str, match_on: str) -> List[Match]:
         # Clean and tokenize the query
         query = Indexer.clean_text_for_indexing(query)
         query_terms = set(query.split(" "))
 
         # First query for the terms
+        search_for_term_from_table = partial(self._search_for_term, table=table)
         with ThreadPoolExecutor() as exe:
-            term_results = list(exe.map(self._search_for_term, query_terms))
+            term_results = list(exe.map(search_for_term_from_table, query_terms))
 
-        # Combine the term results into event results
-        event_results = {}
+        # Combine the term results into table results
+        table_results = {}
         for term_result in term_results:
-            # Join the results into a main results dictionary where they top level key is the event id
+            # Join the results into a main results dictionary where they top level key is the table row id
             for term_details in term_result:
-                if term_details["event_id"] in event_results:
-                    event_results[term_details["event_id"]].append(term_details)
+                if term_details[match_on] in table_results:
+                    table_results[term_details[match_on]].append(term_details)
                 else:
-                    event_results[term_details["event_id"]] = [term_details]
+                    table_results[term_details[match_on]] = [term_details]
 
         # Clean and format the results
-        event_matches = []
-        for event_id, term_results in event_results.items():
-            event_matches.append(EventMatch(
-                event_id=event_id,
-                event_terms=[
-                    EventTerm(term=t["term"], contribution=t["value"]) for t in term_results
+        table_matches = []
+        for unique_id, term_results in table_results.items():
+            table_matches.append(Match(
+                unique_id=unique_id,
+                terms=[
+                    TermResult(term=t["term"], contribution=t["value"]) for t in term_results
                 ]
             ))
 
         # Sort by relevance
-        event_matches = sorted(event_matches, key=lambda em: em.relevance, reverse=True)
+        table_matches = sorted(table_matches, key=lambda m: m.relevance, reverse=True)
 
-        return event_matches
+        return table_matches
+
+    def search_events(self, query: str) -> List[Match]:
+        return self._search(query, table="indexed_event_term", match_on="event_id")
+
+    def get_indexed_minutes_item_term(self, term: str, minutes_item_id: str) -> Dict:
+        return {}
+
+    def upload_or_update_indexed_minutes_item_term(self, term: str, minutes_item_id: str, value: float) -> Dict:
+        return {}
+
+    def search_minutes_items(self, query: str) -> List[Match]:
+        return self._search(query, table="indexed_minutes_item_term", match_on="minutes_item_id")
 
     def __str__(self):
         if self._credentials_path:

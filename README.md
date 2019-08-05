@@ -21,8 +21,8 @@ from cdptools.databases import CloudFirestoreDatabase
 
 db = CloudFirestoreDatabase("cdp-seattle")
 matching_events = db.search_events("bicycle infrastructure, pedestrian mobility, greenways")
-# Returns list of EventMatch objects
-# [EventMatch, EventMatch, ...]
+# Returns list of Match objects
+# [Match, Match, ...]
 
 all_events = db.select_rows_as_list("event")
 # Returns list of dictionaries with event information

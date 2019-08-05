@@ -3,7 +3,7 @@
 
 import json
 from pathlib import Path
-from typing import Union
+from typing import List, Union
 from unittest import mock
 
 import pytest
@@ -20,6 +20,11 @@ from cdptools.sr_models.google_cloud_sr_model import (GoogleCloudSRModel,
 
 from ..databases.test_cloud_firestore_database import MockedCollection
 from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket
+
+
+@pytest.fixture
+def legistar_data_dir(data_dir) -> Path:
+    return data_dir / "legistar"
 
 
 @pytest.fixture
@@ -111,26 +116,6 @@ def example_seattle_route(data_dir):
     return data_dir / "example_seattle_route.html"
 
 
-@pytest.fixture
-def example_legistar_tools_events(data_dir):
-    return data_dir / "example_legistar_tools_events.json"
-
-
-@pytest.fixture
-def example_legistar_tools_event_items_0(data_dir):
-    return data_dir / "example_legistar_tools_event_items_0.json"
-
-
-@pytest.fixture
-def example_legistar_tools_event_items_1(data_dir):
-    return data_dir / "example_legistar_tools_event_items_1.json"
-
-
-@pytest.fixture
-def example_legistar_tools_event_item_vote(data_dir):
-    return data_dir / "example_legistar_tools_event_item_vote.json"
-
-
 class RequestReturn:
     def __init__(self, content: Union[str, Path]):
         if isinstance(content, Path):
@@ -147,6 +132,15 @@ class RequestReturn:
 
     def json(self):
         return self.content
+
+
+@pytest.fixture
+def loaded_legistar_requests(legistar_data_dir) -> List[RequestReturn]:
+    mocked_responses = []
+    for i in range(len(list(legistar_data_dir.glob("request_*")))):
+        mocked_responses.append(RequestReturn(list(legistar_data_dir.glob(f"request_{i}_*"))[0]))
+
+    return mocked_responses
 
 
 def test_event_pipeline_no_backfill(
@@ -183,11 +177,8 @@ def test_event_pipeline_with_backfill(
     example_config,
     example_seattle_routes,
     example_seattle_route,
-    example_legistar_tools_events,
-    example_legistar_tools_event_items_0,
-    example_legistar_tools_event_items_1,
-    example_legistar_tools_event_item_vote,
-    example_video
+    example_video,
+    loaded_legistar_requests
 ):
     # Configure all mocks
     with mock.patch("cdptools.pipelines.pipeline.Pipeline.load_custom_object") as mock_loader:
@@ -198,20 +189,12 @@ def test_event_pipeline_with_backfill(
         # Initialize pipeline
         pipeline = EventGatherPipeline(example_config)
 
-        # Pre read event item returns
-        event_items_zero = RequestReturn(example_legistar_tools_event_items_0)
-        event_items_one = RequestReturn(example_legistar_tools_event_items_1)
-
         with mock.patch("requests.get") as mock_requests:
             # Backfill means we need to mock every request call including all the legistar calls
             mock_requests.side_effect = [
                 RequestReturn(example_seattle_routes),
                 RequestReturn(example_seattle_route),
-                RequestReturn(example_legistar_tools_events),
-                event_items_zero,
-                *([RequestReturn(example_legistar_tools_event_item_vote)] * len(event_items_zero.content)),
-                event_items_one,
-                *([RequestReturn(example_legistar_tools_event_item_vote)] * len(event_items_one.content))
+                *loaded_legistar_requests
             ]
 
             # Mock the video copy

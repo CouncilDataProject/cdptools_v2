@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Union
@@ -32,7 +33,8 @@ class AgendaMatchResults:
 def get_legistar_events_for_timespan(
     client: str,
     begin: datetime = (datetime.utcnow()),
-    end: datetime = (datetime.utcnow() + timedelta(days=1))
+    end: datetime = (datetime.utcnow() + timedelta(days=1)),
+    store_each_response: bool = False
 ) -> List[Dict]:
     """
     Get all legistar events and each events minutes items, people, and votes, for a client for a given timespan.
@@ -45,6 +47,8 @@ def get_legistar_events_for_timespan(
         The timespan beginning datetime to query for events after.
     end: datetime
         The timespan end datetime to query for events before.
+    store_each_response: bool
+        Option to store each response as they come in. Used to store the data for testing the event gather pipeline.
 
     Returns
     -------
@@ -53,6 +57,9 @@ def get_legistar_events_for_timespan(
         and attaches agenda items, minutes items, any attachments, called "EventItems", requests votes for any of these
         "EventItems", and requests person information for any vote.
     """
+    # Request counter
+    request_counter = 0
+
     # The unformatted request parts
     filter_datetime_format = "EventDate+{op}+datetime%27{dt}%27"
     request_format = LEGISTAR_EVENT_BASE + "?$filter={begin}+and+{end}"
@@ -66,10 +73,14 @@ def get_legistar_events_for_timespan(
             end=filter_datetime_format.format(op="lt", dt=str(end).replace(" ", "T"))
         )
     ).json()
+    if store_each_response:
+        with open(f"request_{request_counter}_events.json", "w") as write_out:
+            json.dump(response, write_out)
+    request_counter += 1
 
     # Get all event items for each event
     item_request_format = LEGISTAR_EVENT_BASE + "/{event_id}/EventItems?AgendaNote=1&MinutesNote=1&Attachments=1"
-    for event in response:
+    for i, event in enumerate(response):
         # Attach the Event Items to the event
         event["EventItems"] = requests.get(
             item_request_format.format(
@@ -77,9 +88,13 @@ def get_legistar_events_for_timespan(
                 event_id=event["EventId"]
             )
         ).json()
+        if store_each_response:
+            with open(f"request_{request_counter}_event_{i}_items.json", "w") as write_out:
+                json.dump(event["EventItems"], write_out)
+        request_counter += 1
 
         # Get vote information
-        for event_item in event["EventItems"]:
+        for j, event_item in enumerate(event["EventItems"]):
             vote_request_format = LEGISTAR_VOTE_BASE + "/{event_item_id}/Votes"
             event_item["EventItemVoteInfo"] = requests.get(
                 vote_request_format.format(
@@ -87,9 +102,13 @@ def get_legistar_events_for_timespan(
                     event_item_id=event_item["EventItemId"]
                 )
             ).json()
+            if store_each_response:
+                with open(f"request_{request_counter}_event_{i}_item_{j}_votes.json", "w") as write_out:
+                    json.dump(event_item["EventItemVoteInfo"], write_out)
+            request_counter += 1
 
             # Get person information
-            for vote_info in event_item["EventItemVoteInfo"]:
+            for k, vote_info in enumerate(event_item["EventItemVoteInfo"]):
                 person_request_format = LEGISTAR_PERSON_BASE + "/{person_id}"
                 vote_info["PersonInfo"] = requests.get(
                     person_request_format.format(
@@ -97,6 +116,10 @@ def get_legistar_events_for_timespan(
                         person_id=vote_info["VotePersonId"]
                     )
                 ).json()
+                if store_each_response:
+                    with open(f"request_{request_counter}_event_{i}_item_{j}_vote_{k}_person.json", "w") as write_out:
+                        json.dump(vote_info["PersonInfo"], write_out)
+                request_counter += 1
 
     log.debug(f"Collected {len(response)} Legistar events")
     return response

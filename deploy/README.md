@@ -239,7 +239,7 @@ If you have made it this far in the deployment README, I applaud you. The last c
 pipelines. Currently at `v2.0.0` launch of the project, the idea of _"backfilling"_ was pushed to a later date because
 of how costly this can be (upwards of $10,000). Instead, pipelines at `v2.0.0` launch only have forward gathering,
 in this case, CDP-Seattle, runs the `EventGatherPipeline` continuously on a high network speed, low CPU, low storage,
-Google Cloud server every fifteen minutes and the `EventIndexPipeline` and `DecisionItemIndexPipeline` each on their own
+Google Cloud server every fifteen minutes and the `EventIndexPipeline` and `MinutesItemIndexPipeline` each on their own
 servers but the same server configuration as the `EventGatherPipeline` every two days. These schedules can and should be
 adjusted to fit your needs.
 

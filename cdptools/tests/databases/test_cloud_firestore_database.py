@@ -265,7 +265,7 @@ def test_search_events(no_creds_db):
         # Check individual event results
         # We know the order they should be returned in is highest match to lowest match order
         # Check to make sure that is the case
-        assert results[0].event_id == "event_id_234"
+        assert results[0].unique_id == "event_id_234"
         assert results[0].relevance == 0.8
-        assert results[1].event_id == "event_id_123"
+        assert results[1].unique_id == "event_id_123"
         assert results[1].relevance == 0.2

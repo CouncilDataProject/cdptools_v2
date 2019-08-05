@@ -35,19 +35,19 @@ class OrderOperators:
     asce: str = "ASCENDING"
 
 
-class EventTerm(NamedTuple):
+class TermResult(NamedTuple):
     term: str
     contribution: float
 
 
-class EventMatch:
-    def __init__(self, event_id, event_terms: List[EventTerm]):
-        self._event_id = event_id
-        self._terms = event_terms
+class Match:
+    def __init__(self, unique_id, terms: List[TermResult]):
+        self._unique_id = unique_id
+        self._terms = terms
 
     @property
-    def event_id(self):
-        return self._event_id
+    def unique_id(self):
+        return self._unique_id
 
     @property
     def terms(self):
@@ -58,7 +58,7 @@ class EventMatch:
         return sum(t.contribution for t in self.terms)
 
     def __str__(self):
-        return f"<EventMatch [event_id: {self.event_id}, relevance: {self.relevance}]>"
+        return f"<Match [unique_id: {self.unique_id}, relevance: {self.relevance}]>"
 
     def __repr__(self):
         return str(self)
@@ -633,7 +633,7 @@ class Database(ABC):
     @abstractmethod
     def get_indexed_event_term(self, term: str, event_id: str) -> Dict:
         """
-        Get a single index term.
+        Get a single indexed event term.
 
         Parameters
         ----------
@@ -652,7 +652,7 @@ class Database(ABC):
     @abstractmethod
     def upload_or_update_indexed_event_term(self, term: str, event_id: str, value: float) -> Dict:
         """
-        Upload or update a single index term.
+        Upload or update a single indexed event term.
 
         Parameters
         ----------
@@ -671,18 +671,77 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def search_events(self, query: str) -> List[EventMatch]:
+    def search_events(self, query: str) -> List[Match]:
         """
-        Use the stored index terms to query for events given a query.
+        Use the stored indexed event terms to query for events given a query.
 
         Parameters
         ----------
         query: str
-            A query string to be used to search for events using the already stored index term table.
+            A query string to be used to search for events using the already stored indexed event term table.
 
         Returns
         -------
-        matches: List[EventMatch]
-            An list of event matche objects sorted in most to least relevant order.
+        matches: List[Match]
+            An list of match objects sorted in most to least relevant order.
+        """
+        return []
+
+    @abstractmethod
+    def get_indexed_minutes_item_term(self, term: str, minutes_item_id: str) -> Dict:
+        """
+        Get a single indexed minutes item term.
+
+        Parameters
+        ----------
+        term: str
+            The string term to retrieve.
+        minutes_item_id: str
+            The id for the minutes item that term was used in or discussed about.
+
+        Returns
+        -------
+        details: Dict[str, str]
+            A dictionary containing the data that was either uploaded or found.
+        """
+        return {}
+
+    @abstractmethod
+    def upload_or_update_indexed_minutes_item_term(self, term: str, minutes_item_id: str, value: float) -> Dict:
+        """
+        Upload or update a single indexed minutes_item item term.
+
+        Parameters
+        ----------
+        term: str
+            A term used during an event.
+        minutes_item_id: str
+            The id for the minutes item that term was used in or discussed about.
+        value: float
+            The value that term should be given for that minutes item that indicates that terms relevance to that
+            minutes item.
+
+        Returns
+        -------
+        details: Dict[str, Union[str, float]]
+            A dictionary containing the data that was either uploaded or found.
+        """
+        return {}
+
+    @abstractmethod
+    def search_minutes_items(self, query: str) -> List[Match]:
+        """
+        Use the stored indexed minutes item terms to query for events given a query.
+
+        Parameters
+        ----------
+        query: str
+            A query string to be used to search for minutes items using the already stored indexed minutes items term
+            table.
+
+        Returns
+        -------
+        matches: List[Match]
+            An list of match objects sorted in most to least relevant order.
         """
         return []

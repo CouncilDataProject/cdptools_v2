@@ -126,7 +126,7 @@ EVENT_VALUES = {
 
 @pytest.fixture
 def no_creds_db() -> CloudFirestoreDatabase:
-    return CloudFirestoreDatabase("this-is-a-fake-bucket-hi")
+    return CloudFirestoreDatabase("this-is-a-fake-database-hi")
 
 
 @pytest.fixture
@@ -248,24 +248,28 @@ def test_cloud_firestore_database_max_expectation(no_creds_db, creds_db, pks, n_
 
 
 def test_search_events(no_creds_db):
-    # Mock requests
-    with mock.patch("requests.post") as mocked_request:
-        mocked_request.side_effect = [
+    # Mock the complex search query
+    with mock.patch("requests.post") as mocked_post:
+        mocked_post.side_effect = [
             MockedResponse(INDEXED_EVENT_TERM_ITEMS_HELLO),
             MockedResponse(INDEXED_EVENT_TERM_ITEMS_WORLD)
         ]
 
-        # Generate results
-        results = no_creds_db.search_events("hello world")
+        # Mock the minimal event gets that get attached to the `Match.data` attributes
+        with mock.patch("requests.get") as mocked_get:
+            mocked_get.return_value = MockedResponse({"fields": {}})
 
-        # Check results
-        # Two events returned
-        assert len(results) == 2
+            # Generate results
+            results = no_creds_db.search_events("hello world")
 
-        # Check individual event results
-        # We know the order they should be returned in is highest match to lowest match order
-        # Check to make sure that is the case
-        assert results[0].unique_id == "event_id_234"
-        assert results[0].relevance == 0.8
-        assert results[1].unique_id == "event_id_123"
-        assert results[1].relevance == 0.2
+            # Check results
+            # Two events returned
+            assert len(results) == 2
+
+            # Check individual event results
+            # We know the order they should be returned in is highest match to lowest match order
+            # Check to make sure that is the case
+            assert results[0].unique_id == "event_id_234"
+            assert results[0].relevance == 0.8
+            assert results[1].unique_id == "event_id_123"
+            assert results[1].relevance == 0.2

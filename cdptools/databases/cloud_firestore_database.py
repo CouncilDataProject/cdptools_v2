@@ -719,10 +719,45 @@ class CloudFirestoreDatabase(Database):
         return self._search(query, table="indexed_event_term", match_on="event_id")
 
     def get_indexed_minutes_item_term(self, term: str, minutes_item_id: str) -> Dict:
-        return {}
+        # Try find
+        found = self._select_rows_with_max_results_expectation(
+            table="indexed_minutes_item_term",
+            pks=[("term", term), ("minutes_item_id", minutes_item_id)],
+            expected_max_rows=1
+        )
+        if found:
+            return found[0]
+
+        return None
 
     def upload_or_update_indexed_minutes_item_term(self, term: str, minutes_item_id: str, value: float) -> Dict:
-        return {}
+        # Reject any upload without credentials
+        if self._credentials_path is None:
+            raise exceptions.MissingCredentialsError()
+
+        # Check if index term already exists
+        found = self.get_indexed_minutes_item_term(term, minutes_item_id)
+
+        # If found, use the already stored id
+        if found:
+            id = found["indexed_minutes_item_term_id"]
+        # Else, create a new id
+        else:
+            id = str(uuid4())
+
+        # Create values dictionary
+        values = {
+            "term": term,
+            "minutes_item_id": minutes_item_id,
+            "value": value,
+            "updated": datetime.utcnow()
+        }
+
+        # Store the row
+        self._root.collection("indexed_minutes_item_term_id").document(id).set(values)
+
+        # Return the newly created row
+        return {f"indexed_minutes_item_term_id": id, **values}
 
     def search_minutes_items(self, query: str) -> List[Match]:
         return self._search(query, table="indexed_minutes_item_term", match_on="minutes_item_id")

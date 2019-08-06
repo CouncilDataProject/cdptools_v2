@@ -226,20 +226,26 @@ def test_index_pipeline(
                 with mock.patch("cdptools.databases.CloudFirestoreDatabase.select_row_by_id") as mocked_select_row:
                     mocked_select_row.side_effect = select_row_data
 
-                    # Mock any file request with creds
-                    with mock.patch("cdptools.file_stores.GCSFileStore.download_file") as mocked_download_file:
-                        mocked_download_file.side_effect = [
-                            example_transcript_sentences_0,
-                            example_transcript_sentences_1
-                        ]
+                    # Mock any call to select row with max results expectation
+                    with mock.patch(
+                        "cdptools.databases.CloudFirestoreDatabase._select_rows_with_max_results_expectation"
+                    ) as mocked_select_with_expectation:
+                        mocked_select_with_expectation.return_value = None
 
-                        # Mock any external file request
-                        with mock.patch(
-                            "cdptools.file_stores.FileStore._external_resource_copy"
-                        ) as mocked_resource_copy:
-                            mocked_resource_copy.side_effect = [
-                                example_minutes_item_file_0,
-                                example_minutes_item_file_1
+                        # Mock any file request with creds
+                        with mock.patch("cdptools.file_stores.GCSFileStore.download_file") as mocked_download_file:
+                            mocked_download_file.side_effect = [
+                                example_transcript_sentences_0,
+                                example_transcript_sentences_1
                             ]
 
-                            pipeline.run()
+                            # Mock any external file request
+                            with mock.patch(
+                                "cdptools.file_stores.FileStore._external_resource_copy"
+                            ) as mocked_resource_copy:
+                                mocked_resource_copy.side_effect = [
+                                    example_minutes_item_file_0,
+                                    example_minutes_item_file_1
+                                ]
+
+                                pipeline.run()

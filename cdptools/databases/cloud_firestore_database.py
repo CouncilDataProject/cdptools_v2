@@ -680,7 +680,7 @@ class CloudFirestoreDatabase(Database):
         """
         return self.select_rows_as_list(table, filters=[("term", term)])
 
-    def _search(self, query: str, table: str, match_on: str) -> List[Match]:
+    def _search(self, query: str, table: str, match_on: str, data_table: str) -> List[Match]:
         # Clean and tokenize the query
         query = Indexer.clean_text_for_indexing(query)
         query_terms = set(query.split(" "))
@@ -707,7 +707,8 @@ class CloudFirestoreDatabase(Database):
                 unique_id=unique_id,
                 terms=[
                     TermResult(term=t["term"], contribution=t["value"]) for t in term_results
-                ]
+                ],
+                data=self.select_row_by_id(table=data_table, id=unique_id)
             ))
 
         # Sort by relevance
@@ -716,7 +717,7 @@ class CloudFirestoreDatabase(Database):
         return table_matches
 
     def search_events(self, query: str) -> List[Match]:
-        return self._search(query, table="indexed_event_term", match_on="event_id")
+        return self._search(query, table="indexed_event_term", match_on="event_id", data_table="event")
 
     def get_indexed_minutes_item_term(self, term: str, minutes_item_id: str) -> Dict:
         # Try find
@@ -760,7 +761,12 @@ class CloudFirestoreDatabase(Database):
         return {f"indexed_minutes_item_term_id": id, **values}
 
     def search_minutes_items(self, query: str) -> List[Match]:
-        return self._search(query, table="indexed_minutes_item_term", match_on="minutes_item_id")
+        return self._search(
+            query,
+            table="indexed_minutes_item_term",
+            match_on="minutes_item_id",
+            data_table="minutes_item"
+        )
 
     def __str__(self):
         if self._credentials_path:

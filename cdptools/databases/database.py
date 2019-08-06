@@ -41,13 +41,18 @@ class TermResult(NamedTuple):
 
 
 class Match:
-    def __init__(self, unique_id, terms: List[TermResult]):
+    def __init__(self, unique_id, terms: List[TermResult], data: Dict[str, Any]):
         self._unique_id = unique_id
         self._terms = terms
+        self._data = data
 
     @property
     def unique_id(self):
         return self._unique_id
+
+    @property
+    def data(self):
+        return self._data
 
     @property
     def terms(self):

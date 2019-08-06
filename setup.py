@@ -39,15 +39,15 @@ interactive_requirements = [
 ]
 
 requirements = [
-    "beautifulsoup4>=4.7.1",
-    "ffmpeg-python>=0.1.17",
-    "fuzzywuzzy>=0.17.0",
-    "nltk>=3.4.4",
-    "pandas",
-    "python-Levenshtein>=0.12.0",
-    "requests>=2.21.0",
-    "schedule>=0.6.0",
-    "tika>=1.19"
+    "beautifulsoup4==4.8.0",
+    "ffmpeg-python==0.2.0",
+    "fuzzywuzzy==0.17.0",
+    "nltk==3.4.4",
+    "pandas==0.25.0",
+    "python-Levenshtein==0.12.0",
+    "requests==2.22.0",
+    "schedule==0.6.0",
+    "tika==1.19"
 ]
 
 local_requirements = [
@@ -55,9 +55,9 @@ local_requirements = [
 ]
 
 google_cloud_requirements = [
-    "firebase-admin>=2.16.0",
-    "google-cloud-speech>=1.0.0",
-    "google-cloud-storage>=1.14.0"
+    "firebase-admin==2.17.0",
+    "google-cloud-speech==1.2.0",
+    "google-cloud-storage==1.17.0"
 ]
 
 extra_requirements = {

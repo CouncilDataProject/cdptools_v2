@@ -11,24 +11,13 @@ from typing import Dict, Union
 from .. import get_module_version
 from ..dev_utils import RunManager
 from ..research_utils import transcripts as transcript_tools
-from .pipeline import Pipeline
+from .pipeline import Pipeline, ValuesForTerm
 
 ###############################################################################
 
 log = logging.getLogger(__name__)
 
 ###############################################################################
-
-
-class EventValuesForTerm:
-    """
-    Used for multithreaded uploaded of index terms.
-    Can't use NamedTuple here because dictionaries are mutuable.
-    """
-
-    def __init__(self, term: str, event_values: Dict[str, float]):
-        self.term = term
-        self.event_values = event_values
 
 
 class EventIndexPipeline(Pipeline):
@@ -85,9 +74,9 @@ class EventIndexPipeline(Pipeline):
         ):
             return self.indexer.drop_terms_from_index_below_value(index)
 
-    def _upload_indexed_event_term_event_values(self, evft: EventValuesForTerm):
+    def _upload_indexed_event_term_event_values(self, evft: ValuesForTerm):
         # Loop through each event and value tied to this term and upload to database
-        for event_id, value in evft.event_values.items():
+        for event_id, value in evft.values.items():
             self.database.upload_or_update_indexed_event_term(
                 term=evft.term,
                 event_id=event_id,
@@ -108,7 +97,7 @@ class EventIndexPipeline(Pipeline):
             # This list of objects is just useful for making it easier to multithread the upload
             indexed_event_term_event_values = []
             for term, event_values in index.items():
-                indexed_event_term_event_values.append(EventValuesForTerm(term, event_values))
+                indexed_event_term_event_values.append(ValuesForTerm(term, event_values))
 
             # Multithread the upload/ update of the index
             with ThreadPoolExecutor(self.n_workers) as exe:

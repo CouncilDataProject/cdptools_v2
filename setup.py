@@ -91,7 +91,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Topic :: Utilities"
     ],
-    description="Tools used to run Council Data Project pipelines.",
+    description="Tools to interact with and deploy CouncilDataProject instances",
     entry_points={
         "console_scripts": [
             "run_cdp_pipeline=cdptools.bin.run_cdp_pipeline:main",

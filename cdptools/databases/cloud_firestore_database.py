@@ -755,7 +755,7 @@ class CloudFirestoreDatabase(Database):
         }
 
         # Store the row
-        self._root.collection("indexed_minutes_item_term_id").document(id).set(values)
+        self._root.collection("indexed_minutes_item_term").document(id).set(values)
 
         # Return the newly created row
         return {f"indexed_minutes_item_term_id": id, **values}

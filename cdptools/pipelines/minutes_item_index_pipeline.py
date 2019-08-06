@@ -170,11 +170,11 @@ class MinutesItemIndexPipeline(Pipeline):
         ):
             return self.indexer.drop_terms_from_index_below_value(index)
 
-    def _upload_indexed_minutes_item_term_minutes_item_values(self, evft: ValuesForTerm):
+    def _upload_indexed_minutes_item_term_minutes_item_values(self, mivft: ValuesForTerm):
         # Loop through each minutes item and value tied to this term and upload to database
-        for minutes_item_id, value in evft.values.items():
+        for minutes_item_id, value in mivft.values.items():
             self.database.upload_or_update_indexed_minutes_item_term(
-                term=evft.term,
+                term=mivft.term,
                 minutes_item_id=minutes_item_id,
                 value=value
             )

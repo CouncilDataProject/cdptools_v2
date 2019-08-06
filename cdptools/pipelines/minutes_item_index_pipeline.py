@@ -127,7 +127,7 @@ class MinutesItemIndexPipeline(Pipeline):
                     pass
 
             # Store the join of all transcripts in a single file for the corpus
-            document_path = f"document_{di}.json"
+            document_path = save_dir / f"document_{di}.json"
             with open(document_path, "w") as write_out:
                 json.dump(di_transcript_document, write_out)
 

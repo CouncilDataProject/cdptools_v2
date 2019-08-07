@@ -12,7 +12,7 @@ import requests
 from tika import parser
 
 from .. import get_module_version
-from ..dev_utils import RunManager
+from ..dev_utils import RunManager, load_custom_object
 from .pipeline import Pipeline, ValuesForTerm
 
 ###############################################################################
@@ -36,17 +36,17 @@ class MinutesItemIndexPipeline(Pipeline):
         self.n_workers = self.config.get("max_synchronous_jobs")
 
         # Load modules
-        self.database = self.load_custom_object(
+        self.database = load_custom_object.load_custom_object(
             module_path=self.config["database"]["module_path"],
             object_name=self.config["database"]["object_name"],
             object_kwargs={**self.config["database"].get("object_kwargs", {})}
         )
-        self.file_store = self.load_custom_object(
+        self.file_store = load_custom_object.load_custom_object(
             module_path=self.config["file_store"]["module_path"],
             object_name=self.config["file_store"]["object_name"],
             object_kwargs=self.config["file_store"].get("object_kwargs", {})
         )
-        self.indexer = self.load_custom_object(
+        self.indexer = load_custom_object.load_custom_object(
             module_path=self.config["indexer"]["module_path"],
             object_name=self.config["indexer"]["object_name"],
             object_kwargs=self.config["indexer"].get("object_kwargs", {})

@@ -208,7 +208,7 @@ def test_index_pipeline(
     select_row_data
 ):
     # Configure all mocks
-    with mock.patch("cdptools.pipelines.pipeline.Pipeline.load_custom_object") as mock_loader:
+    with mock.patch("cdptools.dev_utils.load_custom_object.load_custom_object") as mock_loader:
         mock_loader.side_effect = [
             empty_creds_db, empty_creds_fs, TFIDFIndexer()
         ]
@@ -216,36 +216,35 @@ def test_index_pipeline(
         # Initialize pipeline
         pipeline = MinutesItemIndexPipeline(example_config)
 
-        # Interupt RunManager
-        with mock.patch("cdptools.dev_utils.RunManager.__exit__"):
-            # Mock any time we request rows get
-            with mock.patch("cdptools.databases.CloudFirestoreDatabase.select_rows_as_list") as mocked_select_rows:
-                mocked_select_rows.side_effect = select_rows_data
+        # Mock any time we request rows get
+        cfdb = "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase"
+        with mock.patch(f"{cfdb}.select_rows_as_list") as mocked_select_rows:
+            mocked_select_rows.side_effect = select_rows_data
 
-                # Mock any time we request single row get
-                with mock.patch("cdptools.databases.CloudFirestoreDatabase.select_row_by_id") as mocked_select_row:
-                    mocked_select_row.side_effect = select_row_data
+            # Mock any time we request single row get
+            with mock.patch(f"{cfdb}.select_row_by_id") as mocked_select_row:
+                mocked_select_row.side_effect = select_row_data
 
-                    # Mock any call to select row with max results expectation
+                # Mock any call to select row with max results expectation
+                with mock.patch(f"{cfdb}._select_rows_with_max_results_expectation") as mocked_select_with_expectation:
+                    mocked_select_with_expectation.return_value = None
+
+                    # Mock any file request with creds
                     with mock.patch(
-                        "cdptools.databases.CloudFirestoreDatabase._select_rows_with_max_results_expectation"
-                    ) as mocked_select_with_expectation:
-                        mocked_select_with_expectation.return_value = None
+                        "cdptools.file_stores.gcs_file_store.GCSFileStore.download_file"
+                    ) as mocked_download_file:
+                        mocked_download_file.side_effect = [
+                            example_transcript_sentences_0,
+                            example_transcript_sentences_1
+                        ]
 
-                        # Mock any file request with creds
-                        with mock.patch("cdptools.file_stores.GCSFileStore.download_file") as mocked_download_file:
-                            mocked_download_file.side_effect = [
-                                example_transcript_sentences_0,
-                                example_transcript_sentences_1
+                        # Mock any external file request
+                        with mock.patch(
+                            "cdptools.file_stores.gcs_file_store.FileStore._external_resource_copy"
+                        ) as mocked_resource_copy:
+                            mocked_resource_copy.side_effect = [
+                                example_minutes_item_file_0,
+                                example_minutes_item_file_1
                             ]
 
-                            # Mock any external file request
-                            with mock.patch(
-                                "cdptools.file_stores.FileStore._external_resource_copy"
-                            ) as mocked_resource_copy:
-                                mocked_resource_copy.side_effect = [
-                                    example_minutes_item_file_0,
-                                    example_minutes_item_file_1
-                                ]
-
-                                pipeline.run()
+                            pipeline.run()

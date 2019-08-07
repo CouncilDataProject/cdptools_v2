@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 from .. import get_module_version
-from ..dev_utils import RunManager
+from ..dev_utils import RunManager, load_custom_object
 from .pipeline import Pipeline
 
 ###############################################################################
@@ -34,27 +34,27 @@ class EventGatherPipeline(Pipeline):
         self.n_workers = self.config.get("max_synchronous_jobs")
 
         # Load modules
-        self.event_scraper = self.load_custom_object(
+        self.event_scraper = load_custom_object.load_custom_object(
             module_path=self.config["event_scraper"]["module_path"],
             object_name=self.config["event_scraper"]["object_name"],
             object_kwargs=self.config["event_scraper"].get("object_kwargs", {})
         )
-        self.database = self.load_custom_object(
+        self.database = load_custom_object.load_custom_object(
             module_path=self.config["database"]["module_path"],
             object_name=self.config["database"]["object_name"],
             object_kwargs={**self.config["database"].get("object_kwargs", {})}
         )
-        self.file_store = self.load_custom_object(
+        self.file_store = load_custom_object.load_custom_object(
             module_path=self.config["file_store"]["module_path"],
             object_name=self.config["file_store"]["object_name"],
             object_kwargs=self.config["file_store"].get("object_kwargs", {})
         )
-        self.audio_splitter = self.load_custom_object(
+        self.audio_splitter = load_custom_object.load_custom_object(
             module_path=self.config["audio_splitter"]["module_path"],
             object_name=self.config["audio_splitter"]["object_name"],
             object_kwargs=self.config["audio_splitter"].get("object_kwargs", {})
         )
-        self.sr_model = self.load_custom_object(
+        self.sr_model = load_custom_object.load_custom_object(
             module_path=self.config["speech_recognition_model"]["module_path"],
             object_name=self.config["speech_recognition_model"]["object_name"],
             object_kwargs=self.config["speech_recognition_model"].get("object_kwargs", {})

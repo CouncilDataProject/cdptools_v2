@@ -3,7 +3,7 @@
 
 import pytest
 
-from cdptools.pipelines.pipeline import Pipeline
+from cdptools.dev_utils import load_custom_object
 
 
 @pytest.mark.parametrize("module_path, object_name, object_kwargs", [
@@ -15,4 +15,4 @@ from cdptools.pipelines.pipeline import Pipeline
     pytest.param("datetime", "DoesNotExist", {}, marks=pytest.mark.raises(exception=AttributeError))
 ])
 def test_load_custom_object(module_path, object_name, object_kwargs):
-    Pipeline.load_custom_object(module_path, object_name, object_kwargs)
+    load_custom_object.load_custom_object(module_path, object_name, object_kwargs)

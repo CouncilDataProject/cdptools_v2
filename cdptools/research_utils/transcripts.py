@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 import pandas as pd
 
@@ -44,7 +44,11 @@ def get_most_recent_transcript_manifest(db: Database) -> pd.DataFrame:
     return most_recent
 
 
-def download_most_recent_transcripts(db: Database, fs: FileStore, save_dir: Optional[Union[str, Path]] = None) -> Path:
+def download_most_recent_transcripts(
+    db: Database,
+    fs: FileStore,
+    save_dir: Optional[Union[str, Path]] = None
+) -> Dict[str, Path]:
     """
     Download the most recent versions of event transcripts.
 

@@ -8,9 +8,12 @@ from setuptools import find_packages, setup
 with open("README.md") as readme_file:
     readme = readme_file.read()
 
+lint_requirements = [
+    "flake8"
+]
+
 test_requirements = [
     "codecov",
-    "flake8",
     "pytest",
     "pytest-cov",
     "pytest-raises",
@@ -61,6 +64,7 @@ google_cloud_requirements = [
 ]
 
 extra_requirements = {
+    "lint": lint_requirements,
     "test": test_requirements,
     "setup": setup_requirements,
     "dev": dev_requirements,
@@ -71,6 +75,7 @@ extra_requirements = {
         *requirements,
         *local_requirements,
         *google_cloud_requirements,
+        *lint_requirements,
         *test_requirements,
         *setup_requirements,
         *dev_requirements,

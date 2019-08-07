@@ -10,7 +10,8 @@ from pathlib import Path
 
 import schedule
 
-from cdptools import get_module_version, pipelines
+from cdptools import get_module_version
+from cdptools.dev_utils import load_custom_object
 
 ###############################################################################
 
@@ -46,7 +47,7 @@ class Args(argparse.Namespace):
 def run_cdp_pipeline(args: Args):
     try:
         # Initialize pipeline
-        pipeline = pipelines.Pipeline.load_custom_object(
+        pipeline = load_custom_object.load_custom_object(
             module_path="cdptools.pipelines",
             object_name=args.pipeline_type,
             object_kwargs={"config_path": args.config_path}

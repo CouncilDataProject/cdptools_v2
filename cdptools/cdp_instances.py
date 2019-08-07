@@ -73,6 +73,12 @@ class _CDPInstance:
         """
         return transcripts_utils.download_most_recent_transcripts(self.database, self.file_store, save_dir)
 
+    def __str__(self):
+        return f"<CDPInstance [database: {self.database}, file_store: {self.file_store}]>"
+
+    def __repr__(self):
+        return str(self)
+
 
 # City instances
 Seattle = _CDPInstance(

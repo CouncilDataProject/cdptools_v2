@@ -83,7 +83,7 @@ class _CDPInstance:
 # City instances
 seattle = _CDPInstance(
     database_type=databases.CloudFirestoreDatabase,
-    database_config={"project_id": "stg-cdp-seattle"},
+    database_config={"project_id": "cdp-seattle"},
     file_store_type=file_stores.GCSFileStore,
-    file_store_config={"bucket_name": "stg-cdp-seattle.appspot.com"}
+    file_store_config={"bucket_name": "cdp-seattle.appspot.com"}
 )

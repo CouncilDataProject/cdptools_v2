@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from typing import Any, Dict, Type
+from pathlib import Path
+from typing import Any, Dict, Optional, Type
+
+import pandas as pd
 
 from . import databases, file_stores
+from .research_utils import transcripts as transcripts_utils
 
 
 class _CDPInstance:
@@ -37,6 +41,37 @@ class _CDPInstance:
             self._file_store = self._file_store_type(**self._file_store_config)
 
         return self._file_store
+
+    def get_most_recent_transcript_manifest(self) -> pd.DataFrame:
+        """
+        Get a pandas dataframe that can act as a manifest of the most recent transcript available for each
+        event stored in a CDP instance's database.
+
+        Returns
+        -------
+        manifest: pandas.DataFrame
+            A dataframe with transcript, event, body, and file details where each row is the
+            most recent transcript for the event of that row.
+        """
+        return transcripts_utils.get_most_recent_transcript_manifest(self.database)
+
+    def download_most_recent_transcripts(self, save_dir: Optional[Path] = None) -> Dict[str, Path]:
+        """
+        Download the most recent versions of event transcripts.
+
+        Parameters
+        ----------
+        save_dir: Optional[Union[str, Path]]
+            An optional path of where to save the transcripts and manifest CSV.
+            If None provided, uses current directory.
+            Always overwrites existing transcripts with the same name if they already exist in the provided directory.
+
+        Returns
+        -------
+        event_corpus_map: Dict[str, Path]
+            A dictionary mapping event id to local Path of the most recent transcript for that event.
+        """
+        return transcripts_utils.download_most_recent_transcripts(self.database, self.file_store, save_dir)
 
 
 # City instances

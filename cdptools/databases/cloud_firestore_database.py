@@ -388,7 +388,12 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
-    def get_or_upload_minutes_item(self, name: str, matter: str, legistar_event_item_id: Optional[int] = None) -> Dict:
+    def get_or_upload_minutes_item(
+        self,
+        name: str,
+        matter: Optional[str],
+        legistar_event_item_id: Optional[int] = None
+    ) -> Dict:
         return self._get_or_upload_row(
             table="minutes_item",
             pks=[("name", name)],

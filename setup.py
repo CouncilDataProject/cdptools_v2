@@ -27,7 +27,7 @@ dev_requirements = [
     "flake8>=3.7.7",
     "tox>=3.5.2",
     "coverage>=5.0a4",
-    "Sphinx>=version='2.0.1'b1",
+    "Sphinx>=2.0.0b1",
     "twine>=1.13.0",
     "pytest>=4.3.0",
     "pytest-cov==2.6.1",
@@ -114,6 +114,6 @@ setup(
     tests_require=test_requirements,
     extras_require=extra_requirements,
     url="https://github.com/CouncilDataProject/cdptools",
-    version="version='2.0.1'",
+    version="2.0.1",
     zip_safe=False,
 )

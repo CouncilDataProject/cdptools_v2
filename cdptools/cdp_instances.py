@@ -81,7 +81,7 @@ class _CDPInstance:
 
 
 # City instances
-Seattle = _CDPInstance(
+seattle = _CDPInstance(
     database_type=databases.CloudFirestoreDatabase,
     database_config={"project_id": "stg-cdp-seattle"},
     file_store_type=file_stores.GCSFileStore,

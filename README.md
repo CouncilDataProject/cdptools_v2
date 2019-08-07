@@ -21,7 +21,8 @@ Making City Council data more accessible and actions taken by city council membe
 
 ***Search for events using plain text:***
 ```python
-from cdptools import seattle
+from cdptools import CDPInstance, configs
+seattle = CDPInstance(configs.SEATTLE)
 
 matching_events = seattle.database.search_events("bicycle infrastructure, pedestrian mobility")
 # Returns list of Match objects sorted most to least relevant
@@ -39,7 +40,8 @@ matching_events[0].data
 
 ***Search for bills, appointments, 'minutes items' using plain text:***
 ```python
-from cdptools import seattle
+from cdptools import CDPInstance, configs
+seattle = CDPInstance(configs.SEATTLE)
 
 matching_minutes_items = seattle.database.search_minutes_items("bicycle infrastructure")
 # Returns list of Match objects sorted most to least relevant
@@ -48,7 +50,8 @@ matching_minutes_items = seattle.database.search_minutes_items("bicycle infrastr
 
 ***Get all data from a table:***
 ```python
-from cdptools import seattle
+from cdptools import CDPInstance, configs
+seattle = CDPInstance(configs.SEATTLE)
 
 all_events = seattle.database.select_rows_as_list("event")
 # Returns list of dictionaries with event information
@@ -57,7 +60,8 @@ all_events = seattle.database.select_rows_as_list("event")
 
 ***Download the most recent transcripts for all events:***
 ```python
-from cdptools import seattle
+from cdptools import CDPInstance, configs
+seattle = CDPInstance(configs.SEATTLE)
 
 event_corpus_map = seattle.download_most_recent_transcripts()
 # Returns a dictionary mapping event id to a local path of the transcript

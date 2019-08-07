@@ -27,7 +27,7 @@ matching_events = Seattle.database.search_events("bicycle infrastructure, pedest
 # Returns list of Match objects sorted most to least relevant
 # [Match, Match, ...]
 
-# Use the `Match.data` attribute to view the matches data
+# Use the `Match.data` attribute to view the match's data
 matching_events[0].data
 # {
 #   'event_id': '05258417-9ad3-4d42-be1d-95eafcfa03c5',

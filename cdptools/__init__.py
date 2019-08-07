@@ -4,7 +4,7 @@
 
 __author__ = "Jackson Maxfield Brown"
 __email__ = "jmaxfieldbrown@gmail.com"
-__version__ = "2.0.1"
+__version__ = "2.0.2"
 
 from .cdp_instance import CDPInstance  # noqa: F401
 

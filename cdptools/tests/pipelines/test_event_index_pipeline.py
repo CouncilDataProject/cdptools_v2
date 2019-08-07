@@ -61,7 +61,7 @@ def test_index_pipeline(
     example_transcript_sentences_1
 ):
     # Configure all mocks
-    with mock.patch("cdptools.pipelines.pipeline.Pipeline.load_custom_object") as mock_loader:
+    with mock.patch("cdptools.dev_utils.load_custom_object.load_custom_object") as mock_loader:
         mock_loader.side_effect = [
             empty_creds_db, empty_creds_fs, TFIDFIndexer()
         ]

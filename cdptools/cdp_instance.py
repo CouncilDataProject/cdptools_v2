@@ -2,43 +2,63 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional
 
 import pandas as pd
 
-from . import databases, file_stores
+from .databases import Database
+from .dev_utils import load_custom_object
+from .file_stores import FileStore
 from .research_utils import transcripts as transcripts_utils
 
 
-class _CDPInstance:
+class CDPInstanceConfig:
     def __init__(
         self,
-        database_type: Type,
-        database_config: Dict[str, Any],
-        file_store_type: Type,
-        file_store_config: Dict[str, Any]
+        database_module_path: str,
+        database_object_name: str,
+        database_object_kwargs: Dict[str, Any],
+        file_store_module_path: str,
+        file_store_object_name: str,
+        file_store_object_kwargs: Dict[str, Any]
     ):
-        # Store types and lambdas
-        self._database_type = database_type
-        self._database_config = database_config
-        self._file_store_type = file_store_type
-        self._file_store_config = file_store_config
+        # Store values
+        self.database_module_path = database_module_path
+        self.database_object_name = database_object_name
+        self.database_object_kwargs = database_object_kwargs
+        self.file_store_module_path = file_store_module_path
+        self.file_store_object_name = file_store_object_name
+        self.file_store_object_kwargs = file_store_object_kwargs
+
+
+class CDPInstance:
+    def __init__(self, config: CDPInstanceConfig):
+        # Store config
+        self._config = config
 
         # Lazy loaded initialize
         self._database = None
         self._file_store = None
 
     @property
-    def database(self) -> databases.Database:
+    def database(self) -> Database:
         if self._database is None:
-            self._database = self._database_type(**self._database_config)
+            self._database = load_custom_object.load_custom_object(
+                self._config.database_module_path,
+                self._config.database_object_name,
+                self._config.database_object_kwargs
+            )
 
         return self._database
 
     @property
-    def file_store(self) -> file_stores.FileStore:
+    def file_store(self) -> FileStore:
         if self._file_store is None:
-            self._file_store = self._file_store_type(**self._file_store_config)
+            self._file_store = load_custom_object.load_custom_object(
+                self._config.file_store_module_path,
+                self._config.file_store_object_name,
+                self._config.file_store_object_kwargs
+            )
 
         return self._file_store
 
@@ -78,12 +98,3 @@ class _CDPInstance:
 
     def __repr__(self):
         return str(self)
-
-
-# City instances
-seattle = _CDPInstance(
-    database_type=databases.CloudFirestoreDatabase,
-    database_config={"project_id": "cdp-seattle"},
-    file_store_type=file_stores.GCSFileStore,
-    file_store_config={"bucket_name": "cdp-seattle.appspot.com"}
-)

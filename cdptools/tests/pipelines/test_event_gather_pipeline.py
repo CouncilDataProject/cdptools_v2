@@ -151,7 +151,7 @@ def test_event_pipeline_no_backfill(
     example_seattle_routes
 ):
     # Configure all mocks
-    with mock.patch("cdptools.pipelines.pipeline.Pipeline.load_custom_object") as mock_loader:
+    with mock.patch("cdptools.dev_utils.load_custom_object.load_custom_object") as mock_loader:
         mock_loader.side_effect = [
             SeattleEventScraper(), empty_creds_db, empty_creds_fs, FFmpegAudioSplitter(), mocked_sr_model
         ]
@@ -181,7 +181,7 @@ def test_event_pipeline_with_backfill(
     loaded_legistar_requests
 ):
     # Configure all mocks
-    with mock.patch("cdptools.pipelines.pipeline.Pipeline.load_custom_object") as mock_loader:
+    with mock.patch("cdptools.dev_utils.load_custom_object.load_custom_object") as mock_loader:
         mock_loader.side_effect = [
             SeattleEventScraper(backfill=True), empty_creds_db, empty_creds_fs, mocked_splitter, mocked_sr_model
         ]

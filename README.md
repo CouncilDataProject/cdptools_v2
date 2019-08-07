@@ -15,7 +15,7 @@ Making City Council data more accessible and actions taken by city council membe
     * members
     * minutes items
     * event transcripts
-* File stores and databases can be used in combination to download audio of the meeting or the entire transcripts
+* File stores and databases can be used in combination to download audio or the entire transcript of a meeting
 
 ## Quickstart Documentation
 
@@ -23,7 +23,7 @@ Making City Council data more accessible and actions taken by city council membe
 ```python
 from cdptools import Seattle
 
-matching_events = Seattle.database.search_events("bicycle infrastructure, pedestrian mobility, greenways")
+matching_events = Seattle.database.search_events("bicycle infrastructure, pedestrian mobility")
 # Returns list of Match objects sorted most to least relevant
 # [Match, Match, ...]
 
@@ -41,7 +41,7 @@ matching_events[0].data
 ```python
 from cdptools import Seattle
 
-matching_minutes_items = Seattle.database.search_minutes_items("bicycle infrastructure, pedestrian mobility, greenways")
+matching_minutes_items = Seattle.database.search_minutes_items("bicycle infrastructure")
 # Returns list of Match objects sorted most to least relevant
 # [Match, Match, ...]
 ```
@@ -70,10 +70,10 @@ databases and file stores.
 ## Installation
 `cdptools` is available on [pypi.org](https://pypi.org/project/cdptools/).
 
-#### All city installation:
+#### All City Installation:
 `pip install cdptools[all]`
 
-#### Per city installation:
+#### Individual City Installation:
 * Seattle: `pip install cdptools[google-cloud]`
 
 ## Developer Features
@@ -81,7 +81,8 @@ databases and file stores.
 * Data pipelines are highly customizable to fit your cities needs.
 * Deploy and run pipelines using Docker to ensure your system has everything it needs.
 
-For additional information on system design, look at [system_design.md](docs/system_design.md).
+For additional information on system design, refer to [system_design.md](docs/system_design.md).
+For information on deploying a new CDP instance refer to the [deployment with Docker documentation](deploy/).
 
 **Free software: BSD-3-Clause license**
 

@@ -6,5 +6,5 @@ from cdptools import cdp_instances, databases, file_stores
 
 def test_seattle():
     # Assert basic objects are constructed properly
-    assert isinstance(cdp_instances.Seattle.database, databases.CloudFirestoreDatabase)
-    assert isinstance(cdp_instances.Seattle.file_store, file_stores.GCSFileStore)
+    assert isinstance(cdp_instances.seattle.database, databases.CloudFirestoreDatabase)
+    assert isinstance(cdp_instances.seattle.file_store, file_stores.GCSFileStore)

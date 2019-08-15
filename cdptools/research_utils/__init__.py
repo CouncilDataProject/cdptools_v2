@@ -3,4 +3,5 @@
 """Research utilities package for cdptools."""
 
 from .transcripts import (download_most_recent_transcripts,  # noqa: F401
-                          get_most_recent_transcript_manifest)
+                          get_most_recent_transcript_manifest,  # noqa: F401
+                          load_transcript_text)

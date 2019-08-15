@@ -1,3 +1,5 @@
+import json
+
 from pathlib import Path
 from typing import Dict, Optional, Union
 
@@ -97,3 +99,59 @@ def download_most_recent_transcripts(
         ).resolve(strict=False)
 
     return event_corpus_map
+
+
+def load_transcript_text(transcript_path: Union[str, Path], join_sentences: bool = False, sep: str = " ") -> dict:
+    """
+    Attempts to open either a raw or annotated json transcript format and return the raw transcript as a dict.
+    If the file format is not supported or if the data contained in the transcript does not follow the specification
+    a TypeError is raised.
+
+    Parameters
+    ----------
+    transcript_path: Union[str, Path]
+        Path to the transcript
+
+    join_sentences: bool=False
+        If true, join sentences using sep
+
+    sep: str=" "
+        Separator to use if join_sentences is True
+
+    Returns
+    -------
+    transcript: dict
+    {
+        "format": str,
+        "annotations": [],
+        "confidence": float,
+        "sentences": [{"text": str, "start_time": float, "end_time": float}],
+        "full_text": str
+    }
+    """
+    transcript = {}
+    # Enforce path
+    transcript_path = Path(transcript_path).expanduser().resolve(strict=True)
+
+    # Check that the transcript follows a known format
+    if transcript_path.suffix != ".json":
+        raise TypeError(
+            f"Unsure how to handle transcript file format: {transcript_path}"
+            f"Please refer to the `transcript_formats.md` file in the documentation for details."
+        )
+
+    try:
+        with open(transcript_path, "r") as read_in:
+            transcript = json.load(read_in)
+
+        transcript["sentences"] = transcript.pop("data")
+        if join_sentences:
+            transcript["full_text"] = sep.join([portion["text"] for portion in transcript["sentences"]])
+
+    except KeyError:
+        raise TypeError(
+            f"Unsure how to handle annotated JSON transcript provided: {transcript_path}"
+            f"Please refer to the `transcript_formats.md` file in the documentation for details."
+        )
+
+    return transcript

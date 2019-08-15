@@ -11,6 +11,8 @@ from typing import Dict, Union
 
 from nltk.stem import PorterStemmer
 
+from cdptools.research_utils import load_transcript_text
+
 ###############################################################################
 
 log = logging.getLogger(__name__)
@@ -40,7 +42,7 @@ class Indexer(ABC):
     """
 
     @staticmethod
-    def get_raw_transcript(transcipt_path: Union[str, Path]) -> str:
+    def get_raw_transcript(transcript_path: Union[str, Path]) -> str:
         """
         Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.
         If the file format is not supported or if the data contained in the transcript does not follow the specification
@@ -48,7 +50,7 @@ class Indexer(ABC):
 
         Parameters
         ----------
-        transcipt_path: Union[str, Path]
+        transcript_path: Union[str, Path]
             Path to the transcript
 
         Returns
@@ -56,31 +58,8 @@ class Indexer(ABC):
         transcript: str
             The raw text of the opened transcript.
         """
-        # Enforce path
-        transcipt_path = Path(transcipt_path).expanduser().resolve(strict=True)
-
-        # Check that the transcript follows a known format
-        if transcipt_path.suffix == ".json":
-            with open(transcipt_path, "r") as read_in:
-                transcript = json.load(read_in)
-
-            # Join all text items into a single string
-            try:
-                transcript = " ".join([portion["text"] for portion in transcript["data"]])
-            except KeyError:
-                raise TypeError(
-                    f"Unsure how to handle annotated JSON transcript provided: {transcipt_path}"
-                    f"Please refer to the `transcript_formats.md` file in the documentation for details."
-                )
-
-        # Raise error for all other file formats
-        else:
-            raise TypeError(
-                f"Unsure how to handle transcript file format: {transcipt_path}"
-                f"Please refer to the `transcript_formats.md` file in the documentation for details."
-            )
-
-        return transcript
+        transcript = load_transcript_text(transcript_path, join_sentences=True, sep=" ")
+        return transcript["full_text"]
 
     @staticmethod
     def clean_text_for_indexing(raw_transcript: str) -> str:

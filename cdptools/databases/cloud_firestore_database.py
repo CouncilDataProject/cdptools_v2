@@ -735,7 +735,7 @@ class CloudFirestoreDatabase(Database):
                 "event_id": event_id,
                 "label": label,
                 "value": value,
-                "dtype": str(type(value)),
+                "dtype": self._determine_event_entity_dtype(value),
                 "updated": datetime.utcnow()
             }
         )

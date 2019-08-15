@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 import pandas as pd
 import pytest
 
@@ -69,3 +71,15 @@ def test_reshape_list_of_rows_to_dictionary(rows, table, expected):
 def test_reshape_list_of_rows_to_dataframe(rows, table, expected):
     actual = Database._reshape_list_of_rows_to_dataframe(rows, table)
     assert actual.equals(expected)
+
+
+@pytest.mark.parametrize("value, expected", [
+    (1, "INTEGER"),
+    (1.0, "DOUBLE"),
+    ("hello", "STRING"),
+    (datetime.utcnow(), "TIMESTAMP"),
+    ({"some", "weird", "object"}, "<class 'set'>")
+])
+def test_determine_event_entity_dtype(value, expected):
+    actual = Database._determine_event_entity_dtype(value)
+    assert actual == expected

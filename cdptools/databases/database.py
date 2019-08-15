@@ -71,6 +71,14 @@ class Match:
         return str(self)
 
 
+ENTITY_DTYPE_MAP = {
+    str: "STRING",
+    int: "INTEGER",
+    float: "DOUBLE",
+    datetime: "TIMESTAMP"
+}
+
+
 ###############################################################################
 
 
@@ -723,8 +731,29 @@ class Database(ABC):
         """
         return {}
 
+    @staticmethod
+    def _determine_event_entity_dtype(value: Union[str, int, float, datetime]) -> str:
+        """
+        To simplify the storage value of the dtype, instead of using specifically Python types, this simply returns a
+        string value for each of the allowed dtypes.
+
+        Parameters
+        ----------
+        value: Union[str, int, float, datetime]
+            The value to determine type for.
+
+        Returns
+        -------
+        dtype: str
+            The storage ready string to store as the data type of the value.
+        """
+        try:
+            return ENTITY_DTYPE_MAP[type(value)]
+        except KeyError:
+            return str(type(value))
+
     @abstractmethod
-    def get_or_upload_event_entity(self, event_id: str, label: str, value: Any) -> Dict:
+    def get_or_upload_event_entity(self, event_id: str, label: str, value: Union[str, int, float, datetime]) -> Dict:
         """
         Get or upload an event entity. Because entities can be values that are other than strings, most databases,
         should cast this to a string prior to storage. This is also why will store the data type (dtype).

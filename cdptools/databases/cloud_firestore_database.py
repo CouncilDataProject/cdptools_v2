@@ -716,6 +716,30 @@ class CloudFirestoreDatabase(Database):
             }
         )
 
+    def get_or_upload_event_topic(self, event_id: str, topic: str) -> Dict:
+        return self._get_or_upload_row(
+            table="event_topic",
+            pks=[("event_id", event_id), ("topic", topic)],
+            values={
+                "event_id": event_id,
+                "topic": topic,
+                "updated": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_event_entity(self, event_id: str, label: str, value: Any) -> Dict:
+        return self._get_or_upload_row(
+            table="event_topic",
+            pks=[("event_id", event_id), ("label", label), ("value", value)],
+            values={
+                "event_id": event_id,
+                "label": label,
+                "value": value,
+                "dtype": str(type(value)),
+                "updated": datetime.utcnow()
+            }
+        )
+
     def get_indexed_event_term(self, term: str, event_id: str) -> Dict:
         # Try find
         found = self._select_rows_with_max_results_expectation(

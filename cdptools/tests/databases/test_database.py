@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import pandas as pd
 import pytest
 
 from cdptools.databases import exceptions
@@ -33,3 +34,38 @@ def test_construct_where_condition(filt):
 ])
 def test_construct_orderby_condition(order_by):
     Database._construct_orderby_condition(order_by)
+
+
+@pytest.mark.parametrize("rows, table, expected", [
+    (
+        [{"event_id": "abcd", "some_value": 1}, {"event_id": "1234", "some_value": 3}],
+        "event",
+        {"abcd": {"event_id": "abcd", "some_value": 1}, "1234": {"event_id": "1234", "some_value": 3}}
+    ),
+    ([], "doesnt-matter", {}),
+    pytest.param([{"event_id": "abcd", "some_value": 1}], "body", None, marks=pytest.mark.raises(exception=KeyError))
+])
+def test_reshape_list_of_rows_to_dictionary(rows, table, expected):
+    actual = Database._reshape_list_of_rows_to_dict(rows, table)
+    assert actual == expected
+
+
+@pytest.mark.parametrize("rows, table, expected", [
+    (
+        [{"event_id": "abcd", "some_value": 1}, {"event_id": "1234", "some_value": 3}],
+        None,
+        pd.DataFrame([{"event_id": "abcd", "some_value": 1}, {"event_id": "1234", "some_value": 3}])
+    ),
+    (
+        [{"event_id": "abcd", "some_value": 1}, {"event_id": "1234", "some_value": 3}],
+        "event",
+        pd.DataFrame(
+            [{"event_id": "abcd", "some_value": 1}, {"event_id": "1234", "some_value": 3}]
+        ).set_index("event_id")
+    ),
+    ([], None, pd.DataFrame([])),
+    pytest.param([{"event_id": "abcd", "some_value": 1}], "body", None, marks=pytest.mark.raises(exception=KeyError))
+])
+def test_reshape_list_of_rows_to_dataframe(rows, table, expected):
+    actual = Database._reshape_list_of_rows_to_dataframe(rows, table)
+    assert actual.equals(expected)

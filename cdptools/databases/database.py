@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
 
+import pandas as pd
+
 from . import exceptions
 
 ###############################################################################
@@ -232,6 +234,65 @@ class Database(ABC):
             table queried. If no rows are found, returns an empty list.
         """
         return []
+
+    @staticmethod
+    def _reshape_list_of_rows_to_dict(
+        rows: List[Dict[str, Any]],
+        table: str
+    ) -> Dict[str, Dict[str, Any]]:
+        """
+        Reshape a list of rows to a dictionary of rows.
+
+        Parameters
+        ----------
+        rows: List[Dict[str, Any]]
+            The rows returned from a `select_rows_as_list call`.
+        table: str
+            The name of the table to retrieve data from.
+
+        Returns
+        -------
+        formatted: Dict[str, Dict[str, Any]]
+            The rows returned as a dictionary mapping unique id to a dictionary of that rows data from
+            the table queried. If no rows are provided, returns an empty dictionary.
+        """
+        # Format
+        formatted = {}
+        for row in rows:
+            unique_id = row[f"{table}_id"]
+            formatted[unique_id] = row
+
+        return formatted
+
+    @staticmethod
+    def _reshape_list_of_rows_to_dataframe(
+        rows: List[Dict[str, Any]],
+        table: Optional[str] = None
+    ):
+        """
+        Simply cast a list of rows to a dataframe.
+
+        Parameters
+        ----------
+        rows: List[Dict[str, Any]]
+            The rows returned from a `select_rows_as_list_call`.
+        table: Optional[str]
+            If provided, the unique id for each row will be used as the index value.
+
+        Returns
+        -------
+        formatted: pandas.DataFrame
+            The rows returned as a pandas DataFrame object. If table was provided the index of the dataframe will be
+            the unique id's for that table.
+        """
+        # Cast to dataframe
+        formatted = pd.DataFrame(rows)
+
+        # Optionally set the index based on the table name
+        if table:
+            formatted = formatted.set_index(f"{table}_id")
+
+        return formatted
 
     @abstractmethod
     def get_or_upload_body(self, name: str, description: Optional[str]) -> Dict[str, str]:

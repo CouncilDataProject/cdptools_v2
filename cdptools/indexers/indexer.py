@@ -10,7 +10,7 @@ from typing import Dict, Union
 
 from nltk.stem import PorterStemmer
 
-from cdptools.research_utils import load_transcript_text
+from cdptools.research_utils import load_transcript
 
 ###############################################################################
 
@@ -57,7 +57,7 @@ class Indexer(ABC):
         transcript: str
             The raw text of the opened transcript.
         """
-        transcript = load_transcript_text(transcript_path, join_sentences=True, sep=" ")
+        transcript = load_transcript(transcript_path, join_sentences=True, sep=" ")
         return transcript["full_text"]
 
     @staticmethod

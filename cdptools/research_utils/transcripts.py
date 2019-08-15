@@ -9,6 +9,9 @@ from cdptools.databases import Database
 from cdptools.file_stores import FileStore
 
 
+MANIFEST_FILENAME = "transcript_manifest.csv"
+
+
 def get_most_recent_transcript_manifest(db: Database) -> pd.DataFrame:
     """
     Get a pandas dataframe that can act as a manifest of the most recent transcript available for each event stored in a
@@ -89,7 +92,7 @@ def download_most_recent_transcripts(
     )
 
     # Write manifest
-    most_recent.to_csv(save_dir / "transcript_manifest.csv", index=False)
+    most_recent.to_csv(save_dir / MANIFEST_FILENAME, index=False)
 
     # Create event corpus map
     event_corpus_map = {}
@@ -101,7 +104,7 @@ def download_most_recent_transcripts(
     return event_corpus_map
 
 
-def load_transcript_text(transcript_path: Union[str, Path], join_sentences: bool = False, sep: str = " ") -> dict:
+def load_transcript(transcript_path: Union[str, Path], join_sentences: bool = False, sep: str = " ") -> dict:
     """
     Attempts to open either a raw or annotated json transcript format and return the raw transcript as a dict.
     If the file format is not supported or if the data contained in the transcript does not follow the specification

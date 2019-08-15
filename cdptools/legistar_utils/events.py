@@ -220,11 +220,11 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
     # Parse event items
     minutes_items = []
     for legistar_event_item in legistar_event_details["EventItems"]:
-        # Choose name based off available data
-        if legistar_event_item["EventItemMatterName"]:
-            minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemMatterName"])
+        # Choose title based off available data
+        if legistar_event_item["EventItemTitle"]:
+            minutes_item_title = _clean_legistar_string_data(legistar_event_item["EventItemTitle"])
         else:
-            minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemTitle"])
+            minutes_item_title = _clean_legistar_string_data(legistar_event_item["EventItemMatterName"])
 
         # Choose matter name based off available data
         if legistar_event_item["EventItemMatterName"]:
@@ -233,7 +233,7 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
             minutes_item_matter = _clean_legistar_string_data(legistar_event_item["EventItemMatterFile"])
 
         # Only continue if the minutes item name is not ignored
-        if minutes_item_name not in ignore_minutes_items:
+        if minutes_item_title not in ignore_minutes_items:
             # Sometimes this is missing...
             # Not sure why
             index = legistar_event_item["EventItemMinutesSequence"]
@@ -247,7 +247,7 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
 
             # Construct minutes item
             minutes_item = {
-                "name": minutes_item_name,
+                "title": minutes_item_title,
                 "matter": minutes_item_matter,
                 "index": index,
                 "legistar_event_item_id": int(legistar_event_item["EventItemId"])

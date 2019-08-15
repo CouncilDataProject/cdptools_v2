@@ -324,22 +324,19 @@ class Database(ABC):
     @abstractmethod
     def get_or_upload_minutes_item(
         self,
-        name: str,
+        title: str,
         matter: Optional[str] = None,
-        title: Optional[str] = None,
         legistar_event_item_id: Optional[int] = None
     ) -> Dict:
         """
-        Get or upload a minutes item. In Legistar this is commonly referred to as an event item.
+        Get or upload a minutes item. In Legistar this is commonly referred to as an event item (or "matter").
 
         Parameters
         ---------
-        name: str
-            A name for the minutes item. Ex: "Appointment of Rene J. Peters, Jr."
+        title: str
+            A title for the minutes item. Ex: "Appointment of Rene J. Peters, Jr."
         matter: Optional[str]
             A matter name for the minutes item. Ex: "Appt 01373"
-        title: Optional[str]
-            A human readable name for the minutes item. Ex: "A resolution regarding adoption of a Green New Deal."
         legistar_event_item_id: Optional[int]
             If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventItemId`.
 

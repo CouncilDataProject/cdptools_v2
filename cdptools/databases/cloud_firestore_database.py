@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 import firebase_admin
+import pandas as pd
 import requests
 from firebase_admin import credentials, firestore
 
@@ -330,6 +331,81 @@ class CloudFirestoreDatabase(Database):
             return self._select_rows_as_list_with_creds(table=table, filters=filters, order_by=order_by, limit=limit)
 
         return self._select_rows_as_list_no_creds(table=table, filters=filters, order_by=order_by, limit=limit)
+
+    def select_rows_as_dictionary(
+        self,
+        table: str,
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
+        limit: Optional[int] = None
+    ) -> Dict[str, Dict[str, Any]]:
+        """
+        Get a dictionary of rows from a table optionally using filters (a list of where conditions), ordering, and
+        limit.
+
+        Parameters
+        ----------
+        table: str
+            The name of the table to retrieve data from.
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]]
+            A list of filters (where conditions) to add filter down the query.
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]]
+            An order by condition to order the results by before returning.
+        limit: Optional[int]
+            An integer limit to how many rows should be returned that match the query provided.
+            Commonly, running queries without credentials will have a default limit value.
+
+        Returns
+        -------
+        results: Dict[str, Dict[str, Any]]
+            The results of the query returned as a dictionary mapping unique id to a dictionary of that rows data from
+            the table queried. If no rows are found, returns an empty dictionary.
+        """
+        # Get, format, and return
+        return self._reshape_list_of_rows_to_dict(
+            self.select_rows_as_list(table=table, filters=filters, order_by=order_by, limit=limit)
+        )
+
+    def select_rows_as_dataframe(
+        self,
+        table: str,
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
+        limit: Optional[int] = None,
+        set_id_to_index: bool = False
+    ) -> pd.DataFrame:
+        """
+        Get a dataframe of rows from a table optionally using filters (a list of where conditions), ordering, and limit.
+
+        Parameters
+        ----------
+        table: str
+            The name of the table to retrieve data from.
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]]
+            A list of filters (where conditions) to add filter down the query.
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]]
+            An order by condition to order the results by before returning.
+        limit: Optional[int]
+            An integer limit to how many rows should be returned that match the query provided.
+            Commonly, running queries without credentials will have a default limit value.
+        set_id_to_index: bool
+            Boolean value to determine whether or not the unique id values for this data should be used as the index of
+            the dataframe.
+
+        Returns
+        -------
+        results: pandas.DataFrame
+            The results of the query returned as a pandas DataFrame, where each rwow is a unique row from the
+            table queried. If no rows are found, returns an empty DataFrame.
+        """
+        # Get data
+        data = self.select_rows_as_list(table=table, filters=filters, order_by=order_by, limit=limit)
+
+        # Format
+        if set_id_to_index:
+            return self._reshape_list_of_rows_to_dataframe(data, table)
+
+        return self._reshape_list_of_rows_to_dataframe(data)
 
     def _select_rows_with_max_results_expectation(
         self,

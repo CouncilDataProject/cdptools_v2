@@ -36,6 +36,7 @@ def _annotate_as_label(label):
             An entity annotator which applies the given label
     """
 
+
     def annotate(entities, doc, event_time):
         """
             Produces annotations consisting of the exact source spacy entity text

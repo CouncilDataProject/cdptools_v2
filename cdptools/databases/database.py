@@ -705,6 +705,47 @@ class Database(ABC):
         return {}
 
     @abstractmethod
+    def get_or_upload_event_topic(self, event_id: str, topic: str) -> Dict:
+        """
+        Get or upload an event topic.
+
+        Parameters
+        ----------
+        event_id: str
+            The id for which event this topic is related to.
+        topic: str
+            The term or terms (as a string) that define the topic as a unique topic.
+
+        Returns
+        -------
+        details: Dict[str, Any]
+            A dictionary containing the data that was either uploaded or found.
+        """
+        return {}
+
+    @abstractmethod
+    def get_or_upload_event_entity(self, event_id: str, label: str, value: Any) -> Dict:
+        """
+        Get or upload an event entity. Because entities can be values that are other than strings, most databases,
+        should cast this to a string prior to storage. This is also why will store the data type (dtype).
+
+        Parameters
+        ----------
+        event_id: str
+            The id for which event this entity was referenced in.
+        label: str
+            The label for the entity. Ex: 'location', 'person', etc.
+        value: Any
+            The value for the entity. Ex: 'Bruce Harrell'.
+
+        Returns
+        -------
+        details: Dict[str, Any]
+            A dictionary containing the data that was either uploaded or found.
+        """
+        return {}
+
+    @abstractmethod
     def get_indexed_event_term(self, term: str, event_id: str) -> Dict:
         """
         Get a single indexed event term.

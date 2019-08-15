@@ -51,10 +51,13 @@ clean-test: ## remove test and coverage artifacts
 	rm -f coverage.xml
 	rm -fr .pytest_cache
 
+clean-exception-logs: ## remove exception logs from previous failed tests
+	rm -f exception_log_*.err
+
 lint: ## check style with flake8
 	flake8 cdptools tests
 
-test: ## run tests quickly with the default Python
+test: clean-exception-logs ## run tests quickly with the default Python
 	py.test
 
 test-all: ## run tests on every Python version with tox

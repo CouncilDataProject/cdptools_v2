@@ -13,9 +13,8 @@ class WordCountNLAnalyzer(NLAnalyzer):
 
         return len(text.split(" "))
 
-    @staticmethod
-    def _count_words(text):
-        return _naive_word_count(text)
+    def _count_words(self, text):
+        return self._naive_word_count(text)
 
     def load(self, transcript):
         return transcript["full_text"]

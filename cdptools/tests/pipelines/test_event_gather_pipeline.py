@@ -143,7 +143,7 @@ def loaded_legistar_requests(legistar_data_dir) -> List[RequestReturn]:
     return mocked_responses
 
 
-def test_event_pipeline_no_backfill(
+def test_event_gather_pipeline_no_backfill(
     empty_creds_db,
     empty_creds_fs,
     mocked_sr_model,
@@ -169,7 +169,7 @@ def test_event_pipeline_no_backfill(
             pipeline.process_event.assert_not_called()
 
 
-def test_event_pipeline_with_backfill(
+def test_event_gather_pipeline_with_backfill(
     empty_creds_db,
     empty_creds_fs,
     mocked_splitter,

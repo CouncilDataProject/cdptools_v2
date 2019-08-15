@@ -196,7 +196,7 @@ def select_row_data():
     ]
 
 
-def test_index_pipeline(
+def test_minutes_item_index_pipeline(
     empty_creds_db,
     empty_creds_fs,
     example_config,

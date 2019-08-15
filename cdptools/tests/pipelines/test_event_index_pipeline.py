@@ -53,7 +53,7 @@ def example_transcript_sentences_1(data_dir):
     return data_dir / "example_transcript_sentences_1.json"
 
 
-def test_index_pipeline(
+def test_event_index_pipeline(
     empty_creds_db,
     empty_creds_fs,
     example_config,

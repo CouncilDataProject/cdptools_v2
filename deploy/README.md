@@ -233,6 +233,9 @@ web interactions which can be done on any machine.
 means the code that is actually running is no longer editable, which for a production server is generally a good thing.
 Second, specifying `google-cloud` over `all` means there will be less dependencies installed on the machine.
 
+You may also need to ensure the bucket is "viewable" by `allUsers` on Google Cloud Console. Details [here](https://stackoverflow.com/questions/40232188/allow-public-read-access-on-a-gcs-bucket#answer-49809949).
+If you want to have a front end for the system you will also need to allow CORS requests. Details [here](https://cloud.google.com/storage/docs/cross-origin).
+
 
 ## Running Pipelines
 If you have made it this far in the deployment README, I applaud you. The last couple comments to add are about running

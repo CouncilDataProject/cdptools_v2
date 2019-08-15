@@ -467,7 +467,8 @@ class CloudFirestoreDatabase(Database):
     def get_or_upload_minutes_item(
         self,
         name: str,
-        matter: Optional[str],
+        matter: Optional[str] = None,
+        title: Optional[str] = None,
         legistar_event_item_id: Optional[int] = None
     ) -> Dict:
         return self._get_or_upload_row(
@@ -476,6 +477,7 @@ class CloudFirestoreDatabase(Database):
             values={
                 "name": name,
                 "matter": matter,
+                "title": title,
                 "legistar_event_item_id": legistar_event_item_id,
                 "created": datetime.utcnow()
             }

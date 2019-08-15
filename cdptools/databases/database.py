@@ -317,7 +317,8 @@ class Database(ABC):
     def get_or_upload_minutes_item(
         self,
         name: str,
-        matter: Optional[str],
+        matter: Optional[str] = None,
+        title: Optional[str] = None,
         legistar_event_item_id: Optional[int] = None
     ) -> Dict:
         """
@@ -327,8 +328,10 @@ class Database(ABC):
         ---------
         name: str
             A name for the minutes item. Ex: "Appointment of Rene J. Peters, Jr."
-        matter: str
+        matter: Optional[str]
             A matter name for the minutes item. Ex: "Appt 01373"
+        title: Optional[str]
+            A human readable name for the minutes item. Ex: "A resolution regarding adoption of a Green New Deal."
         legistar_event_item_id: Optional[int]
             If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventItemId`.
 

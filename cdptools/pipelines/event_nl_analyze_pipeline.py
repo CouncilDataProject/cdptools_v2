@@ -3,13 +3,12 @@ import json
 import logging
 import os
 import tempfile
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import Any, Dict, Union
 
 from .. import get_module_version
 from ..dev_utils import RunManager, load_custom_object
-from ..natural_language_analyzers import EntityAnalyzer
 from ..research_utils import transcripts as transcript_tools
 from .pipeline import Pipeline
 
@@ -48,23 +47,6 @@ class EventNLAnalyzePipeline(Pipeline):
         # Get workers
         self.n_workers = self.config.get("max_synchronous_jobs")
 
-        self.database = load_custom_object.load_custom_object(
-            module_path=self.config["database"]["module_path"],
-            object_name=self.config["database"]["object_name"],
-            object_kwargs={**self.config["database"].get("object_kwargs", {})}
-        )
-        self.file_store = load_custom_object.load_custom_object(
-            module_path=self.config["file_store"]["module_path"],
-            object_name=self.config["file_store"]["object_name"],
-            object_kwargs=self.config["file_store"].get("object_kwargs", {})
-        )
-
-        self.entity_analyzer = load_custom_object.load_custom_object(
-            module_path=self.config["entity_analyzer"]["module_path"],
-            object_name=self.config["entity_analyzer"]["object_name"],
-            object_kwargs=self.config["file_store"].get("object_kwargs", {})
-        )
-
     def _load_event_metadata(self, manifest_path):
         with open(manifest_path) as f:
             reader = csv.DictReader(f)
@@ -79,26 +61,30 @@ class EventNLAnalyzePipeline(Pipeline):
         return event_metadata
 
     def task_extract_and_upload_entities(self, event: Dict[str, Any]):
-        input = EntityAnalyzer.load(event["transcript"], event["metadata"])
-
-        entities = EntityAnalyzer.analyze(input)
-
-        for entity in entities:
-            self.database.get_or_upload_event_entity(
-                event["metadata"]["event_id"],
-                entity["label"],
-                entity["value"]
-            )
-
-    def process_event(self, event: Dict) -> str:
+        database = load_custom_object.load_custom_object_from_config("database", self.config)
         with RunManager(
-            database=self.database,
-            file_store=self.file_store,
-            algorithm_name="EventNLAnalyzePipeline.process_event",
-            algorithm_version=get_module_version(),
+            database,
+            load_custom_object.load_custom_object_from_config("file_store", self.config),
+            "EventNLAnalyzePipeline.task_extract_and_upload_entities",
+            get_module_version(),
             remove_files=True
         ):
-            self.task_extract_and_upload_entities(event)
+            entity_analyzer = load_custom_object.load_custom_object_from_config("entity_analyzer", self.config)
+
+            analyzer_input = entity_analyzer.load(event["transcript"], event["metadata"])
+
+            entities = entity_analyzer.analyze(analyzer_input)
+
+            for entity in entities:
+                database.get_or_upload_event_entity(
+                    event["metadata"]["event_id"],
+                    entity["label"],
+                    entity["value"]
+                )
+
+    def process_event(self, event: Dict) -> str:
+        # Other tasks will go here
+        self.task_extract_and_upload_entities(event, self.config)
 
         # Update progress
         log.info("Completed event: {} ({}) ".format(
@@ -108,9 +94,12 @@ class EventNLAnalyzePipeline(Pipeline):
 
     def run(self):
         log.info("Starting event processing.")
+        database = load_custom_object.load_custom_object_from_config("database", self.config)
+        file_store = load_custom_object.load_custom_object_from_config("file_store", self.config)
+
         with RunManager(
-            self.database,
-            self.file_store,
+            database,
+            file_store,
             "EventNLAnalyzePipeline.run",
             get_module_version(),
             remove_files=True
@@ -120,12 +109,12 @@ class EventNLAnalyzePipeline(Pipeline):
                 # Get the event corpus map and download most recent transcripts to local machine
                 log.info("Downloading most recent transcripts")
                 event_corpus_map = transcript_tools.download_most_recent_transcripts(
-                    db=self.database,
-                    fs=self.file_store,
+                    db=database,
+                    fs=file_store,
                     save_dir=tmpdir
                 )
 
-                manifest_path = os.path.join(tmpdir, transcript_tools.MANIFEST_FILENAME)
+                manifest_path = Path(tmpdir, transcript_tools.MANIFEST_FILENAME)
                 event_metadata_list = self._load_event_metadata(manifest_path)
 
                 events = []
@@ -136,8 +125,9 @@ class EventNLAnalyzePipeline(Pipeline):
                     events.append({"metadata": metadata, "transcript": transcript})
 
             # Multiprocess each event found
-            # TODO ProcessPoolExecutor
-            with ThreadPoolExecutor(self.n_workers) as exe:
+            # Since NLAnalyzer tasks are likely CPU intensive, use ProcessPoolExecutor
+            # which can only accept pickleable arguments
+            with ProcessPoolExecutor(self.n_workers) as exe:
                 exe.map(self.process_event, events)
 
         log.info("Completed event processing.")

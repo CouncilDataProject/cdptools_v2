@@ -1,13 +1,14 @@
 import csv
 import json
 import logging
-import os
 import tempfile
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from functools import partial
 from pathlib import Path
 from typing import Any, Dict, Union
 
 from .. import get_module_version
+from ..databases import Database
 from ..dev_utils import RunManager, load_custom_object
 from ..research_utils import transcripts as transcript_tools
 from .pipeline import Pipeline
@@ -60,27 +61,44 @@ class EventNLAnalyzePipeline(Pipeline):
             event_metadata[col] = event_row.get(col)
         return event_metadata
 
+    def _upload_entity(database: Database, entity: Dict[str, Any]) -> Dict[str, Any]:
+        return database.get_or_upload_event_entity(
+            event_id=entity["event_id"],
+            label=entity["label"],
+            value=entity["value"]
+        )
+
     def task_extract_and_upload_entities(self, event: Dict[str, Any]):
+        # Load database
         database = load_custom_object.load_custom_object_from_config("database", self.config)
         with RunManager(
             database,
             load_custom_object.load_custom_object_from_config("file_store", self.config),
             "EventNLAnalyzePipeline.task_extract_and_upload_entities",
             get_module_version(),
+            inputs=[("event_id", event["metadata"]["event_id"])],
             remove_files=True
         ):
+            # Load entity analyzer in process
             entity_analyzer = load_custom_object.load_custom_object_from_config("entity_analyzer", self.config)
 
+            # Load model input
             analyzer_input = entity_analyzer.load(event["transcript"], event["metadata"])
 
+            # Analyze text for entities
             entities = entity_analyzer.analyze(analyzer_input)
+            entities = [{
+                "event_id": event["metadata"]["event_id"],
+                "label": entity["label"],
+                "value": entity["value"]
+            } for entity in entities]
 
-            for entity in entities:
-                database.get_or_upload_event_entity(
-                    event["metadata"]["event_id"],
-                    entity["label"],
-                    entity["value"]
-                )
+            # Create partial for uploader
+            uploader = partial(self._upload_entity, database=database)
+
+            # Multithreaded upload
+            with ThreadPoolExecutor() as exe:
+                exe.map(uploader, entities)
 
     def process_event(self, event: Dict) -> str:
         # Other tasks will go here

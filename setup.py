@@ -53,7 +53,6 @@ requirements = [
     "schedule==0.6.0",
     "spacy==2.1.8",
     "tika==1.19",
-    "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.1.0/en_core_web_sm-2.1.0.tar.gz",
 ]
 
 local_requirements = [

@@ -6,8 +6,18 @@ import dateparser
 import en_core_web_sm
 import spacy
 from spacy import displacy
+from spacy.cli import download
 
 from .nl_analyzer import NLAnalyzer
+
+
+MODEL_NAME = "en_core_web_sm"
+
+try:
+    spacy.load(MODEL_NAME)
+except OSError:
+    download(MODEL_NAME)
+    spacy.load(MODEL_NAME)
 
 
 def _annotate_as_label(label):

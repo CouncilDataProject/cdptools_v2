@@ -7,7 +7,7 @@ import en_core_web_sm
 import spacy
 from spacy import displacy
 
-from nl_analyzer import NLAnalyzer
+from .nl_analyzer import NLAnalyzer
 
 
 def _annotate_as_label(label):

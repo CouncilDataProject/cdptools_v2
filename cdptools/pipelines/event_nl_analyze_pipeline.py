@@ -126,16 +126,17 @@ class EventNLAnalyzePipeline(Pipeline):
                 )
 
                 manifest_path = os.path.join(tmpdir, transcript_tools.MANIFEST_FILENAME)
-                event_metadata = self._load_event_metadata(manifest_path)
+                event_metadata_list = self._load_event_metadata(manifest_path)
 
                 events = []
-                for metadata in event_metadata:
+                for metadata in event_metadata_list:
                     transcript_path = event_corpus_map[metadata["event_id"]]
-                    transcript = transcript_tools.load_transcript(transcript_path, join_sentences=True, sep=" ")
+                    transcript = transcript_tools.load_transcript(transcript_path, join_text=True, sep=" ")
 
                     events.append({"metadata": metadata, "transcript": transcript})
 
             # Multiprocess each event found
+            # TODO ProcessPoolExecutor
             with ThreadPoolExecutor(self.n_workers) as exe:
                 exe.map(self.process_event, events)
 

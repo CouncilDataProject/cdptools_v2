@@ -104,7 +104,7 @@ def download_most_recent_transcripts(
     return event_corpus_map
 
 
-def load_transcript(transcript_path: Union[str, Path], join_sentences: bool = False, sep: str = " ") -> dict:
+def load_transcript(transcript_path: Union[str, Path], join_text: bool = False, sep: str = " ") -> dict:
     """
     Attempts to open either a raw or annotated json transcript format and return the raw transcript as a dict.
     If the file format is not supported or if the data contained in the transcript does not follow the specification
@@ -115,11 +115,11 @@ def load_transcript(transcript_path: Union[str, Path], join_sentences: bool = Fa
     transcript_path: Union[str, Path]
         Path to the transcript
 
-    join_sentences: bool=False
+    join_text: bool=False
         If true, join sentences using sep
 
     sep: str=" "
-        Separator to use if join_sentences is True
+        Separator to use if join_text is True
 
     Returns
     -------
@@ -148,7 +148,7 @@ def load_transcript(transcript_path: Union[str, Path], join_sentences: bool = Fa
             transcript = json.load(read_in)
 
         transcript["sentences"] = transcript.pop("data")
-        if join_sentences:
+        if join_text:
             transcript["full_text"] = sep.join([portion["text"] for portion in transcript["sentences"]])
 
     except KeyError:

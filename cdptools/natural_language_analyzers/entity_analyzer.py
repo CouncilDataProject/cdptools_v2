@@ -2,7 +2,6 @@ from datetime import datetime as dt
 from itertools import chain, groupby
 
 from typing import Any, Callable, List, Union
-from mypy_extensions import TypedDict
 import dateparser
 import en_core_web_sm
 import spacy

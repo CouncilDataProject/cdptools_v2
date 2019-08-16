@@ -6,7 +6,6 @@ from itertools import chain, groupby
 from typing import Any, Callable, Dict, List, Tuple, Union
 
 import dateparser
-import en_core_web_sm
 import spacy
 from spacy.cli import download
 
@@ -26,6 +25,8 @@ try:
 except OSError:
     download(MODEL_NAME)
     spacy.load(MODEL_NAME)
+
+import en_core_web_sm  # noqa: E402
 
 ###############################################################################
 
@@ -246,7 +247,7 @@ class EntityAnalyzer(NLAnalyzer):
         }
 
     @staticmethod
-    def _create_doc(text: str, nlp_model: spacy.LANGUAGE) -> spacy.tokens.Doc:
+    def _create_doc(text: str, nlp_model) -> spacy.tokens.Doc:
         """
         Given a spacy NLP model, analyze text, returning a spacy doc.
         """
@@ -282,10 +283,7 @@ class EntityAnalyzer(NLAnalyzer):
             entity_type: list(es) for entity_type, es in grouped_entities
         }
 
-        def _filter_by_stopwords(
-                entities: List[Spacy.tokens.Span],
-                stopwords: List[str]
-            ) -> List[Spacy.tokens.Span]:
+        def _filter_by_stopwords(entities: List[spacy.tokens.Span], stopwords: List[str]) -> List[spacy.tokens.Span]:
             """
             Filter entity spans against a stopword list.
 
@@ -322,7 +320,7 @@ class EntityAnalyzer(NLAnalyzer):
         sentences_texts = [sentence["text"] for sentence in transcript["sentences"]]
         return {
             "texts": sentences_texts,
-            "event_time": event_metadata["event_datetime"]
+            "event_time": datetime.utcnow()
         }
 
     def analyze(self, load_output: Dict) -> List[List[EntityAnnotation]]:
@@ -342,12 +340,12 @@ class EntityAnalyzer(NLAnalyzer):
             A list, where each item is a collection of the annotations associated with the
             corresponding source text.
         """
-        docs = (self._create_doc(text, self.NLP) for text in texts)
-        doc_annotations_by_entity_type = (
-            self._annotate_entities(doc.ents, doc, event_time) for doc in docs
+        docs = list(self._create_doc(text, self.NLP) for text in load_output["texts"])
+        doc_annotations_by_entity_type = list(
+            self._annotate_entities(doc.ents, doc, load_output["event_time"]) for doc in docs
         )
-        sentence_annotations = (
-            list(chain(doc_annotations.values()))
+        sentence_annotations = list(
+            list(chain(*doc_annotations.values()))
             for doc_annotations in doc_annotations_by_entity_type
         )
         return list(sentence_annotations)

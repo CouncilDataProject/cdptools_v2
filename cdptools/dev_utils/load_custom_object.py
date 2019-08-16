@@ -43,3 +43,26 @@ def load_custom_object(module_path: Union[str, List[str]], object_name: str, obj
     log.debug(f"Using object: {type(obj)}")
 
     return obj
+
+
+def load_custom_object_from_config(custom_object_label: str, config: Dict):
+    """
+    A wrapper around load_custom_object to load the object by label from a config.
+
+    Parameters
+    ----------
+    custom_object_label: str
+        Top-level key for the target object in the config (e.g., "database", "file_store")
+    config: Dict
+        Full configuration
+
+    Returns
+    -------
+    obj: object
+        The initialized object.
+    """
+    return load_custom_object.load_custom_object(
+        module_path=config[custom_object_label]["module_path"],
+        object_name=config[custom_object_label]["object_name"],
+        object_kwargs=config[custom_object_label].get("object_kwargs", {})
+    )

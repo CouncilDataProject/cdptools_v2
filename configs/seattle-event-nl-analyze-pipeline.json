@@ -17,6 +17,13 @@
     },
     "entity_analyzer": {
         "module_path": "cdptools.natural_language_analyzers.entity_analyzer",
-        "object_name": "EntityAnalyzer"
+        "object_name": "EntityAnalyzer",
+        "object_kwargs": {
+            "stopwords_by_label": {
+                "PRODUCT": [
+                    "amendment"
+                ]
+            }
+        }
     }
 }

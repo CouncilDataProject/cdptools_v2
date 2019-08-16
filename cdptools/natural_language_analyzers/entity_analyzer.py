@@ -167,35 +167,6 @@ def _annotate_date_entities(
     return transcribed_dates
 
 
-def _annotate_product_entities(
-    entities: List[spacy.tokens.Span],
-    doc: spacy.tokens.Doc,
-    event_time: datetime
-) -> List[EntityAnnotation]:
-    """
-    Produces annotations of product names, removing commong false positives.
-
-    False positives removed:
-        - "amendment"
-
-    Parameters
-    ----------
-    entities: List[spacy.tokens.Span]
-        A list of spacy.tokens.Span objects representing entities
-    doc: spacy.tokens.Doc
-        The spacy doc the entities are derived from
-    event_time: datetime
-        The timestamp that the event occurred on
-
-    Returns
-    -------
-    annotations: List[EntityAnnotation]
-        A list of product entity annotations
-    """
-    filtered = [e for e in entities if e.text.lower() != "amendment"]
-    return [_span_to_annotation(e, "Entity[Product]", e.text) for e in filtered]
-
-
 def _annotate_money_entities(
     entities: List[spacy.tokens.Span],
     doc: spacy.tokens.Doc,
@@ -250,8 +221,9 @@ def _span_to_annotation(
 
 
 class EntityAnalyzer(NLAnalyzer):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.NLP = en_core_web_sm.load()
+        self._stopwords_by_label = kwargs.get("stopwords_by_label", {})
         self._entity_annotators_by_label = {
             "PERSON": _annotate_person_entities,
             "CARDINAL": _annotate_empty,
@@ -264,7 +236,7 @@ class EntityAnalyzer(NLAnalyzer):
             "TIME": _annotate_empty,
             "NORP": _annotate_as_label("Entity[NORP]"),
             "QUANTITY": _annotate_empty,
-            "PRODUCT": _annotate_product_entities,
+            "PRODUCT": _annotate_as_label("Entity[Product]"),
             "MONEY": _annotate_money_entities,
             "PERCENT": _annotate_empty,
             "LAW": _annotate_as_label("Entity[Law]"),
@@ -284,7 +256,7 @@ class EntityAnalyzer(NLAnalyzer):
         self,
         entities: List[spacy.tokens.Span],
         doc: spacy.tokens.Doc,
-        event_time: datetime
+        event_time: datetime,
     ) -> Dict[str, List[EntityAnnotation]]:
         """
         Generates a list of annotations for each entity type in a list of entities.
@@ -306,8 +278,34 @@ class EntityAnalyzer(NLAnalyzer):
         # Group the extracted entities by entity label
         sorted_entities = sorted(entities, key=lambda e: e.label_)
         grouped_entities = groupby(sorted_entities, key=lambda e: e.label_)
-        entities_by_label = {
+        raw_entities_by_label = {
             entity_type: list(es) for entity_type, es in grouped_entities
+        }
+
+        def _filter_by_stopwords(
+                entities: List[Spacy.tokens.Span],
+                stopwords: List[str]
+            ) -> List[Spacy.tokens.Span]:
+            """
+            Filter entity spans against a stopword list.
+
+            Parameters
+            ----------
+            entities: List[spacy.tokens.Span]
+                A list of spacy.tokens.Span objects representing entities
+            stopwords: List[str]
+                A list of stopwords
+
+            Returns
+            -------
+            filtered_entities: List[spacy.tokens.Span]
+                The filtered list
+            """
+            return [e for e in entities if e.text.lower() not in stopwords]
+
+        entities_by_label = {
+            entity_type: _filter_by_stopwords(entities, self._stopwords_by_label.get(entity_type, []))
+            for entity_type, es in raw_entities_by_label.items())
         }
 
         # Generate the annotations as appropriate by type

@@ -61,7 +61,7 @@ def load_custom_object_from_config(custom_object_label: str, config: Dict):
     obj: object
         The initialized object.
     """
-    return load_custom_object.load_custom_object(
+    return load_custom_object(
         module_path=config[custom_object_label]["module_path"],
         object_name=config[custom_object_label]["object_name"],
         object_kwargs=config[custom_object_label].get("object_kwargs", {})

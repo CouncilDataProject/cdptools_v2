@@ -101,8 +101,11 @@ class EventNLAnalyzePipeline(Pipeline):
                 exe.map(uploader, entities)
 
     def process_event(self, event: Dict) -> str:
+        print("processing event", event["metadata"]["metadata"]["event_id"])
         # Other tasks will go here
-        self.task_extract_and_upload_entities(event, self.config)
+        self.task_extract_and_upload_entities(event)
+
+        print("completed event", event["metadata"]["metadata"]["event_id"])
 
         # Update progress
         log.info("Completed event: {} ({}) ".format(
@@ -137,7 +140,7 @@ class EventNLAnalyzePipeline(Pipeline):
 
                 events = []
                 for metadata in event_metadata_list:
-                    transcript_path = event_corpus_map[metadata["event_id"]]
+                    transcript_path = event_corpus_map[metadata["metadata"]["event_id"]]
                     transcript = transcript_tools.load_transcript(transcript_path, join_text=True, sep=" ")
 
                     events.append({"metadata": metadata, "transcript": transcript})
@@ -146,7 +149,7 @@ class EventNLAnalyzePipeline(Pipeline):
             # Since NLAnalyzer tasks are likely CPU intensive, use ProcessPoolExecutor
             # which can only accept pickleable arguments
             with ProcessPoolExecutor(self.n_workers) as exe:
-                exe.map(self.process_event, events)
+                list(exe.map(self.process_event, events))
 
         log.info("Completed event processing.")
         log.info("=" * 80)

@@ -3,5 +3,4 @@
 """Natural language analyzers package for cdptools."""
 
 
-from .nl_analyzer import NLAnalyzer # noqa: F401
-from .entity_analyzer import EntityAnalyzer # noqa: F401
+from .natural_language_analyzer import NLAnalyzer, EntityAnalyzer # noqa: F401

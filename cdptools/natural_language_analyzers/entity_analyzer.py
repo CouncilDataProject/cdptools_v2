@@ -215,7 +215,7 @@ def _span_to_annotation(span, label, value):
 class EntityAnalyzer(NLAnalyzer):
     def __init__(self):
         self.NLP = en_core_web_sm.load()
-        self._entity_annotators_by_type = {
+        self._entity_annotators_by_label = {
             "PERSON": _annotate_person_entities,
             "CARDINAL": _annotate_empty,
             "DATE": _annotate_date_entities,
@@ -264,14 +264,14 @@ class EntityAnalyzer(NLAnalyzer):
         # Group the extracted entities by entity label
         sorted_entities = sorted(entities, key=lambda e: e.label_)
         grouped_entities = groupby(sorted_entities, key=lambda e: e.label_)
-        entities_by_type = {
+        entities_by_label = {
             entity_type: list(es) for entity_type, es in grouped_entities
         }
 
         # Generate the annotations as appropriate by type
         annotations_by_entity_type = {}
-        for entity_type, es in entities_by_type.items():
-            entity_type_annotator = self._entity_annotators_by_type[entity_type]
+        for entity_type, es in entities_by_label.items():
+            entity_type_annotator = self._entity_annotators_by_label[entity_type]
             annotations_by_entity_type[entity_type] = entity_type_annotator(
                 es, doc, event_time
             )

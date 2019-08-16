@@ -1,17 +1,25 @@
-from datetime import datetime as dt
-from itertools import chain, groupby
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-from typing import Any, Callable, List, Union
+from datetime import datetime
+from itertools import chain, groupby
+from typing import Any, Callable, Dict, List, Tuple, Union
+
 import dateparser
 import en_core_web_sm
 import spacy
-from spacy import displacy
 from spacy.cli import download
 
 from .nl_analyzer import NLAnalyzer
 
+###############################################################################
 
 MODEL_NAME = "en_core_web_sm"
+EntityAnnotator = Callable
+AnnotationValueType = Union[str, float, datetime, Any]
+EntityAnnotation = Dict[str, AnnotationValueType]
+
+###############################################################################
 
 try:
     spacy.load(MODEL_NAME)
@@ -19,114 +27,131 @@ except OSError:
     download(MODEL_NAME)
     spacy.load(MODEL_NAME)
 
+###############################################################################
 
-def _annotate_as_label(label):
+
+def _annotate_as_label(label: str) -> EntityAnnotator:
     """
-        Creates an annotator that returns the entity annotation as-is with the given annotation label.
+    Creates an annotator that returns the entity annotation as-is with the given annotation label.
+
+    Parameters
+    ----------
+    label: str
+        The label to apply to the generated annotations
+
+    Returns
+    -------
+    annotator: EntityAnnotator
+        An entity annotator which applies the given label
+    """
+
+    def annotate(
+        entities: spacy.tokens.Span,
+        doc: spacy.tokens.Doc,
+        event_time: datetime
+    ) -> List[EntityAnnotation]:
+        """
+        Produces annotations consisting of the exact source spacy entity text
+        with the given custom annotation label
 
         Parameters
         ----------
-        label: str
-            The label to apply to the generated annotations
+        entities: spacy.tokens.Span
+            A list of spacy.tokens.Span objects representing entities
+        doc: spacy.tokens.Doc
+            The spacy doc the entities are derived from
+        event_time: datetime
+            The timestamp that the event occurred on
 
         Returns
         -------
-        annotator: EntityAnnotator
-            An entity annotator which applies the given label
-    """
-
-    def annotate(entities, doc, event_time):
-        """
-            Produces annotations consisting of the exact source spacy entity text
-            with the given custom annotation label
-
-            Parameters
-            ----------
-            entities: spacy.tokens.Span
-                A list of spacy.tokens.Span objects representing entities
-            doc: spacy.tokens.Doc
-                The spacy doc the entities are derived from
-            event_time: datetime
-                The timestamp that the event occurred on
-
-            Returns
-            -------
-            annotations
-                A list of annotations with the given label
+        annotations: List[EntityAnnotation]
+            A list of annotations with the given label
         """
         return [_span_to_annotation(e, label, e.text) for e in entities]
 
     return annotate
 
 
-def _annotate_empty(entities, doc, event_time):
+def _annotate_empty(
+    entities: List[spacy.tokens.Span],
+    doc: spacy.tokens.Doc,
+    event_time: datetime
+) -> List[EntityAnnotation]:
     """
-        An Annotator which produces no annotations for the given entities.
+    An Annotator which produces no annotations for the given entities.
 
-        Parameters
-        ----------
-        entities: List[spacy.tokens.Span]
-            A list of spacy.tokens.Span objects representing entities
-        doc: spacy.tokens.Doc
-            The spacy doc the entities are derived from
-        event_time: datetime
-            The timestamp that the event occurred on
+    Parameters
+    ----------
+    entities: List[spacy.tokens.Span]
+        A list of spacy.tokens.Span objects representing entities
+    doc: spacy.tokens.Doc
+        The spacy doc the entities are derived from
+    event_time: datetime
+        The timestamp that the event occurred on
 
-        Returns
-        -------
-        annotations
-            An empty list.
+    Returns
+    -------
+    annotations: List[EntityAnnotation]
+        An empty list.
     """
     return []
 
 
-def _annotate_person_entities(entities, doc, event):
+def _annotate_person_entities(
+    entities: List[spacy.tokens.Span],
+    doc: spacy.tokens.Doc,
+    event_time: datetime
+) -> List[EntityAnnotation]:
     """
-        Produce annotations for person entities.
+    Produce annotations for person entities.
 
-        This filters out entities for ones containing spaces, using that as a proxy
-        to indicate first and last name.
+    This filters out entities for ones containing spaces, using that as a proxy
+    to indicate first and last name.
 
-        Parameters
-        ----------
-        entities: List[spacy.tokens.Span]
-            A list of spacy.tokens.Span objects representing entities
-        doc: spacy.tokens.Doc
-            The spacy doc the entities are derived from
-        event_time: datetime
-            The timestamp that the event occurred on
+    Parameters
+    ----------
+    entities: List[spacy.tokens.Span]
+        A list of spacy.tokens.Span objects representing entities
+    doc: spacy.tokens.Doc
+        The spacy doc the entities are derived from
+    event_time: datetime
+        The timestamp that the event occurred on
 
-        Returns
-        -------
-        annotations
-            A list of absolute date annotations.
+    Returns
+    -------
+    annotations: List[EntityAnnotation]
+        A list of absolute date annotations.
     """
-    filtered = [
+    return [
         _span_to_annotation(e, "Entity[Person]", e.text)
         for e in entities
         if " " in e.text
     ]
-    return filtered
 
 
-def _annotate_date_entities(entities, doc, event_time):
+def _annotate_date_entities(
+    entities: List[spacy.tokens.Span],
+    doc: spacy.tokens.Doc,
+    event_time: datetime
+) -> List[EntityAnnotation]:
     """
-        Parse exact dates and transform relative dates into exact dates based on date and
-        time the event ocurred.
+    Parse exact dates and transform relative dates into exact dates based on date and
+    time the event ocurred.
 
-        Parameters
-        ----------
-        entities: List[spacy.tokens.Span]
-            A list of spacy.tokens.Span objects representing entities
-        doc: spacy.tokens.Doc
-            The spacy doc the entities are derived from
-        event_time: datetime
-            The timestamp that the event occurred on
+    Parameters
+    ----------
+    entities: List[spacy.tokens.Span]
+        A list of spacy.tokens.Span objects representing entities
+    doc: spacy.tokens.Doc
+        The spacy doc the entities are derived from
+    event_time: datetime
+        The timestamp that the event occurred on
 
-        Returns
-        -------
-        annotations
-            A list of absolute date annotations.
+    Returns
+    -------
+    annotations: List[EntityAnnotation]
+        A list of absolute date annotations.
     """
     base_date = event_time
     conf = {"RELATIVE_BASE": base_date}
@@ -142,72 +167,84 @@ def _annotate_date_entities(entities, doc, event_time):
     return transcribed_dates
 
 
-def _annotate_product_entities(entities, doc, event_time):
+def _annotate_product_entities(
+    entities: List[spacy.tokens.Span],
+    doc: spacy.tokens.Doc,
+    event_time: datetime
+) -> List[EntityAnnotation]:
     """
-        Produces annotations of product names, removing commong false positives.
+    Produces annotations of product names, removing commong false positives.
 
-        False positives removed:
-            - "amendment"
+    False positives removed:
+        - "amendment"
 
-        Parameters
-        ----------
-        entities: List[spacy.tokens.Span]
-            A list of spacy.tokens.Span objects representing entities
-        doc: spacy.tokens.Doc
-            The spacy doc the entities are derived from
-        event_time: datetime
-            The timestamp that the event occurred on
+    Parameters
+    ----------
+    entities: List[spacy.tokens.Span]
+        A list of spacy.tokens.Span objects representing entities
+    doc: spacy.tokens.Doc
+        The spacy doc the entities are derived from
+    event_time: datetime
+        The timestamp that the event occurred on
 
-        Returns
-        -------
-        annotations
-            A list of product entity annotations
+    Returns
+    -------
+    annotations: List[EntityAnnotation]
+        A list of product entity annotations
     """
     filtered = [e for e in entities if e.text.lower() != "amendment"]
     return [_span_to_annotation(e, "Entity[Product]", e.text) for e in filtered]
 
 
-def _annotate_money_entities(entities, doc, event_time):
+def _annotate_money_entities(
+    entities: List[spacy.tokens.Span],
+    doc: spacy.tokens.Doc,
+    event_time: datetime
+) -> List[EntityAnnotation]:
     """
-        Produces annotations of monetary values.
+    Produces annotations of monetary values.
 
-        Ideally, we'd like to do some additional analysis here to associate those
-        dollar amounts back to some expenditure, budget, etc.
+    Ideally, we'd like to do some additional analysis here to associate those
+    dollar amounts back to some expenditure, budget, etc.
 
-        Parameters
-        ----------
-        entities: List[spacy.tokens.Span]
-            A list of spacy.tokens.Span objects representing entities
-        doc: spacy.tokens.Doc
-            The spacy doc the entities are derived from
-        event_time: datetime
-            The timestamp that the event occurred on
+    Parameters
+    ----------
+    entities: List[spacy.tokens.Span]
+        A list of spacy.tokens.Span objects representing entities
+    doc: spacy.tokens.Doc
+        The spacy doc the entities are derived from
+    event_time: datetime
+        The timestamp that the event occurred on
 
-        Returns
-        -------
-        annotations
-            A list of monetary annotations.
+    Returns
+    -------
+    annotations: List[EntityAnnotation]
+        A list of monetary annotations.
     """
     return [_span_to_annotation(e, "Entity[Money]", e.text) for e in entities]
 
 
-def _span_to_annotation(span, label, value):
+def _span_to_annotation(
+    span: spacy.tokens.Span,
+    label: str,
+    value: AnnotationValueType
+) -> EntityAnnotation:
     """
-        Convert a Spacy span to an annotation with the given label and value.
+    Convert a Spacy span to an annotation with the given label and value.
 
-        Parameters
-        ----------
-        span: spacy.tokens.Span
-            The source span for the annotation
-        label: str
-            A string label to apply to the annotation
-        value: AnnotationValueType
-            The timestamp that the event occurred on
+    Parameters
+    ----------
+    span: spacy.tokens.Span
+        The source span for the annotation
+    label: str
+        A string label to apply to the annotation
+    value: AnnotationValueType
+        The timestamp that the event occurred on
 
-        Returns
-        -------
-        annotations
-            A list of monetary annotations.
+    Returns
+    -------
+    annotations: Dict[str, AnnotationValueType]
+        A list of monetary annotations.
     """
     return {"start": span.start, "end": span.end, "label": label, "value": value}
 
@@ -237,29 +274,34 @@ class EntityAnalyzer(NLAnalyzer):
         }
 
     @staticmethod
-    def _create_doc(text, nlp_model):
+    def _create_doc(text: str, nlp_model: spacy.LANGUAGE) -> spacy.tokens.Doc:
         """
         Given a spacy NLP model, analyze text, returning a spacy doc.
         """
         return nlp_model(text)
 
-    def _annotate_entities(self, entities, doc, event_time):
+    def _annotate_entities(
+        self,
+        entities: List[spacy.tokens.Span],
+        doc: spacy.tokens.Doc,
+        event_time: datetime
+    ) -> Dict[str, List[EntityAnnotation]]:
         """
-            Generates a list of annotations for each entity type in a list of entities.
+        Generates a list of annotations for each entity type in a list of entities.
 
-            Parameters
-            ----------
-            entities: List[spacy.tokens.Span]
-                A list of spacy.tokens.Span objects representing entities
-            doc: spacy.tokens.Doc
-                The spacy doc the entities are derived from
-            event_time: datetime
-                The timestamp that the event occurred on
+        Parameters
+        ----------
+        entities: List[spacy.tokens.Span]
+            A list of spacy.tokens.Span objects representing entities
+        doc: spacy.tokens.Doc
+            The spacy doc the entities are derived from
+        event_time: datetime
+            The timestamp that the event occurred on
 
-            Returns
-            -------
-            annotations
-                A dict of lists of Annotation objects, keyed by the annotation type
+        Returns
+        -------
+        annotations: Dict[str, List[EntityAnnotation]]
+            A dict of lists of Annotation objects, keyed by the annotation type
         """
         # Group the extracted entities by entity label
         sorted_entities = sorted(entities, key=lambda e: e.label_)
@@ -278,26 +320,26 @@ class EntityAnalyzer(NLAnalyzer):
 
         return annotations_by_entity_type
 
-    def load(self, transcript, event_metadata):
+    def load(self, transcript: Dict, event_metadata: Dict) -> Tuple[List[str], datetime]:
         sentences_texts = [sentence["text"] for sentence in transcript["sentences"]]
         return (sentences_texts, event_metadata["event_datetime"])
 
-    def analyze(self, texts, event_time):
+    def analyze(self, texts: List[str], event_time: datetime) -> List[List[EntityAnnotation]]:
         """
-            Generate annotations for a collection of texts related to a single event.
+        Generate annotations for a collection of texts related to a single event.
 
-            Parameters
-            ----------
-            sentence_texts: List[str]
-                The list of texts to analyze
-            event_time: datetime
-                The timestamp that the event occurred on
+        Parameters
+        ----------
+        sentence_texts: List[str]
+            The list of texts to analyze
+        event_time: datetime
+            The timestamp that the event occurred on
 
-            Returns
-            -------
-            sentence_annotations
-                A list, where each item is a collection of the annotations associated with the
-                corresponding source text.
+        Returns
+        -------
+        sentence_annotations: List[List[EntityAnnotation]]
+            A list, where each item is a collection of the annotations associated with the
+            corresponding source text.
         """
         docs = (self._create_doc(text, self.NLP) for text in texts)
         doc_annotations_by_entity_type = (
@@ -308,4 +350,3 @@ class EntityAnalyzer(NLAnalyzer):
             for doc_annotations in doc_annotations_by_entity_type
         )
         return list(sentence_annotations)
-

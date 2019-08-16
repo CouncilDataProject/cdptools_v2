@@ -114,7 +114,7 @@ class EventNLAnalyzePipeline(Pipeline):
                     save_dir=tmpdir
                 )
 
-                manifest_path = os.path.join(tmpdir, transcript_tools.MANIFEST_FILENAME)
+                manifest_path = Path(tmpdir, transcript_tools.MANIFEST_FILENAME)
                 event_metadata_list = self._load_event_metadata(manifest_path)
 
                 events = []

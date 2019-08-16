@@ -3,22 +3,12 @@ from itertools import chain, groupby
 
 from typing import Any, Callable, List, Union
 from mypy_extensions import TypedDict
-import dateutil.parser as parser
+import dateparser
 import en_core_web_sm
 import spacy
 from spacy import displacy
 
 from nl_analyzer import NLAnalyzer
-
-AnnotationValueTypes = Union[int, float, str, dt]
-Annotation = TypedDict(
-    "Annotation",
-    {"start": int, "end": int, "label": str, "value": AnnotationValueTypes},
-)
-"""
-    Given a list of spacy entities, the source spacy Doc, and a datetime, produce a list of annotations.
-"""
-EntityAnnotator = Callable[[List[spacy.tokens.Span], spacy.tokens.Doc, dt], List[Annotation]]
 
 
 def _annotate_as_label(label):
@@ -35,7 +25,6 @@ def _annotate_as_label(label):
         annotator: EntityAnnotator
             An entity annotator which applies the given label
     """
-
 
     def annotate(entities, doc, event_time):
         """
@@ -56,7 +45,7 @@ def _annotate_as_label(label):
             annotations
                 A list of annotations with the given label
         """
-        return [span_to_annotate(e, label, e.text) for e in entities]
+        return [_span_to_annotation(e, label, e.text) for e in entities]
 
     return annotate
 
@@ -103,8 +92,13 @@ def _annotate_person_entities(entities, doc, event):
         annotations
             A list of absolute date annotations.
     """
-    filtered = [span_to_annotation(e, "Entity[Person]", e.text) for e in entities if ' ' in e.text]
+    filtered = [
+        _span_to_annotation(e, "Entity[Person]", e.text)
+        for e in entities
+        if " " in e.text
+    ]
     return filtered
+
 
 def _annotate_date_entities(entities, doc, event_time):
     """
@@ -126,10 +120,11 @@ def _annotate_date_entities(entities, doc, event_time):
             A list of absolute date annotations.
     """
     base_date = event_time
+    conf = {"RELATIVE_BASE": base_date}
     transcribed_dates = []
     for e in entities:
         try:
-            parsed_date = parser.parse(e.text)
+            parsed_date = dateparser.parse(e.text, settings=conf)
             transcribed_dates.append(
                 _span_to_annotation(e, "Entity[Date]", parsed_date)
             )

@@ -305,7 +305,7 @@ class EntityAnalyzer(NLAnalyzer):
 
         entities_by_label = {
             entity_type: _filter_by_stopwords(entities, self._stopwords_by_label.get(entity_type, []))
-            for entity_type, es in raw_entities_by_label.items())
+            for entity_type, es in raw_entities_by_label.items()
         }
 
         # Generate the annotations as appropriate by type

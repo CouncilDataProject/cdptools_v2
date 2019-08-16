@@ -71,9 +71,9 @@ class EventNLAnalyzePipeline(Pipeline):
         ):
             entity_analyzer = load_custom_object.load_custom_object_from_config("entity_analyzer", self.config)
 
-            input = entity_analyzer.load(event["transcript"], event["metadata"])
+            analyzer_input = entity_analyzer.load(event["transcript"], event["metadata"])
 
-            entities = entity_analyzer.analyze(*input)
+            entities = entity_analyzer.analyze(analyzer_input)
 
             for entity in entities:
                 database.get_or_upload_event_entity(

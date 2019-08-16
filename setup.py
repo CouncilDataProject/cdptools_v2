@@ -44,7 +44,6 @@ interactive_requirements = [
 requirements = [
     "beautifulsoup4==4.8.0",
     "dateparser==0.7.1",
-    "en-core-web-sm==2.1.0",
     "ffmpeg-python==0.2.0",
     "fuzzywuzzy==0.17.0",
     "nltk==3.4.4",

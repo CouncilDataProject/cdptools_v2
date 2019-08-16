@@ -1,3 +1,4 @@
+import copy
 import csv
 import json
 import logging
@@ -6,6 +7,7 @@ from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from functools import partial
 from pathlib import Path
 from typing import Any, Dict, Union
+from uuid import uuid4
 
 from .. import get_module_version
 from ..databases import Database
@@ -61,7 +63,7 @@ class EventNLAnalyzePipeline(Pipeline):
             event_metadata[col] = event_row.get(col)
         return event_metadata
 
-    def _upload_entity(database: Database, entity: Dict[str, Any]) -> Dict[str, Any]:
+    def _upload_entity(self, database: Database, entity: Dict[str, Any]) -> Dict[str, Any]:
         return database.get_or_upload_event_entity(
             event_id=entity["event_id"],
             label=entity["label"],
@@ -70,7 +72,9 @@ class EventNLAnalyzePipeline(Pipeline):
 
     def task_extract_and_upload_entities(self, event: Dict[str, Any]):
         # Load database
-        database = load_custom_object.load_custom_object_from_config("database", self.config)
+        config = copy.deepcopy(self.config)
+        config["database"]["object_kwargs"]["name"] = str(uuid4())
+        database = load_custom_object.load_custom_object_from_config("database", config)
         with RunManager(
             database,
             load_custom_object.load_custom_object_from_config("file_store", self.config),
@@ -87,25 +91,30 @@ class EventNLAnalyzePipeline(Pipeline):
 
             # Analyze text for entities
             entities = entity_analyzer.analyze(analyzer_input)
-            entities = [{
-                "event_id": event["metadata"]["event_id"],
-                "label": entity["label"],
-                "value": entity["value"]
-            } for entity in entities]
+            flatten = []
+            for e_list in entities:
+                for entity in e_list:
+                    flatten.append({
+                        "event_id": event["metadata"]["event_id"],
+                        "label": entity["label"],
+                        "value": entity["value"]
+                    })
 
-            # Create partial for uploader
-            uploader = partial(self._upload_entity, database=database)
+        # Create partial for uploader
+        # uploader = partial(self._upload_entity, database=database)
 
             # Multithreaded upload
-            with ThreadPoolExecutor() as exe:
-                exe.map(uploader, entities)
+            for e in flatten:
+                self._upload_entity(database, e)
+        # with ThreadPoolExecutor() as exe:
+        #     list(exe.map(uploader, entities))
 
     def process_event(self, event: Dict) -> str:
-        print("processing event", event["metadata"]["metadata"]["event_id"])
+        print("processing event", event["metadata"]["event_id"])
         # Other tasks will go here
         self.task_extract_and_upload_entities(event)
 
-        print("completed event", event["metadata"]["metadata"]["event_id"])
+        print("completed event", event["metadata"]["event_id"])
 
         # Update progress
         log.info("Completed event: {} ({}) ".format(
@@ -143,13 +152,16 @@ class EventNLAnalyzePipeline(Pipeline):
                     transcript_path = event_corpus_map[metadata["metadata"]["event_id"]]
                     transcript = transcript_tools.load_transcript(transcript_path, join_text=True, sep=" ")
 
-                    events.append({"metadata": metadata, "transcript": transcript})
+                    event = {**metadata, "transcript": transcript}
+                    events.append(event)
 
             # Multiprocess each event found
             # Since NLAnalyzer tasks are likely CPU intensive, use ProcessPoolExecutor
             # which can only accept pickleable arguments
-            with ProcessPoolExecutor(self.n_workers) as exe:
-                list(exe.map(self.process_event, events))
+            for e in events:
+                self.process_event(e)
+            # with ProcessPoolExecutor(self.n_workers) as exe:
+            #     list(exe.map(self.process_event, events))
 
         log.info("Completed event processing.")
         log.info("=" * 80)

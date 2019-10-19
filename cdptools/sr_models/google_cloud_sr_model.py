@@ -87,7 +87,7 @@ class GoogleCloudSRModel(SRModel):
         operation = client.long_running_recognize(config, audio)
 
         # Wait for complete
-        response = operation.result(timeout=4000)
+        response = operation.result(timeout=10800)
 
         # Select highest confidence transcripts
         confidence_sum = 0

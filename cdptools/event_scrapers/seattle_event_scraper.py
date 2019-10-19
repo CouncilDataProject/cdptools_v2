@@ -234,7 +234,7 @@ class SeattleEventScraper(EventScraper):
         # If the event was not today, ignore it.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
-            yesterday = now - timedelta(days=1)
+            yesterday = now - timedelta(days=7)
             if not (event_dt > yesterday and event_dt < now):
                 raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 

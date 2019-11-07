@@ -6,7 +6,6 @@
     2. [File Stores](#file-stores)
     3. [Audio Splitters](#audio-splitters)
     4. [Databases](#databases)
-        * [Database Schema Diagram](#database-schema-diagram)
     5. [Speech Recognition Models](#speech-recognition-models)
     6. [Indexers](#indexers)
     7. [Pipelines](#pipelines)
@@ -79,8 +78,7 @@ schema, there will be no issues with downstream processing. Similar to file stor
 open read, as if collaborators want to use the data stored by a CDP instance, it makes it easy for them to do so. Just
 ask them nicely to not slam the database with requests.
 
-[Database Schema Diagram](resources/database_diagram.pdf)
-*Created with dbdiagram.io*
+![Database Schema Diagram](resources/database_diagram.png)
 
 ### Speech Recognition Model
 Things can start to get tricky here. Speech recognition models are where the standard idea of processing may be a bit
@@ -92,7 +90,7 @@ already high quality transcript back, no need for any processing. These are both
 simply that one of them produces transcripts that have 100% confidence.
 
 If you want to develop your own speech recognition model, please first read about
-[supported transcript formats](transcript_formats.md).
+[supported transcript formats](transcript_formats.html).
 
 ### Indexers
 Indexer objects are used to generate a term value to terms in a corpus. A single document in this corpus could be a

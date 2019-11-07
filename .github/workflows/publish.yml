@@ -24,5 +24,5 @@ jobs:
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
-        user: {{ cookiecutter.pypi_username }}
+        user: councildataproject
         password: ${{ secrets.PYPI_TOKEN }}

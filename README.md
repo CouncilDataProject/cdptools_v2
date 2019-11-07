@@ -32,7 +32,7 @@ this package are objects to do just that; connect and request data from CDP inst
 ## User Features
 * Plain text query for events or minutes items
 
-* [Database schema](docs/resources/database_diagram.pdf) allows for simple querying of:
+* [Database schema](https://councildataproject.github.io/cdptools/_images/database_diagram.png) allows for simple querying of:
     * events (meetings)
     * voting history of a city council or city council member
     * bodies (committees)

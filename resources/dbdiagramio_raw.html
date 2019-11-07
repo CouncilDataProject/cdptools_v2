@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>&lt;no title&gt; &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>&lt;no title&gt;</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/resources/dbdiagramio_raw.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <dl class="simple">
+<dt>Table body {</dt><dd><p>body_id varchar [pk]
+name varchar [not null]
+description varchar
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table minutes_item {</dt><dd><p>minutes_item_id varchar [pk]
+name varchar [not null]
+matter varchar
+legistar_event_item_id integer
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table minutes_item_file {</dt><dd><p>minutes_item_file_id varchar [pk]
+minutes_item_id varchar [ref: &gt; minutes_item.minutes_item_id]
+uri varchar [not null]
+name varchar
+legistar_matter_attachment_id integer
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table event {</dt><dd><p>event_id varchar [pk]
+body_id varchar [ref: &gt; body.body_id]
+agenda_file_uri varchar
+event_datetime varchar [not null]
+minutes_file_uri varchar
+source_uri varchar [not null]
+video_uri varchar [not null]
+legistar_event_id integer
+legistar_event_link varchar
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table event_minutes_item {</dt><dd><p>event_minutes_item_id varchar [pk]
+event_id varchar [ref: &gt; event.event_id]
+minutes_item_id varchar [ref: &gt; minutes_item.minutes_item_id]
+index integer
+decision varchar
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table person {</dt><dd><p>person_id varchar [pk]
+full_name varchar [not null]
+email varchar [not null]
+phone varchar
+website varchar
+legistar_person_id integer
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table vote {</dt><dd><p>vote_id varchar [pk]
+person_id varchar [ref: &gt; person.person_id]
+event_minutes_item_id varchar [ref: &gt; event_minutes_item.event_minutes_item_id]
+decision varchar [not null]
+legistar_event_item_vote_id integer
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table file {</dt><dd><p>file_id varchar [pk]
+uri varchar [not null]
+filename varchar
+description varchar
+content_type varchar
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table transcript {</dt><dd><p>transcript_id varchar [pk]
+event_id varchar [ref: &gt; event.event_id]
+file_id varchar [ref: - file.file_id]
+confidence float [not null]
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table algorithm {</dt><dd><p>algorithm_id varchar [pk]
+name varchar [not null]
+version varchar [not null]
+description varchar
+source varchar
+created datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table run {</dt><dd><p>run_id varchar [pk]
+algorithm_id varchar [ref: &gt; algorithm.algorithm_id]
+begin datetime
+completed datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table run_input {</dt><dd><p>run_input_id varchar [pk]
+run_id varchar [ref: &gt; run.run_id]
+dtype varchar [not null]
+value varchar [not null]</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table run_input_file {</dt><dd><p>run_input_file_id varchar [pk]
+run_id varchar [ref: &gt; run.run_id]
+file_id varchar [ref: - file.file_id]</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table run_output {</dt><dd><p>run_output_id varchar [pk]
+run_id varchar [ref: &gt; run.run_id]
+dtype varchar [not null]
+value varchar [not null]</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table run_output_file {</dt><dd><p>run_output_file_id varchar [pk]
+run_id varchar [ref: &gt; run.run_id]
+file_id varchar [ref: - file.file_id]</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table indexed_event_term {</dt><dd><p>indexed_event_term_id varchar [pk]
+term varchar [not null]
+event_id varchar [ref: &gt; event.event_id]
+updated datetime</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>Table indexed_minutes_item_term {</dt><dd><p>indexed_minutes_item_term_id varchar [pk]
+term varchar [not null]
+minutes_item_id varchar [ref: &gt; minutes_item.minutes_item_id]
+updated datetime</p>
+</dd>
+</dl>
+<p>}</p>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

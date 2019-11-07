@@ -1,0 +1,390 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.event_scrapers package &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cdptools.file_stores package" href="cdptools.file_stores.html" />
+    <link rel="prev" title="cdptools.dev_utils package" href="cdptools.dev_utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cdptools.html">cdptools package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">cdptools</a> &raquo;</li>
+        
+          <li><a href="cdptools.html">cdptools package</a> &raquo;</li>
+        
+      <li>cdptools.event_scrapers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cdptools.event_scrapers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="cdptools.file_stores.html" class="btn btn-neutral float-right" title="cdptools.file_stores package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cdptools.dev_utils.html" class="btn btn-neutral float-left" title="cdptools.dev_utils package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cdptools-event-scrapers-package">
+<h1>cdptools.event_scrapers package<a class="headerlink" href="#cdptools-event-scrapers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cdptools.event_scrapers.event_scraper">
+<span id="cdptools-event-scrapers-event-scraper-module"></span><h2>cdptools.event_scrapers.event_scraper module<a class="headerlink" href="#module-cdptools.event_scrapers.event_scraper" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.event_scrapers.event_scraper.EventScraper">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.event_scrapers.event_scraper.</code><code class="sig-name descname">EventScraper</code><a class="reference internal" href="_modules/cdptools/event_scrapers/event_scraper.html#EventScraper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.event_scraper.EventScraper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="method">
+<dt id="cdptools.event_scrapers.event_scraper.EventScraper.get_events">
+<em class="property">abstract </em><code class="sig-name descname">get_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[Dict[str, Any]]<a class="reference internal" href="_modules/cdptools/event_scrapers/event_scraper.html#EventScraper.get_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.event_scraper.EventScraper.get_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of event details required to run the rest of an event pipeline.</p>
+<p>Many get events functions are meant to be run on a schedule so it may be best to consider implementing an
+OutOfTimeBoundsError somewhere during the processing to ignore events you believe should have already been
+retrieved during a prior run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>events</strong> – A list of dictionaries with each dictionary containing event details for the rest of an event pipeline to
+use for processing and storage information.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.event_scrapers.exceptions">
+<span id="cdptools-event-scrapers-exceptions-module"></span><h2>cdptools.event_scrapers.exceptions module<a class="headerlink" href="#module-cdptools.event_scrapers.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="cdptools.event_scrapers.exceptions.EventOutOfTimeboundsError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.event_scrapers.exceptions.</code><code class="sig-name descname">EventOutOfTimeboundsError</code><span class="sig-paren">(</span><em class="sig-param">current: datetime.datetime</em>, <em class="sig-param">begin: datetime.datetime</em>, <em class="sig-param">end: datetime.datetime</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/event_scrapers/exceptions.html#EventOutOfTimeboundsError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.exceptions.EventOutOfTimeboundsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.event_scrapers.exceptions.EventParseError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.event_scrapers.exceptions.</code><code class="sig-name descname">EventParseError</code><span class="sig-paren">(</span><em class="sig-param">body: str</em>, <em class="sig-param">dt: datetime.datetime</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/event_scrapers/exceptions.html#EventParseError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.exceptions.EventParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.event_scrapers.exceptions.LegistarLookupError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.event_scrapers.exceptions.</code><code class="sig-name descname">LegistarLookupError</code><span class="sig-paren">(</span><em class="sig-param">body: str</em>, <em class="sig-param">dt: datetime.datetime</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/event_scrapers/exceptions.html#LegistarLookupError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.exceptions.LegistarLookupError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.event_scrapers.seattle_event_scraper">
+<span id="cdptools-event-scrapers-seattle-event-scraper-module"></span><h2>cdptools.event_scrapers.seattle_event_scraper module<a class="headerlink" href="#module-cdptools.event_scrapers.seattle_event_scraper" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.event_scrapers.seattle_event_scraper.ParsedEvents">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.event_scrapers.seattle_event_scraper.</code><code class="sig-name descname">ParsedEvents</code><span class="sig-paren">(</span><em class="sig-param">success: List[Dict] = None</em>, <em class="sig-param">warning: List[cdptools.event_scrapers.exceptions.EventOutOfTimeboundsError] = None</em>, <em class="sig-param">error: List[Union[cdptools.event_scrapers.exceptions.EventParseError</em>, <em class="sig-param">cdptools.event_scrapers.exceptions.LegistarLookupError]] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#ParsedEvents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.ParsedEvents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.event_scrapers.seattle_event_scraper.</code><code class="sig-name descname">SeattleEventScraper</code><span class="sig-paren">(</span><em class="sig-param">main_route: str = 'http://www.seattlechannel.org/CityCouncil'</em>, <em class="sig-param">backfill: bool = False</em>, <em class="sig-param">ignore_minutes_items: List[str] = []</em>, <em class="sig-param">legistar_client: str = 'seattle'</em>, <em class="sig-param">max_concurrent_requests: int = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#SeattleEventScraper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cdptools.event_scrapers.event_scraper.EventScraper" title="cdptools.event_scrapers.event_scraper.EventScraper"><code class="xref py py-class docutils literal notranslate"><span class="pre">cdptools.event_scrapers.event_scraper.EventScraper</span></code></a></p>
+<dl class="method">
+<dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_events">
+<code class="sig-name descname">get_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#SeattleEventScraper.get_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of event details required to run the rest of an event pipeline.</p>
+<p>Many get events functions are meant to be run on a schedule so it may be best to consider implementing an
+OutOfTimeBoundsError somewhere during the processing to ignore events you believe should have already been
+retrieved during a prior run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>events</strong> – A list of dictionaries with each dictionary containing event details for the rest of an event pipeline to
+use for processing and storage information.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_routes">
+<code class="sig-name descname">get_routes</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#SeattleEventScraper.get_routes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_routes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.pstnow">
+<em class="property">static </em><code class="sig-name descname">pstnow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#SeattleEventScraper.pstnow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.pstnow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.event_scrapers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdptools.event_scrapers" title="Permalink to this headline">¶</a></h2>
+<p>Event scrapers package for cdptools.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

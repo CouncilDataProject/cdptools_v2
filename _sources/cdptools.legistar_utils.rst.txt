@@ -1,0 +1,22 @@
+cdptools.legistar\_utils package
+================================
+
+Submodules
+----------
+
+cdptools.legistar\_utils.events module
+--------------------------------------
+
+.. automodule:: cdptools.legistar_utils.events
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cdptools.legistar_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

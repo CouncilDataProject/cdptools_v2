@@ -1,0 +1,30 @@
+cdptools.dev\_utils package
+===========================
+
+Submodules
+----------
+
+cdptools.dev\_utils.load\_custom\_object module
+-----------------------------------------------
+
+.. automodule:: cdptools.dev_utils.load_custom_object
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdptools.dev\_utils.run\_manager module
+---------------------------------------
+
+.. automodule:: cdptools.dev_utils.run_manager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cdptools.dev_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

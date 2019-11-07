@@ -1,0 +1,606 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.pipelines.event_gather_pipeline &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdptools.html">cdptools</a> &raquo;</li>
+        
+      <li>cdptools.pipelines.event_gather_pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdptools.pipelines.event_gather_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="k">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">get_module_version</span>
+<span class="kn">from</span> <span class="nn">..dev_utils</span> <span class="k">import</span> <span class="n">RunManager</span><span class="p">,</span> <span class="n">load_custom_object</span>
+<span class="kn">from</span> <span class="nn">.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="EventGatherPipeline"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline">[docs]</a><span class="k">class</span> <span class="nc">EventGatherPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
+        <span class="c1"># Resolve config path</span>
+        <span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Read</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">read_in</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">read_in</span><span class="p">)</span>
+
+        <span class="c1"># Get workers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_synchronous_jobs&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Load modules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_scraper</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;event_scraper&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;event_scraper&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;event_scraper&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio_splitter</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="EventGatherPipeline.task_audio_get_or_copy"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_audio_get_or_copy">[docs]</a>    <span class="k">def</span> <span class="nf">task_audio_get_or_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or copy and return audio resource uri provied key and video uri.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.task_audio_get_or_copy&quot;</span><span class="p">,</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">],</span>
+            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
+            <span class="c1"># Check if audio already exists in file store</span>
+            <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_audio.wav&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">audio_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+                <span class="c1"># Store the video in temporary file</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">video_uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+                    <span class="n">suffix</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;tmp_</span><span class="si">{key}</span><span class="s2">_video.</span><span class="si">{suffix}</span><span class="s2">&quot;</span>
+                <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">_external_resource_copy</span><span class="p">(</span>
+                    <span class="n">uri</span><span class="o">=</span><span class="n">video_uri</span><span class="p">,</span>
+                    <span class="n">dst</span><span class="o">=</span><span class="n">tmp_video_filepath</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Split and store the audio in temporary file prior to upload</span>
+                <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio_splitter</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+                    <span class="n">video_read_path</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">,</span>
+                    <span class="n">audio_save_path</span><span class="o">=</span><span class="n">tmp_audio_filepath</span>
+                <span class="p">)</span>
+                <span class="n">tmp_audio_log_out_filepath</span> <span class="o">=</span> <span class="n">tmp_audio_filepath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.out&quot;</span><span class="p">)</span>
+                <span class="n">tmp_audio_log_err_filepath</span> <span class="o">=</span> <span class="n">tmp_audio_filepath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.err&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Remove tmp video file</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmp_video_filepath</span><span class="p">)</span>
+
+                <span class="c1"># Store audio and logs</span>
+                <span class="n">audio_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">)</span>
+                <span class="n">audio_log_out_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_out_filepath</span><span class="p">)</span>
+                <span class="n">audio_log_err_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_err_filepath</span><span class="p">)</span>
+                <span class="c1"># Store database records</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">audio_uri</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">audio_log_out_uri</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">audio_log_err_uri</span><span class="p">)</span>
+                <span class="c1"># Register audio files with run manager</span>
+                <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">tmp_audio_filepath</span><span class="p">)</span>
+                <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">tmp_audio_filepath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.out&quot;</span><span class="p">))</span>
+                <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">tmp_audio_filepath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.err&quot;</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">audio_uri</span></div>
+
+<div class="viewcode-block" id="EventGatherPipeline.task_transcript_get_or_create"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_transcript_get_or_create">[docs]</a>    <span class="k">def</span> <span class="nf">task_transcript_get_or_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">audio_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or create and return transcript resource uri provied key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.task_transcript_get_or_create&quot;</span><span class="p">,</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">audio_uri</span><span class="p">],</span>
+            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
+            <span class="c1"># Setup temporary filenames</span>
+            <span class="n">tmp_raw_transcript_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_raw_transcript_0.json&quot;</span>
+            <span class="n">tmp_ts_words_transcript_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_words_transcript_0.json&quot;</span>
+            <span class="n">tmp_ts_sentences_transcript_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_sentences_transcript_0.json&quot;</span>
+
+            <span class="c1"># Check if raw transcript already exists in file store</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Try get the best variant of transcript</span>
+                <span class="c1"># Timestamped sentences first</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_ts_sentences_transcript_filepath</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+                    <span class="c1"># Timestamped words second</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_ts_words_transcript_filepath</span><span class="p">)</span>
+                    <span class="c1"># Default to raw transcript</span>
+                    <span class="c1"># If this isn&#39;t found, the first try except block will break and entirely new transcripts will be</span>
+                    <span class="c1"># generated.</span>
+                    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+                        <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_raw_transcript_filepath</span><span class="p">)</span>
+
+                <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">main_transcript_uri</span><span class="p">)</span>
+                <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span>
+                    <span class="n">table</span><span class="o">=</span><span class="s2">&quot;transcript&quot;</span><span class="p">,</span>
+                    <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;file_id&quot;</span><span class="p">,</span> <span class="n">main_transcript_details</span><span class="p">[</span><span class="s2">&quot;file_id&quot;</span><span class="p">])],</span>
+                    <span class="n">limit</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+                <span class="c1"># Transcribe audio</span>
+                <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span>
+                    <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
+                    <span class="n">phrases</span><span class="o">=</span><span class="n">phrases</span><span class="p">,</span>
+                    <span class="n">raw_transcript_save_path</span><span class="o">=</span><span class="n">tmp_raw_transcript_filepath</span><span class="p">,</span>
+                    <span class="n">timestamped_words_save_path</span><span class="o">=</span><span class="n">tmp_ts_words_transcript_filepath</span><span class="p">,</span>
+                    <span class="n">timestamped_sentences_save_path</span><span class="o">=</span><span class="n">tmp_ts_sentences_transcript_filepath</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Store and register transcript files</span>
+                <span class="n">raw_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">raw_path</span><span class="p">)</span>
+                <span class="n">raw_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">raw_transcript_uri</span><span class="p">)</span>
+                <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">raw_path</span><span class="p">)</span>
+
+                <span class="c1"># Default to using the raw output as main transcript</span>
+                <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">raw_transcript_file_details</span>
+                <span class="n">confidence</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">confidence</span>
+
+                <span class="c1"># Timestamped transcripts are optional</span>
+                <span class="c1"># If available store them but also set as main transcript</span>
+                <span class="k">if</span> <span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_words_path</span><span class="p">:</span>
+                    <span class="n">ts_words_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_words_path</span><span class="p">)</span>
+                    <span class="n">ts_words_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">ts_words_transcript_uri</span><span class="p">)</span>
+                    <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_words_path</span><span class="p">)</span>
+                    <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_words_transcript_file_details</span>
+
+                <span class="c1"># Timestamped sentences provide a nicer viewing experience</span>
+                <span class="c1"># If available store them but also set as main transcript</span>
+                <span class="k">if</span> <span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_sentences_path</span><span class="p">:</span>
+                    <span class="n">ts_sentences_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+                        <span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_sentences_path</span>
+                    <span class="p">)</span>
+                    <span class="n">ts_sentences_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">ts_sentences_transcript_uri</span><span class="p">)</span>
+                    <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_sentences_path</span><span class="p">)</span>
+                    <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_sentences_transcript_file_details</span>
+
+            <span class="k">return</span> <span class="n">main_transcript_details</span><span class="p">,</span> <span class="n">confidence</span></div>
+
+<div class="viewcode-block" id="EventGatherPipeline.task_parse_and_upload_constructed_event"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_parse_and_upload_constructed_event">[docs]</a>    <span class="k">def</span> <span class="nf">task_parse_and_upload_constructed_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.task_parse_and_upload_constructed_event&quot;</span><span class="p">,</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;source_uri&quot;</span><span class="p">]]</span>
+        <span class="p">):</span>
+            <span class="c1"># Store or get body details</span>
+            <span class="n">body_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_body</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">])</span>
+
+            <span class="c1"># Store event</span>
+            <span class="n">event_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_event</span><span class="p">(</span>
+                <span class="n">body_id</span><span class="o">=</span><span class="n">body_details</span><span class="p">[</span><span class="s2">&quot;body_id&quot;</span><span class="p">],</span>
+                <span class="n">event_datetime</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;event_datetime&quot;</span><span class="p">],</span>
+                <span class="n">source_uri</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;source_uri&quot;</span><span class="p">],</span>
+                <span class="n">video_uri</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">],</span>
+                <span class="n">agenda_file_uri</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;agenda_file_uri&quot;</span><span class="p">],</span>
+                <span class="n">minutes_file_uri</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;minutes_file_uri&quot;</span><span class="p">],</span>
+                <span class="n">legistar_event_id</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;legistar_event_id&quot;</span><span class="p">],</span>
+                <span class="n">legistar_event_link</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;legistar_event_link&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Store or get all minute_items</span>
+            <span class="k">for</span> <span class="n">m_item</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;minutes_items&quot;</span><span class="p">]:</span>
+                <span class="c1"># Store or get minutes item</span>
+                <span class="n">minutes_item_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_minutes_item</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                    <span class="n">matter</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;matter&quot;</span><span class="p">],</span>
+                    <span class="n">legistar_event_item_id</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;legistar_event_item_id&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Store any attachments</span>
+                <span class="k">for</span> <span class="n">attachment</span> <span class="ow">in</span> <span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;attachments&quot;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_minutes_item_file</span><span class="p">(</span>
+                        <span class="n">minutes_item_id</span><span class="o">=</span><span class="n">minutes_item_details</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">],</span>
+                        <span class="n">uri</span><span class="o">=</span><span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">],</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                        <span class="n">legistar_matter_attachment_id</span><span class="o">=</span><span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;legistar_matter_attachment_id&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># Attach minutes item to event</span>
+                <span class="n">event_minutes_item_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_event_minutes_item</span><span class="p">(</span>
+                    <span class="n">event_id</span><span class="o">=</span><span class="n">event_details</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">],</span>
+                    <span class="n">minutes_item_id</span><span class="o">=</span><span class="n">minutes_item_details</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">],</span>
+                    <span class="n">index</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">],</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;decision&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Store any votes and persons</span>
+                <span class="k">for</span> <span class="n">vote</span> <span class="ow">in</span> <span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;votes&quot;</span><span class="p">]:</span>
+                    <span class="n">person_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_person</span><span class="p">(</span>
+                        <span class="n">full_name</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;full_name&quot;</span><span class="p">],</span>
+                        <span class="n">email</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
+                        <span class="n">phone</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;phone&quot;</span><span class="p">],</span>
+                        <span class="n">website</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;website&quot;</span><span class="p">],</span>
+                        <span class="n">legistar_person_id</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;legistar_person_id&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_vote</span><span class="p">(</span>
+                        <span class="n">person_id</span><span class="o">=</span><span class="n">person_details</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">],</span>
+                        <span class="n">event_minutes_item_id</span><span class="o">=</span><span class="n">event_minutes_item_details</span><span class="p">[</span><span class="s2">&quot;event_minutes_item_id&quot;</span><span class="p">],</span>
+                        <span class="n">decision</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;decision&quot;</span><span class="p">],</span>
+                        <span class="n">legistar_event_item_vote_id</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;legistar_event_item_vote_id&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+
+            <span class="c1"># Link event to transcript</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_transcript</span><span class="p">(</span>
+                <span class="n">event_id</span><span class="o">=</span><span class="n">event_details</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">],</span>
+                <span class="n">file_id</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">][</span><span class="s2">&quot;transcript_file_details&quot;</span><span class="p">][</span><span class="s2">&quot;file_id&quot;</span><span class="p">],</span>
+                <span class="n">confidence</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">][</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">event_details</span></div>
+
+<div class="viewcode-block" id="EventGatherPipeline.process_event"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.process_event">[docs]</a>    <span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># Create a key for the event</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+        <span class="c1"># Begin</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.process_event&quot;</span><span class="p">,</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;source_uri&quot;</span><span class="p">]],</span>
+            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">):</span>
+            <span class="c1"># Check event already exists in database</span>
+            <span class="n">found_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_event</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">found_event</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Skipping event: </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">found_event</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processing event: </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">]))</span>
+
+                <span class="c1"># Run audio task</span>
+                <span class="n">audio_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_audio_get_or_copy</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">])</span>
+
+                <span class="c1"># Create list of phrases to send to sr model</span>
+                <span class="n">phrases</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;minutes_items&quot;</span><span class="p">]]</span>
+
+                <span class="c1"># Run transcript task</span>
+                <span class="n">transcript_file_details</span><span class="p">,</span> <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_transcript_get_or_create</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">audio_uri</span><span class="p">,</span> <span class="n">phrases</span><span class="p">)</span>
+
+                <span class="c1"># Attach transcript details to event</span>
+                <span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;transcript_file_details&quot;</span><span class="p">:</span> <span class="n">transcript_file_details</span><span class="p">,</span>
+                    <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">confidence</span>
+                <span class="p">}</span>
+
+                <span class="c1"># Event details</span>
+                <span class="n">event_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_parse_and_upload_constructed_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Uploaded event details: </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event_details</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">],</span> <span class="n">key</span><span class="p">))</span>
+
+            <span class="c1"># Update progress</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Completed event: </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">]))</span></div>
+
+<div class="viewcode-block" id="EventGatherPipeline.run"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting event processing.&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="s2">&quot;EventGatherPipeline.run&quot;</span><span class="p">,</span>
+            <span class="n">get_module_version</span><span class="p">(),</span>
+            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">):</span>
+            <span class="c1"># Get events</span>
+            <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span> <span class="s2">&quot;EventScraper.get_events&quot;</span><span class="p">,</span> <span class="n">get_module_version</span><span class="p">()):</span>
+                <span class="n">events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_scraper</span><span class="o">.</span><span class="n">get_events</span><span class="p">()</span>
+
+            <span class="c1"># Multiprocess each event found</span>
+            <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+                <span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process_event</span><span class="p">,</span> <span class="n">events</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Completed event processing.&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

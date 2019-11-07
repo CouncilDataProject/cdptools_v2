@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Transcript Format &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Deploying and Running CDP Pipelines" href="deployment_instructions.html" />
+    <link rel="prev" title="Backend Design" href="system_design.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Transcript Format</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/transcript_formats.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="deployment_instructions.html" class="btn btn-neutral float-right" title="Deploying and Running CDP Pipelines" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="system_design.html" class="btn btn-neutral float-left" title="Backend Design" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="transcript-format">
+<h1>Transcript Format<a class="headerlink" href="#transcript-format" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#introduction">Introduction</a></p></li>
+<li><p><a class="reference external" href="#formats">Formats</a></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#format:-raw">Raw</a></p></li>
+<li><p><a class="reference external" href="#format:-timestamped-words">Timestamped Words</a></p></li>
+<li><p><a class="reference external" href="#format:-timestamped-sentences">Timestamped Sentences</a></p></li>
+</ol>
+</li>
+<li><p><a class="reference external" href="#notes">Notes</a></p></li>
+</ol>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Modularity and customization of CDP instances is a core goal of the entire project, it can lead to downstream problems
+if outputs do not follow specified formats. A core output of a CDP instance is the produced transcript(s) for an event.
+Because multiple pipelines and tasks in each pipeline need to interact with these transcripts it is best to have
+specific formats for how they can be stored for interoperability with other modules.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="id2">
+<h3>Formats<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>The basic layout of a format currently for CDP instances will be the following JSON block:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;{TRANSCRIPT_FORMAT_TYPE}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;annotations&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;start_time&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;{TRANSCRIPT_TEXT_PORTION}&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;end_time&quot;</span><span class="p">:</span> <span class="mf">2.6</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>All variants will be only slightly different from this and the following sections explain how.</p>
+</div>
+</div>
+<div class="section" id="format-raw">
+<h2>Format: Raw<a class="headerlink" href="#format-raw" title="Permalink to this headline">¶</a></h2>
+<p>The most basic transcript format. It has the core information of <code class="docutils literal notranslate"><span class="pre">format</span></code>, <code class="docutils literal notranslate"><span class="pre">annotations</span></code>, and <code class="docutils literal notranslate"><span class="pre">confidence</span></code>, but it’s
+<code class="docutils literal notranslate"><span class="pre">data</span></code> section is simply the entire transcript dumped into a single text block.</p>
+</div>
+<div class="section" id="format-timestamped-words">
+<h2>Format: Timestamped Words<a class="headerlink" href="#format-timestamped-words" title="Permalink to this headline">¶</a></h2>
+<p>Currently the most expansive transcript format. As with all formats it has the basic <code class="docutils literal notranslate"><span class="pre">format</span></code>, <code class="docutils literal notranslate"><span class="pre">annotations</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">confidence</span></code>, but, unlike <code class="docutils literal notranslate"><span class="pre">format:</span> <span class="pre">raw</span></code> it’s <code class="docutils literal notranslate"><span class="pre">data</span></code> portion is a large list where each <code class="docutils literal notranslate"><span class="pre">text</span></code> portion of each
+dictionary in the list is only a single word (including any punctuation returned from the model).</p>
+</div>
+<div class="section" id="format-timestamped-sentences">
+<h2>Format: Timestamped Sentences<a class="headerlink" href="#format-timestamped-sentences" title="Permalink to this headline">¶</a></h2>
+<p>A middle ground between <code class="docutils literal notranslate"><span class="pre">format:</span> <span class="pre">raw</span></code> and <code class="docutils literal notranslate"><span class="pre">format:</span> <span class="pre">timestamped-words</span></code>. Like all, it has the basic <code class="docutils literal notranslate"><span class="pre">format</span></code>,
+<code class="docutils literal notranslate"><span class="pre">annotations</span></code>, and <code class="docutils literal notranslate"><span class="pre">confidence</span></code>. However, to facilitate the development of speaker turn taking annotations (which
+happen on a sentence level), ten <code class="docutils literal notranslate"><span class="pre">data</span></code> portion is a large list where each <code class="docutils literal notranslate"><span class="pre">text</span></code> portion of each dictionary in the list
+is a single sentence (including any punctuation returned from the model).</p>
+<hr class="docutils" />
+<div class="section" id="id3">
+<h3>Notes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">EventGatherPipeline</span></code> will set the “primary” transcript for each event gathered to <code class="docutils literal notranslate"><span class="pre">timestamped-sentences</span></code> if
+available. If <code class="docutils literal notranslate"><span class="pre">timestamped-sentences</span></code> was not returned by the speech recognition model in the outputs object, it will
+then choose, <code class="docutils literal notranslate"><span class="pre">timestamped-words</span></code>. Again if <code class="docutils literal notranslate"><span class="pre">timestamped-words</span></code> is not available, it will default to <code class="docutils literal notranslate"><span class="pre">raw</span></code> which should
+always be available regardless of which speech recognition model you choose or create.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

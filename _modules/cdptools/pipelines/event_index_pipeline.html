@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.pipelines.event_index_pipeline &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdptools.html">cdptools</a> &raquo;</li>
+        
+      <li>cdptools.pipelines.event_index_pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdptools.pipelines.event_index_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="k">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">get_module_version</span>
+<span class="kn">from</span> <span class="nn">..dev_utils</span> <span class="k">import</span> <span class="n">RunManager</span><span class="p">,</span> <span class="n">load_custom_object</span>
+<span class="kn">from</span> <span class="nn">..research_utils</span> <span class="k">import</span> <span class="n">transcripts</span> <span class="k">as</span> <span class="n">transcript_tools</span>
+<span class="kn">from</span> <span class="nn">.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">ValuesForTerm</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="EventIndexPipeline"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline">[docs]</a><span class="k">class</span> <span class="nc">EventIndexPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
+        <span class="c1"># Resolve config path</span>
+        <span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Read</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">read_in</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">read_in</span><span class="p">)</span>
+
+        <span class="c1"># Get workers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_synchronous_jobs&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Load modules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="EventIndexPipeline.task_generate_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_generate_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate word event scores dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventIndexPipeline.task_generate_index&quot;</span><span class="p">,</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span><span class="o">.</span><span class="n">generate_index</span><span class="p">(</span><span class="n">event_corpus_map</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventIndexPipeline.task_clean_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_clean_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_clean_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean the generated index prior to upload.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventIndexPipeline.task_clean_index&quot;</span><span class="p">,</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span><span class="o">.</span><span class="n">drop_terms_from_index_below_value</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_upload_indexed_event_term_event_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evft</span><span class="p">:</span> <span class="n">ValuesForTerm</span><span class="p">):</span>
+        <span class="c1"># Loop through each event and value tied to this term and upload to database</span>
+        <span class="k">for</span> <span class="n">event_id</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">evft</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">upload_or_update_indexed_event_term</span><span class="p">(</span>
+                <span class="n">term</span><span class="o">=</span><span class="n">evft</span><span class="o">.</span><span class="n">term</span><span class="p">,</span>
+                <span class="n">event_id</span><span class="o">=</span><span class="n">event_id</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">value</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="EventIndexPipeline.task_upload_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_upload_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_upload_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Upload a word event scores dictionary. This will completely replace a previous index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventIndexPipeline.task_upload_index&quot;</span><span class="p">,</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="c1"># Create upload items</span>
+            <span class="c1"># This list of objects is just useful for making it easier to multithread the upload</span>
+            <span class="n">indexed_event_term_event_values</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">event_values</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">indexed_event_term_event_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValuesForTerm</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">event_values</span><span class="p">))</span>
+
+            <span class="c1"># Multithread the upload/ update of the index</span>
+            <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+                <span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_upload_indexed_event_term_event_values</span><span class="p">,</span> <span class="n">indexed_event_term_event_values</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventIndexPipeline.run"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting index creation.&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span> <span class="s2">&quot;EventIndexPipeline.run&quot;</span><span class="p">,</span> <span class="n">get_module_version</span><span class="p">()):</span>
+            <span class="c1"># Store the transcripts locally in a temporary directory</span>
+            <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+                <span class="c1"># Get the event corpus map and download most recent transcripts to local machine</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloading most recent transcripts&quot;</span><span class="p">)</span>
+                <span class="n">event_corpus_map</span> <span class="o">=</span> <span class="n">transcript_tools</span><span class="o">.</span><span class="n">download_most_recent_transcripts</span><span class="p">(</span>
+                    <span class="n">db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+                    <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+                    <span class="n">save_dir</span><span class="o">=</span><span class="n">tmpdir</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Compute word event scores</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating index&quot;</span><span class="p">)</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_generate_index</span><span class="p">(</span><span class="n">event_corpus_map</span><span class="p">)</span>
+
+                <span class="c1"># Clean the index</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dropping event terms with limited value&quot;</span><span class="p">)</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_clean_index</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+            <span class="c1"># Upload word event scores</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Uploading index&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task_upload_index</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Completed index creation.&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

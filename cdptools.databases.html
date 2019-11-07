@@ -1,0 +1,1010 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.databases package &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cdptools.dev_utils package" href="cdptools.dev_utils.html" />
+    <link rel="prev" title="cdptools.bin package" href="cdptools.bin.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cdptools.html">cdptools package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">cdptools</a> &raquo;</li>
+        
+          <li><a href="cdptools.html">cdptools package</a> &raquo;</li>
+        
+      <li>cdptools.databases package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cdptools.databases.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="cdptools.dev_utils.html" class="btn btn-neutral float-right" title="cdptools.dev_utils package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cdptools.bin.html" class="btn btn-neutral float-left" title="cdptools.bin package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cdptools-databases-package">
+<h1>cdptools.databases package<a class="headerlink" href="#cdptools-databases-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cdptools-databases-cloud-firestore-database-module">
+<h2>cdptools.databases.cloud_firestore_database module<a class="headerlink" href="#cdptools-databases-cloud-firestore-database-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cdptools.databases.database">
+<span id="cdptools-databases-database-module"></span><h2>cdptools.databases.database module<a class="headerlink" href="#module-cdptools.databases.database" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.databases.database.Database">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">Database</code><a class="reference internal" href="_modules/cdptools/databases/database.html#Database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_event">
+<em class="property">abstract </em><code class="sig-name descname">get_event</code><span class="sig-paren">(</span><em class="sig-param">video_uri: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find an event using the primary key for events, a video uri.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all downstream data for an event.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_indexed_event_term">
+<em class="property">abstract </em><code class="sig-name descname">get_indexed_event_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">event_id: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_indexed_event_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_indexed_event_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single indexed event term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – The string term to retrieve.</p></li>
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for the event that term was used during.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_indexed_minutes_item_term">
+<em class="property">abstract </em><code class="sig-name descname">get_indexed_minutes_item_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">minutes_item_id: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_indexed_minutes_item_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_indexed_minutes_item_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single indexed minutes item term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – The string term to retrieve.</p></li>
+<li><p><strong>minutes_item_id</strong> (<em>str</em>) – The id for the minutes item that term was used in or discussed about.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_algorithm">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_algorithm</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">version: str</em>, <em class="sig-param">description: Optional[str] = None</em>, <em class="sig-param">source: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_algorithm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_algorithm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload an algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A name for the algorithm. Preferred, the full module path for the algorithm.</p></li>
+<li><p><strong>version</strong> (<em>str</em>) – A version string for the algorithm.</p></li>
+<li><p><strong>description</strong> (<em>Optional[str]</em>) – An optional description for the algorithm.</p></li>
+<li><p><strong>source</strong> (<em>Optional[str]</em>) – An optional source uri for the algorithm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_body">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_body</code><span class="sig-paren">(</span><em class="sig-param">name: str, description: Optional[str]</em><span class="sig-paren">)</span> &#x2192; Dict[str, str]<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the body (council, subcommittee, etc).</p></li>
+<li><p><strong>description</strong> (<em>Optional[str]:</em>) – An optional description of the body.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_event">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_event</code><span class="sig-paren">(</span><em class="sig-param">body_id: str</em>, <em class="sig-param">event_datetime: datetime.datetime</em>, <em class="sig-param">source_uri: str</em>, <em class="sig-param">video_uri: str</em>, <em class="sig-param">agenda_file_uri: Optional[str] = None</em>, <em class="sig-param">minutes_file_uri: Optional[str] = None</em>, <em class="sig-param">legistar_event_id: Optional[int] = None</em>, <em class="sig-param">legistar_event_link: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload an event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body_id</strong> (<em>str</em>) – The id for the body this event occured in.</p></li>
+<li><p><strong>event_datetime</strong> (<em>datetime</em>) – The datetime this event occured at.</p></li>
+<li><p><strong>source_uri</strong> (<em>str</em>) – The primary uri for where this event info or video was retrieved from.</p></li>
+<li><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all downstream data for an event.</p></li>
+<li><p><strong>agenda_file_uri</strong> (<em>Optional[str]</em>) – If an agenda file is available for the event, it is recommended to store a uri to the file.</p></li>
+<li><p><strong>minutes_file_uri</strong> (<em>Optional[str]</em>) – If a minutes file is available for the event, it is recommened to store a uri to the file.</p></li>
+<li><p><strong>legistar_event_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventId</cite>.</p></li>
+<li><p><strong>legistar_event_link</strong> (<em>Optional[str]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store a link to the
+event details for this event but in Legistar’s system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, datetime, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_event_minutes_item">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_event_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">event_id: str</em>, <em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">index: int</em>, <em class="sig-param">decision: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_event_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_event_minutes_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload the join of an event and a minutes item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for the event this minutes item was referenced in.</p></li>
+<li><p><strong>minutes_item</strong> (<em>id: str</em>) – The id for the minutes item that was referenced.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – The integer index for when this minutes item should be placed in the minutes of an event.</p></li>
+<li><p><strong>decision</strong> (<em>Optional[str]</em>) – If the minutes item was a vote, what was the overall outcome for this minutes item.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_file">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_file</code><span class="sig-paren">(</span><em class="sig-param">uri: str</em>, <em class="sig-param">filename: Optional[str] = None</em>, <em class="sig-param">description: Optional[str] = None</em>, <em class="sig-param">content_type: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a file (to the database table, not a file store).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uri</strong> (<em>str</em>) – A uri to the file.</p></li>
+<li><p><strong>filename</strong> (<em>Optional[str]</em>) – An optional filename to store with the file.</p></li>
+<li><p><strong>description</strong> (<em>Optional[str]</em>) – An optional description for the file.</p></li>
+<li><p><strong>content_type</strong> (<em>Optional[str]</em>) – An optional content type for the file.
+Preferred to use MIME types: <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_minutes_item">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">name: str, matter: Optional[str], legistar_event_item_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_minutes_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a minutes item. In Legistar this is commonly referred to as an event item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A name for the minutes item. Ex: “Appointment of Rene J. Peters, Jr.”</p></li>
+<li><p><strong>matter</strong> (<em>str</em>) – A matter name for the minutes item. Ex: “Appt 01373”</p></li>
+<li><p><strong>legistar_event_item_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventItemId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_minutes_item_file">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_minutes_item_file</code><span class="sig-paren">(</span><em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">uri: str</em>, <em class="sig-param">name: Optional[str] = None</em>, <em class="sig-param">legistar_matter_attachment_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_minutes_item_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_minutes_item_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a minutes item file. Commonly, minutes items have an associated file such as a presentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minutes_item_id</strong> (<em>str</em>) – A minutes item id this file is associated with.</p></li>
+<li><p><strong>uri</strong> (<em>str</em>) – A uri that can be used to access this file.</p></li>
+<li><p><strong>name</strong> (<em>Optional[str]</em>) – A name for the file.</p></li>
+<li><p><strong>legistar_matter_attachment_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the
+<cite>MatterAttachmentId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_person">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_person</code><span class="sig-paren">(</span><em class="sig-param">full_name: str</em>, <em class="sig-param">email: str</em>, <em class="sig-param">phone: Optional[str] = None</em>, <em class="sig-param">website: Optional[str] = None</em>, <em class="sig-param">legistar_person_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_person" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a city council member (person).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>full_name</strong> (<em>str</em>) – The full name of the city council member.</p></li>
+<li><p><strong>email</strong> (<em>str</em>) – The email of the city council member.</p></li>
+<li><p><strong>phone</strong> (<em>Optional[str]</em>) – The phone number of the city council member.</p></li>
+<li><p><strong>website</strong> (<em>Optional[str]</em>) – The website url of the city council member.</p></li>
+<li><p><strong>legistar_person_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>PersonId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_run">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_run</code><span class="sig-paren">(</span><em class="sig-param">algorithm_id: str</em>, <em class="sig-param">begin: datetime.datetime</em>, <em class="sig-param">completed: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run.</p>
+<p>Used as a method for log tracking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>algorithm_id</strong> (<em>str</em>) – The id for the algorithm that ran.</p></li>
+<li><p><strong>begin</strong> (<em>datetime</em>) – The datetime that the algorithm started processing.</p></li>
+<li><p><strong>completed</strong> (<em>datetime</em>) – The datetime that the algorithm finished processing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, datetime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_run_input">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_run_input</code><span class="sig-paren">(</span><em class="sig-param">run_id: str</em>, <em class="sig-param">dtype: str</em>, <em class="sig-param">value: Any</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_run_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_run_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> (<em>str</em>) – The id for which run this parameter was used for.</p></li>
+<li><p><strong>dtype</strong> (<em>str</em>) – The data type for the value used.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value for the input.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_run_input_file">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_run_input_file</code><span class="sig-paren">(</span><em class="sig-param">run_id: str</em>, <em class="sig-param">file_id: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_run_input_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_run_input_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run input file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> (<em>str</em>) – The id for which run this file was used for.</p></li>
+<li><p><strong>file_id</strong> (<em>str</em>) – The id for the file used as an input.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_run_output">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_run_output</code><span class="sig-paren">(</span><em class="sig-param">run_id: str</em>, <em class="sig-param">dtype: str</em>, <em class="sig-param">value: Any</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_run_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_run_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> (<em>str</em>) – The id for which run this parameter was output from.</p></li>
+<li><p><strong>dtype</strong> (<em>str</em>) – The data type for the value used.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value for the output.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_run_output_file">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_run_output_file</code><span class="sig-paren">(</span><em class="sig-param">run_id: str</em>, <em class="sig-param">file_id: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_run_output_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_run_output_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> (<em>str</em>) – The id for which run this file was created from.</p></li>
+<li><p><strong>file_id</strong> (<em>str</em>) – The id for the file created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_transcript">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_transcript</code><span class="sig-paren">(</span><em class="sig-param">file_id: str</em>, <em class="sig-param">confidence: Optional[float] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_transcript"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_transcript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a transcript (to the database, a file store).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for the event that this transcript is for.</p></li>
+<li><p><strong>file_id</strong> (<em>str</em>) – The id for the file that contains the transcript data.</p></li>
+<li><p><strong>confidence</strong> (<em>Optional[float]</em>) – If available, a float / double value to store with the transcript for the confidence of the transcription.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_vote">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_vote</code><span class="sig-paren">(</span><em class="sig-param">person_id: str</em>, <em class="sig-param">event_minutes_item_id: str</em>, <em class="sig-param">decision: str</em>, <em class="sig-param">legistar_event_item_vote_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_vote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a person’s vote on a minutes item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>person_id</strong> (<em>str</em>) – The id of the person who voted on an minutes item already tied to an event. (event_minutes_item)</p></li>
+<li><p><strong>event_minutes_item_id</strong> (<em>str</em>) – The id of the minutes item and event join that was voted on.</p></li>
+<li><p><strong>decision</strong> (<em>str</em>) – This individual’s personal decision on the minutes item.</p></li>
+<li><p><strong>legistar_event_item_vote_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>PersonId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.search_events">
+<em class="property">abstract </em><code class="sig-name descname">search_events</code><span class="sig-paren">(</span><em class="sig-param">query: str</em><span class="sig-paren">)</span> &#x2192; List[cdptools.databases.database.Match]<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.search_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.search_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the stored indexed event terms to query for events given a query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for events using the already stored indexed event term table.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>matches</strong> – An list of match objects sorted in most to least relevant order.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#cdptools.databases.database.Match" title="cdptools.databases.database.Match">Match</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.search_minutes_items">
+<em class="property">abstract </em><code class="sig-name descname">search_minutes_items</code><span class="sig-paren">(</span><em class="sig-param">query: str</em><span class="sig-paren">)</span> &#x2192; List[cdptools.databases.database.Match]<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.search_minutes_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.search_minutes_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the stored indexed minutes item terms to query for events given a query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for minutes items using the already stored indexed minutes items term
+table.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>matches</strong> – An list of match objects sorted in most to least relevant order.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#cdptools.databases.database.Match" title="cdptools.databases.database.Match">Match</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.select_row_by_id">
+<em class="property">abstract </em><code class="sig-name descname">select_row_by_id</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">id: str</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[str, Any]]<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.select_row_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.select_row_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get row from a table by looking up the value by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data by id from.</p></li>
+<li><p><strong>id</strong> (<em>str</em>) – The id of the data to retrieve data for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>If the row was found, the data from that row is returned as a dictionary. If not found, None is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.select_rows_as_list">
+<em class="property">abstract </em><code class="sig-name descname">select_rows_as_list</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">filters: Optional[List[Union[cdptools.databases.database.WhereCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple]]] = None</em>, <em class="sig-param">order_by: Union[cdptools.databases.database.OrderCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">str</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">limit: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; List[Dict[str, Any]]<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.select_rows_as_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.select_rows_as_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data from.</p></li>
+<li><p><strong>filters</strong> (<em>Optional[List[Union[WhereCondition, List, Tuple]]]</em>) – A list of filters (where conditions) to add filter down the query.</p></li>
+<li><p><strong>order_by</strong> (<em>Optional[Union[OrderCondition, List, Tuple, str]]</em>) – An order by condition to order the results by before returning.</p></li>
+<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query provided.
+Commonly, running queries without credentials will have a default limit value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a List of Dictionaries, where each dictionary is a unique row from the
+table queried. If no rows are found, returns an empty list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Dict[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.upload_or_update_indexed_event_term">
+<em class="property">abstract </em><code class="sig-name descname">upload_or_update_indexed_event_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">event_id: str</em>, <em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.upload_or_update_indexed_event_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.upload_or_update_indexed_event_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload or update a single indexed event term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – A term used during an event.</p></li>
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for the event the term was used during.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that event that indicates that terms relevance to that event.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.upload_or_update_indexed_minutes_item_term">
+<em class="property">abstract </em><code class="sig-name descname">upload_or_update_indexed_minutes_item_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.upload_or_update_indexed_minutes_item_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.upload_or_update_indexed_minutes_item_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload or update a single indexed minutes_item item term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – A term used during an event.</p></li>
+<li><p><strong>minutes_item_id</strong> (<em>str</em>) – The id for the minutes item that term was used in or discussed about.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that minutes item that indicates that terms relevance to that
+minutes item.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.databases.database.Match">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">Match</code><span class="sig-paren">(</span><em class="sig-param">unique_id, terms: List[cdptools.databases.database.TermResult], data: Dict[str, Any]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/database.html#Match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="cdptools.databases.database.Match.data">
+<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#cdptools.databases.database.Match.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Match.relevance">
+<em class="property">property </em><code class="sig-name descname">relevance</code><a class="headerlink" href="#cdptools.databases.database.Match.relevance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Match.terms">
+<em class="property">property </em><code class="sig-name descname">terms</code><a class="headerlink" href="#cdptools.databases.database.Match.terms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Match.unique_id">
+<em class="property">property </em><code class="sig-name descname">unique_id</code><a class="headerlink" href="#cdptools.databases.database.Match.unique_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.databases.database.OrderCondition">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">OrderCondition</code><span class="sig-paren">(</span><em class="sig-param">column_name</em>, <em class="sig-param">operator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/database.html#OrderCondition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.OrderCondition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of OrderCondition(column_name, operator)</p>
+<dl class="method">
+<dt id="cdptools.databases.database.OrderCondition.column_name">
+<em class="property">property </em><code class="sig-name descname">column_name</code><a class="headerlink" href="#cdptools.databases.database.OrderCondition.column_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.OrderCondition.operator">
+<em class="property">property </em><code class="sig-name descname">operator</code><a class="headerlink" href="#cdptools.databases.database.OrderCondition.operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.databases.database.OrderOperators">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">OrderOperators</code><a class="reference internal" href="_modules/cdptools/databases/database.html#OrderOperators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.OrderOperators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="cdptools.databases.database.OrderOperators.asce">
+<code class="sig-name descname">asce</code><em class="property"> = 'ASCENDING'</em><a class="headerlink" href="#cdptools.databases.database.OrderOperators.asce" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.database.OrderOperators.desc">
+<code class="sig-name descname">desc</code><em class="property"> = 'DESCENDING'</em><a class="headerlink" href="#cdptools.databases.database.OrderOperators.desc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.databases.database.TermResult">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">TermResult</code><span class="sig-paren">(</span><em class="sig-param">term</em>, <em class="sig-param">contribution</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/database.html#TermResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.TermResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of TermResult(term, contribution)</p>
+<dl class="method">
+<dt id="cdptools.databases.database.TermResult.contribution">
+<em class="property">property </em><code class="sig-name descname">contribution</code><a class="headerlink" href="#cdptools.databases.database.TermResult.contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.TermResult.term">
+<em class="property">property </em><code class="sig-name descname">term</code><a class="headerlink" href="#cdptools.databases.database.TermResult.term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.databases.database.WhereCondition">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">WhereCondition</code><span class="sig-paren">(</span><em class="sig-param">column_name</em>, <em class="sig-param">operator</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/database.html#WhereCondition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.WhereCondition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of WhereCondition(column_name, operator, value)</p>
+<dl class="method">
+<dt id="cdptools.databases.database.WhereCondition.column_name">
+<em class="property">property </em><code class="sig-name descname">column_name</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.column_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.WhereCondition.operator">
+<em class="property">property </em><code class="sig-name descname">operator</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.WhereCondition.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.databases.database.WhereOperators">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">WhereOperators</code><a class="reference internal" href="_modules/cdptools/databases/database.html#WhereOperators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.WhereOperators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="cdptools.databases.database.WhereOperators.contains">
+<code class="sig-name descname">contains</code><em class="property"> = 'in'</em><a class="headerlink" href="#cdptools.databases.database.WhereOperators.contains" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.database.WhereOperators.eq">
+<code class="sig-name descname">eq</code><em class="property"> = '=='</em><a class="headerlink" href="#cdptools.databases.database.WhereOperators.eq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.database.WhereOperators.gt">
+<code class="sig-name descname">gt</code><em class="property"> = '&gt;'</em><a class="headerlink" href="#cdptools.databases.database.WhereOperators.gt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.database.WhereOperators.gteq">
+<code class="sig-name descname">gteq</code><em class="property"> = '&gt;='</em><a class="headerlink" href="#cdptools.databases.database.WhereOperators.gteq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.database.WhereOperators.lt">
+<code class="sig-name descname">lt</code><em class="property"> = '&lt;'</em><a class="headerlink" href="#cdptools.databases.database.WhereOperators.lt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.database.WhereOperators.lteq">
+<code class="sig-name descname">lteq</code><em class="property"> = '&lt;='</em><a class="headerlink" href="#cdptools.databases.database.WhereOperators.lteq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.databases.exceptions">
+<span id="cdptools-databases-exceptions-module"></span><h2>cdptools.databases.exceptions module<a class="headerlink" href="#module-cdptools.databases.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="cdptools.databases.exceptions.FailedRequestError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.databases.exceptions.</code><code class="sig-name descname">FailedRequestError</code><span class="sig-paren">(</span><em class="sig-param">response: str</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/exceptions.html#FailedRequestError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.exceptions.FailedRequestError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.databases.exceptions.MissingCredentialsError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.databases.exceptions.</code><code class="sig-name descname">MissingCredentialsError</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/exceptions.html#MissingCredentialsError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.exceptions.MissingCredentialsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.databases.exceptions.MissingParameterError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.databases.exceptions.</code><code class="sig-name descname">MissingParameterError</code><span class="sig-paren">(</span><em class="sig-param">parameter_options: List[str], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/exceptions.html#MissingParameterError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.exceptions.MissingParameterError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.databases.exceptions.UniquenessError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.databases.exceptions.</code><code class="sig-name descname">UniquenessError</code><span class="sig-paren">(</span><em class="sig-param">table: str, pks: List[str], results: List[Dict], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/exceptions.html#UniquenessError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.exceptions.UniquenessError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.databases.exceptions.UnknownTypeOrderConditionError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.databases.exceptions.</code><code class="sig-name descname">UnknownTypeOrderConditionError</code><span class="sig-paren">(</span><em class="sig-param">by: object</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/exceptions.html#UnknownTypeOrderConditionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.exceptions.UnknownTypeOrderConditionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.databases.exceptions.UnknownTypeWhereConditionError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.databases.exceptions.</code><code class="sig-name descname">UnknownTypeWhereConditionError</code><span class="sig-paren">(</span><em class="sig-param">filt: object</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/exceptions.html#UnknownTypeWhereConditionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.exceptions.UnknownTypeWhereConditionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.databases.exceptions.UnstructuredOrderConditionError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.databases.exceptions.</code><code class="sig-name descname">UnstructuredOrderConditionError</code><span class="sig-paren">(</span><em class="sig-param">by: Union[List, Tuple], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/exceptions.html#UnstructuredOrderConditionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.exceptions.UnstructuredOrderConditionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cdptools.databases.exceptions.UnstructuredWhereConditionError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.databases.exceptions.</code><code class="sig-name descname">UnstructuredWhereConditionError</code><span class="sig-paren">(</span><em class="sig-param">filt: Union[List, Tuple], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/exceptions.html#UnstructuredWhereConditionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.exceptions.UnstructuredWhereConditionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.databases">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdptools.databases" title="Permalink to this headline">¶</a></h2>
+<p>Databases package for cdptools.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

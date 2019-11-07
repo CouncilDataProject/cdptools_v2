@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.file_stores package &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cdptools.indexers package" href="cdptools.indexers.html" />
+    <link rel="prev" title="cdptools.event_scrapers package" href="cdptools.event_scrapers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cdptools.html">cdptools package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">cdptools</a> &raquo;</li>
+        
+          <li><a href="cdptools.html">cdptools package</a> &raquo;</li>
+        
+      <li>cdptools.file_stores package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cdptools.file_stores.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="cdptools.indexers.html" class="btn btn-neutral float-right" title="cdptools.indexers package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cdptools.event_scrapers.html" class="btn btn-neutral float-left" title="cdptools.event_scrapers package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cdptools-file-stores-package">
+<h1>cdptools.file_stores package<a class="headerlink" href="#cdptools-file-stores-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cdptools-file-stores-app-dirs-file-store-module">
+<h2>cdptools.file_stores.app_dirs_file_store module<a class="headerlink" href="#cdptools-file-stores-app-dirs-file-store-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cdptools.file_stores.exceptions">
+<span id="cdptools-file-stores-exceptions-module"></span><h2>cdptools.file_stores.exceptions module<a class="headerlink" href="#module-cdptools.file_stores.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="cdptools.file_stores.exceptions.MissingCredentialsError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.file_stores.exceptions.</code><code class="sig-name descname">MissingCredentialsError</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/file_stores/exceptions.html#MissingCredentialsError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.exceptions.MissingCredentialsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.file_stores.file_store">
+<span id="cdptools-file-stores-file-store-module"></span><h2>cdptools.file_stores.file_store module<a class="headerlink" href="#module-cdptools.file_stores.file_store" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.file_stores.file_store.FileStore">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.file_stores.file_store.</code><code class="sig-name descname">FileStore</code><a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="method">
+<dt id="cdptools.file_stores.file_store.FileStore.compute_sha256_for_file">
+<em class="property">static </em><code class="sig-name descname">compute_sha256_for_file</code><span class="sig-paren">(</span><em class="sig-param">filepath: Union[str, pathlib.Path], block_size: int = 1048576</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore.compute_sha256_for_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore.compute_sha256_for_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a SHA256 hexdigest for a file. Works for large files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>Union[str, Path]</em>) – The path to the file to compute a SHA256 hexdigest for.</p></li>
+<li><p><strong>block_size</strong> (<em>int</em>) – How many bytes to read at a time to add to the hashing algorithm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>digest</strong> – The result of completing the SHA256 hash and taking the hexdigest.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.file_store.FileStore.download_file">
+<em class="property">abstract </em><code class="sig-name descname">download_file</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em>, <em class="sig-param">save_path: Union[str</em>, <em class="sig-param">pathlib.Path</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">overwrite: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore.download_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore.download_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the file if neccessary and return the Path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the file in the file store that you want to download.</p></li>
+<li><p><strong>save_path</strong> (<em>Optional[Union[str, Path]] = None</em>) – An optional save path / destination to store the file locally.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – Boolean value indicating whether or not to overwrite a file that already exists in the destination.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>save_path</strong> – The local path of the downloaded file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.file_store.FileStore.get_file_uri">
+<em class="property">abstract </em><code class="sig-name descname">get_file_uri</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore.get_file_uri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore.get_file_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a file path/ uri given a filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The file you are requesting a file uri for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>uri</strong> – If the file is found, the file uri is returned as a string. If it isn’t a FileNotFoundError is raised.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.file_store.FileStore.upload_file">
+<em class="property">abstract </em><code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param">filepath: Union[str, pathlib.Path], save_name: Optional[str] = None, remove: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore.upload_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore.upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>Union[str, Path]</em>) – The filepath to the file you want to store.</p></li>
+<li><p><strong>save_name</strong> (<em>Optional[str]</em>) – An optional save name to store the file as instead of it’s current name.</p></li>
+<li><p><strong>remove</strong> (<em>bool</em>) – Boolean value indicating whether or not to remove the local file after storage in the file store.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>uri</strong> – The uri for the stored file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="cdptools-file-stores-gcs-file-store-module">
+<h2>cdptools.file_stores.gcs_file_store module<a class="headerlink" href="#cdptools-file-stores-gcs-file-store-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cdptools.file_stores">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdptools.file_stores" title="Permalink to this headline">¶</a></h2>
+<p>File stores package for cdptools.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

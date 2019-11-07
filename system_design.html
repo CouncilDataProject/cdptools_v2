@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Backend Design &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Transcript Format" href="transcript_formats.html" />
+    <link rel="prev" title="Welcome to cdptools’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Backend Design</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/system_design.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="transcript_formats.html" class="btn btn-neutral float-right" title="Transcript Format" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to cdptools’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="backend-design">
+<h1>Backend Design<a class="headerlink" href="#backend-design" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#introduction">Introduction</a></p></li>
+<li><p><a class="reference external" href="#modules">Modules</a></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#event-scrapers">Event Scrapers</a></p></li>
+<li><p><a class="reference external" href="#file-stores">File Stores</a></p></li>
+<li><p><a class="reference external" href="#audio-splitters">Audio Splitters</a></p></li>
+<li><p><a class="reference external" href="#databases">Databases</a></p></li>
+<li><p><a class="reference external" href="#speech-recognition-models">Speech Recognition Models</a></p></li>
+<li><p><a class="reference external" href="#indexers">Indexers</a></p></li>
+<li><p><a class="reference external" href="#pipelines">Pipelines</a></p></li>
+</ol>
+</li>
+<li><p><a class="reference external" href="#why-not-airflow">Why not Airflow?</a></p></li>
+</ol>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Council Data Project tools are built with a goal of being both extremely modular (to a limit) and easy to deploy.
+There are a few core components which will be discussed in the <a class="reference external" href="#modules">modules</a> section next, but in short, if the
+mission of Council Data Project is to make city council activities more transparent and discoverable, it is
+unsustainable to build an entirely new system for each city government we want to produce data and analysis for. By
+trying to make components modular, customizable, and most importantly, reusable across cities, it may be possible to
+make systems like CDP, sustainable. However, there is always going to be an inherent fear of “customization introducing
+complexity”. Which leads us to the question:</p>
+<blockquote>
+<div><p><em>How much customization is understandable and deployable for a non CDP-dev?</em></p>
+</div></blockquote>
+<p>This design document/ spec/ whatever you want to call it will go over the basics of how designs for new modules should
+be scrutinized and in turn, built and deployed. From the basics of data gathering, to data storage, and finally,
+data analysis.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="id3">
+<h3>Modules<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>As stated previously, CDP is an attempt to make a data analysis and activity discovery system for any city government.
+Because of this, we must use customizable modules to have a a chance at sustainability of a code base. This next
+section will go over the basics of the major components developed thus far. Each module type will have what other
+languages would call an <a class="reference external" href="https://www.w3schools.com/java/java_interface.asp">interface</a> but in Python, to my knowledge,
+are most related to <a class="reference external" href="https://docs.python.org/3/library/abc.html">abstract base classes</a>. These layout the “must have”
+functions and properties that each module type must have. Anything else a deployed module has is just icing on the cake!
+And if each module has all the properties and functions of the abstract base class, the modules <em>should</em> be
+interoperable with one another. For example: If you want to use a local system file store, use the
+<code class="docutils literal notranslate"><span class="pre">file_stores.AppDirsFileStore</span></code>, but, if you want to store your files with Google Cloud Storage, use the
+<code class="docutils literal notranslate"><span class="pre">file_stores.GCSFileStores</span></code>.</p>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Event Scrapers<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>Event scrapers are likely going to be the most varied from one another as they each are simply a method of retrieved
+data about city council activities and formatting that data into a format expected by the rest of the system. For cities
+fortunate enough to have all data required for CDP processing to be completed available on Legistar: great, write a
+LegistarEventScraper. However, some cities don’t have all the required data available on Legistar; Seattle for example
+actually has <em>most</em> of the data CDP systems need on the cities broadcasting website
+<a class="reference external" href="http://www.seattlechannel.org">seattlechannel.org</a>. The remaining data can be retrieved by querying very specific
+Legistar endpoints. Because of this, the <code class="docutils literal notranslate"><span class="pre">event_scrapers.SeattleEventScraper</span></code> uses a mix of web scraping and JSON
+requests. To sum up, event scrapers are a module usually tailored for each city, unless they have the Legistar data
+easily accessible, that retrieves the data and formats it into a system wide expectation of what event data should look
+like.</p>
+</div>
+<div class="section" id="id5">
+<h2>File Stores<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>File stores are largely wrappers around other already well known file storage solutions. <code class="docutils literal notranslate"><span class="pre">file_stores.AppDirsFileStore</span></code>
+uses a method of using the SHA256 hash of a files bytes to generate a storage location and id for the file.
+On the other end of the spectrum, <code class="docutils literal notranslate"><span class="pre">file_stores.GCSFileStore</span></code> really is just a simple wrapper around Google Cloud
+Storage to make their functions fit nicely with the rest of the processing stack for CDP. Choosing a file store really
+comes down to your choice in other modules, for Seattle, the stack is entirely Google services based, so using the
+<code class="docutils literal notranslate"><span class="pre">file_stores.GCSFileStore</span></code> makes sense. If you have enough storage and compute on your local machine though, it may be
+best to run a docker container for you database, and use <code class="docutils literal notranslate"><span class="pre">file_stores.AppDirsFileStore</span></code> for storage, and a locally
+trained speech recognition model for processing. Choose what works best for you. They all should work together thanks
+to the shared spec. For the sake of transparency, it is recommended that file stores be open read, understandably,
+<code class="docutils literal notranslate"><span class="pre">file_stores.AppDirsFileStore</span></code> will probably never be open read as it is entirely about storing files on the local
+machine.</p>
+</div>
+<div class="section" id="id6">
+<h2>Audio Splitters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>Being honest, I assume there will only ever be one audio splitter module. <code class="docutils literal notranslate"><span class="pre">FFmpeg</span></code> is the defacto standard for video and
+audio format processing. In the case others want to use a different audio splitter, the module specification is
+available.</p>
+</div>
+<div class="section" id="id7">
+<h2>Databases<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>Much like file stores, CDP attempts to make enough abstraction on the module level for any database to be used. The
+schema diagram linked below is an example of this, while the diagram is relational, Seattle use Firebase’s Cloud
+Firestore which is a NoSQL Document Store. As long the modules api delivers data in a manner that is consistent with the
+schema, there will be no issues with downstream processing. Similar to file stores, databases are also recommended to be
+open read, as if collaborators want to use the data stored by a CDP instance, it makes it easy for them to do so. Just
+ask them nicely to not slam the database with requests.</p>
+<a class="reference external image-reference" href="resources/database_diagram.png"><img alt="Database Schema Diagram" src="_images/database_diagram.png" /></a>
+</div>
+<div class="section" id="speech-recognition-model">
+<h2>Speech Recognition Model<a class="headerlink" href="#speech-recognition-model" title="Permalink to this headline">¶</a></h2>
+<p>Things can start to get tricky here. Speech recognition models are where the standard idea of processing may be a bit
+odd. Let’s compare a city like Seattle which doesn’t produce transcripts of city council meetings to an unnamed city
+that does. The speech recognition model available for Seattle, is the <code class="docutils literal notranslate"><span class="pre">sr_models.GoogleCloudSRModel</span></code>, which accepts
+a URI to an audio file, and returns a saved transcript text local path. However, if your city already produces
+transcripts for city council meetings, maybe you will write a module that simply takes an audio URI and requests the
+already high quality transcript back, no need for any processing. These are both valid speech recognition models, it’s
+simply that one of them produces transcripts that have 100% confidence.</p>
+<p>If you want to develop your own speech recognition model, please first read about
+<a class="reference external" href="transcript_formats.html">supported transcript formats</a>.</p>
+</div>
+<div class="section" id="id8">
+<h2>Indexers<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>Indexer objects are used to generate a term value to terms in a corpus. A single document in this corpus could be a
+single transcript, for indexing by events, or could be the merge of many documents to a single string for indexing by
+a different reference, minutes items for example. They need a corpus map which is whatever primary key to a local path
+to a document in the corpus to run. This is a made a module because indexing is a hotly debated topic on “how best to
+index documents” and so while a basic <code class="docutils literal notranslate"><span class="pre">TFIDFIndexer</span></code> is made available as default, if you want to write or implement a
+different indexing algorithm please feel free to do so.</p>
+</div>
+<div class="section" id="id9">
+<h2>Pipelines<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>Finally we arrive at pipelines. Pipelines should, similarly to modules, follow the <code class="docutils literal notranslate"><span class="pre">pipelines.Pipeline</span></code> abstract base
+class specification, but they really simply are just a task graph that gets carried out with each task being one of the
+modules already defined. Commonly, a pipeline like these is called a “DAG”, or “Directed Acyclic Graph”. This style of
+managing task graphs has been made popular by tools like <a class="reference external" href="https://github.com/apache/airflow">Apache Airflow</a>. Pipeline
+configuration files that dictate which modules to use and any extra arguments needed to be passed to them then allow the
+entire pipeline to run.</p>
+<hr class="docutils" />
+<div class="section" id="id10">
+<h3>Why not Airflow<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p>Circling back to the original intent of these tools: CDP aims to be highly modular and still reusable by many cities.
+However, if individuals who want to see data for their own city council can’t set up Airflow, and don’t have a
+computation cluster to support it’s operations, then what is the point of making the system modular? So yes, while many
+CDP operations could be very efficiently handled by Airflow, ease of use is also a factor and until we dedicate time to
+wrapping all the processes and pipelines in as easy to use configuration files tailored for Airflow, this is the format
+we are going with for now. Contributions welcome on that front though.</p>
+<hr class="docutils" />
+<p>Now go make transparency research happen.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+cdptools.pipelines package
+==========================
+
+Submodules
+----------
+
+cdptools.pipelines.event\_gather\_pipeline module
+-------------------------------------------------
+
+.. automodule:: cdptools.pipelines.event_gather_pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdptools.pipelines.event\_index\_pipeline module
+------------------------------------------------
+
+.. automodule:: cdptools.pipelines.event_index_pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdptools.pipelines.minutes\_item\_index\_pipeline module
+--------------------------------------------------------
+
+.. automodule:: cdptools.pipelines.minutes_item_index_pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdptools.pipelines.pipeline module
+----------------------------------
+
+.. automodule:: cdptools.pipelines.pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cdptools.pipelines
+   :members:
+   :undoc-members:
+   :show-inheritance:

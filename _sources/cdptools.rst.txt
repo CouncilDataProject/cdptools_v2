@@ -1,0 +1,47 @@
+cdptools package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   cdptools.audio_splitters
+   cdptools.bin
+   cdptools.databases
+   cdptools.dev_utils
+   cdptools.event_scrapers
+   cdptools.file_stores
+   cdptools.indexers
+   cdptools.legistar_utils
+   cdptools.pipelines
+   cdptools.research_utils
+   cdptools.sr_models
+
+Submodules
+----------
+
+cdptools.cdp\_instance module
+-----------------------------
+
+.. automodule:: cdptools.cdp_instance
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdptools.configs module
+-----------------------
+
+.. automodule:: cdptools.configs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cdptools
+   :members:
+   :undoc-members:
+   :show-inheritance:

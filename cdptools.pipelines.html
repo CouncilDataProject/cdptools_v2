@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.pipelines package &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cdptools.research_utils package" href="cdptools.research_utils.html" />
+    <link rel="prev" title="cdptools.legistar_utils package" href="cdptools.legistar_utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cdptools.html">cdptools package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">cdptools</a> &raquo;</li>
+        
+          <li><a href="cdptools.html">cdptools package</a> &raquo;</li>
+        
+      <li>cdptools.pipelines package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cdptools.pipelines.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="cdptools.research_utils.html" class="btn btn-neutral float-right" title="cdptools.research_utils package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cdptools.legistar_utils.html" class="btn btn-neutral float-left" title="cdptools.legistar_utils package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cdptools-pipelines-package">
+<h1>cdptools.pipelines package<a class="headerlink" href="#cdptools-pipelines-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cdptools.pipelines.event_gather_pipeline">
+<span id="cdptools-pipelines-event-gather-pipeline-module"></span><h2>cdptools.pipelines.event_gather_pipeline module<a class="headerlink" href="#module-cdptools.pipelines.event_gather_pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.pipelines.event_gather_pipeline.EventGatherPipeline">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.pipelines.event_gather_pipeline.</code><code class="sig-name descname">EventGatherPipeline</code><span class="sig-paren">(</span><em class="sig-param">config_path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/event_gather_pipeline.html#EventGatherPipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cdptools.pipelines.pipeline.Pipeline" title="cdptools.pipelines.pipeline.Pipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">cdptools.pipelines.pipeline.Pipeline</span></code></a></p>
+<dl class="method">
+<dt id="cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.process_event">
+<code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param">event: Dict</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/pipelines/event_gather_pipeline.html#EventGatherPipeline.process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.process_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/event_gather_pipeline.html#EventGatherPipeline.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the pipeline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_audio_get_or_copy">
+<code class="sig-name descname">task_audio_get_or_copy</code><span class="sig-paren">(</span><em class="sig-param">key: str</em>, <em class="sig-param">video_uri: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/pipelines/event_gather_pipeline.html#EventGatherPipeline.task_audio_get_or_copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_audio_get_or_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or copy and return audio resource uri provied key and video uri.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_parse_and_upload_constructed_event">
+<code class="sig-name descname">task_parse_and_upload_constructed_event</code><span class="sig-paren">(</span><em class="sig-param">event: Dict[str, Any]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/event_gather_pipeline.html#EventGatherPipeline.task_parse_and_upload_constructed_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_parse_and_upload_constructed_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_transcript_get_or_create">
+<code class="sig-name descname">task_transcript_get_or_create</code><span class="sig-paren">(</span><em class="sig-param">key: str</em>, <em class="sig-param">audio_uri: str</em>, <em class="sig-param">phrases: Optional[List[str]] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/event_gather_pipeline.html#EventGatherPipeline.task_transcript_get_or_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_transcript_get_or_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or create and return transcript resource uri provied key.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.pipelines.event_index_pipeline">
+<span id="cdptools-pipelines-event-index-pipeline-module"></span><h2>cdptools.pipelines.event_index_pipeline module<a class="headerlink" href="#module-cdptools.pipelines.event_index_pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.pipelines.event_index_pipeline.EventIndexPipeline">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.pipelines.event_index_pipeline.</code><code class="sig-name descname">EventIndexPipeline</code><span class="sig-paren">(</span><em class="sig-param">config_path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/event_index_pipeline.html#EventIndexPipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_index_pipeline.EventIndexPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cdptools.pipelines.pipeline.Pipeline" title="cdptools.pipelines.pipeline.Pipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">cdptools.pipelines.pipeline.Pipeline</span></code></a></p>
+<dl class="method">
+<dt id="cdptools.pipelines.event_index_pipeline.EventIndexPipeline.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/event_index_pipeline.html#EventIndexPipeline.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the pipeline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_clean_index">
+<code class="sig-name descname">task_clean_index</code><span class="sig-paren">(</span><em class="sig-param">index: Dict[str, Dict[str, float]]</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, float]]<a class="reference internal" href="_modules/cdptools/pipelines/event_index_pipeline.html#EventIndexPipeline.task_clean_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_clean_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean the generated index prior to upload.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_generate_index">
+<code class="sig-name descname">task_generate_index</code><span class="sig-paren">(</span><em class="sig-param">event_corpus_map: Dict[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, float]]<a class="reference internal" href="_modules/cdptools/pipelines/event_index_pipeline.html#EventIndexPipeline.task_generate_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_generate_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate word event scores dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_upload_index">
+<code class="sig-name descname">task_upload_index</code><span class="sig-paren">(</span><em class="sig-param">index: Dict[str, Dict[str, float]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/event_index_pipeline.html#EventIndexPipeline.task_upload_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_upload_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a word event scores dictionary. This will completely replace a previous index.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.pipelines.minutes_item_index_pipeline">
+<span id="cdptools-pipelines-minutes-item-index-pipeline-module"></span><h2>cdptools.pipelines.minutes_item_index_pipeline module<a class="headerlink" href="#module-cdptools.pipelines.minutes_item_index_pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.pipelines.minutes_item_index_pipeline.</code><code class="sig-name descname">MinutesItemIndexPipeline</code><span class="sig-paren">(</span><em class="sig-param">config_path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/minutes_item_index_pipeline.html#MinutesItemIndexPipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cdptools.pipelines.pipeline.Pipeline" title="cdptools.pipelines.pipeline.Pipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">cdptools.pipelines.pipeline.Pipeline</span></code></a></p>
+<dl class="method">
+<dt id="cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/minutes_item_index_pipeline.html#MinutesItemIndexPipeline.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the pipeline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_clean_index">
+<code class="sig-name descname">task_clean_index</code><span class="sig-paren">(</span><em class="sig-param">index: Dict[str, Dict[str, float]]</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, float]]<a class="reference internal" href="_modules/cdptools/pipelines/minutes_item_index_pipeline.html#MinutesItemIndexPipeline.task_clean_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_clean_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean the generated index prior to upload.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_corpus">
+<code class="sig-name descname">task_generate_corpus</code><span class="sig-paren">(</span><em class="sig-param">save_dir: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; Dict[str, pathlib.Path]<a class="reference internal" href="_modules/cdptools/pipelines/minutes_item_index_pipeline.html#MinutesItemIndexPipeline.task_generate_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_corpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the minutes item corpus (decision item corpus) to be indexed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_index">
+<code class="sig-name descname">task_generate_index</code><span class="sig-paren">(</span><em class="sig-param">minutes_item_corpus_map: Dict[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, float]]<a class="reference internal" href="_modules/cdptools/pipelines/minutes_item_index_pipeline.html#MinutesItemIndexPipeline.task_generate_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate word minutes item scores dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_upload_index">
+<code class="sig-name descname">task_upload_index</code><span class="sig-paren">(</span><em class="sig-param">index: Dict[str, Dict[str, float]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/minutes_item_index_pipeline.html#MinutesItemIndexPipeline.task_upload_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_upload_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a word minutes item scores dictionary. This will completely replace a previous index.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.pipelines.pipeline">
+<span id="cdptools-pipelines-pipeline-module"></span><h2>cdptools.pipelines.pipeline module<a class="headerlink" href="#module-cdptools.pipelines.pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.pipelines.pipeline.Pipeline">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.pipelines.pipeline.</code><code class="sig-name descname">Pipeline</code><a class="reference internal" href="_modules/cdptools/pipelines/pipeline.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.pipeline.Pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="method">
+<dt id="cdptools.pipelines.pipeline.Pipeline.run">
+<em class="property">abstract </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/pipeline.html#Pipeline.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.pipeline.Pipeline.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the pipeline.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.pipelines.pipeline.ValuesForTerm">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.pipelines.pipeline.</code><code class="sig-name descname">ValuesForTerm</code><span class="sig-paren">(</span><em class="sig-param">term: str, values: Dict[str, float]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/pipelines/pipeline.html#ValuesForTerm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.pipelines.pipeline.ValuesForTerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Used for multithreaded uploaded of index terms.
+Can’t use NamedTuple here because dictionaries are mutuable.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.pipelines">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdptools.pipelines" title="Permalink to this headline">¶</a></h2>
+<p>Pipelines package for cdptools.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

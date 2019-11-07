@@ -1,0 +1,1032 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.databases.database &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdptools.html">cdptools</a> &raquo;</li>
+        
+      <li>cdptools.databases.database</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdptools.databases.database</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">exceptions</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="WhereCondition"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.WhereCondition">[docs]</a><span class="k">class</span> <span class="nc">WhereCondition</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">operator</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="OrderCondition"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.OrderCondition">[docs]</a><span class="k">class</span> <span class="nc">OrderCondition</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">operator</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="WhereOperators"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.WhereOperators">[docs]</a><span class="k">class</span> <span class="nc">WhereOperators</span><span class="p">:</span>
+    <span class="n">eq</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;==&quot;</span>
+    <span class="n">contains</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;in&quot;</span>
+    <span class="n">gt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span>
+    <span class="n">lt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span>
+    <span class="n">gteq</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&gt;=&quot;</span>
+    <span class="n">lteq</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&lt;=&quot;</span></div>
+
+
+<div class="viewcode-block" id="OrderOperators"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.OrderOperators">[docs]</a><span class="k">class</span> <span class="nc">OrderOperators</span><span class="p">:</span>
+    <span class="n">desc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;DESCENDING&quot;</span>
+    <span class="n">asce</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ASCENDING&quot;</span></div>
+
+
+<div class="viewcode-block" id="TermResult"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.TermResult">[docs]</a><span class="k">class</span> <span class="nc">TermResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">term</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">contribution</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+<div class="viewcode-block" id="Match"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Match">[docs]</a><span class="k">class</span> <span class="nc">Match</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">terms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TermResult</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unique_id</span> <span class="o">=</span> <span class="n">unique_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_terms</span> <span class="o">=</span> <span class="n">terms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">unique_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unique_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">terms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_terms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">relevance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">contribution</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">terms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;&lt;Match [unique_id: </span><span class="si">{self.unique_id}</span><span class="s2">, relevance: </span><span class="si">{self.relevance}</span><span class="s2">]&gt;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_construct_where_condition</span><span class="p">(</span><span class="n">filt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WhereCondition</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a where condition from the passed filter object.</span>
+
+<span class="sd">        For available where condition operators, please view the WhereOperators class attributes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filt: Union[WhereCondition, List, Tuple]</span>
+<span class="sd">            The filter to construct a WhereCondition for.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        filt: WhereCondition</span>
+<span class="sd">            If provided an already constructed WhereCondition, simply returns the provided object.</span>
+<span class="sd">            If provided a List or Tuple of length two, constructs a WhereCondition with an equal operator.</span>
+<span class="sd">            If provided a List or Tuple of length three, constructs a WhereCondition with the contents of the provided.</span>
+<span class="sd">            Provided List or Tuple objects should follow the format:</span>
+<span class="sd">                {target_to_filter}, {operator}, {target_value}</span>
+<span class="sd">            Unless provided a List or Tuple of length two, in which case, should follow the format:</span>
+<span class="sd">                {target_to_filter}, {target_value}</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        ```</span>
+<span class="sd">        condition = Database._construct_where_condition(WhereCondition(</span>
+<span class="sd">            column_name=&quot;event_id&quot;,</span>
+<span class="sd">            operator=&quot;&gt;=&quot;,</span>
+<span class="sd">            value=&quot;abcd&quot;</span>
+<span class="sd">        ))</span>
+<span class="sd">        # Returns the same WhereCondition that was passed in</span>
+
+<span class="sd">        condition = Database._construct_where_condition([&quot;event_id&quot;, WhereOperators.gteq, value=&quot;abcd&quot;])</span>
+<span class="sd">        # Returns the same WhereCondition as above</span>
+
+<span class="sd">        condition = Database._construct_where_condition((&quot;event_id&quot;, &quot;abcd&quot;))</span>
+<span class="sd">        # Returns a WhereCondition similar to above but the operator is set to equal rather than greater than or equal.</span>
+<span class="sd">        ```</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filt</span><span class="p">,</span> <span class="n">WhereCondition</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">filt</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filt</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="c1"># Assume equal</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filt</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">WhereCondition</span><span class="p">(</span><span class="n">filt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">WhereOperators</span><span class="o">.</span><span class="n">eq</span><span class="p">,</span> <span class="n">filt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">filt</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">WhereCondition</span><span class="p">(</span><span class="o">*</span><span class="n">filt</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UnstructuredWhereConditionError</span><span class="p">(</span><span class="n">filt</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UnknownTypeWhereConditionError</span><span class="p">(</span><span class="n">filt</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_construct_orderby_condition</span><span class="p">(</span><span class="n">by</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OrderCondition</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct an orderby condition from the passed by object.</span>
+
+<span class="sd">        For available order condition operators, please view the OrderOperators class attributes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        by: Union[OrderCondition, List, Tuple, str]</span>
+<span class="sd">            The order by data to construct an OrderCondition for.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        by: OrderCondition</span>
+<span class="sd">            If provided an already constructed OrderCondition, simply returns the provided object.</span>
+<span class="sd">            If provided a string, returns and OrderCondition with the provided string being used as the column name</span>
+<span class="sd">                and defaults to descending as the operator.</span>
+<span class="sd">            If provided a List or Tuple of length two, constructs an OrderCondition with the provided data.</span>
+<span class="sd">            Provided List or Tuple objects should follow the format:</span>
+<span class="sd">                {target_to_order}, {operator}</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        ```</span>
+<span class="sd">        condition = Database._construct_orderby_condition(OrderCondition(</span>
+<span class="sd">            column_name=&quot;event_id&quot;,</span>
+<span class="sd">            operator=&quot;DESCENDING&quot;,</span>
+<span class="sd">        ))</span>
+<span class="sd">        # Returns the same OrderCondition that was passed in</span>
+
+<span class="sd">        condition = Database._construct_orderby_condition(&quot;event_id&quot;)</span>
+<span class="sd">        # Returns the same OrderCondition as above</span>
+
+<span class="sd">        condition = Database._construct_orderby_condition([&quot;event_id&quot;, OrderOperators.desc])</span>
+<span class="sd">        # Returns the same OrderCondition as above</span>
+
+<span class="sd">        condition = Database._construct_where_condition((&quot;event_id&quot;, &quot;ASCENDING&quot;)</span>
+<span class="sd">        # Returns an OrderCondition similar to above but the operator is set to ascending rather than descending.</span>
+<span class="sd">        ```</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="n">OrderCondition</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">by</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># Assume descending</span>
+            <span class="k">return</span> <span class="n">OrderCondition</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="n">OrderOperators</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="c1"># Assume descending</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">by</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">OrderCondition</span><span class="p">(</span><span class="n">by</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">OrderOperators</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">by</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">OrderCondition</span><span class="p">(</span><span class="o">*</span><span class="n">by</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UnstructuredOrderConditionError</span><span class="p">(</span><span class="n">by</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UnknownTypeOrderConditionError</span><span class="p">(</span><span class="n">by</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Database.select_row_by_id"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.select_row_by_id">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">select_row_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get row from a table by looking up the value by id.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table: str</span>
+<span class="sd">            The name of the table to retrieve data by id from.</span>
+<span class="sd">        id: str</span>
+<span class="sd">            The id of the data to retrieve data for.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        If the row was found, the data from that row is returned as a dictionary. If not found, None is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.select_rows_as_list"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.select_rows_as_list">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">select_rows_as_list</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">WhereCondition</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">OrderCondition</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table: str</span>
+<span class="sd">            The name of the table to retrieve data from.</span>
+<span class="sd">        filters: Optional[List[Union[WhereCondition, List, Tuple]]]</span>
+<span class="sd">            A list of filters (where conditions) to add filter down the query.</span>
+<span class="sd">        order_by: Optional[Union[OrderCondition, List, Tuple, str]]</span>
+<span class="sd">            An order by condition to order the results by before returning.</span>
+<span class="sd">        limit: Optional[int]</span>
+<span class="sd">            An integer limit to how many rows should be returned that match the query provided.</span>
+<span class="sd">            Commonly, running queries without credentials will have a default limit value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        results: List[Dict[str, Any]]</span>
+<span class="sd">            The results of the query returned as a List of Dictionaries, where each dictionary is a unique row from the</span>
+<span class="sd">            table queried. If no rows are found, returns an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_body"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_body">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_body</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a body.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            The name of the body (council, subcommittee, etc).</span>
+<span class="sd">        description: Optional[str]:</span>
+<span class="sd">            An optional description of the body.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, str]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_minutes_item"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_minutes_item">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_minutes_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">matter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">legistar_event_item_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a minutes item. In Legistar this is commonly referred to as an event item.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            A name for the minutes item. Ex: &quot;Appointment of Rene J. Peters, Jr.&quot;</span>
+<span class="sd">        matter: str</span>
+<span class="sd">            A matter name for the minutes item. Ex: &quot;Appt 01373&quot;</span>
+<span class="sd">        legistar_event_item_id: Optional[int]</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventItemId`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Optional[int]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_minutes_item_file"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_minutes_item_file">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_minutes_item_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">legistar_matter_attachment_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a minutes item file. Commonly, minutes items have an associated file such as a presentation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        minutes_item_id: str</span>
+<span class="sd">            A minutes item id this file is associated with.</span>
+<span class="sd">        uri: str</span>
+<span class="sd">            A uri that can be used to access this file.</span>
+<span class="sd">        name: Optional[str]</span>
+<span class="sd">            A name for the file.</span>
+<span class="sd">        legistar_matter_attachment_id: Optional[int]</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the</span>
+<span class="sd">            `MatterAttachmentId`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Optional[int]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_event"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_event">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find an event using the primary key for events, a video uri.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        video_uri: str</span>
+<span class="sd">            A uri that can be used to access the video file used to generate all downstream data for an event.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Optional[int]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_event"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_event">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_event</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">body_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">event_datetime</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">source_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">agenda_file_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">minutes_file_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">legistar_event_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">legistar_event_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload an event.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body_id: str</span>
+<span class="sd">            The id for the body this event occured in.</span>
+<span class="sd">        event_datetime: datetime</span>
+<span class="sd">            The datetime this event occured at.</span>
+<span class="sd">        source_uri: str</span>
+<span class="sd">            The primary uri for where this event info or video was retrieved from.</span>
+<span class="sd">        video_uri: str</span>
+<span class="sd">            A uri that can be used to access the video file used to generate all downstream data for an event.</span>
+<span class="sd">        agenda_file_uri: Optional[str]</span>
+<span class="sd">            If an agenda file is available for the event, it is recommended to store a uri to the file.</span>
+<span class="sd">        minutes_file_uri: Optional[str]</span>
+<span class="sd">            If a minutes file is available for the event, it is recommened to store a uri to the file.</span>
+<span class="sd">        legistar_event_id: Optional[int]</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventId`.</span>
+<span class="sd">        legistar_event_link: Optional[str]</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store a link to the</span>
+<span class="sd">            event details for this event but in Legistar&#39;s system.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, datetime, Optional[int]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_event_minutes_item"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_event_minutes_item">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_event_minutes_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">decision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload the join of an event and a minutes item.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------</span>
+<span class="sd">        event_id: str</span>
+<span class="sd">            The id for the event this minutes item was referenced in.</span>
+<span class="sd">        minutes_item:id: str</span>
+<span class="sd">            The id for the minutes item that was referenced.</span>
+<span class="sd">        index: int</span>
+<span class="sd">            The integer index for when this minutes item should be placed in the minutes of an event.</span>
+<span class="sd">        decision: Optional[str]</span>
+<span class="sd">            If the minutes item was a vote, what was the overall outcome for this minutes item.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, int]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_person"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_person">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_person</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">full_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">phone</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">website</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">legistar_person_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a city council member (person).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        full_name: str</span>
+<span class="sd">            The full name of the city council member.</span>
+<span class="sd">        email: str</span>
+<span class="sd">            The email of the city council member.</span>
+<span class="sd">        phone: Optional[str]</span>
+<span class="sd">            The phone number of the city council member.</span>
+<span class="sd">        website: Optional[str]</span>
+<span class="sd">            The website url of the city council member.</span>
+<span class="sd">        legistar_person_id: Optional[int]</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `PersonId`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Optional[int]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_vote"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_vote">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_vote</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">person_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">event_minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">decision</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">legistar_event_item_vote_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a person&#39;s vote on a minutes item.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        person_id: str</span>
+<span class="sd">            The id of the person who voted on an minutes item already tied to an event. (event_minutes_item)</span>
+<span class="sd">        event_minutes_item_id: str</span>
+<span class="sd">            The id of the minutes item and event join that was voted on.</span>
+<span class="sd">        decision: str</span>
+<span class="sd">            This individual&#39;s personal decision on the minutes item.</span>
+<span class="sd">        legistar_event_item_vote_id: Optional[int]</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `PersonId`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Optional[int]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_file"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_file">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">content_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a file (to the database table, not a file store).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        uri: str</span>
+<span class="sd">            A uri to the file.</span>
+<span class="sd">        filename: Optional[str]</span>
+<span class="sd">            An optional filename to store with the file.</span>
+<span class="sd">        description: Optional[str]</span>
+<span class="sd">            An optional description for the file.</span>
+<span class="sd">        content_type: Optional[str]</span>
+<span class="sd">            An optional content type for the file.</span>
+<span class="sd">            Preferred to use MIME types: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Optional[int]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_transcript"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_transcript">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_transcript</span><span class="p">(</span><span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a transcript (to the database, a file store).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event_id: str</span>
+<span class="sd">            The id for the event that this transcript is for.</span>
+<span class="sd">        file_id: str</span>
+<span class="sd">            The id for the file that contains the transcript data.</span>
+<span class="sd">        confidence: Optional[float]</span>
+<span class="sd">            If available, a float / double value to store with the transcript for the confidence of the transcription.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Optional[float]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_algorithm"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_algorithm">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_algorithm</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload an algorithm.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            A name for the algorithm. Preferred, the full module path for the algorithm.</span>
+<span class="sd">        version: str</span>
+<span class="sd">            A version string for the algorithm.</span>
+<span class="sd">        description: Optional[str]</span>
+<span class="sd">            An optional description for the algorithm.</span>
+<span class="sd">        source: Optional[str]</span>
+<span class="sd">            An optional source uri for the algorithm.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Optional[float]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_run"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithm_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">begin</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">completed</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a run.</span>
+
+<span class="sd">        Used as a method for log tracking.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        algorithm_id: str</span>
+<span class="sd">            The id for the algorithm that ran.</span>
+<span class="sd">        begin: datetime</span>
+<span class="sd">            The datetime that the algorithm started processing.</span>
+<span class="sd">        completed: datetime</span>
+<span class="sd">            The datetime that the algorithm finished processing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, datetime]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_run_input"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run_input">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_run_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a run input.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run_id: str</span>
+<span class="sd">            The id for which run this parameter was used for.</span>
+<span class="sd">        dtype: str</span>
+<span class="sd">            The data type for the value used.</span>
+<span class="sd">        value: Any</span>
+<span class="sd">            The value for the input.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Any]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_run_input_file"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run_input_file">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_run_input_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a run input file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run_id: str</span>
+<span class="sd">            The id for which run this file was used for.</span>
+<span class="sd">        file_id: str</span>
+<span class="sd">            The id for the file used as an input.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, str]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_run_output"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run_output">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_run_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a run output.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run_id: str</span>
+<span class="sd">            The id for which run this parameter was output from.</span>
+<span class="sd">        dtype: str</span>
+<span class="sd">            The data type for the value used.</span>
+<span class="sd">        value: Any</span>
+<span class="sd">            The value for the output.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, Any]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_or_upload_run_output_file"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run_output_file">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_run_output_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get or upload a run output file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run_id: str</span>
+<span class="sd">            The id for which run this file was created from.</span>
+<span class="sd">        file_id: str</span>
+<span class="sd">            The id for the file created.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, str]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.get_indexed_event_term"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_indexed_event_term">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_indexed_event_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a single indexed event term.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term: str</span>
+<span class="sd">            The string term to retrieve.</span>
+<span class="sd">        event_id: str</span>
+<span class="sd">            The id for the event that term was used during.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, str]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.upload_or_update_indexed_event_term"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.upload_or_update_indexed_event_term">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">upload_or_update_indexed_event_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Upload or update a single indexed event term.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term: str</span>
+<span class="sd">            A term used during an event.</span>
+<span class="sd">        event_id: str</span>
+<span class="sd">            The id for the event the term was used during.</span>
+<span class="sd">        value: float</span>
+<span class="sd">            The value that term should be given for that event that indicates that terms relevance to that event.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, float]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.search_events"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.search_events">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">search_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Match</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use the stored indexed event terms to query for events given a query.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query: str</span>
+<span class="sd">            A query string to be used to search for events using the already stored indexed event term table.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        matches: List[Match]</span>
+<span class="sd">            An list of match objects sorted in most to least relevant order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Database.get_indexed_minutes_item_term"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_indexed_minutes_item_term">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_indexed_minutes_item_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a single indexed minutes item term.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term: str</span>
+<span class="sd">            The string term to retrieve.</span>
+<span class="sd">        minutes_item_id: str</span>
+<span class="sd">            The id for the minutes item that term was used in or discussed about.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, str]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.upload_or_update_indexed_minutes_item_term"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.upload_or_update_indexed_minutes_item_term">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">upload_or_update_indexed_minutes_item_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Upload or update a single indexed minutes_item item term.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        term: str</span>
+<span class="sd">            A term used during an event.</span>
+<span class="sd">        minutes_item_id: str</span>
+<span class="sd">            The id for the minutes item that term was used in or discussed about.</span>
+<span class="sd">        value: float</span>
+<span class="sd">            The value that term should be given for that minutes item that indicates that terms relevance to that</span>
+<span class="sd">            minutes item.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        details: Dict[str, Union[str, float]]</span>
+<span class="sd">            A dictionary containing the data that was either uploaded or found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="Database.search_minutes_items"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.search_minutes_items">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">search_minutes_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Match</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use the stored indexed minutes item terms to query for events given a query.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query: str</span>
+<span class="sd">            A query string to be used to search for minutes items using the already stored indexed minutes items term</span>
+<span class="sd">            table.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        matches: List[Match]</span>
+<span class="sd">            An list of match objects sorted in most to least relevant order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

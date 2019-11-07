@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.indexers.tfidf_indexer &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdptools.html">cdptools</a> &raquo;</li>
+        
+      <li>cdptools.indexers.tfidf_indexer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdptools.indexers.tfidf_indexer</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="k">import</span> <span class="n">ProcessPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">.indexer</span> <span class="k">import</span> <span class="n">Indexer</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="DocumentDetails"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.tfidf_indexer.DocumentDetails">[docs]</a><span class="k">class</span> <span class="nc">DocumentDetails</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">unique_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span></div>
+
+
+<div class="viewcode-block" id="TFIDFIndexer"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.tfidf_indexer.TFIDFIndexer">[docs]</a><span class="k">class</span> <span class="nc">TFIDFIndexer</span><span class="p">(</span><span class="n">Indexer</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_synchronous_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Set state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span> <span class="o">=</span> <span class="n">max_synchronous_jobs</span>
+
+    <span class="k">def</span> <span class="nf">_generate_term_counts_for_document</span><span class="p">(</span><span class="n">transcript_details</span><span class="p">:</span> <span class="n">DocumentDetails</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="c1"># Open the transcript and get raw</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">Indexer</span><span class="o">.</span><span class="n">get_raw_transcript</span><span class="p">(</span><span class="n">transcript_details</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># Clean the transcript text</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">Indexer</span><span class="o">.</span><span class="n">clean_text_for_indexing</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+
+        <span class="c1"># Count terms</span>
+        <span class="c1"># Thanks python core modules :^)</span>
+        <span class="n">terms</span> <span class="o">=</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;unique_id&quot;</span><span class="p">:</span> <span class="n">transcript_details</span><span class="o">.</span><span class="n">unique_id</span><span class="p">,</span> <span class="s2">&quot;term_counts&quot;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(</span><span class="n">terms</span><span class="p">)}</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_combine_term_counts_for_corpus</span><span class="p">(</span>
+        <span class="n">corpus_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">DocumentDetails</span><span class="p">,</span> <span class="n">Counter</span><span class="p">]]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="c1"># Go through each term count dictionary and combine into single</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">id_term_counts</span> <span class="ow">in</span> <span class="n">corpus_results</span><span class="p">:</span>
+            <span class="c1"># For each term count Counter returned get each term and it&#39;s count</span>
+            <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">id_term_counts</span><span class="p">[</span><span class="s2">&quot;term_counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># If the term has been seen before, simply add a new entry for the term count for that unique id</span>
+                <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">combined</span><span class="p">:</span>
+                    <span class="n">combined</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="n">id_term_counts</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">count</span>
+                <span class="c1"># If the term hasn&#39;t been seen, create a new dictionary to store term count by unique id</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">combined</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">id_term_counts</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">]:</span> <span class="n">count</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">combined</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calculate_tfidf_for_corpus</span><span class="p">(</span><span class="n">term_counts_corpus</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="c1"># N: total number of documents in the corpus</span>
+        <span class="c1"># Let&#39;s use sets to create a list of all unique documents in the term counts corpus</span>
+        <span class="n">corpus</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">term_counts_corpus</span><span class="p">:</span>
+            <span class="c1"># Do set union to continue to add unique items to the corpus map</span>
+            <span class="n">documents</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">term_counts_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+        <span class="c1"># N is just now the length of the corpus</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+
+        <span class="c1"># Compute tfidf values for the entire corpus</span>
+        <span class="n">tfidf_corpus</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">term_counts_corpus</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">tf</span> <span class="ow">in</span> <span class="n">term_counts_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># Compute idf</span>
+                <span class="c1"># d_t: documents containing term</span>
+                <span class="c1"># The number of documents containing a term is just the length of the available keys for that term</span>
+                <span class="c1"># in the term counts corpus</span>
+                <span class="c1"># Ex:</span>
+                <span class="c1"># &quot;hello&quot;: {</span>
+                <span class="c1">#   &quot;0000...&quot;: 3,</span>
+                <span class="c1">#   &quot;1111...&quot;: 7,</span>
+                <span class="c1">#   &quot;9999...&quot;: 2</span>
+                <span class="c1"># }</span>
+                <span class="c1"># The term &quot;hello&quot; occurs in 3 documents in the above example</span>
+                <span class="n">d_t</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">term_counts_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">])</span>
+                <span class="n">idf</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="n">d_t</span><span class="p">)</span>
+
+                <span class="c1"># If term already seen, simply add a new entry for the term tfidf value for that unique id</span>
+                <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">tfidf_corpus</span><span class="p">:</span>
+                    <span class="n">tfidf_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="n">unique_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span> <span class="o">*</span> <span class="n">idf</span>
+                <span class="c1"># If the term hasn&#39;t been seen, create a new dictionary to store term tfidf value by unique id</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tfidf_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">unique_id</span><span class="p">:</span> <span class="n">tf</span> <span class="o">*</span> <span class="n">idf</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">tfidf_corpus</span>
+
+<div class="viewcode-block" id="TFIDFIndexer.generate_index"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.tfidf_indexer.TFIDFIndexer.generate_index">[docs]</a>    <span class="k">def</span> <span class="nf">generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="c1"># Convert the document corpus map to a list of TranscriptDetails for easier passing to multiprocessing</span>
+        <span class="n">document_corpus_map</span> <span class="o">=</span> <span class="p">[</span><span class="n">DocumentDetails</span><span class="p">(</span><span class="n">unique_id</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">document_corpus_map</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+
+        <span class="c1"># We could use sklearn CountVectorizer/ TfidfVectorizer, but meh 🤷</span>
+        <span class="c1"># I don&#39;t think loading all the files into memory and stuffing them into a single list is that great</span>
+        <span class="c1"># These transcripts can get long....</span>
+        <span class="c1"># Memory shouldn&#39;t be an issue now, but maybe at like ~4000 documents?</span>
+        <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">TFIDFIndexer</span><span class="o">.</span><span class="n">_generate_term_counts_for_document</span><span class="p">,</span> <span class="n">document_corpus_map</span><span class="p">))</span>
+
+        <span class="c1"># Combine the single unique id results</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_combine_term_counts_for_corpus</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+        <span class="c1"># Compute tfidf values for the combined results</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_tfidf_for_corpus</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">index</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

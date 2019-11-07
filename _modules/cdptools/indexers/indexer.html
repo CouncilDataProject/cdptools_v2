@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.indexers.indexer &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../cdptools.html">cdptools</a> &raquo;</li>
+        
+      <li>cdptools.indexers.indexer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cdptools.indexers.indexer</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="k">import</span> <span class="n">PorterStemmer</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Ensure stopwords are downloaded</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="k">import</span> <span class="n">stopwords</span>
+    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">nltk</span>
+    <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;stopwords&quot;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloaded nltk stopwords&quot;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="k">import</span> <span class="n">stopwords</span>
+    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="Indexer"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer">[docs]</a><span class="k">class</span> <span class="nc">Indexer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Why is this not just a single function?</span>
+
+<span class="sd">    Like audio splitters, to pass arguments to the instance of the class and retain state may be useful. In this case,</span>
+<span class="sd">    while computing the scores for every meeting memory may be a constrant, or in the case where a developer wants to</span>
+<span class="sd">    artifically inflate the scores for certain events or words to highlight something that can be done on an object</span>
+<span class="sd">    instance rather than just a function instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Indexer.get_raw_transcript"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.get_raw_transcript">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_raw_transcript</span><span class="p">(</span><span class="n">transcipt_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.</span>
+<span class="sd">        If the file format is not supported or if the data contained in the transcript does not follow the specification</span>
+<span class="sd">        a TypeError is raised.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        transcipt_path: Union[str, Path]</span>
+<span class="sd">            Path to the transcript</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        transcript: str</span>
+<span class="sd">            The raw text of the opened transcript.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Enforce path</span>
+        <span class="n">transcipt_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">transcipt_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Check that the transcript follows a known format</span>
+        <span class="k">if</span> <span class="n">transcipt_path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">transcipt_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">read_in</span><span class="p">:</span>
+                <span class="n">transcript</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">read_in</span><span class="p">)</span>
+
+            <span class="c1"># Join all text items into a single string</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">portion</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">portion</span> <span class="ow">in</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]])</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;Unsure how to handle annotated JSON transcript provided: </span><span class="si">{transcipt_path}</span><span class="s2">&quot;</span>
+                    <span class="n">f</span><span class="s2">&quot;Please refer to the `transcript_formats.md` file in the documentation for details.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Raise error for all other file formats</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;Unsure how to handle transcript file format: </span><span class="si">{transcipt_path}</span><span class="s2">&quot;</span>
+                <span class="n">f</span><span class="s2">&quot;Please refer to the `transcript_formats.md` file in the documentation for details.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transcript</span></div>
+
+<div class="viewcode-block" id="Indexer.clean_text_for_indexing"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.clean_text_for_indexing">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">clean_text_for_indexing</span><span class="p">(</span><span class="n">raw_transcript</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run basic cleaning operations against the raw text of the transcript.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        raw_transcript: str</span>
+<span class="sd">            The raw text of a transcript as a single string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cleaned_transcript: str</span>
+<span class="sd">            The cleaned version of the transcript text.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Send to lowercase</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">raw_transcript</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c1"># Remove new line and tab characters</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">cleaned_transcript</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+        <span class="c1"># Remove punctuation</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;[{re.escape(string.punctuation)}]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_transcript</span><span class="p">)</span>
+
+        <span class="c1"># Remove stopwords</span>
+        <span class="n">joined_stopwords</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b(&quot;</span><span class="o">+</span><span class="n">joined_stopwords</span><span class="o">+</span><span class="sa">r</span><span class="s2">&quot;)\b&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_transcript</span><span class="p">)</span>
+
+        <span class="c1"># Remove gaps in string</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">cleaned_transcript</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cleaned_transcript</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
+            <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">cleaned_transcript</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">cleaned_transcript</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
+            <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">cleaned_transcript</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Clean words by stems</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">cleaned_transcript</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="n">stemmed</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ps</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">stemmed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">word</span><span class="p">))</span>
+
+        <span class="c1"># Rejoin transcript</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stemmed</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cleaned_transcript</span></div>
+
+<div class="viewcode-block" id="Indexer.drop_terms_from_index_below_value"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.drop_terms_from_index_below_value">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">drop_terms_from_index_below_value</span><span class="p">(</span>
+        <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="n">minimum_value_allowed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Drop any terms from an index that have a value less than or equal to the provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index: Dict[str, Dict[str, float]]</span>
+<span class="sd">            An index dictionary, the output of an `Indexer.generate_index` run.</span>
+
+<span class="sd">        minimum_value_allowed: float</span>
+<span class="sd">            The float value that all term event values should be compared against. Any term event value less than or</span>
+<span class="sd">            equal to the received value will be dropped from the index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cleaned_index: Dict[str, Dict[str, float]]</span>
+<span class="sd">            The cleaned index that has had values removed based off the received minimum value allowed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dropped_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># For each term in the index</span>
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">index</span><span class="p">:</span>
+            <span class="c1"># For each event value given to that term</span>
+            <span class="k">for</span> <span class="n">event_id</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">index</span><span class="p">[</span><span class="n">term</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># If the value is strictly greater than the minimum value allowed</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">minimum_value_allowed</span><span class="p">:</span>
+                    <span class="c1"># If the term is already in the cleaned index, add the event and value as a new pair</span>
+                    <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="p">:</span>
+                        <span class="n">cleaned</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="n">event_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="c1"># If the term is not already in the cleaned index, add a new dictionary to store the pair</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">cleaned</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">event_id</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dropped_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Dropped </span><span class="si">{dropped_count}</span><span class="s2"> terms during index cleaning&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cleaned</span></div>
+
+<div class="viewcode-block" id="Indexer.generate_index"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.generate_index">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an event corpus map, compute word event values that will act as a search index.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event_corpus_map: Dict[str, str]</span>
+<span class="sd">            A dictionary that maps event id to a local path with transcript to use for indexing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        word_event_scores: Dict[str, Dict[str, float]]</span>
+<span class="sd">            A dictionary of values per event per word that will be stored in the CDP instance&#39;s database and used as a</span>
+<span class="sd">            method for searching for events.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">            ```json</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;hello&quot;: {</span>
+<span class="sd">                    &quot;15ce0a20-3688-4ebd-bf3f-24f6e8d12ad9&quot;: 12.3781,</span>
+<span class="sd">                    &quot;3571c871-6f7d-41b5-85d1-ced0589f9220&quot;: 56.7922,</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;world&quot;: {</span>
+<span class="sd">                    &quot;15ce0a20-3688-4ebd-bf3f-24f6e8d12ad9&quot;: 8.0016,</span>
+<span class="sd">                    &quot;3571c871-6f7d-41b5-85d1-ced0589f9220&quot;: 33.9152,</span>
+<span class="sd">                }</span>
+<span class="sd">            }</span>
+<span class="sd">            ```</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">{}</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+cdptools.research\_utils package
+================================
+
+Submodules
+----------
+
+cdptools.research\_utils.transcripts module
+-------------------------------------------
+
+.. automodule:: cdptools.research_utils.transcripts
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cdptools.research_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to cdptools’s documentation! &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Backend Design" href="system_design.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to cdptools’s documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="system_design.html" class="btn btn-neutral float-right" title="Backend Design" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-cdptools-s-documentation">
+<h1>Welcome to cdptools’s documentation!<a class="headerlink" href="#welcome-to-cdptools-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="cdptools">
+<h1>cdptools<a class="headerlink" href="#cdptools" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://github.com/CouncilDataProject/cdptools/actions"><img alt="Build Status" src="https://github.com/CouncilDataProject/cdptools/workflows/Build%20Master/badge.svg" /></a>
+<a class="reference external image-reference" href="https://CouncilDataProject.github.io/cdptools"><img alt="Documentation" src="https://github.com/CouncilDataProject/cdptools/workflows/Documentation/badge.svg" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/CouncilDataProject/cdptools"><img alt="Code Coverage" src="https://codecov.io/gh/CouncilDataProject/cdptools/branch/master/graph/badge.svg" /></a>
+<p>Making City Council data more accessible and actions taken by city council members more discoverable and trackable.</p>
+<hr class="docutils" />
+<div class="section" id="about">
+<h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
+<p>We wondered why it was so hard to find out what was being discussed in Seattle City Council about a specific topic, so
+we set out to solve that. The first step to this is basic data processing: automated transcript creation for city
+council events, indexing those transcripts, and finally making them available on the web via our website and database.
+We also wanted the entire system to aim to be low cost, modular, and open access, so that it would be relatively easy
+for other CDP instances to be created and maintained. For us that means, databases and file stores are open access to
+read from, the websites that users can interact with the data can be run on free hosting services such as GitHub Pages,
+and computation choices should be flexible so that cost isn’t a barrier issue.</p>
+<p>The first CDP instance to be deployed was for Seattle and an example of the data that is produced and available from
+these systems can be seen on our <a class="reference external" href="https://councildataproject.github.io/seattle/">Seattle instance website</a>. The
+repository and code for the instance website can be found <a class="reference external" href="https://github.com/CouncilDataProject/seattle">here</a>.</p>
+<p>This repository and Python package is a collection of tools, pipelines, and processing functions, that are used by
+servers to retrieve, package, store, and process data required by CouncilDataProject instances.</p>
+<p>While this package is primarily targeted towards developers of the CDP instances and backend services, a main mission
+of CDP was to make city council data easier to access in all forms, on the web and programmatically, so included in
+this package are objects to do just that; connect and request data from CDP instance databases and file stores
+(examples below).</p>
+</div>
+<div class="section" id="user-features">
+<h2>User Features<a class="headerlink" href="#user-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Plain text query for events or minutes items</p></li>
+<li><p><a class="reference external" href="docs/resources/database_diagram.pdf">Database schema</a> allows for simple querying of:</p>
+<ul>
+<li><p>events (meetings)</p></li>
+<li><p>voting history of a city council or city council member</p></li>
+<li><p>bodies (committees)</p></li>
+<li><p>members</p></li>
+<li><p>minutes items</p></li>
+<li><p>event transcripts</p></li>
+</ul>
+</li>
+<li><p>File stores and databases can be used in combination to download audio or the entire transcript of a meeting</p></li>
+</ul>
+</div>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a><em>Search for events using plain text:</em>**</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cdptools</span> <span class="kn">import</span> <span class="n">CDPInstance</span><span class="p">,</span> <span class="n">configs</span>
+<span class="n">seattle</span> <span class="o">=</span> <span class="n">CDPInstance</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">SEATTLE</span><span class="p">)</span>
+
+<span class="n">matching_events</span> <span class="o">=</span> <span class="n">seattle</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">search_events</span><span class="p">(</span><span class="s2">&quot;bicycle infrastructure, pedestrian mobility&quot;</span><span class="p">)</span>
+<span class="c1"># Returns list of Match objects sorted most to least relevant</span>
+<span class="c1"># [Match, Match, ...]</span>
+
+<span class="c1"># Use the `Match.data` attribute to view the match&#39;s data</span>
+<span class="n">matching_events</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+<span class="c1"># {</span>
+<span class="c1">#   &#39;event_id&#39;: &#39;05258417-9ad3-4d42-be1d-95eafcfa03c5&#39;,</span>
+<span class="c1">#   &#39;legistar_event_id&#39;: 4053,</span>
+<span class="c1">#   &#39;event_datetime&#39;: datetime.datetime(2019, 8, 5, 9, 30),</span>
+<span class="c1">#   ...</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+<p><a href="#id3"><span class="problematic" id="id4">**</span></a><em>Search for bills, appointments, ‘minutes items’ using plain text:</em>**</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cdptools</span> <span class="kn">import</span> <span class="n">CDPInstance</span><span class="p">,</span> <span class="n">configs</span>
+<span class="n">seattle</span> <span class="o">=</span> <span class="n">CDPInstance</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">SEATTLE</span><span class="p">)</span>
+
+<span class="n">matching_minutes_items</span> <span class="o">=</span> <span class="n">seattle</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">search_minutes_items</span><span class="p">(</span><span class="s2">&quot;bicycle infrastructure&quot;</span><span class="p">)</span>
+<span class="c1"># Returns list of Match objects sorted most to least relevant</span>
+<span class="c1"># [Match, Match, ...]</span>
+</pre></div>
+</div>
+<p><a href="#id5"><span class="problematic" id="id6">**</span></a><em>Get all data from a table:</em>**</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cdptools</span> <span class="kn">import</span> <span class="n">CDPInstance</span><span class="p">,</span> <span class="n">configs</span>
+<span class="n">seattle</span> <span class="o">=</span> <span class="n">CDPInstance</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">SEATTLE</span><span class="p">)</span>
+
+<span class="n">all_events</span> <span class="o">=</span> <span class="n">seattle</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">)</span>
+<span class="c1"># Returns list of dictionaries with event information</span>
+<span class="c1"># [{&quot;event_id&quot;: &quot;0123&quot;, ...}, ...]</span>
+</pre></div>
+</div>
+<p><a href="#id7"><span class="problematic" id="id8">**</span></a><em>Download the most recent transcripts for all events:</em>**</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cdptools</span> <span class="kn">import</span> <span class="n">CDPInstance</span><span class="p">,</span> <span class="n">configs</span>
+<span class="n">seattle</span> <span class="o">=</span> <span class="n">CDPInstance</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">SEATTLE</span><span class="p">)</span>
+
+<span class="n">event_corpus_map</span> <span class="o">=</span> <span class="n">seattle</span><span class="o">.</span><span class="n">download_most_recent_transcripts</span><span class="p">()</span>
+<span class="c1"># Returns a dictionary mapping event id to a local path of the transcript</span>
+<span class="c1"># {&quot;0123abc...&quot;: &quot;~/4567def...&quot;}</span>
+</pre></div>
+</div>
+<p>Please view the <a class="reference external" href="/examples">examples</a> directory which contains Jupyter notebooks with more examples on how to use CDP
+databases and file stores.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Stable Release:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cdptools</span></code><span class="raw-html-m2r"><br></span>
+<strong>Development Head:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/CouncilDataProject/cdptools.git</span></code></p>
+<div class="section" id="all-city-installation">
+<h3>All City Installation:<a class="headerlink" href="#all-city-installation" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cdptools[all]</span></code></p>
+</div>
+<div class="section" id="individual-city-installation">
+<h3>Individual City Installation:<a class="headerlink" href="#individual-city-installation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Seattle: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cdptools[google-cloud]</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="developer-features">
+<h2>Developer Features<a class="headerlink" href="#developer-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Modular system for gathering city council events, transcribing, and indexing them to make searchable.</p></li>
+<li><p>Data pipelines are highly customizable to fit your cities needs.</p></li>
+<li><p>Deploy and run pipelines using Docker to ensure your system has everything it needs.</p></li>
+</ul>
+<p>For additional information on system design please refer to our
+<a class="reference external" href="https://CouncilDataProject.github.io/cdptools">documentation</a>.</p>
+</div>
+<div class="section" id="id9">
+<h2>Documentation<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>For full package documentation please visit <a class="reference external" href="https://CouncilDataProject.github.io/cdptools">CouncilDataProject.github.io/cdptools</a>.</p>
+</div>
+<div class="section" id="development">
+<h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="CONTRIBUTING.md">CONTRIBUTING.md</a> for information related to developing the code.</p>
+<p><strong>Free software: BSD-3-Clause license</strong></p>
+<p>This package was created with <a class="reference external" href="https://github.com/audreyr/cookiecutter">Cookiecutter</a>.</p>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

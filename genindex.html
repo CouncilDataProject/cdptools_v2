@@ -1,0 +1,816 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Index &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Index</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.legistar_utils.html#cdptools.legistar_utils.events.AgendaMatchResults">AgendaMatchResults (class in cdptools.legistar_utils.events)</a>
+</li>
+      <li><a href="cdptools.bin.html#cdptools.bin.run_cdp_pipeline.Args">Args (class in cdptools.bin.run_cdp_pipeline)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.OrderOperators.asce">asce (cdptools.databases.database.OrderOperators attribute)</a>
+</li>
+      <li><a href="cdptools.audio_splitters.html#cdptools.audio_splitters.audio_splitter.AudioSplitter">AudioSplitter (class in cdptools.audio_splitters.audio_splitter)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance">CDPInstance (class in cdptools.cdp_instance)</a>
+</li>
+      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstanceConfig">CDPInstanceConfig (class in cdptools.cdp_instance)</a>
+</li>
+      <li><a href="cdptools.html#module-cdptools">cdptools (module)</a>
+</li>
+      <li><a href="cdptools.audio_splitters.html#module-cdptools.audio_splitters">cdptools.audio_splitters (module)</a>
+</li>
+      <li><a href="cdptools.audio_splitters.html#module-cdptools.audio_splitters.audio_splitter">cdptools.audio_splitters.audio_splitter (module)</a>
+</li>
+      <li><a href="cdptools.audio_splitters.html#module-cdptools.audio_splitters.ffmpeg_audio_splitter">cdptools.audio_splitters.ffmpeg_audio_splitter (module)</a>
+</li>
+      <li><a href="cdptools.bin.html#module-cdptools.bin">cdptools.bin (module)</a>
+</li>
+      <li><a href="cdptools.bin.html#module-cdptools.bin.run_cdp_pipeline">cdptools.bin.run_cdp_pipeline (module)</a>
+</li>
+      <li><a href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance (module)</a>
+</li>
+      <li><a href="cdptools.html#module-cdptools.configs">cdptools.configs (module)</a>
+</li>
+      <li><a href="cdptools.databases.html#module-cdptools.databases">cdptools.databases (module)</a>
+</li>
+      <li><a href="cdptools.databases.html#module-cdptools.databases.database">cdptools.databases.database (module)</a>
+</li>
+      <li><a href="cdptools.databases.html#module-cdptools.databases.exceptions">cdptools.databases.exceptions (module)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#module-cdptools.dev_utils">cdptools.dev_utils (module)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#module-cdptools.dev_utils.load_custom_object">cdptools.dev_utils.load_custom_object (module)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#module-cdptools.dev_utils.run_manager">cdptools.dev_utils.run_manager (module)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#module-cdptools.event_scrapers">cdptools.event_scrapers (module)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#module-cdptools.event_scrapers.event_scraper">cdptools.event_scrapers.event_scraper (module)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#module-cdptools.event_scrapers.exceptions">cdptools.event_scrapers.exceptions (module)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#module-cdptools.event_scrapers.seattle_event_scraper">cdptools.event_scrapers.seattle_event_scraper (module)</a>
+</li>
+      <li><a href="cdptools.file_stores.html#module-cdptools.file_stores">cdptools.file_stores (module)</a>
+</li>
+      <li><a href="cdptools.file_stores.html#module-cdptools.file_stores.exceptions">cdptools.file_stores.exceptions (module)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.file_stores.html#module-cdptools.file_stores.file_store">cdptools.file_stores.file_store (module)</a>
+</li>
+      <li><a href="cdptools.indexers.html#module-cdptools.indexers">cdptools.indexers (module)</a>
+</li>
+      <li><a href="cdptools.indexers.html#module-cdptools.indexers.indexer">cdptools.indexers.indexer (module)</a>
+</li>
+      <li><a href="cdptools.indexers.html#module-cdptools.indexers.tfidf_indexer">cdptools.indexers.tfidf_indexer (module)</a>
+</li>
+      <li><a href="cdptools.legistar_utils.html#module-cdptools.legistar_utils">cdptools.legistar_utils (module)</a>
+</li>
+      <li><a href="cdptools.legistar_utils.html#module-cdptools.legistar_utils.events">cdptools.legistar_utils.events (module)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#module-cdptools.pipelines">cdptools.pipelines (module)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#module-cdptools.pipelines.event_gather_pipeline">cdptools.pipelines.event_gather_pipeline (module)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#module-cdptools.pipelines.event_index_pipeline">cdptools.pipelines.event_index_pipeline (module)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#module-cdptools.pipelines.minutes_item_index_pipeline">cdptools.pipelines.minutes_item_index_pipeline (module)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#module-cdptools.pipelines.pipeline">cdptools.pipelines.pipeline (module)</a>
+</li>
+      <li><a href="cdptools.research_utils.html#module-cdptools.research_utils">cdptools.research_utils (module)</a>
+</li>
+      <li><a href="cdptools.research_utils.html#module-cdptools.research_utils.transcripts">cdptools.research_utils.transcripts (module)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#module-cdptools.sr_models">cdptools.sr_models (module)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#module-cdptools.sr_models.constants">cdptools.sr_models.constants (module)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#module-cdptools.sr_models.sr_model">cdptools.sr_models.sr_model (module)</a>
+</li>
+      <li><a href="cdptools.indexers.html#cdptools.indexers.indexer.Indexer.clean_text_for_indexing">clean_text_for_indexing() (cdptools.indexers.indexer.Indexer static method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.OrderCondition.column_name">column_name() (cdptools.databases.database.OrderCondition property)</a>
+
+      <ul>
+        <li><a href="cdptools.databases.html#cdptools.databases.database.WhereCondition.column_name">(cdptools.databases.database.WhereCondition property)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.compute_sha256_for_file">compute_sha256_for_file() (cdptools.file_stores.file_store.FileStore static method)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.confidence">confidence() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.contains">contains (cdptools.databases.database.WhereOperators attribute)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.TermResult.contribution">contribution() (cdptools.databases.database.TermResult property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Match.data">data() (cdptools.databases.database.Match property)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database">Database (class in cdptools.databases.database)</a>
+</li>
+      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance.database">database() (cdptools.cdp_instance.CDPInstance property)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.OrderOperators.desc">desc (cdptools.databases.database.OrderOperators attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.indexers.html#cdptools.indexers.tfidf_indexer.DocumentDetails">DocumentDetails (class in cdptools.indexers.tfidf_indexer)</a>
+</li>
+      <li><a href="cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.download_file">download_file() (cdptools.file_stores.file_store.FileStore method)</a>
+</li>
+      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance.download_most_recent_transcripts">download_most_recent_transcripts() (cdptools.cdp_instance.CDPInstance method)</a>
+
+      <ul>
+        <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.download_most_recent_transcripts">(in module cdptools.research_utils.transcripts)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.indexers.html#cdptools.indexers.indexer.Indexer.drop_terms_from_index_below_value">drop_terms_from_index_below_value() (cdptools.indexers.indexer.Indexer static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.eq">eq (cdptools.databases.database.WhereOperators attribute)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline">EventGatherPipeline (class in cdptools.pipelines.event_gather_pipeline)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline">EventIndexPipeline (class in cdptools.pipelines.event_index_pipeline)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.exceptions.EventOutOfTimeboundsError">EventOutOfTimeboundsError</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.exceptions.EventParseError">EventParseError</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.event_scraper.EventScraper">EventScraper (class in cdptools.event_scrapers.event_scraper)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.extras">extras() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.exceptions.FailedRequestError">FailedRequestError</a>
+</li>
+      <li><a href="cdptools.audio_splitters.html#cdptools.audio_splitters.ffmpeg_audio_splitter.FFmpegAudioSplitter">FFmpegAudioSplitter (class in cdptools.audio_splitters.ffmpeg_audio_splitter)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance.file_store">file_store() (cdptools.cdp_instance.CDPInstance property)</a>
+</li>
+      <li><a href="cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore">FileStore (class in cdptools.file_stores.file_store)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.indexers.html#cdptools.indexers.indexer.Indexer.generate_index">generate_index() (cdptools.indexers.indexer.Indexer method)</a>
+
+      <ul>
+        <li><a href="cdptools.indexers.html#cdptools.indexers.tfidf_indexer.TFIDFIndexer.generate_index">(cdptools.indexers.tfidf_indexer.TFIDFIndexer method)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_event">get_event() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.event_scraper.EventScraper.get_events">get_events() (cdptools.event_scrapers.event_scraper.EventScraper method)</a>
+
+      <ul>
+        <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_events">(cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper method)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.get_file_uri">get_file_uri() (cdptools.file_stores.file_store.FileStore method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_indexed_event_term">get_indexed_event_term() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_indexed_minutes_item_term">get_indexed_minutes_item_term() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.legistar_utils.html#cdptools.legistar_utils.events.get_legistar_events_for_timespan">get_legistar_events_for_timespan() (in module cdptools.legistar_utils.events)</a>
+</li>
+      <li><a href="cdptools.legistar_utils.html#cdptools.legistar_utils.events.get_matching_legistar_event_by_minutes_match">get_matching_legistar_event_by_minutes_match() (in module cdptools.legistar_utils.events)</a>
+</li>
+      <li><a href="cdptools.html#cdptools.get_module_version">get_module_version() (in module cdptools)</a>
+</li>
+      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance.get_most_recent_transcript_manifest">get_most_recent_transcript_manifest() (cdptools.cdp_instance.CDPInstance method)</a>
+
+      <ul>
+        <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.get_most_recent_transcript_manifest">(in module cdptools.research_utils.transcripts)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_algorithm">get_or_upload_algorithm() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_body">get_or_upload_body() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_event">get_or_upload_event() (cdptools.databases.database.Database method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_event_minutes_item">get_or_upload_event_minutes_item() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_file">get_or_upload_file() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_minutes_item">get_or_upload_minutes_item() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_minutes_item_file">get_or_upload_minutes_item_file() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_person">get_or_upload_person() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run">get_or_upload_run() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run_input">get_or_upload_run_input() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run_input_file">get_or_upload_run_input_file() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run_output">get_or_upload_run_output() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run_output_file">get_or_upload_run_output_file() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_transcript">get_or_upload_transcript() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_vote">get_or_upload_vote() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.indexers.html#cdptools.indexers.indexer.Indexer.get_raw_transcript">get_raw_transcript() (cdptools.indexers.indexer.Indexer static method)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_routes">get_routes() (cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.gt">gt (cdptools.databases.database.WhereOperators attribute)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.gteq">gteq (cdptools.databases.database.WhereOperators attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.indexers.html#cdptools.indexers.indexer.Indexer">Indexer (class in cdptools.indexers.indexer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.exceptions.LegistarLookupError">LegistarLookupError</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.load_custom_object.load_custom_object">load_custom_object() (in module cdptools.dev_utils.load_custom_object)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.lt">lt (cdptools.databases.database.WhereOperators attribute)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.lteq">lteq (cdptools.databases.database.WhereOperators attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.bin.html#cdptools.bin.run_cdp_pipeline.main">main() (in module cdptools.bin.run_cdp_pipeline)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Match">Match (class in cdptools.databases.database)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline">MinutesItemIndexPipeline (class in cdptools.pipelines.minutes_item_index_pipeline)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.exceptions.MissingCredentialsError">MissingCredentialsError</a>, <a href="cdptools.file_stores.html#cdptools.file_stores.exceptions.MissingCredentialsError">[1]</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.exceptions.MissingParameterError">MissingParameterError</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.OrderCondition.operator">operator() (cdptools.databases.database.OrderCondition property)</a>
+
+      <ul>
+        <li><a href="cdptools.databases.html#cdptools.databases.database.WhereCondition.operator">(cdptools.databases.database.WhereCondition property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.OrderCondition">OrderCondition (class in cdptools.databases.database)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.OrderOperators">OrderOperators (class in cdptools.databases.database)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.legistar_utils.html#cdptools.legistar_utils.events.parse_legistar_event_details">parse_legistar_event_details() (in module cdptools.legistar_utils.events)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.ParsedEvents">ParsedEvents (class in cdptools.event_scrapers.seattle_event_scraper)</a>
+</li>
+      <li><a href="cdptools.indexers.html#cdptools.indexers.tfidf_indexer.DocumentDetails.path">path() (cdptools.indexers.tfidf_indexer.DocumentDetails property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.pipeline.Pipeline">Pipeline (class in cdptools.pipelines.pipeline)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.process_event">process_event() (cdptools.pipelines.event_gather_pipeline.EventGatherPipeline method)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.pstnow">pstnow() (cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.constants.TranscriptFormats.raw">raw (cdptools.sr_models.constants.TranscriptFormats attribute)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.raw_path">raw_path() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunManager.register_input">register_input() (cdptools.dev_utils.run_manager.RunManager method)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunManager.register_output">register_output() (cdptools.dev_utils.run_manager.RunManager method)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunManager.register_run">register_run() (cdptools.dev_utils.run_manager.RunManager method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Match.relevance">relevance() (cdptools.databases.database.Match property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.run">run() (cdptools.pipelines.event_gather_pipeline.EventGatherPipeline method)</a>
+
+      <ul>
+        <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.run">(cdptools.pipelines.event_index_pipeline.EventIndexPipeline method)</a>
+</li>
+        <li><a href="cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.run">(cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline method)</a>
+</li>
+        <li><a href="cdptools.pipelines.html#cdptools.pipelines.pipeline.Pipeline.run">(cdptools.pipelines.pipeline.Pipeline method)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.bin.html#cdptools.bin.run_cdp_pipeline.run_cdp_pipeline">run_cdp_pipeline() (in module cdptools.bin.run_cdp_pipeline)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunIO">RunIO (class in cdptools.dev_utils.run_manager)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunManager">RunManager (class in cdptools.dev_utils.run_manager)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.search_events">search_events() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.search_minutes_items">search_minutes_items() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper">SeattleEventScraper (class in cdptools.event_scrapers.seattle_event_scraper)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.select_row_by_id">select_row_by_id() (cdptools.databases.database.Database method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.select_rows_as_list">select_rows_as_list() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.audio_splitters.html#cdptools.audio_splitters.audio_splitter.AudioSplitter.split">split() (cdptools.audio_splitters.audio_splitter.AudioSplitter method)</a>
+
+      <ul>
+        <li><a href="cdptools.audio_splitters.html#cdptools.audio_splitters.ffmpeg_audio_splitter.FFmpegAudioSplitter.split">(cdptools.audio_splitters.ffmpeg_audio_splitter.FFmpegAudioSplitter method)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel">SRModel (class in cdptools.sr_models.sr_model)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs">SRModelOutputs (class in cdptools.sr_models.sr_model)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_audio_get_or_copy">task_audio_get_or_copy() (cdptools.pipelines.event_gather_pipeline.EventGatherPipeline method)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_clean_index">task_clean_index() (cdptools.pipelines.event_index_pipeline.EventIndexPipeline method)</a>
+
+      <ul>
+        <li><a href="cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_clean_index">(cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline method)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_corpus">task_generate_corpus() (cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline method)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_generate_index">task_generate_index() (cdptools.pipelines.event_index_pipeline.EventIndexPipeline method)</a>
+
+      <ul>
+        <li><a href="cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_index">(cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline method)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_parse_and_upload_constructed_event">task_parse_and_upload_constructed_event() (cdptools.pipelines.event_gather_pipeline.EventGatherPipeline method)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_transcript_get_or_create">task_transcript_get_or_create() (cdptools.pipelines.event_gather_pipeline.EventGatherPipeline method)</a>
+</li>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_upload_index">task_upload_index() (cdptools.pipelines.event_index_pipeline.EventIndexPipeline method)</a>
+
+      <ul>
+        <li><a href="cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_upload_index">(cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.TermResult.term">term() (cdptools.databases.database.TermResult property)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.TermResult">TermResult (class in cdptools.databases.database)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Match.terms">terms() (cdptools.databases.database.Match property)</a>
+</li>
+      <li><a href="cdptools.indexers.html#cdptools.indexers.tfidf_indexer.TFIDFIndexer">TFIDFIndexer (class in cdptools.indexers.tfidf_indexer)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.constants.TranscriptFormats.timestamped_sentences">timestamped_sentences (cdptools.sr_models.constants.TranscriptFormats attribute)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.timestamped_sentences_path">timestamped_sentences_path() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.constants.TranscriptFormats.timestamped_words">timestamped_words (cdptools.sr_models.constants.TranscriptFormats attribute)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.timestamped_words_path">timestamped_words_path() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel.transcribe">transcribe() (cdptools.sr_models.sr_model.SRModel method)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.constants.TranscriptFormats">TranscriptFormats (class in cdptools.sr_models.constants)</a>
+</li>
+      <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunIO.type">type() (cdptools.dev_utils.run_manager.RunIO property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Match.unique_id">unique_id() (cdptools.databases.database.Match property)</a>
+
+      <ul>
+        <li><a href="cdptools.indexers.html#cdptools.indexers.tfidf_indexer.DocumentDetails.unique_id">(cdptools.indexers.tfidf_indexer.DocumentDetails property)</a>
+</li>
+      </ul></li>
+      <li><a href="cdptools.databases.html#cdptools.databases.exceptions.UniquenessError">UniquenessError</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.exceptions.UnknownTypeOrderConditionError">UnknownTypeOrderConditionError</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.exceptions.UnknownTypeWhereConditionError">UnknownTypeWhereConditionError</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.exceptions.UnstructuredOrderConditionError">UnstructuredOrderConditionError</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.exceptions.UnstructuredWhereConditionError">UnstructuredWhereConditionError</a>
+</li>
+      <li><a href="cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.upload_file">upload_file() (cdptools.file_stores.file_store.FileStore method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.upload_or_update_indexed_event_term">upload_or_update_indexed_event_term() (cdptools.databases.database.Database method)</a>
+</li>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.Database.upload_or_update_indexed_minutes_item_term">upload_or_update_indexed_minutes_item_term() (cdptools.databases.database.Database method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereCondition.value">value() (cdptools.databases.database.WhereCondition property)</a>
+
+      <ul>
+        <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunIO.value">(cdptools.dev_utils.run_manager.RunIO property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.pipelines.html#cdptools.pipelines.pipeline.ValuesForTerm">ValuesForTerm (class in cdptools.pipelines.pipeline)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereCondition">WhereCondition (class in cdptools.databases.database)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators">WhereOperators (class in cdptools.databases.database)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel.wrap_and_format_transcript_data">wrap_and_format_transcript_data() (cdptools.sr_models.sr_model.SRModel static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

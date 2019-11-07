@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cdptools.dev_utils package &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cdptools.event_scrapers package" href="cdptools.event_scrapers.html" />
+    <link rel="prev" title="cdptools.databases package" href="cdptools.databases.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_instructions.html">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cdptools.html">cdptools package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">cdptools</a> &raquo;</li>
+        
+          <li><a href="cdptools.html">cdptools package</a> &raquo;</li>
+        
+      <li>cdptools.dev_utils package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cdptools.dev_utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="cdptools.event_scrapers.html" class="btn btn-neutral float-right" title="cdptools.event_scrapers package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cdptools.databases.html" class="btn btn-neutral float-left" title="cdptools.databases package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cdptools-dev-utils-package">
+<h1>cdptools.dev_utils package<a class="headerlink" href="#cdptools-dev-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cdptools.dev_utils.load_custom_object">
+<span id="cdptools-dev-utils-load-custom-object-module"></span><h2>cdptools.dev_utils.load_custom_object module<a class="headerlink" href="#module-cdptools.dev_utils.load_custom_object" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cdptools.dev_utils.load_custom_object.load_custom_object">
+<code class="sig-prename descclassname">cdptools.dev_utils.load_custom_object.</code><code class="sig-name descname">load_custom_object</code><span class="sig-paren">(</span><em class="sig-param">module_path: Union[str, List[str]], object_name: str, object_kwargs: Dict</em><span class="sig-paren">)</span> &#x2192; object<a class="reference internal" href="_modules/cdptools/dev_utils/load_custom_object.html#load_custom_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.dev_utils.load_custom_object.load_custom_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a custom object with kwargs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module_path</strong> (<em>Union[str, List[str]]</em>) – Python module path or list of path parts to a custom module. Ex: “cptools.pipeline”</p></li>
+<li><p><strong>object_name</strong> (<em>str</em>) – Name of the object to retrieve from the module. Ex: “Pipeline”</p></li>
+<li><p><strong>object_kwargs</strong> (<em>Dict</em>) – Any kwargs to pass to the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>obj</strong> – The initialized object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.dev_utils.run_manager">
+<span id="cdptools-dev-utils-run-manager-module"></span><h2>cdptools.dev_utils.run_manager module<a class="headerlink" href="#module-cdptools.dev_utils.run_manager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.dev_utils.run_manager.RunIO">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.dev_utils.run_manager.</code><code class="sig-name descname">RunIO</code><span class="sig-paren">(</span><em class="sig-param">type</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/dev_utils/run_manager.html#RunIO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.dev_utils.run_manager.RunIO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of RunIO(type, value)</p>
+<dl class="method">
+<dt id="cdptools.dev_utils.run_manager.RunIO.type">
+<em class="property">property </em><code class="sig-name descname">type</code><a class="headerlink" href="#cdptools.dev_utils.run_manager.RunIO.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.dev_utils.run_manager.RunIO.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#cdptools.dev_utils.run_manager.RunIO.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.dev_utils.run_manager.RunManager">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.dev_utils.run_manager.</code><code class="sig-name descname">RunManager</code><span class="sig-paren">(</span><em class="sig-param">database: cdptools.databases.database.Database</em>, <em class="sig-param">file_store: cdptools.file_stores.file_store.FileStore</em>, <em class="sig-param">algorithm_name: str</em>, <em class="sig-param">algorithm_version: str</em>, <em class="sig-param">inputs: Optional[List[Union[List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">cdptools.dev_utils.run_manager.RunIO]]] = []</em>, <em class="sig-param">algorithm_description: Optional[str] = None</em>, <em class="sig-param">algorithm_source: Optional[str] = None</em>, <em class="sig-param">remove_files: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/dev_utils/run_manager.html#RunManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.dev_utils.run_manager.RunManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A RunManager can be used to track the IO of an algorithm and log begin and completed times. Additionally, will
+gracefully handle when an algorithm errors. Depending on IO type, if any IO is a pathlib.Path, the full file will be
+linked to the run.</p>
+<p>A context manager of this class is available and the preffered method of interaction with this object. In the case
+an error occurs during the run, the context manager will catch the error and store it as an output.</p>
+<p>Construct a RunManager object to track algorithm IO.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>database</strong> (<em>Database</em>) – A cdptools.database.Database connection that has full credentials to upload new data.</p></li>
+<li><p><strong>file_store</strong> (<em>FileStore</em>) – A cdptools.file_store.FileStore connection that has full credentials to upload new data.</p></li>
+<li><p><strong>algorithm_name</strong> (<em>str</em>) – The name of the algorithm about to run. Preffered: the full module path.</p></li>
+<li><p><strong>algorithm_version</strong> (<em>str</em>) – The version string of the algorithm about to run.</p></li>
+<li><p><strong>inputs</strong> (<em>Optional[Union[List, Tuple, RunIO]]</em>) – Inputs that are already known prior to the start of the algorithm run. If provided a List of List or a List
+of Tuple, each object in the outer List will be converted to RunIO objects.</p></li>
+<li><p><strong>algorithm_description</strong> (<em>Optional[str]</em>) – Optionally, a description for the algorithm about to run.</p></li>
+<li><p><strong>algorithm_source</strong> (<em>Optional[str]</em>) – Optionally, a uri to view the source of the algorithm about to run.</p></li>
+<li><p><strong>remove_files</strong> (<em>bool</em>) – Boolean representing whether or not generated output files should be cleaned up after the algorithm
+completes. Default: False (Do not remove files)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The constructed RunManager.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="cdptools.dev_utils.run_manager.RunManager.register_input">
+<code class="sig-name descname">register_input</code><span class="sig-paren">(</span><em class="sig-param">input: Union[Any, List, Tuple, cdptools.dev_utils.run_manager.RunIO]</em><span class="sig-paren">)</span> &#x2192; cdptools.dev_utils.run_manager.RunIO<a class="reference internal" href="_modules/cdptools/dev_utils/run_manager.html#RunManager.register_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.dev_utils.run_manager.RunManager.register_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a value or RunIO as an input to the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> (<em>Union[Any, List, Tuple, RunIO]</em>) – The input value that will use <cite>RunManager._create_io</cite> prior to adding the value to the inputs list.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>input</strong> – The RunIO object that was stored in the inputs list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#cdptools.dev_utils.run_manager.RunIO" title="cdptools.dev_utils.run_manager.RunIO">RunIO</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.dev_utils.run_manager.RunManager.register_output">
+<code class="sig-name descname">register_output</code><span class="sig-paren">(</span><em class="sig-param">output: Union[Any, List, Tuple, cdptools.dev_utils.run_manager.RunIO]</em><span class="sig-paren">)</span> &#x2192; cdptools.dev_utils.run_manager.RunIO<a class="reference internal" href="_modules/cdptools/dev_utils/run_manager.html#RunManager.register_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.dev_utils.run_manager.RunManager.register_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a value or RunIO as an output to the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> (<em>Union[Any, List, Tuple, RunIO]</em>) – The output value that will use <cite>RunManager._create_io</cite> prior to adding the value to the outputs list.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – The RunIO object that was stored in the outputs list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#cdptools.dev_utils.run_manager.RunIO" title="cdptools.dev_utils.run_manager.RunIO">RunIO</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.dev_utils.run_manager.RunManager.register_run">
+<code class="sig-name descname">register_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/dev_utils/run_manager.html#RunManager.register_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.dev_utils.run_manager.RunManager.register_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uploads the information stored in the RunManager’s instance state.</p>
+<p>Creates a row in the Run table of the database, and uploads and links all run inputs (and run input files) and
+all run outputs (an run output files). Additionally, links the run to the algorithm id created or found from
+the details provided on RunManager instance creation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cdptools.dev_utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cdptools.dev_utils" title="Permalink to this headline">¶</a></h2>
+<p>Development utilities package for cdptools.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,527 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Deploying and Running CDP Pipelines &mdash; cdptools 2.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Transcript Format" href="transcript_formats.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cdptools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_design.html">Backend Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id3">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id4">Event Scrapers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id5">File Stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id6">Audio Splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id7">Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#speech-recognition-model">Speech Recognition Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id8">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_design.html#id9">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system_design.html#id10">Why not Airflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transcript_formats.html">Transcript Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id1">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id2">Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deploying and Running CDP Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#index">Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Module Choices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Back-end Hosting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Configuration and Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">Local Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">Production Server Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Running Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cdptools.html">cdptools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.audio_splitters.html">cdptools.audio_splitters package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.bin.html">cdptools.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.databases.html">cdptools.databases package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.dev_utils.html">cdptools.dev_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.event_scrapers.html">cdptools.event_scrapers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.file_stores.html">cdptools.file_stores package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.indexers.html">cdptools.indexers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.legistar_utils.html">cdptools.legistar_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.pipelines.html">cdptools.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.research_utils.html">cdptools.research_utils package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cdptools.sr_models.html">cdptools.sr_models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.cdp_instance">cdptools.cdp_instance module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools.configs">cdptools.configs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdptools.html#module-cdptools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cdptools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Deploying and Running CDP Pipelines</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/deployment_instructions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="transcript_formats.html" class="btn btn-neutral float-left" title="Transcript Format" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="deploying-and-running-cdp-pipelines">
+<h1>Deploying and Running CDP Pipelines<a class="headerlink" href="#deploying-and-running-cdp-pipelines" title="Permalink to this headline">¶</a></h1>
+<p>This document details how to deploy and maintain a CDP instance for a new city or for your own personal use. Many of the
+examples used during these guide will be exact use cases and problems found during the launch of CDP-Seattle. Your own
+instance of CDP for you own city may have it’s own issues but generally this document should be all encompassing, and,
+if you run into issues during deploying or maintaining your server please feel free to submit a pull request to add to
+this document with more notes and information. If you want to deploy an exact replica to CDP-Seattle, jump to the
+<a class="reference external" href="#configuration-and-setup">configuration and setup</a> section.</p>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#background">Background</a></p></li>
+<li><p><a class="reference external" href="#module-choices">Module Choices</a></p></li>
+<li><p><a class="reference external" href="#back-end-hosting">Back-end Hosting</a></p></li>
+<li><p><a class="reference external" href="#configuration-and-setup">Configuration and Setup</a></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#local-development-setup">Local Development Setup</a></p></li>
+<li><p><a class="reference external" href="#production-server-setup">Production Server Setup</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#running-pipelines">Running Pipelines</a></p></li>
+</ol>
+<div class="section" id="id2">
+<h3>Background<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>It is generally a good practice to have a staging and a production instance of any system that will be mass producing
+data so please do that. It is also a primary goal to keep costs of running a CDP instance as low as possible while
+still producing high quality data. Quick math says that running a CDP instance should cost anywhere between
+$50 - $100 / month. This includes all server, database, transcription, and storage costs but this will vary depending
+on which back-end hosting provider you choose and how much traffic your system receives.</p>
+<p>There are currently two pipelines you will want to run, the event gathering pipeline (<code class="docutils literal notranslate"><span class="pre">EventGatherPipeline</span></code>) and the
+event indexing pipeline (<code class="docutils literal notranslate"><span class="pre">EventIndexPipeline</span></code>). The core of the system is very much the <code class="docutils literal notranslate"><span class="pre">EventGatherPipeline</span></code> as it is
+what actually gathers the data from your city, produces a transcript, and standardizes all the retrieved and generated
+data into the CDP database and storage formats. The <code class="docutils literal notranslate"><span class="pre">EventIndexPipeline</span></code> is the first of many downstream processing
+pipelines. It indexes the transcripts in relation to events to allow for fast plain text search of events. Technically,
+this is not a required pipeline to run but plain text search is a leg up on a lot of civic systems and generally a nice
+tool.</p>
+<p>Each of these pipelines runs in their own process on their own schedule (as determined by you). We will get more into
+this in the <a class="reference external" href="#configuration-and-setup">configuration and setup</a> section but note that because each pipeline runs on it’s
+own process and requests multiple threads and in some cases spawns additional processes, it may be best to either have
+a medium sized host for many of these pipelines to run from, or many smaller hosts that each run a single pipeline.</p>
+</div>
+<div class="section" id="id4">
+<h3>Module Choices<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>As discussed in the <a class="reference external" href="../docs/system_design">system design</a> document, each pipeline is highly modular. Each pipeline
+must have all components but it is designed to be plug-and-play with the different modules. Many module choices will
+likely come down to which back-end server host / provider / platform you will use while others modules will likely be
+standard across all CDP instances. An example of a module that is likely going to be used across all CDP instances, is
+the <code class="docutils literal notranslate"><span class="pre">FFmpegAudioSplitter</span></code> as it is generally the fastest and easiest to use programmable audio splitting interface. The
+modules that will be dependent on your back-end server / host / provider / platform would be any <code class="docutils literal notranslate"><span class="pre">Database</span></code> or
+<code class="docutils literal notranslate"><span class="pre">FileStore</span></code> as these commonly go together.</p>
+<p>Just keep these module choices in mind when deciding which back-end host to use; “If I use this back-end server
+provider, are there already made and tested modules that work with this provider or will I have to write my own?”.</p>
+</div>
+<div class="section" id="id5">
+<h3>Back-end Hosting<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>This is going to be the biggest choice in deploying a CDP instance. For the easiest integration between all modules, it
+is recommended to use Google Cloud Platform. This is because it has a database and file store that live together
+(Cloud Firestore), an if your audio files live in a Google Cloud Storage bucket, you can use the already written
+<code class="docutils literal notranslate"><span class="pre">GoogleCloudSRModel</span></code> because it requires a <code class="docutils literal notranslate"><span class="pre">gc://</span></code> uri header to work properly (aka: multi-hour-long audio files in a
+single transcription request call). All this together means you will have only two credential files, one for a staging
+deployment of the entire system and one for the production deployment of the entire system.</p>
+<p>Other providers like AWS or Microsoft Azure would require splitting resources across multiple systems. For example, file
+storage in AWS S3, database storage in AWS Redshift, but transcription for a different provider, Google Cloud, IBM
+Watson, etc. This shouldn’t turn you away from these other services as they each have their benefits, but note that the
+following <a class="reference external" href="#configuration-and-setup">configuration and setup</a> section uses Google Cloud as it’s entire back-end server
+host / provider / platform.</p>
+</div>
+<div class="section" id="id7">
+<h3>Configuration and Setup<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>This section will be broken into a <a class="reference external" href="#local-development-setup">local development setup</a> section and a
+<a class="reference external" href="#production-server-setup">production server setup</a> section. Local development will point at a staging instance and
+production server with point at a production instance.</p>
+<p><strong>Note:</strong> One more notice that these instructions are for an exact copy of CDP-Seattle which uses entirely Google Cloud
+products and services.</p>
+<p><strong>Note:</strong> Any terminal commands in the following section assumes you are using a bash terminal.</p>
+</div>
+</div>
+<div class="section" id="id10">
+<h2>Local Development Setup<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p>First let’s clone the project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/CouncilDataProject/cdptools.git
+<span class="nb">cd</span> cdptools/
+</pre></div>
+</div>
+<p>Let’s also preemptively create a credentials folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir credentials
+</pre></div>
+</div>
+<p><strong>Keep this terminal open for later.</strong></p>
+<ol class="arabic simple">
+<li><p>Create a Firebase project by going to <a class="reference external" href="https://console.firebase.google.com/">Firebase console</a> and clicking the
+“Create a project” button.</p></li>
+<li><p>Give the project a name. Because this is a staging deployment, it is recommended to prepend <code class="docutils literal notranslate"><span class="pre">stg-</span></code> to the name for
+easy recognition of which deployment you are working with later on. Your staging project’s name should look something
+like: <code class="docutils literal notranslate"><span class="pre">stg-cdp-seattle</span></code>.</p></li>
+<li><p>Agree with the terms of use and click “Create project”.</p></li>
+<li><p>Once the project is done setting up, click “Continue” and you should now have a card available on the same page with
+your project name. Click on the card with your project name.</p></li>
+<li><p>You are now at your database and file store console! Time to setup the database. In the upper left of the page, click
+on “Develop” to reveal various development tools and options.</p></li>
+<li><p>In the “Develop” section that was just opened, click on “Database”.</p></li>
+<li><p>In the upper center of the screen, click on “Create database”.</p></li>
+<li><p>Optional: If you want your database and file store to be open access, it doesn’t matter if you selected “Start in
+locked mode” or “Start in test mode”, we will change this soon so simply click “Next”. If you want the data to be a
+private copy for your own personal use (although we discourage this), it is recommended to make sure “Start in locked
+mode” and then click “Next”.</p></li>
+<li><p>Optional: If you want a server hosting your database and file store to be specifically in your region, (i.e. North
+America west coast, east coast, central), choose which server location you want from the “Cloud Firestore location”
+dropdown. By default, server location is set to us-central.</p></li>
+<li><p>Click done to create the database and wait for all the setup and provisioning to finish.</p></li>
+<li><p>Optional: You are now on the data page, before we do anything else, if in step 8 you moved on but you do want to
+allow your database and file store to be open access, in the upper left, click “Rules”. In the text box on the right
+side, copy and paste the following lines of code:</p></li>
+</ol>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read: if true;
+    }
+  }
+}
+</pre></div>
+</div>
+<p>Click “Publish” to have your database be open access.</p>
+<ol class="arabic simple">
+<li><p>In the “Develop” section in the upper left again, click on “Storage”.</p></li>
+<li><p>Click “Get Started” and follow the prompts. Click “Next”. Click “Done”.</p></li>
+<li><p>Optional: You are now on the files page, if you want your files to be open access, in the upper left, click “Rules”.
+In the text box on the right side, copy and paste the following lines of code:</p></li>
+</ol>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read: if true;
+    }
+  }
+}
+</pre></div>
+</div>
+<p>Click “Publish” to have your file store be open access.</p>
+<ol class="arabic simple">
+<li><p>You have now setup the database and file store for your CDP instance, time to setup the Google Speech to Text
+and add billing to your account. Go to the <a class="reference external" href="https://console.cloud.google.com/">Google cloud console</a>.</p></li>
+<li><p>In the upper left, click on the “Select a project” dropdown. After a brief second, all projects linked to your
+Google account should appear. Click on the project that you just created (it will have the same project name that you
+entered when you were working with Firebase console).</p></li>
+<li><p>On the left side of the page, hover over “APIs &amp; Services” and then click “Dashboard”.</p></li>
+<li><p>At the top of the page, click “+ ENABLE APIS AND SERVICES”.</p></li>
+<li><p>In the search bar, type “Cloud Speech-to-Text API”, when the results appear, click on the “Cloud Speech-to-Text API”
+card.</p></li>
+<li><p>Click “ENABLE”. Follow the prompt and click on “ENABLE BILLING”. Follow the prompt and click “CREATE BILLING
+ACCOUNT”.</p></li>
+<li><p>Agree to the terms and click “AGREE AND CONTINUE”.</p></li>
+<li><p>Enter your personal and billing information and then click “START MY FREE TRIAL”. Follow the prompt, click “GOT IT”.</p></li>
+<li><p>You should now be back to the “Cloud Speech-to-Text API” page. Click “ENABLE”.</p></li>
+<li><p>You should now be on the metrics page for the “Cloud Speech-to-Text API” page. In the far upper left corner, click
+the hamburger icon (three horizontal lines). Hover over “APIs &amp; Services” and click on “Credentials”.</p></li>
+<li><p>In the upper left, click on the “Create credentials” dropdown and select “Service account key”.</p></li>
+<li><p>In the “Service account” dropdown, select “App Engine default service account” and make sure that “JSON” is selected
+as the key type. Click “Create”. This will download a file. <strong>Place this file somewhere safe that will not get uploaded
+to any public repository. It can safely be placed in the ``credentials`` folder you made earlier.</strong></p></li>
+<li><p>If you do not have Docker installed, please follow the
+<a class="reference external" href="https://docs.docker.com/install/">Docker instruction documentation</a>. With Docker installed and with the still open
+terminal, run the following commands:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> deploy/
+sudo bash build.sh
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>You will now have a Docker container built and ready to work on the project. If you have no pipeline running, you
+can start a Docker image (an instance of the built Docker container) by running:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo bash run.sh
+</pre></div>
+</div>
+<p>Once connected the Docker image, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install -e cdptools<span class="o">[</span>all<span class="o">]</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Once the dependencies are all installed, edit your configuration file for the system found at
+<code class="docutils literal notranslate"><span class="pre">cdptools/configs/seattle-event-pipeline.json</span></code>. Specifically, change the filename for the credentials file to the name
+of the credentials file you downloaded anywhere where there is the key <code class="docutils literal notranslate"><span class="pre">&quot;credentials_path&quot;</span></code>.</p></li>
+<li><p>To start a single gathering of events run:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>run_cdp_pipeline EventGatherPipeline cdptools/configs/seattle-event-gather-pipeline.json
+</pre></div>
+</div>
+<p>Or to run the pipeline every <code class="docutils literal notranslate"><span class="pre">n</span></code> minutes run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>run_cdp_pipeline EventGatherPipeline cdptools/configs/seattle-event-gather-pipeline.json --nm <span class="m">20</span>
+</pre></div>
+</div>
+<p>In the above case, the pipeline will run every 20 minutes (<code class="docutils literal notranslate"><span class="pre">--nm</span> <span class="pre">20</span></code>).</p>
+<ol class="arabic simple">
+<li><p>The pipeline is now running! You can leave it running by simply closing the terminal. To reconnect to a running
+Docker container you can run:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker ps
+</pre></div>
+</div>
+<p>To view all containers that are currently running.</p>
+<p>Find the container you are looking for by image name, copy it’s “CONTAINER ID” and then to reconnect run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker attach e28e4954f626
+</pre></div>
+</div>
+<p>Where your container id is replacing the <code class="docutils literal notranslate"><span class="pre">e28e4954f626</span></code>.</p>
+<ol class="arabic simple">
+<li><p>It may look like you haven’t connected, but remember the pipeline is running on a schedule and won’t print anything
+to console unless it is currently processing data.</p></li>
+</ol>
+<p>That wraps up how to create a development setup with full staging database, file store, and Google Cloud API enabled.
+From here, if you wanted to develop a CDP instance for your own city, that would involve writing an <code class="docutils literal notranslate"><span class="pre">EventScraper</span></code>, and
+changing the event pipeline configuration file.</p>
+<p>It is a similar process for all other pipelines.</p>
+</div>
+<div class="section" id="id11">
+<h2>Production Server Setup<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<p>The setup for a production server is nearly identical as for local development except for a couple of details:</p>
+<ol class="arabic simple">
+<li><p>Follow all the steps in described in the local development setup on a server from the host of your choice, except for
+web interactions which can be done on any machine.</p></li>
+<li><p>Because you are creating a production instance, probably best to not pre-pend the <code class="docutils literal notranslate"><span class="pre">stg-</span></code> to your project name.</p></li>
+<li><p>It is recommended to not <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code> the project repository and instead simply run
+<code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">cdptools[google-cloud]</span></code> for a couple of reasons. First, not cloning the repository and removing the <code class="docutils literal notranslate"><span class="pre">-e</span></code>
+means the code that is actually running is no longer editable, which for a production server is generally a good thing.
+Second, specifying <code class="docutils literal notranslate"><span class="pre">google-cloud</span></code> over <code class="docutils literal notranslate"><span class="pre">all</span></code> means there will be less dependencies installed on the machine.</p></li>
+</ol>
+<div class="section" id="id12">
+<h3>Running Pipelines<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>If you have made it this far in the deployment README, I applaud you. The last couple comments to add are about running
+pipelines. Currently at <code class="docutils literal notranslate"><span class="pre">v2.0.0</span></code> launch of the project, the idea of <em>“backfilling”</em> was pushed to a later date because
+of how costly this can be (upwards of $10,000). Instead, pipelines at <code class="docutils literal notranslate"><span class="pre">v2.0.0</span></code> launch only have forward gathering,
+in this case, CDP-Seattle, runs the <code class="docutils literal notranslate"><span class="pre">EventGatherPipeline</span></code> continuously on a high network speed, low CPU, low storage,
+Google Cloud server every fifteen minutes and the <code class="docutils literal notranslate"><span class="pre">EventIndexPipeline</span></code> and <code class="docutils literal notranslate"><span class="pre">MinutesItemIndexPipeline</span></code> each on their own
+servers but the same server configuration as the <code class="docutils literal notranslate"><span class="pre">EventGatherPipeline</span></code> every two days. These schedules can and should be
+adjusted to fit your needs.</p>
+<hr class="docutils" />
+<p>Now go make transparency research happen.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

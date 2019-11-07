@@ -1,0 +1,30 @@
+cdptools.indexers package
+=========================
+
+Submodules
+----------
+
+cdptools.indexers.indexer module
+--------------------------------
+
+.. automodule:: cdptools.indexers.indexer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cdptools.indexers.tfidf\_indexer module
+---------------------------------------
+
+.. automodule:: cdptools.indexers.tfidf_indexer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cdptools.indexers
+   :members:
+   :undoc-members:
+   :show-inheritance:

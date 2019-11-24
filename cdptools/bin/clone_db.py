@@ -1,8 +1,5 @@
 import argparse
 import logging
-import sys
-import time
-import traceback
 from pathlib import Path
 
 from concurrent.futures import ThreadPoolExecutor
@@ -33,11 +30,13 @@ class Args(argparse.Namespace):
         p.add_argument("--debug", action="store_true", dest="debug", help="Show traceback if the script were to fail.")
         p.parse_args(namespace=self)
 
+
 def pass_through(row, target_db, table):
     row.pop('updated', None)
     row.pop('created', None)
     row.pop(str(table)+'_id', None)
     target_db._table_to_function_dict[table](**row)
+
 
 def main():
     args = Args()
@@ -50,6 +49,7 @@ def main():
         prod_rows = source_db.select_rows_as_list(table)
         with ThreadPoolExecutor() as exe:
             exe.map(processingfunc, prod_rows)
+
 
 if __name__ == "__main__":
     main()

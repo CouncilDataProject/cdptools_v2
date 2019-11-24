@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     python3.7-dev \
     python3-pip \
     ffmpeg \
-    git \
+    git
 
 # Upgrade pip and force it to use python3.7
 RUN python3.7 -m pip install --upgrade pip

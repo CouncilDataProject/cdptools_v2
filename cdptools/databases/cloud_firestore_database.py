@@ -84,6 +84,31 @@ class CloudFirestoreDatabase(Database):
         else:
             raise exceptions.MissingParameterError(["project_id", "credentials_path"])
 
+        self._tables = [
+                'minutes_item_file', 'vote', 'person', 'run_input',
+                'indexed_minutes_item_term', 'minutes_item', 'event_minutes_item',
+                'run', 'run_output', 'transcript', 'file', 'run_input_file', 'algorithm',
+                'indexed_event_term', 'event', 'body', 'run_output_file']
+
+        self._table_to_function_dict = {
+                'minutes_item_file': self.get_or_upload_minutes_item_file,
+                'vote': self.get_or_upload_vote,
+                'person': self.get_or_upload_person,
+                'run_input': self.get_or_upload_run_input,
+                'indexed_minutes_item_term': self.upload_or_update_indexed_minutes_item_term,
+                'minutes_item': self.get_or_upload_minutes_item,
+                'event_minutes_item': self.get_or_upload_event_minutes_item,
+                'run': self.get_or_upload_run,
+                'run_output': self.get_or_upload_run_output,
+                'transcript': self.get_or_upload_transcript,
+                'file': self.get_or_upload_file,
+                'run_input_file': self.get_or_upload_run_input_file,
+                'algorithm': self.get_or_upload_algorithm,
+                'indexed_event_term': self.upload_or_update_indexed_event_term,
+                'event': self.get_or_upload_event,
+                'body': self.get_or_upload_body,
+                'run_output_file': self.get_or_upload_run_output_file}
+
     @staticmethod
     def _jsonify_firestore_response(fields: Dict) -> Dict:
         formatted = {}

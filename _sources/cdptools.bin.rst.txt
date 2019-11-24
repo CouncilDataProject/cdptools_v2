@@ -4,6 +4,14 @@ cdptools.bin package
 Submodules
 ----------
 
+cdptools.bin.clone\_db module
+-----------------------------
+
+.. automodule:: cdptools.bin.clone_db
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdptools.bin.run\_cdp\_pipeline module
 --------------------------------------
 

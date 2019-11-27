@@ -25,9 +25,13 @@ class Args(argparse.Namespace):
             prog="clone_prod",
             description="Clone prod database to target database."
         )
-        p.add_argument("project_id", help="Project id of source database.", default="cdp-seattle")
+
         p.add_argument("target_credentials", type=Path, help="Credentials of target database.")
         p.add_argument("--debug", action="store_true", dest="debug", help="Show traceback if the script were to fail.")
+        group = p.add_mutually_exclusive_group(required=True)
+        group.add_argument('--source_project_id', help="Project id of source database.", default="cdp-seattle")
+        group.add_argument('--source_credentials', help="Credentials of source database.")
+
         p.parse_args(namespace=self)
 
 
@@ -40,7 +44,15 @@ def pass_through(row, target_db, table):
 
 def main():
     args = Args()
-    source_db = c_db.CloudFirestoreDatabase(project_id=args.project_id)
+     
+    source_db = None
+    if args.source_project_id:
+        source_db = c_db.CloudFirestoreDatabase(project_id=args.source_project_id)
+        log.info("Cloning database with project_id={}".format(args.source_project_id))
+    else:
+        source_db = c_db.CloudFirestoreDatabase(credentials_path=args.source_credentials)
+        log.info("Cloning database with credentials={}".format(args.source_credentials))
+
     target_db = c_db.CloudFirestoreDatabase(credentials_path=args.target_credentials)
 
     for table in source_db._tables:

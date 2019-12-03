@@ -798,6 +798,24 @@ class CloudFirestoreDatabase(Database):
             data_table="minutes_item"
         )
 
+    def wipe_table(self, table, batch_size):
+        docs = self._root.collection(table).list_documents(batch_size)
+
+        total_del = 0
+        while docs:
+            deleted_count = 0
+            for doc in docs:
+                doc.delete()
+                deleted_count += 1
+                total_del += 1
+
+            # If there could potentially be more documents in the table
+            if deleted_count >= batch_size:
+                docs = self._root.collection(table).list_documents(batch_size)
+            else:
+                log.info("Deleted {} docs from {} table in batches of {} docs".format(total_del, table, batch_size))
+                return
+
     def __str__(self):
         if self._credentials_path:
             return f"<CloudFirestoreDatabase [{self._credentials_path}]>"

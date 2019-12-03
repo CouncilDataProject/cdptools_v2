@@ -42,6 +42,10 @@ def pass_through(row, target_db, table):
     target_db._table_to_function_dict[table](**row)
 
 
+def delete_table(table, target_db):
+    target_db.wipe_table(table, 100)
+
+
 def main():
     args = Args()
 
@@ -54,6 +58,15 @@ def main():
         log.info("Cloning database with credentials={}".format(args.source_credentials))
 
     target_db = c_db.CloudFirestoreDatabase(credentials_path=args.target_credentials)
+
+    deletefunc = partial(delete_table, target_db=target_db)
+
+    # We fetch all tables in case some tables exist in target, but not in source
+    # Path returns a tuple, and root collection path is in first index
+    target_db_tables = [coll._path[0] for coll in target_db._root.collections()]
+
+    with ThreadPoolExecutor() as exe:
+        exe.map(deletefunc, target_db_tables)
 
     for table in source_db._tables:
         log.info("Cloning table: " + table)

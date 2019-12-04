@@ -234,19 +234,19 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">.databases</span> <span class="k">import</span> <span class="n">Database</span>
-<span class="kn">from</span> <span class="nn">.dev_utils</span> <span class="k">import</span> <span class="n">load_custom_object</span>
-<span class="kn">from</span> <span class="nn">.file_stores</span> <span class="k">import</span> <span class="n">FileStore</span>
-<span class="kn">from</span> <span class="nn">.research_utils</span> <span class="k">import</span> <span class="n">transcripts</span> <span class="k">as</span> <span class="n">transcripts_utils</span>
+<span class="kn">from</span> <span class="nn">.databases</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">.dev_utils</span> <span class="kn">import</span> <span class="n">load_custom_object</span>
+<span class="kn">from</span> <span class="nn">.file_stores</span> <span class="kn">import</span> <span class="n">FileStore</span>
+<span class="kn">from</span> <span class="nn">.research_utils</span> <span class="kn">import</span> <span class="n">transcripts</span> <span class="k">as</span> <span class="n">transcripts_utils</span>
 
 
 <div class="viewcode-block" id="CDPInstanceConfig"><a class="viewcode-back" href="../../cdptools.html#cdptools.cdp_instance.CDPInstanceConfig">[docs]</a><span class="k">class</span> <span class="nc">CDPInstanceConfig</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">database_module_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">database_object_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -265,7 +265,7 @@
 
 
 <div class="viewcode-block" id="CDPInstance"><a class="viewcode-back" href="../../cdptools.html#cdptools.cdp_instance.CDPInstance">[docs]</a><span class="k">class</span> <span class="nc">CDPInstance</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">CDPInstanceConfig</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">CDPInstanceConfig</span><span class="p">):</span>
         <span class="c1"># Store config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">config</span>
 
@@ -326,10 +326,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">transcripts_utils</span><span class="o">.</span><span class="n">download_most_recent_transcripts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;&lt;CDPInstance [database: </span><span class="si">{self.database}</span><span class="s2">, file_store: </span><span class="si">{self.file_store}</span><span class="s2">]&gt;&quot;</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;CDPInstance [database: </span><span class="si">{self.database}</span><span class="s2">, file_store: </span><span class="si">{self.file_store}</span><span class="s2">]&gt;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 </pre></div>
 

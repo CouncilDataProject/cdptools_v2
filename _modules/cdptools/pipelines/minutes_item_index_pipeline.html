@@ -237,16 +237,16 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="k">import</span> <span class="n">ThreadPoolExecutor</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">tika</span> <span class="k">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">tika</span> <span class="kn">import</span> <span class="n">parser</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">get_module_version</span>
-<span class="kn">from</span> <span class="nn">..dev_utils</span> <span class="k">import</span> <span class="n">RunManager</span><span class="p">,</span> <span class="n">load_custom_object</span>
-<span class="kn">from</span> <span class="nn">.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">ValuesForTerm</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">get_module_version</span>
+<span class="kn">from</span> <span class="nn">..dev_utils</span> <span class="kn">import</span> <span class="n">RunManager</span><span class="p">,</span> <span class="n">load_custom_object</span>
+<span class="kn">from</span> <span class="nn">.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">ValuesForTerm</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -257,7 +257,7 @@
 
 <div class="viewcode-block" id="MinutesItemIndexPipeline"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline">[docs]</a><span class="k">class</span> <span class="nc">MinutesItemIndexPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
         <span class="c1"># Resolve config path</span>
         <span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -370,7 +370,7 @@
                         <span class="k">pass</span>
 
                 <span class="c1"># Store the join of all transcripts in a single file for the corpus</span>
-                <span class="n">document_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;document_</span><span class="si">{di}</span><span class="s2">.json&quot;</span>
+                <span class="n">document_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;document_</span><span class="si">{di}</span><span class="s2">.json&quot;</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">document_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">write_out</span><span class="p">:</span>
                     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">di_transcript_document</span><span class="p">,</span> <span class="n">write_out</span><span class="p">)</span>
 

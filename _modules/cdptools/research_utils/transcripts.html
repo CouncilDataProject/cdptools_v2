@@ -231,13 +231,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for cdptools.research_utils.transcripts</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">cdptools.databases</span> <span class="k">import</span> <span class="n">Database</span>
-<span class="kn">from</span> <span class="nn">cdptools.file_stores</span> <span class="k">import</span> <span class="n">FileStore</span>
+<span class="kn">from</span> <span class="nn">cdptools.databases</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">cdptools.file_stores</span> <span class="kn">import</span> <span class="n">FileStore</span>
 
 
 <div class="viewcode-block" id="get_most_recent_transcript_manifest"><a class="viewcode-back" href="../../../cdptools.research_utils.html#cdptools.research_utils.transcripts.get_most_recent_transcript_manifest">[docs]</a><span class="k">def</span> <span class="nf">get_most_recent_transcript_manifest</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>

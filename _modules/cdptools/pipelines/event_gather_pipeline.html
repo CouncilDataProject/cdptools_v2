@@ -238,13 +238,13 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="k">import</span> <span class="n">ThreadPoolExecutor</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">get_module_version</span>
-<span class="kn">from</span> <span class="nn">..dev_utils</span> <span class="k">import</span> <span class="n">RunManager</span><span class="p">,</span> <span class="n">load_custom_object</span>
-<span class="kn">from</span> <span class="nn">.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">get_module_version</span>
+<span class="kn">from</span> <span class="nn">..dev_utils</span> <span class="kn">import</span> <span class="n">RunManager</span><span class="p">,</span> <span class="n">load_custom_object</span>
+<span class="kn">from</span> <span class="nn">.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -255,7 +255,7 @@
 
 <div class="viewcode-block" id="EventGatherPipeline"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline">[docs]</a><span class="k">class</span> <span class="nc">EventGatherPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
         <span class="c1"># Resolve config path</span>
         <span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -306,7 +306,7 @@
             <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
             <span class="c1"># Check if audio already exists in file store</span>
-            <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_audio.wav&quot;</span>
+            <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_audio.wav&quot;</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">audio_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
@@ -316,7 +316,7 @@
                     <span class="n">suffix</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;tmp_</span><span class="si">{key}</span><span class="s2">_video.</span><span class="si">{suffix}</span><span class="s2">&quot;</span>
+                <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;tmp_</span><span class="si">{key}</span><span class="s2">_video.</span><span class="si">{suffix}</span><span class="s2">&quot;</span>
                 <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">_external_resource_copy</span><span class="p">(</span>
                     <span class="n">uri</span><span class="o">=</span><span class="n">video_uri</span><span class="p">,</span>
                     <span class="n">dst</span><span class="o">=</span><span class="n">tmp_video_filepath</span>
@@ -361,9 +361,9 @@
             <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
             <span class="c1"># Setup temporary filenames</span>
-            <span class="n">tmp_raw_transcript_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_raw_transcript_0.json&quot;</span>
-            <span class="n">tmp_ts_words_transcript_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_words_transcript_0.json&quot;</span>
-            <span class="n">tmp_ts_sentences_transcript_filepath</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_sentences_transcript_0.json&quot;</span>
+            <span class="n">tmp_raw_transcript_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_raw_transcript_0.json&quot;</span>
+            <span class="n">tmp_ts_words_transcript_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_words_transcript_0.json&quot;</span>
+            <span class="n">tmp_ts_sentences_transcript_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_sentences_transcript_0.json&quot;</span>
 
             <span class="c1"># Check if raw transcript already exists in file store</span>
             <span class="k">try</span><span class="p">:</span>

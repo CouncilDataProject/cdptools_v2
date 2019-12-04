@@ -237,18 +237,18 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="k">import</span> <span class="n">ThreadPoolExecutor</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="k">import</span> <span class="n">BeautifulSoup</span>
-<span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="k">import</span> <span class="n">process</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">process</span>
 
-<span class="kn">from</span> <span class="nn">..legistar_utils</span> <span class="k">import</span> <span class="n">events</span> <span class="k">as</span> <span class="n">legistar_event_tools</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">exceptions</span>
-<span class="kn">from</span> <span class="nn">.event_scraper</span> <span class="k">import</span> <span class="n">EventScraper</span>
+<span class="kn">from</span> <span class="nn">..legistar_utils</span> <span class="kn">import</span> <span class="n">events</span> <span class="k">as</span> <span class="n">legistar_event_tools</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span> <span class="nn">.event_scraper</span> <span class="kn">import</span> <span class="n">EventScraper</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -259,7 +259,7 @@
 
 <div class="viewcode-block" id="ParsedEvents"><a class="viewcode-back" href="../../../cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.ParsedEvents">[docs]</a><span class="k">class</span> <span class="nc">ParsedEvents</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">success</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">warning</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">exceptions</span><span class="o">.</span><span class="n">EventOutOfTimeboundsError</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -276,7 +276,7 @@
     <span class="k">def</span> <span class="nf">pstnow</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">main_route</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://www.seattlechannel.org/CityCouncil&quot;</span><span class="p">,</span>
         <span class="n">backfill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -331,7 +331,7 @@
             <span class="n">parent</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sibling_parts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
             <span class="c1"># Expand route</span>
-            <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{parent}</span><span class="s2">/</span><span class="si">{route}</span><span class="s2">&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{parent}</span><span class="s2">/</span><span class="si">{route}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="SeattleEventScraper.get_routes"><a class="viewcode-back" href="../../../cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_routes">[docs]</a>    <span class="k">def</span> <span class="nf">get_routes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="c1"># Get page</span>
@@ -420,7 +420,7 @@
         <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; Special Meeting - Public Hearing&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">body_includes_date</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}$&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">body_includes_date</span><span class="p">:</span>
-            <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot; {body_includes_date.group(0)}&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; {body_includes_date.group(0)}&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
         <span class="c1"># Find and clean date</span>
         <span class="n">date</span> <span class="o">=</span> <span class="n">event_details</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s2">&quot;videoDate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
@@ -460,7 +460,7 @@
             <span class="c1"># Note: some of the urls have spaces in the video filename which is why the space is included in the</span>
             <span class="c1"># regex search pattern.</span>
             <span class="n">video</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;video\.seattle\.gov[a-zA-Z0-9\/_ ]*\.(mp4|flv)&quot;</span><span class="p">,</span> <span class="n">video</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">video</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;https://</span><span class="si">{video}</span><span class="s2">&quot;</span>
+            <span class="n">video</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{video}</span><span class="s2">&quot;</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventParseError</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">event_dt</span><span class="p">)</span>
 
@@ -514,10 +514,10 @@
 
         <span class="c1"># Return processed events</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="n">f</span><span class="s2">&quot;Collected {len(events.success)}. &quot;</span>
-            <span class="n">f</span><span class="s2">&quot;Warnings: {len(events.warning)}. &quot;</span>
-            <span class="n">f</span><span class="s2">&quot;Errors: {len(events.error)}. &quot;</span>
-            <span class="n">f</span><span class="s2">&quot;from sub-route: </span><span class="si">{url}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Collected {len(events.success)}. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Warnings: {len(events.warning)}. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Errors: {len(events.error)}. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;from sub-route: </span><span class="si">{url}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">events</span>
 
@@ -616,7 +616,7 @@
             <span class="n">warning</span> <span class="o">+=</span> <span class="n">body_result</span><span class="o">.</span><span class="n">warning</span>
             <span class="n">error</span> <span class="o">+=</span> <span class="n">body_result</span><span class="o">.</span><span class="n">error</span>
         <span class="n">results</span> <span class="o">=</span> <span class="n">ParsedEvents</span><span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Found {len(results.success)} events from initial gather.&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found {len(results.success)} events from initial gather.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Attach legistar agenda item details</span>
         <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_concurrent_requests</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">*</span> <span class="mi">5</span><span class="p">))</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
@@ -627,17 +627,17 @@
         <span class="c1"># Clean out the &quot;None&quot;s</span>
         <span class="n">parsed_events</span> <span class="o">=</span> <span class="p">[</span><span class="n">event</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">parsed_events</span> <span class="k">if</span> <span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
 
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Collected: {len(results.success)}. &quot;</span>
-                 <span class="n">f</span><span class="s2">&quot;Ignored: {len(results.warning)}. &quot;</span>
-                 <span class="n">f</span><span class="s2">&quot;Errored: {len(results.error)}.&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Collected: {len(results.success)}. &quot;</span>
+                 <span class="sa">f</span><span class="s2">&quot;Ignored: {len(results.warning)}. &quot;</span>
+                 <span class="sa">f</span><span class="s2">&quot;Errored: {len(results.error)}.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Return events</span>
         <span class="k">return</span> <span class="n">parsed_events</span></div>
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;&lt;SeattleEventScraper [</span><span class="si">{self.main_route}</span><span class="s2">]&gt;&quot;</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;SeattleEventScraper [</span><span class="si">{self.main_route}</span><span class="s2">]&gt;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 </pre></div>
 

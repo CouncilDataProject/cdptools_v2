@@ -239,12 +239,12 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">schedule</span>
 
-<span class="kn">from</span> <span class="nn">cdptools</span> <span class="k">import</span> <span class="n">get_module_version</span>
-<span class="kn">from</span> <span class="nn">cdptools.dev_utils</span> <span class="k">import</span> <span class="n">load_custom_object</span>
+<span class="kn">from</span> <span class="nn">cdptools</span> <span class="kn">import</span> <span class="n">get_module_version</span>
+<span class="kn">from</span> <span class="nn">cdptools.dev_utils</span> <span class="kn">import</span> <span class="n">load_custom_object</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -259,7 +259,7 @@
 
 <div class="viewcode-block" id="Args"><a class="viewcode-back" href="../../../cdptools.bin.html#cdptools.bin.run_cdp_pipeline.Args">[docs]</a><span class="k">class</span> <span class="nc">Args</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__parse</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -286,13 +286,13 @@
             <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;config_path&quot;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">config_path</span><span class="p">}</span>
         <span class="p">)</span>
 
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;CDPTools Version: {get_module_version()}&quot;</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Initializing: </span><span class="si">{args.pipeline_type}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CDPTools Version: {get_module_version()}&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing: </span><span class="si">{args.pipeline_type}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># If pipeline schedule was provided run on schedule</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">schedule</span><span class="p">:</span>
             <span class="n">schedule</span><span class="o">.</span><span class="n">every</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">schedule</span><span class="p">)</span><span class="o">.</span><span class="n">minutes</span><span class="o">.</span><span class="n">do</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Pipeline will run every </span><span class="si">{args.schedule}</span><span class="s2"> minutes.&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pipeline will run every </span><span class="si">{args.schedule}</span><span class="s2"> minutes.&quot;</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
             <span class="c1"># Continuely run</span>
@@ -302,7 +302,7 @@
 
         <span class="c1"># No schedule passed. Run once</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Pipeline will run once.&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pipeline will run once.&quot;</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
             <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 

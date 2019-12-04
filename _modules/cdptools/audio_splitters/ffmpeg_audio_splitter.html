@@ -235,12 +235,12 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">ffmpeg</span>
 
-<span class="kn">from</span> <span class="nn">.audio_splitter</span> <span class="k">import</span> <span class="n">AudioSplitter</span>
+<span class="kn">from</span> <span class="nn">.audio_splitter</span> <span class="kn">import</span> <span class="n">AudioSplitter</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -251,7 +251,7 @@
 
 <div class="viewcode-block" id="FFmpegAudioSplitter"><a class="viewcode-back" href="../../../cdptools.audio_splitters.html#cdptools.audio_splitters.ffmpeg_audio_splitter.FFmpegAudioSplitter">[docs]</a><span class="k">class</span> <span class="nc">FFmpegAudioSplitter</span><span class="p">(</span><span class="n">AudioSplitter</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="FFmpegAudioSplitter.split"><a class="viewcode-back" href="../../../cdptools.audio_splitters.html#cdptools.audio_splitters.ffmpeg_audio_splitter.FFmpegAudioSplitter.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span>
@@ -273,10 +273,10 @@
         <span class="n">stream</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">audio_save_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;wav&quot;</span><span class="p">,</span> <span class="n">acodec</span><span class="o">=</span><span class="s2">&quot;pcm_s16le&quot;</span><span class="p">,</span> <span class="n">ac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ar</span><span class="o">=</span><span class="s2">&quot;16k&quot;</span><span class="p">)</span>
 
         <span class="c1"># Run dag</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Beginning audio separation for: </span><span class="si">{video_read_path}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning audio separation for: </span><span class="si">{video_read_path}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">capture_stdout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">capture_stderr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Completed audio separation for: </span><span class="si">{video_read_path}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Stored audio: </span><span class="si">{audio_save_path}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed audio separation for: </span><span class="si">{video_read_path}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored audio: </span><span class="si">{audio_save_path}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># Store logs</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">audio_save_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.out&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">write_out</span><span class="p">:</span>

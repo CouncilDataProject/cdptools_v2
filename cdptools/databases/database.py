@@ -755,3 +755,32 @@ class Database(ABC):
             An list of match objects sorted in most to least relevant order.
         """
         return []
+
+    @abstractmethod
+    def wipe_table(self, table: str):
+        """
+        Wipe the input table.
+
+        Parameters
+        ----------
+        table: str
+            A string tablename in the database to be deleted.
+
+        Returns
+        -------
+        None
+        """
+        return
+
+    @property
+    @abstractmethod
+    def _tables(self) -> List[str]:
+        """
+        A generic database tables property.
+
+        Returns
+        -------
+        _tables: List[str]
+            A list of table names.
+        """
+        pass

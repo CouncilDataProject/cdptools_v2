@@ -77,6 +77,10 @@ class CloudFirestoreDatabase(Database):
         # With credentials:
         if credentials_path:
             self._initialize_creds_db(credentials_path, name)
+
+            # We fetch all tables in case some tables exist in target, but not in source
+            # Path returns a tuple, and root collection path is in first index
+            self._tables = [coll._path[0] for coll in self._root.collections()]
         elif project_id:
             self._credentials_path = None
             self._project_id = project_id
@@ -84,13 +88,13 @@ class CloudFirestoreDatabase(Database):
         else:
             raise exceptions.MissingParameterError(["project_id", "credentials_path"])
 
-        self._tables = [
+        self._cdp_tables = [
                 'minutes_item_file', 'vote', 'person', 'run_input',
                 'indexed_minutes_item_term', 'minutes_item', 'event_minutes_item',
                 'run', 'run_output', 'transcript', 'file', 'run_input_file', 'algorithm',
                 'indexed_event_term', 'event', 'body', 'run_output_file']
 
-        self._table_to_function_dict = {
+        self._cdp_table_to_function_dict = {
                 'minutes_item_file': self.get_or_upload_minutes_item_file,
                 'vote': self.get_or_upload_vote,
                 'person': self.get_or_upload_person,
@@ -815,6 +819,9 @@ class CloudFirestoreDatabase(Database):
             else:
                 log.info("Deleted {} docs from {} table in batches of {} docs".format(total_del, table, batch_size))
                 return
+
+    def _tables(self) -> List[str]:
+        return self._tables
 
     def __str__(self):
         if self._credentials_path:

@@ -62,9 +62,9 @@ def main():
     deletefunc = partial(delete_table, target_db=target_db)
 
     with ThreadPoolExecutor() as exe:
-        exe.map(deletefunc, target_db._tables)
+        exe.map(deletefunc, target_db.tables)
 
-    for table in source_db._cdp_tables:
+    for table in source_db.tables:
         log.info("Cloning table: " + table)
         processingfunc = partial(pass_through, target_db=target_db, table=table)
         prod_rows = source_db.select_rows_as_list(table)

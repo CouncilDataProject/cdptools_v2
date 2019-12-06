@@ -17,7 +17,7 @@ from firebase_admin import credentials, firestore
 from ..indexers import Indexer
 from . import exceptions
 from .database import (Database, Match, OrderCondition, TermResult,
-                       WhereCondition, WhereOperators)
+                       WhereCondition, WhereOperators, cdp_tables)
 
 ###############################################################################
 
@@ -85,14 +85,9 @@ class CloudFirestoreDatabase(Database):
             self._credentials_path = None
             self._project_id = project_id
             self._db_uri = FIRESTORE_BASE_URI.format(project_id=project_id)
+            self._tables = cdp_tables
         else:
             raise exceptions.MissingParameterError(["project_id", "credentials_path"])
-
-        self._cdp_tables = [
-                'minutes_item_file', 'vote', 'person', 'run_input',
-                'indexed_minutes_item_term', 'minutes_item', 'event_minutes_item',
-                'run', 'run_output', 'transcript', 'file', 'run_input_file', 'algorithm',
-                'indexed_event_term', 'event', 'body', 'run_output_file']
 
         self._cdp_table_to_function_dict = {
                 'minutes_item_file': self.get_or_upload_minutes_item_file,
@@ -820,7 +815,9 @@ class CloudFirestoreDatabase(Database):
                 log.info("Deleted {} docs from {} table in batches of {} docs".format(total_del, table, batch_size))
                 return
 
-    def _tables(self) -> List[str]:
+    @property
+    def tables(self) -> List[str]:
+        log.info("Fetched the following tables: {}".format(str(self._tables)))
         return self._tables
 
     def __str__(self):

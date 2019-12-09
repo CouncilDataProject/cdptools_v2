@@ -10,6 +10,13 @@ from . import exceptions
 ###############################################################################
 
 
+cdp_tables = [
+        'minutes_item_file', 'vote', 'person', 'run_input',
+        'indexed_minutes_item_term', 'minutes_item', 'event_minutes_item',
+        'run', 'run_output', 'transcript', 'file', 'run_input_file', 'algorithm',
+        'indexed_event_term', 'event', 'body', 'run_output_file']
+
+
 class WhereCondition(NamedTuple):
     column_name: str
     operator: str
@@ -755,3 +762,32 @@ class Database(ABC):
             An list of match objects sorted in most to least relevant order.
         """
         return []
+
+    @abstractmethod
+    def wipe_table(self, table: str):
+        """
+        Wipe the input table.
+
+        Parameters
+        ----------
+        table: str
+            A string tablename in the database to be deleted.
+
+        Returns
+        -------
+        None
+        """
+        return
+
+    @property
+    @abstractmethod
+    def tables(self) -> List[str]:
+        """
+        A generic database tables property.
+
+        Returns
+        -------
+        _tables: List[str]
+            A list of table names.
+        """
+        pass

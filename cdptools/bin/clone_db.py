@@ -39,7 +39,11 @@ def pass_through(row, target_db, table):
     row.pop('updated', None)
     row.pop('created', None)
     row.pop(str(table)+'_id', None)
-    target_db._table_to_function_dict[table](**row)
+    target_db._cdp_table_to_function_dict[table](**row)
+
+
+def delete_table(table, target_db):
+    target_db.wipe_table(table, 500)
 
 
 def main():
@@ -55,7 +59,12 @@ def main():
 
     target_db = c_db.CloudFirestoreDatabase(credentials_path=args.target_credentials)
 
-    for table in source_db._tables:
+    deletefunc = partial(delete_table, target_db=target_db)
+
+    with ThreadPoolExecutor() as exe:
+        exe.map(deletefunc, target_db.tables)
+
+    for table in source_db.tables:
         log.info("Cloning table: " + table)
         processingfunc = partial(pass_through, target_db=target_db, table=table)
         prod_rows = source_db.select_rows_as_list(table)

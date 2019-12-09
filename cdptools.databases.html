@@ -724,6 +724,20 @@ table queried. If no rows are found, returns an empty list.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="cdptools.databases.database.Database.tables">
+<em class="property">abstract property </em><code class="sig-name descname">tables</code><a class="headerlink" href="#cdptools.databases.database.Database.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic database tables property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>_tables</strong> – A list of table names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="cdptools.databases.database.Database.upload_or_update_indexed_event_term">
 <em class="property">abstract </em><code class="sig-name descname">upload_or_update_indexed_event_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">event_id: str</em>, <em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.upload_or_update_indexed_event_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.upload_or_update_indexed_event_term" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload or update a single indexed event term.</p>
@@ -762,6 +776,23 @@ minutes item.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Dict[str, Union[str, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.wipe_table">
+<em class="property">abstract </em><code class="sig-name descname">wipe_table</code><span class="sig-paren">(</span><em class="sig-param">table: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/database.html#Database.wipe_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.wipe_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wipe the input table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table</strong> (<em>str</em>) – A string tablename in the database to be deleted.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>

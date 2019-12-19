@@ -106,4 +106,4 @@ def test_google_cloud_transcribe(fake_creds_path, example_audio, tmpdir):
 
         sr_model = GoogleCloudSRModel(fake_creds_path)
 
-        sr_model.transcribe(str(example_audio), tmpdir / "raw.txt", tmpdir / "words.json", tmpdir / "sentences.json")
+        sr_model.transcribe(str(example_audio), tmpdir / "raw.json", tmpdir / "words.json", tmpdir / "sentences.json")

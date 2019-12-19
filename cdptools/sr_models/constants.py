@@ -12,3 +12,4 @@ class TranscriptFormats:
     raw = "raw"
     timestamped_words = "timestamped-words"
     timestamped_sentences = "timestamped-sentences"
+    timestamped_speaker_turns = "timestamped-speaker-turns"

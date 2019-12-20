@@ -48,7 +48,7 @@ class GoogleCloudSRModel(SRModel):
 
     def transcribe(
         self,
-        source_uri: Union[str, Path],
+        file_uri: Union[str, Path],
         raw_transcript_save_path: Union[str, Path],
         timestamped_words_save_path: Union[str, Path],
         timestamped_sentences_save_path: Union[str, Path],
@@ -80,10 +80,10 @@ class GoogleCloudSRModel(SRModel):
             speech_contexts=[speech_context],
             metadata=metadata
         )
-        audio = speech.types.RecognitionAudio(uri=source_uri)
+        audio = speech.types.RecognitionAudio(uri=file_uri)
 
         # Begin transcription
-        log.debug(f"Beginning transcription for: {source_uri}")
+        log.debug(f"Beginning transcription for: {file_uri}")
         operation = client.long_running_recognize(config, audio)
 
         # Wait for complete
@@ -134,7 +134,7 @@ class GoogleCloudSRModel(SRModel):
             confidence = confidence_sum / segments
         else:
             confidence = 0.0
-        log.info(f"Completed transcription for: {source_uri}. Confidence: {confidence}")
+        log.info(f"Completed transcription for: {file_uri}. Confidence: {confidence}")
 
         # Wrap each transcript in the standard format
         raw_transcript = self.wrap_and_format_transcript_data(

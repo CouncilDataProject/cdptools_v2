@@ -22,27 +22,28 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-class WebVttSRModel(SRModel):
+class WebVTTSRModel(SRModel):
     def __init__(self, new_turn_pattern: str, **kwargs):
-        # New speaker turn must begin with one or more new_turn_pattern_str
+        # New speaker turn must begin with one or more new_turn_pattern str
         self.new_turn_pattern = r"^({})+\s*(.+)$".format(new_turn_pattern)
-        # Nentence must be ended by period, question mark, or exclamation point.
+        # Sentence must be ended by period, question mark, or exclamation point.
         self.end_of_sentence_pattern = r"^.+[.?!]\s*$"
 
-    def _true_case(self, text: str) -> str:
+    def _normalize_text(self, text: str) -> str:
         normalized_text = truecase.get_true_case(text)
-        # normalized_text = re.sub('[$] ', ' $', normalized_text)
+        # Fix some punctuation issue, e.g. `roughly$ 19` bececomes `roughly $19`
+        normalized_text = re.sub(r"([#$(<[{]) ", lambda x: f" {x.group(1)}", normalized_text)
         return normalized_text
 
-    def _request_caption_content(self, source_uri: str) -> str:
-        # Get the content of source_uri
-        response = requests.get(source_uri)
+    def _request_caption_content(self, file_uri: str) -> str:
+        # Get the content of file_uri
+        response = requests.get(file_uri)
         response.raise_for_status()
         return response.text
 
-    def _get_sentences(self, source_uri: str) -> List[Dict[str, Union[str, float]]]:
+    def _get_sentences(self, file_uri: str) -> List[Dict[str, Union[str, float]]]:
         # Create file-like object of caption file's content
-        buffer = io.StringIO(self._request_caption_content(source_uri))
+        buffer = io.StringIO(self._request_caption_content(file_uri))
         # Get list of caption block
         captions = webvtt.read_buffer(buffer).captions
         buffer.close()
@@ -73,16 +74,16 @@ class WebVttSRModel(SRModel):
                               'text': ' '.join(lines)})
         return sentences
 
-    def _get_speaker_turns(self, source_uri: str) -> List[Dict[str, Union[str, List[Dict[str, Union[str, float]]]]]]:
+    def _get_speaker_turns(self, file_uri: str) -> List[Dict[str, Union[str, List[Dict[str, Union[str, float]]]]]]:
         # Get timestamped sentences
-        sentences = self._get_sentences(source_uri)
+        sentences = self._get_sentences(file_uri)
 
         # Create timestamped speaker turns
         turns = []
         for sentence in sentences:
             new_turn_search = re.search(self.new_turn_pattern, sentence['text'])
             text = new_turn_search.group(2) if new_turn_search else sentence['text']
-            normalized_text = self._true_case(text)
+            normalized_text = self._normalize_text(text)
             # Sentence block is start of new speaker turn, or turns is empty
             if new_turn_search or not turns:
                 turn = {
@@ -108,17 +109,19 @@ class WebVttSRModel(SRModel):
 
     def transcribe(
         self,
-        source_uri: Union[str, Path],
+        file_uri: Union[str, Path],
         raw_transcript_save_path: Union[str, Path],
+        timestamped_sentences_save_path: Union[str, Path],
         timestamped_speaker_turns_save_path: Union[str, Path],
         **kwargs
     ) -> SRModelOutputs:
         # Check paths
         raw_transcript_save_path = Path(raw_transcript_save_path).resolve()
+        timestamped_sentences_save_path = Path(timestamped_sentences_save_path).resolve()
         timestamped_speaker_turns_save_path = Path(timestamped_speaker_turns_save_path).resolve()
 
         # Create timestamped speaker turns transcript
-        timestamped_speaker_turns = self._get_speaker_turns(source_uri)
+        timestamped_speaker_turns = self._get_speaker_turns(file_uri)
 
         # Create raw transcript
         raw_text = ' '.join([sentence['text'] for turn in timestamped_speaker_turns for sentence in turn['data']])
@@ -126,10 +129,19 @@ class WebVttSRModel(SRModel):
                            'end_time': timestamped_speaker_turns[-1]['data'][-1]['end_time'],
                            'text': raw_text}]
 
+        # Create timestamped sentences transcript
+        timestamped_sentences = [sentence for turn in timestamped_speaker_turns for sentence in turn['data']]
+
         # Wrap each transcript in the standard format
         raw_transcript = self.wrap_and_format_transcript_data(
             data=raw_transcript,
             transcript_format=constants.TranscriptFormats.raw,
+            confidence=1
+        )
+
+        timestamped_sentences = self.wrap_and_format_transcript_data(
+            data=timestamped_sentences,
+            transcript_format=constants.TranscriptFormats.timestamped_sentences,
             confidence=1
         )
 
@@ -143,6 +155,9 @@ class WebVttSRModel(SRModel):
         with open(raw_transcript_save_path, "w") as write_out:
             json.dump(raw_transcript, write_out)
 
+        with open(timestamped_sentences_save_path, "w") as write_out:
+            json.dump(timestamped_sentences, write_out)
+
         with open(timestamped_speaker_turns_save_path, "w") as write_out:
             json.dump(timestamped_speaker_turns, write_out)
 
@@ -150,5 +165,6 @@ class WebVttSRModel(SRModel):
         return SRModelOutputs(
             raw_transcript_save_path,
             1,
+            timestamped_sentences_path=timestamped_sentences_save_path,
             timestamped_speaker_turns_path=timestamped_speaker_turns_save_path
         )

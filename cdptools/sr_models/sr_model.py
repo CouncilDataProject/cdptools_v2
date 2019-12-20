@@ -58,7 +58,7 @@ class SRModel(ABC):
     @abstractmethod
     def transcribe(
         self,
-        source_uri: Union[str, Path],
+        file_uri: Union[str, Path],
         raw_transcript_save_path: Union[str, Path],
         timestamped_words_save_path: Optional[Union[str, Path]] = None,
         timestamped_sentences_save_path: Optional[Union[str, Path]] = None,
@@ -70,7 +70,7 @@ class SRModel(ABC):
 
         Parameters
         ----------
-        source_uri: Union[str, Path]
+        file_uri: Union[str, Path]
             The uri to the audio file or caption file to transcribe.
         raw_transcript_save_path: Union[str, Path]
             Where the raw transcript should be saved to.

@@ -4,6 +4,7 @@
 import io
 import json
 import logging
+import nltk
 import re
 import requests
 import truecase
@@ -24,6 +25,8 @@ log = logging.getLogger(__name__)
 
 class WebVTTSRModel(SRModel):
     def __init__(self, new_turn_pattern: str, **kwargs):
+        # Download punkt for truecase module
+        nltk.download("punkt")
         # New speaker turn must begin with one or more new_turn_pattern str
         self.new_turn_pattern = r"^({})+\s*(.+)$".format(new_turn_pattern)
         # Sentence must be ended by period, question mark, or exclamation point.

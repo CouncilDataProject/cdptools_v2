@@ -52,7 +52,9 @@ requirements = [
     "python-Levenshtein==0.12.0",
     "requests==2.22.0",
     "schedule==0.6.0",
-    "tika==1.19"
+    "tika==1.19",
+    "webvtt-py==0.4.3",
+    "truecase==0.0.5"
 ]
 
 local_requirements = [

@@ -194,3 +194,37 @@ class FileStore(ABC):
         """
 
         return Path("/tmp/file.tmp")
+
+    @abstractmethod
+    def delete_file(
+        self,
+        filename: str
+    ) -> str:
+        """
+        Delete the file.
+
+        Parameters
+        ----------
+        filename: str
+            The name of the file in the file store to delete.
+
+        Returns
+        -------
+        deleted_file_name: str
+            Message containing the name of the file deleted.
+        """
+        return ""
+
+    @abstractmethod
+    def clear_bucket(
+        self
+    ) -> str:
+        """
+        Clear the bucket of all files.
+
+        Returns
+        -------
+        clear_bucket_message: str
+            Message notifying that the bucket has been cleared.
+        """
+        return ""

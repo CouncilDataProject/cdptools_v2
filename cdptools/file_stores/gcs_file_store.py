@@ -8,6 +8,9 @@ from typing import Optional, Union
 
 import requests
 from google.cloud import storage
+from google.api_core.page_iterator import Page
+
+from concurrent.futures import ThreadPoolExecutor
 
 from . import exceptions
 from .file_store import FileStore
@@ -201,6 +204,33 @@ class GCSFileStore(FileStore):
             return self._download_file_with_creds(filename, save_path, overwrite)
 
         return self._download_file_no_creds(filename, save_path, overwrite)
+
+    def delete_file(
+        self,
+        filename: str
+    ) -> str:
+        self._bucket.delete_blob(filename)
+        return "Deleted file: {}".format(filename)
+
+    def delete_page(
+        self,
+        page: Page
+    ) -> str:
+        for blob in page:
+            self.delete_file(blob.name)
+        return "Deleted page in bucket: {}".format(self._bucket.name)
+
+    def clear_bucket(
+            self
+    ) -> str:
+        # Gather the files by pages so we can delete in parallel
+        pages = self._client.list_blobs(self._bucket).pages
+
+        with ThreadPoolExecutor() as exe:
+            exe.map(self.delete_page, pages)
+
+        log.info("Cleared bucket: {}".format(self._bucket.name))
+        return "Cleared bucket: {}".format(self._bucket.name)
 
     def __str__(self):
         # With credentials

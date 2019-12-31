@@ -92,7 +92,9 @@ simply that one of them produces transcripts that have 100% confidence.
 If your city provides closed caption files for city council meetings, you can write a module that takes the closed caption
 file and produce transcripts. If not all city council meetings have closed caption files, you can use a mixture of speech
 recognition models. That is, if there is a closed caption file, use that to produce transcripts. If there is no closed
-caption file you can use a `sr_models.GoogleCloudSRModel` to produce transcripts from an audio file.
+caption file you can use a `sr_models.GoogleCloudSRModel` to produce transcripts from an audio file. Please see
+`cdptools/cdptools/tests/data/example_event_pipeline_config_with_mixture_sr_model.json` for an example on how
+to configure a mixture of speech recognition models for your pipeline.
 
 If you want to develop your own speech recognition model, please first read about
 [supported transcript formats](transcript_formats.html).

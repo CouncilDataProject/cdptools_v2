@@ -15,6 +15,7 @@ class SRModelOutputs(NamedTuple):
     confidence: float
     timestamped_words_path: Optional[Path] = None
     timestamped_sentences_path: Optional[Path] = None
+    timestamped_speaker_turns_path: Optional[Path] = None
     extras: Optional[Dict[str, Any]] = None
 
 
@@ -57,10 +58,11 @@ class SRModel(ABC):
     @abstractmethod
     def transcribe(
         self,
-        audio_uri: Union[str, Path],
+        file_uri: Union[str, Path],
         raw_transcript_save_path: Union[str, Path],
         timestamped_words_save_path: Optional[Union[str, Path]] = None,
         timestamped_sentences_save_path: Optional[Union[str, Path]] = None,
+        timestamped_speaker_turns_save_path: Optional[Union[str, Path]] = None,
         **kwargs
     ) -> SRModelOutputs:
         """
@@ -68,14 +70,16 @@ class SRModel(ABC):
 
         Parameters
         ----------
-        audio_uri: Union[str, Path]
-            The uri to the audio file to transcribe.
+        file_uri: Union[str, Path]
+            The uri to the audio file or caption file to transcribe.
         raw_transcript_save_path: Union[str, Path]
             Where the raw transcript should be saved to.
         timestamped_words_save_path: Optional[Union[str, Path]]
             If a timestamped words formatted transcript is produced, where it should be saved to.
         timestamped_sentences_save_path: Optional[Union[str, Path]]
             If a timestamped sentences formatted transcript is produced, where it should be saved to.
+        timestamped_speaker_turns_save_path: Optional[Union[str, Path]]
+            If a timestamped speaker turns formatted transcript is produced, where it should be saved to.
 
         Returns
         -------
@@ -88,5 +92,6 @@ class SRModel(ABC):
             Path(raw_transcript_save_path),
             1.0,
             Path(timestamped_words_save_path),
-            Path(timestamped_sentences_save_path)
+            Path(timestamped_sentences_save_path),
+            Path(timestamped_speaker_turns_save_path)
         )

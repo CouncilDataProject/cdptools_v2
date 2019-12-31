@@ -1,0 +1,49 @@
+{
+    "event_scraper": {
+        "module_path": "cdptools.event_scrapers.seattle_event_scraper",
+        "object_name": "SeattleEventScraper",
+        "object_kwargs": {
+            "ignore_minutes_items": [
+                "This meeting also constitutes a meeting of the City Council, provided that the meeting shall be conducted as a committee meeting under the Council Rules and Procedures, and Council action shall be limited to committee business.",
+                "City Council Agenda",
+                "Please Note: Times listed are estimated"
+            ]
+        }
+    },
+    "database": {
+        "module_path": "cdptools.databases.cloud_firestore_database",
+        "object_name": "CloudFirestoreDatabase",
+        "object_kwargs": {
+            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json"
+        }
+    },
+    "file_store": {
+        "module_path": "cdptools.file_stores.gcs_file_store",
+        "object_name": "GCSFileStore",
+        "object_kwargs": {
+            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json",
+            "bucket_name": "stg-cdp-seattle.appspot.com"
+        }
+    },
+    "audio_splitter": {
+        "module_path": "cdptools.audio_splitters.ffmpeg_audio_splitter",
+        "object_name": "FFmpegAudioSplitter",
+        "object_kwargs": {}
+    },
+    "speech_recognition_model": {
+        "try": {
+            "module_path": "cdptools.sr_models.webvtt_sr_model",
+            "object_name": "WebVTTSRModel",
+            "object_kwargs": {
+                "new_turn_pattern": "&gt;"
+            }
+        },
+        "catch": {
+            "module_path": "cdptools.sr_models.google_cloud_sr_model",
+            "object_name": "GoogleCloudSRModel",
+            "object_kwargs": {
+                "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json"
+            }
+        }
+    }
+}

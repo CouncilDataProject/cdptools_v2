@@ -7,6 +7,7 @@ import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from requests import RequestException
 from typing import Any, Dict, List, Optional, Union
 
 from .. import get_module_version
@@ -54,11 +55,26 @@ class EventGatherPipeline(Pipeline):
             object_name=self.config["audio_splitter"]["object_name"],
             object_kwargs=self.config["audio_splitter"].get("object_kwargs", {})
         )
-        self.sr_model = load_custom_object.load_custom_object(
-            module_path=self.config["speech_recognition_model"]["module_path"],
-            object_name=self.config["speech_recognition_model"]["object_name"],
-            object_kwargs=self.config["speech_recognition_model"].get("object_kwargs", {})
-        )
+        try:
+            try_model = self.config["speech_recognition_model"]["try"]
+            catch_model = self.config["speech_recognition_model"]["catch"]
+            self.caption_sr_model = load_custom_object.load_custom_object(
+                module_path=try_model["module_path"],
+                object_name=try_model["object_name"],
+                object_kwargs=try_model.get("object_kwargs", {})
+            )
+
+            self.sr_model = load_custom_object.load_custom_object(
+                module_path=catch_model["module_path"],
+                object_name=catch_model["object_name"],
+                object_kwargs=catch_model.get("object_kwargs", {})
+            )
+        except KeyError:
+            self.sr_model = load_custom_object.load_custom_object(
+                module_path=self.config["speech_recognition_model"]["module_path"],
+                object_name=self.config["speech_recognition_model"]["object_name"],
+                object_kwargs=self.config["speech_recognition_model"].get("object_kwargs", {})
+            )
 
     def task_audio_get_or_copy(self, key: str, video_uri: str) -> str:
         """
@@ -115,7 +131,13 @@ class EventGatherPipeline(Pipeline):
 
             return audio_uri
 
-    def task_transcript_get_or_create(self, key: str, audio_uri: str, phrases: Optional[List[str]] = None):
+    def task_transcript_get_or_create(
+        self,
+        key: str,
+        video_uri: str,
+        caption_uri: Optional[str] = None,
+        phrases: Optional[List[str]] = None
+    ):
         """
         Get or create and return transcript resource uri provied key.
         """
@@ -124,45 +146,62 @@ class EventGatherPipeline(Pipeline):
             file_store=self.file_store,
             algorithm_name="EventGatherPipeline.task_transcript_get_or_create",
             algorithm_version=get_module_version(),
-            inputs=[key, audio_uri],
+            inputs=[key, video_uri, caption_uri],
             remove_files=True
         ) as run:
-            # Setup temporary filenames
-            tmp_raw_transcript_filepath = f"{key}_raw_transcript_0.json"
-            tmp_ts_words_transcript_filepath = f"{key}_ts_words_transcript_0.json"
-            tmp_ts_sentences_transcript_filepath = f"{key}_ts_sentences_transcript_0.json"
+            # Setup temporary filenames, sorted by preference
+            tmp_filenames = [
+                f"{key}_ts_speaker_turns_transcript_0.json",
+                f"{key}_ts_sentences_transcript_0.json",
+                f"{key}_ts_words_transcript_0.json",
+                f"{key}_raw_transcript_0.json"
+            ]
 
-            # Check if raw transcript already exists in file store
-            try:
-                # Try get the best variant of transcript
-                # Timestamped sentences first
+            # Iterate through tmp_filenames and check if any of them exists
+            main_transcript_uri = None
+
+            for tmp_filename in tmp_filenames:
                 try:
-                    main_transcript_uri = self.file_store.get_file_uri(filename=tmp_ts_sentences_transcript_filepath)
+                    main_transcript_uri = self.file_store.get_file_uri(filename=tmp_filename)
+                    break
                 except FileNotFoundError:
-                    # Timestamped words second
-                    try:
-                        main_transcript_uri = self.file_store.get_file_uri(filename=tmp_ts_words_transcript_filepath)
-                    # Default to raw transcript
-                    # If this isn't found, the first try except block will break and entirely new transcripts will be
-                    # generated.
-                    except FileNotFoundError:
-                        main_transcript_uri = self.file_store.get_file_uri(filename=tmp_raw_transcript_filepath)
+                    continue
 
+            # Transcript already exist
+            if main_transcript_uri:
                 main_transcript_details = self.database.get_or_upload_file(main_transcript_uri)
                 confidence = self.database.select_rows_as_list(
                     table="transcript",
                     filters=[("file_id", main_transcript_details["file_id"])],
                     limit=1
                 )[0]["confidence"]
-            except FileNotFoundError:
-                # Transcribe audio
-                outputs = self.sr_model.transcribe(
-                    audio_uri=audio_uri,
-                    phrases=phrases,
-                    raw_transcript_save_path=tmp_raw_transcript_filepath,
-                    timestamped_words_save_path=tmp_ts_words_transcript_filepath,
-                    timestamped_sentences_save_path=tmp_ts_sentences_transcript_filepath,
-                )
+            else:
+                # List of tmp_filenames exhausted without break, so there must be no transcripts
+                # Create entirely new transcripts
+                try:
+                    # Create transcript from caption_uri
+                    outputs = self.caption_sr_model.transcribe(
+                        file_uri=caption_uri,
+                        raw_transcript_save_path=tmp_filenames[-1],
+                        timestamped_sentences_save_path=tmp_filenames[1],
+                        timestamped_speaker_turns_save_path=tmp_filenames[0]
+                    )
+                except (AttributeError, RequestException):
+                    # Either there is no caption_sr_model for this pipeline or
+                    # caption_sr_model was unable to create transcripts, due to invalid caption_uri
+                    # Create transcripts from video_uri
+
+                    # Run audio task
+                    audio_uri = self.task_audio_get_or_copy(key, video_uri)
+
+                    # Transcribe audio
+                    outputs = self.sr_model.transcribe(
+                        file_uri=audio_uri,
+                        phrases=phrases,
+                        raw_transcript_save_path=tmp_filenames[3],
+                        timestamped_words_save_path=tmp_filenames[2],
+                        timestamped_sentences_save_path=tmp_filenames[1],
+                    )
 
                 # Store and register transcript files
                 raw_transcript_uri = self.file_store.upload_file(filepath=outputs.raw_path)
@@ -190,6 +229,18 @@ class EventGatherPipeline(Pipeline):
                     ts_sentences_transcript_file_details = self.database.get_or_upload_file(ts_sentences_transcript_uri)
                     run.register_output(outputs.timestamped_sentences_path)
                     main_transcript_details = ts_sentences_transcript_file_details
+
+                # Store and register speaker turns transcript file
+                # Set as main transcript
+                if outputs.timestamped_speaker_turns_path:
+                    ts_speaker_turns_transcript_uri = self.file_store.upload_file(
+                        filepath=outputs.timestamped_speaker_turns_path
+                    )
+                    ts_speaker_turns_transcript_file_details = self.database.get_or_upload_file(
+                        ts_speaker_turns_transcript_uri
+                    )
+                    run.register_output(outputs.timestamped_speaker_turns_path)
+                    main_transcript_details = ts_speaker_turns_transcript_file_details
 
             return main_transcript_details, confidence
 
@@ -288,14 +339,16 @@ class EventGatherPipeline(Pipeline):
             else:
                 log.info("Processing event: {} ({})".format(key, event["video_uri"]))
 
-                # Run audio task
-                audio_uri = self.task_audio_get_or_copy(key, event["video_uri"])
-
                 # Create list of phrases to send to sr model
                 phrases = [item["name"] for item in event["minutes_items"]]
 
                 # Run transcript task
-                transcript_file_details, confidence = self.task_transcript_get_or_create(key, audio_uri, phrases)
+                transcript_file_details, confidence = self.task_transcript_get_or_create(
+                    key,
+                    event["video_uri"],
+                    event["caption_uri"],
+                    phrases
+                )
 
                 # Attach transcript details to event
                 event["transcript_details"] = {

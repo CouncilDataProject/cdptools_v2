@@ -221,10 +221,12 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
     minutes_items = []
     for legistar_event_item in legistar_event_details["EventItems"]:
         # Choose name based off available data
-        if legistar_event_item["EventItemMatterName"]:
+        if legistar_event_item["EventItemTitle"]:
+            minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemTitle"])
+        elif legistar_event_item["EventItemMatterName"]:
             minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemMatterName"])
         else:
-            minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemTitle"])
+            minutes_item_matter = _clean_legistar_string_data(legistar_event_item["EventItemMatterFile"])
 
         # Choose matter name based off available data
         if legistar_event_item["EventItemMatterName"]:

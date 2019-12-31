@@ -126,8 +126,8 @@ def mocked_caption_sr_model(
 ) -> WebVTTSRModel:
     mocked_model = mock.Mock(WebVTTSRModel("any-new-turn-pattern"))
     mocked_model.transcribe.return_value = SRModelOutputs(
-        example_transcript_raw,
-        1,
+        raw_path=example_transcript_raw,
+        confidence=1,
         timestamped_sentences_path=example_transcript_sentences,
         timestamped_speaker_turns_path=example_transcript_speaker_turns
     )

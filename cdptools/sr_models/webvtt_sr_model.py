@@ -166,8 +166,8 @@ class WebVTTSRModel(SRModel):
 
         # Return the save path
         return SRModelOutputs(
-            raw_transcript_save_path,
-            1,
+            raw_path=raw_transcript_save_path,
+            confidence=1,
             timestamped_sentences_path=timestamped_sentences_save_path,
             timestamped_speaker_turns_path=timestamped_speaker_turns_save_path
         )

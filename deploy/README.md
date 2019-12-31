@@ -234,9 +234,9 @@ The setup for a production server is nearly identical as for local development e
 web interactions which can be done on any machine.
 2. Because you are creating a production instance, probably best to not pre-pend the `stg-` to your project name.
 3. It is recommended to not `git clone` the project repository and instead simply run
-`pip3 install cdptools[google-cloud]` for a couple of reasons. First, not cloning the repository and removing the `-e`
+`pip3 install cdptools[seattle]` for a couple of reasons. First, not cloning the repository and removing the `-e`
 means the code that is actually running is no longer editable, which for a production server is generally a good thing.
-Second, specifying `google-cloud` over `all` means there will be less dependencies installed on the machine.
+Second, specifying `seattle` over `all` means there will be less dependencies installed on the machine.
 
 You may also need to ensure the bucket is "viewable" by `allUsers` on Google Cloud Console. Details [here](https://stackoverflow.com/questions/40232188/allow-public-read-access-on-a-gcs-bucket#answer-49809949).
 If you want to have a front end for the system you will also need to allow CORS requests. Details [here](https://cloud.google.com/storage/docs/cross-origin).

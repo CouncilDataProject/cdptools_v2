@@ -103,7 +103,7 @@ databases and file stores.
 `pip install cdptools[all]`
 
 #### Individual City Installation:
-* Seattle: `pip install cdptools[google-cloud]`
+* Seattle: `pip install cdptools[seattle]`
 
 ## Developer Features
 * Modular system for gathering city council events, transcribing, and indexing them to make searchable.

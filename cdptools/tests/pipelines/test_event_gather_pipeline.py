@@ -4,12 +4,12 @@
 import json
 from pathlib import Path
 from typing import List, Union
-from requests import RequestException
 from unittest import mock
 
 import pytest
 from firebase_admin import firestore
 from google.cloud import storage
+from requests import RequestException
 
 from cdptools.audio_splitters.ffmpeg_audio_splitter import FFmpegAudioSplitter
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
@@ -256,7 +256,7 @@ def test_event_pipeline_no_backfill(
             pipeline.process_event.assert_not_called()
 
 
-def test_event_pipeline_with_backfill(
+def test_event_gather_pipeline_with_backfill(
     empty_creds_db,
     empty_creds_fs,
     mocked_splitter,

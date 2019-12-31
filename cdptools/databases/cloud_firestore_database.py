@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
 import firebase_admin
+import pandas as pd
 import requests
 from firebase_admin import credentials, firestore
 
@@ -355,6 +356,81 @@ class CloudFirestoreDatabase(Database):
 
         return self._select_rows_as_list_no_creds(table=table, filters=filters, order_by=order_by, limit=limit)
 
+    def select_rows_as_dictionary(
+        self,
+        table: str,
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
+        limit: Optional[int] = None
+    ) -> Dict[str, Dict[str, Any]]:
+        """
+        Get a dictionary of rows from a table optionally using filters (a list of where conditions), ordering, and
+        limit.
+
+        Parameters
+        ----------
+        table: str
+            The name of the table to retrieve data from.
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]]
+            A list of filters (where conditions) to add filter down the query.
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]]
+            An order by condition to order the results by before returning.
+        limit: Optional[int]
+            An integer limit to how many rows should be returned that match the query provided.
+            Commonly, running queries without credentials will have a default limit value.
+
+        Returns
+        -------
+        results: Dict[str, Dict[str, Any]]
+            The results of the query returned as a dictionary mapping unique id to a dictionary of that rows data from
+            the table queried. If no rows are found, returns an empty dictionary.
+        """
+        # Get, format, and return
+        return self._reshape_list_of_rows_to_dict(
+            self.select_rows_as_list(table=table, filters=filters, order_by=order_by, limit=limit)
+        )
+
+    def select_rows_as_dataframe(
+        self,
+        table: str,
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
+        limit: Optional[int] = None,
+        set_id_to_index: bool = False
+    ) -> pd.DataFrame:
+        """
+        Get a dataframe of rows from a table optionally using filters (a list of where conditions), ordering, and limit.
+
+        Parameters
+        ----------
+        table: str
+            The name of the table to retrieve data from.
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]]
+            A list of filters (where conditions) to add filter down the query.
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]]
+            An order by condition to order the results by before returning.
+        limit: Optional[int]
+            An integer limit to how many rows should be returned that match the query provided.
+            Commonly, running queries without credentials will have a default limit value.
+        set_id_to_index: bool
+            Boolean value to determine whether or not the unique id values for this data should be used as the index of
+            the dataframe.
+
+        Returns
+        -------
+        results: pandas.DataFrame
+            The results of the query returned as a pandas DataFrame, where each rwow is a unique row from the
+            table queried. If no rows are found, returns an empty DataFrame.
+        """
+        # Get data
+        data = self.select_rows_as_list(table=table, filters=filters, order_by=order_by, limit=limit)
+
+        # Format
+        if set_id_to_index:
+            return self._reshape_list_of_rows_to_dataframe(data, table)
+
+        return self._reshape_list_of_rows_to_dataframe(data)
+
     def _select_rows_with_max_results_expectation(
         self,
         table: str,
@@ -415,7 +491,8 @@ class CloudFirestoreDatabase(Database):
     def get_or_upload_minutes_item(
         self,
         name: str,
-        matter: Optional[str],
+        matter: Optional[str] = None,
+        title: Optional[str] = None,
         legistar_event_item_id: Optional[int] = None
     ) -> Dict:
         return self._get_or_upload_row(
@@ -424,6 +501,7 @@ class CloudFirestoreDatabase(Database):
             values={
                 "name": name,
                 "matter": matter,
+                "title": title,
                 "legistar_event_item_id": legistar_event_item_id,
                 "created": datetime.utcnow()
             }
@@ -659,6 +737,30 @@ class CloudFirestoreDatabase(Database):
                 "run_id": run_id,
                 "file_id": file_id,
                 "created": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_event_topic(self, event_id: str, topic: str) -> Dict:
+        return self._get_or_upload_row(
+            table="event_topic",
+            pks=[("event_id", event_id), ("topic", topic)],
+            values={
+                "event_id": event_id,
+                "topic": topic,
+                "updated": datetime.utcnow()
+            }
+        )
+
+    def get_or_upload_event_entity(self, event_id: str, label: str, value: Any) -> Dict:
+        return self._get_or_upload_row(
+            table="event_topic",
+            pks=[("event_id", event_id), ("label", label), ("value", value)],
+            values={
+                "event_id": event_id,
+                "label": label,
+                "value": value,
+                "dtype": self._determine_event_entity_dtype(value),
+                "updated": datetime.utcnow()
             }
         )
 

@@ -195,7 +195,7 @@ def test_cloud_firestore_database_select_row(no_creds_db, creds_db):
     (None, None, 10),
     pytest.param(None, 12, None, marks=pytest.mark.raises(exception=exceptions.UnknownTypeOrderConditionError))
 ])
-def test_cloud_firestore_database_select_rows(no_creds_db, creds_db, filters, order_by, limit):
+def test_cloud_firestore_database_select_rows_as_list(no_creds_db, creds_db, filters, order_by, limit):
     # Mock requests
     with mock.patch("requests.post") as mocked_request:
         mocked_request.return_value = MockedResponse(EVENT_ITEMS)

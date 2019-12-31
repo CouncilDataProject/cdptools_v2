@@ -19,15 +19,15 @@
         "module_path": "cdptools.databases.cloud_firestore_database",
         "object_name": "CloudFirestoreDatabase",
         "object_kwargs": {
-            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json"
+            "credentials_path": "/home/cdptools/credentials/cdp-seattle.json"
         }
     },
     "file_store": {
         "module_path": "cdptools.file_stores.gcs_file_store",
         "object_name": "GCSFileStore",
         "object_kwargs": {
-            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json",
-            "bucket_name": "stg-cdp-seattle.appspot.com"
+            "credentials_path": "/home/cdptools/credentials/cdp-seattle.json",
+            "bucket_name": "cdp-seattle.appspot.com"
         }
     },
     "audio_splitter": {
@@ -36,10 +36,19 @@
         "object_kwargs": {}
     },
     "speech_recognition_model": {
-        "module_path": "cdptools.sr_models.google_cloud_sr_model",
-        "object_name": "GoogleCloudSRModel",
-        "object_kwargs": {
-            "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json"
+        "try": {
+            "module_path": "cdptools.sr_models.webvtt_sr_model",
+            "object_name": "WebVTTSRModel",
+            "object_kwargs": {
+                "new_turn_pattern": "&gt;"
+            }
+        },
+        "catch": {
+            "module_path": "cdptools.sr_models.google_cloud_sr_model",
+            "object_name": "GoogleCloudSRModel",
+            "object_kwargs": {
+                "credentials_path": "/home/cdptools/credentials/cdp-seattle.json"
+            }
         }
     }
 }

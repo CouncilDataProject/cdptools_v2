@@ -6,7 +6,6 @@
     2. [File Stores](#file-stores)
     3. [Audio Splitters](#audio-splitters)
     4. [Databases](#databases)
-        * [Database Schema Diagram](#database-schema-diagram)
     5. [Speech Recognition Models](#speech-recognition-models)
     6. [Indexers](#indexers)
     7. [Pipelines](#pipelines)
@@ -79,8 +78,7 @@ schema, there will be no issues with downstream processing. Similar to file stor
 open read, as if collaborators want to use the data stored by a CDP instance, it makes it easy for them to do so. Just
 ask them nicely to not slam the database with requests.
 
-[Database Schema Diagram](resources/database_diagram.pdf)
-*Created with dbdiagram.io*
+![Database Schema Diagram](resources/database_diagram.png)
 
 ### Speech Recognition Model
 Things can start to get tricky here. Speech recognition models are where the standard idea of processing may be a bit
@@ -91,8 +89,15 @@ transcripts for city council meetings, maybe you will write a module that simply
 already high quality transcript back, no need for any processing. These are both valid speech recognition models, it's
 simply that one of them produces transcripts that have 100% confidence.
 
+If your city provides closed caption files for city council meetings, you can write a module that takes the closed caption
+file and produce transcripts. If not all city council meetings have closed caption files, you can use a mixture of speech
+recognition models. That is, if there is a closed caption file, use that to produce transcripts. If there is no closed
+caption file you can use a `sr_models.GoogleCloudSRModel` to produce transcripts from an audio file. Please see
+`cdptools/cdptools/tests/data/example_event_pipeline_config_with_mixture_sr_model.json` for an example on how
+to configure a mixture of speech recognition models for your pipeline.
+
 If you want to develop your own speech recognition model, please first read about
-[supported transcript formats](transcript_formats.md).
+[supported transcript formats](transcript_formats.html).
 
 ### Indexers
 Indexer objects are used to generate a term value to terms in a corpus. A single document in this corpus could be a

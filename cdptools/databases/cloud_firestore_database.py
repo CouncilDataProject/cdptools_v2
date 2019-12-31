@@ -18,7 +18,7 @@ from firebase_admin import credentials, firestore
 from ..indexers import Indexer
 from . import exceptions
 from .database import (Database, Match, OrderCondition, TermResult,
-                       WhereCondition, WhereOperators)
+                       WhereCondition, WhereOperators, cdp_tables)
 
 ###############################################################################
 
@@ -78,12 +78,36 @@ class CloudFirestoreDatabase(Database):
         # With credentials:
         if credentials_path:
             self._initialize_creds_db(credentials_path, name)
+
+            # We fetch all tables in case some tables exist in target, but not in source
+            # Path returns a tuple, and root collection path is in first index
+            self._tables = [coll._path[0] for coll in self._root.collections()]
         elif project_id:
             self._credentials_path = None
             self._project_id = project_id
             self._db_uri = FIRESTORE_BASE_URI.format(project_id=project_id)
+            self._tables = cdp_tables
         else:
             raise exceptions.MissingParameterError(["project_id", "credentials_path"])
+
+        self._cdp_table_to_function_dict = {
+                'minutes_item_file': self.get_or_upload_minutes_item_file,
+                'vote': self.get_or_upload_vote,
+                'person': self.get_or_upload_person,
+                'run_input': self.get_or_upload_run_input,
+                'indexed_minutes_item_term': self.upload_or_update_indexed_minutes_item_term,
+                'minutes_item': self.get_or_upload_minutes_item,
+                'event_minutes_item': self.get_or_upload_event_minutes_item,
+                'run': self.get_or_upload_run,
+                'run_output': self.get_or_upload_run_output,
+                'transcript': self.get_or_upload_transcript,
+                'file': self.get_or_upload_file,
+                'run_input_file': self.get_or_upload_run_input_file,
+                'algorithm': self.get_or_upload_algorithm,
+                'indexed_event_term': self.upload_or_update_indexed_event_term,
+                'event': self.get_or_upload_event,
+                'body': self.get_or_upload_body,
+                'run_output_file': self.get_or_upload_run_output_file}
 
     @staticmethod
     def _jsonify_firestore_response(fields: Dict) -> Dict:
@@ -874,6 +898,29 @@ class CloudFirestoreDatabase(Database):
             match_on="minutes_item_id",
             data_table="minutes_item"
         )
+
+    def wipe_table(self, table, batch_size):
+        docs = self._root.collection(table).list_documents(batch_size)
+
+        total_del = 0
+        while docs:
+            deleted_count = 0
+            for doc in docs:
+                doc.delete()
+                deleted_count += 1
+                total_del += 1
+
+            # If there could potentially be more documents in the table
+            if deleted_count >= batch_size:
+                docs = self._root.collection(table).list_documents(batch_size)
+            else:
+                log.info("Deleted {} docs from {} table in batches of {} docs".format(total_del, table, batch_size))
+                return
+
+    @property
+    def tables(self) -> List[str]:
+        log.info("Fetched the following tables: {}".format(str(self._tables)))
+        return self._tables
 
     def __str__(self):
         if self._credentials_path:

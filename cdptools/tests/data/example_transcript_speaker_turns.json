@@ -1,0 +1,1612 @@
+{
+  "format": "timestamped-speaker-turns",
+  "annotations": [],
+  "confidence": 1,
+  "data": [
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 13.213,
+          "end_time": 14.948,
+          "text": "Okay, good morning."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 14.948,
+          "end_time": 15.348,
+          "text": "Good morning."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 15.348,
+          "end_time": 20.12,
+          "text": "Thanks for being here for our regular scheduled briefing on July 15."
+        },
+        {
+          "start_time": 20.12,
+          "end_time": 25.725,
+          "text": "A few things just to mention before we go around the table."
+        },
+        {
+          "start_time": 25.725,
+          "end_time": 30.597,
+          "text": "We were joined by Council member Bagshaw, Pacheco, Juarez, and Gonzalez."
+        },
+        {
+          "start_time": 30.597,
+          "end_time": 37.57,
+          "text": "If there's no objection to the minutes of the July 8, 2019 meeting, it'll be approved."
+        },
+        {
+          "start_time": 37.57,
+          "end_time": 42.942,
+          "text": "Seeing no objections, those minutes are being approved."
+        },
+        {
+          "start_time": 42.942,
+          "end_time": 47.514,
+          "text": "I just want to mention -- I'm sorry?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 47.514,
+          "end_time": 49.516,
+          "text": "I may have an objection."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 49.516,
+          "end_time": 51.351,
+          "text": "Silence is it in my rule."
+        },
+        {
+          "start_time": 51.351,
+          "end_time": 58.158,
+          "text": "After this meeting, I do need all of you to know we have a select Committee on civic arenas."
+        },
+        {
+          "start_time": 58.158,
+          "end_time": 59.559,
+          "text": "It'll start at 10:30."
+        },
+        {
+          "start_time": 59.559,
+          "end_time": 65.365,
+          "text": "I'll be Co-Chairing the meeting, of course, council member Juarez is a Co-Council as well."
+        },
+        {
+          "start_time": 65.365,
+          "end_time": 71.438,
+          "text": "We have three items to talk about and we do need a Quorum."
+        },
+        {
+          "start_time": 71.438,
+          "end_time": 81.481,
+          "text": "The first matter will be the Seattle overlay district legislation followed by the Seattle storm key arena facility use agreement amendment."
+        },
+        {
+          "start_time": 81.481,
+          "end_time": 83.283,
+          "text": "In other words amending the agreement with the storm."
+        },
+        {
+          "start_time": 83.283,
+          "end_time": 89.155,
+          "text": "Then the other one is a property transfer relative to skate Plaza site."
+        },
+        {
+          "start_time": 89.155,
+          "end_time": 92.792,
+          "text": "And so let's try to get five members there, so we can start that one on time."
+        },
+        {
+          "start_time": 92.792,
+          "end_time": 101.1,
+          "text": "I have a proclamation I want to pass around for signature for Carolyn Riley Payne."
+        },
+        {
+          "start_time": 101.1,
+          "end_time": 101.801,
+          "text": "Many of you know Miss Payne."
+        },
+        {
+          "start_time": 101.801,
+          "end_time": 112.912,
+          "text": "She's been active in the community for 40 years, most notably active of the Vice President of the youth Council of the Naacp."
+        },
+        {
+          "start_time": 112.912,
+          "end_time": 114.481,
+          "text": "And extremely instrumental in this."
+        },
+        {
+          "start_time": 114.481,
+          "end_time": 134.0,
+          "text": "I think it's called the so program, the act, which stands for Afro, academic technological and sign Tiff Cal Olympic program."
+        },
+        {
+          "start_time": 134.0,
+          "end_time": 136.87,
+          "text": "And in our areas as this program was just magnificent."
+        },
+        {
+          "start_time": 136.87,
+          "end_time": 138.571,
+          "text": "She'll be here this afternoon."
+        },
+        {
+          "start_time": 138.571,
+          "end_time": 143.643,
+          "text": "So there's a huge celebration of her accomplishments."
+        },
+        {
+          "start_time": 143.643,
+          "end_time": 148.081,
+          "text": "At first it was on Saturday, which was very well attended."
+        },
+        {
+          "start_time": 148.081,
+          "end_time": 152.452,
+          "text": "I'll pass it around for a signature."
+        },
+        {
+          "start_time": 152.452,
+          "end_time": 163.463,
+          "text": "And although Council member Gonzalez may talk about her proclamation -- why do n't we just take that now where we're in the habit of talking about proclamations."
+        },
+        {
+          "start_time": 163.463,
+          "end_time": 166.833,
+          "text": "Council member Gonzalez has a proclamation she has circled around."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 166.833,
+          "end_time": 169.402,
+          "text": "Thank you, Council President."
+        },
+        {
+          "start_time": 169.402,
+          "end_time": 169.969,
+          "text": "Good morning everyone."
+        },
+        {
+          "start_time": 169.969,
+          "end_time": 181.247,
+          "text": "I'm pleased to pass around a proclamation to recognize Latinx pride, which will occur this Saturday, July 20, from 5:00 to 10:00 P.M."
+        },
+        {
+          "start_time": 181.247,
+          "end_time": 184.384,
+          "text": "In the beacon Hill neighborhood."
+        },
+        {
+          "start_time": 184.384,
+          "end_time": 195.428,
+          "text": "So really excited about being able to not only have a joint proclamation from this city to declare July Lgbt next pride month as a follow up to June's pride month."
+        },
+        {
+          "start_time": 195.428,
+          "end_time": 204.337,
+          "text": "But this is really an opportunity for us to recognize the contributions in an Intersectional matter."
+        },
+        {
+          "start_time": 204.337,
+          "end_time": 212.245,
+          "text": "The contributions that the Latinx Lgbt community has made to the broader Lgbt movement."
+        },
+        {
+          "start_time": 212.245,
+          "end_time": 226.426,
+          "text": "Also really want to extend my gratitude and thanks to Council President's office for working with us on identifying a manner within the Council rules that would allow the city Council to be a sponsor of this really important event."
+        },
+        {
+          "start_time": 226.426,
+          "end_time": 236.669,
+          "text": "It's a small event, and they need a lot of resources to be able to pull it off, and it is really an important part of the values of the city of Seattle."
+        },
+        {
+          "start_time": 236.669,
+          "end_time": 242.442,
+          "text": "We'll be a sponsor in this event in the amount of $2,000."
+        },
+        {
+          "start_time": 242.442,
+          "end_time": 250.149,
+          "text": "Really welcome everybody to join this Saturday if you are available."
+        },
+        {
+          "start_time": 250.149,
+          "end_time": 262.161,
+          "text": "It'll be a great celebration of the Latinx community who identify as Transgender, Bisexual, Lesbian, gay, or queer."
+        },
+        {
+          "start_time": 262.161,
+          "end_time": 273.072,
+          "text": "So I'm passing around the proclamation now, and would appreciate your signature and your support and again if you're able to attend and join us this Saturday, that's July 20, from 5:00 to 10:00 P.M."
+        },
+        {
+          "start_time": 273.072,
+          "end_time": 278.511,
+          "text": "I am pleased to be able to attend myself personally."
+        },
+        {
+          "start_time": 278.511,
+          "end_time": 284.45,
+          "text": "Will be presenting the proclamation to the organizers and members of the community on Saturday."
+        },
+        {
+          "start_time": 284.45,
+          "end_time": 284.984,
+          "text": "Thank you."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 284.984,
+          "end_time": 289.389,
+          "text": "Thank you, council member Gonzalez for sort of spearheading our support for this great event."
+        },
+        {
+          "start_time": 289.389,
+          "end_time": 290.023,
+          "text": "Look forward to it."
+        },
+        {
+          "start_time": 290.023,
+          "end_time": 294.861,
+          "text": "We'll try to get as many bodies as possible from the Council."
+        },
+        {
+          "start_time": 294.861,
+          "end_time": 295.395,
+          "text": "Council member Bagshaw?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 295.395,
+          "end_time": 297.363,
+          "text": "Thank you so much and good morning."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 297.363,
+          "end_time": 297.764,
+          "text": "Good morning."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 297.764,
+          "end_time": 301.034,
+          "text": "This afternoon from Finance and neighborhood committee we've got two items."
+        },
+        {
+          "start_time": 301.034,
+          "end_time": 307.106,
+          "text": "One is the appointment of Bobby Humes as director of our Department of human resources."
+        },
+        {
+          "start_time": 307.106,
+          "end_time": 312.679,
+          "text": "Many of you know he has, when he first came to parks, he has come over here at the Mayor's request."
+        },
+        {
+          "start_time": 312.679,
+          "end_time": 325.224,
+          "text": "I've had many chances to talk and interview with him, so that'll be on this afternoon's calendar thanks to President Harrell and Council member Gonzalez for joining me in supporting him at our committee."
+        },
+        {
+          "start_time": 325.224,
+          "end_time": 332.765,
+          "text": "We're also going to be approving the 2019 annual action plan for housing and community development during our budget last year."
+        },
+        {
+          "start_time": 332.765,
+          "end_time": 335.034,
+          "text": "We had roughly $19 million in the pot."
+        },
+        {
+          "start_time": 335.034,
+          "end_time": 344.711,
+          "text": "It turned out we would have $2 million more totaling now $21 million."
+        },
+        {
+          "start_time": 344.711,
+          "end_time": 350.249,
+          "text": "So that goes into our block grant and home investment partnerships, so we'll be approving that this afternoon."
+        },
+        {
+          "start_time": 350.249,
+          "end_time": 352.919,
+          "text": "Those are the two items I have."
+        },
+        {
+          "start_time": 352.919,
+          "end_time": 361.127,
+          "text": "And scheduling, we're going to cancel the Finance and neighborhood's committee for the 24th, which is a week from Wednesday."
+        },
+        {
+          "start_time": 361.127,
+          "end_time": 365.465,
+          "text": "I'm going to be rescheduling a special meeting on the 31st."
+        },
+        {
+          "start_time": 365.465,
+          "end_time": 369.335,
+          "text": "Thanks for your assistance in making that happen and putting that on your calendars."
+        },
+        {
+          "start_time": 369.335,
+          "end_time": 374.774,
+          "text": "Just a couple of other things that happened last week that I am very proud of."
+        },
+        {
+          "start_time": 374.774,
+          "end_time": 383.516,
+          "text": "Thank you to Brian chew and my office for organizing some work that we did in the public life study at Pioneer square."
+        },
+        {
+          "start_time": 383.516,
+          "end_time": 384.183,
+          "text": "Working with Sdot."
+        },
+        {
+          "start_time": 384.183,
+          "end_time": 387.086,
+          "text": "The first time we had about 45 volunteers."
+        },
+        {
+          "start_time": 387.086,
+          "end_time": 389.956,
+          "text": "We've had at least that for the last couple of days."
+        },
+        {
+          "start_time": 389.956,
+          "end_time": 396.362,
+          "text": "What we do, we actually count the number of people there that are coming or going, sitting, what kind of behavior is going on."
+        },
+        {
+          "start_time": 396.362,
+          "end_time": 404.337,
+          "text": "Then that becomes a part of Sdot's basic information for either investments or deciding what we need to do to make it a safer place."
+        },
+        {
+          "start_time": 404.337,
+          "end_time": 416.482,
+          "text": "So I'm excited about the fact it's the first time it has been done in our city hall park area, and I just want to acknowledge all the people that joined on that."
+        },
+        {
+          "start_time": 416.482,
+          "end_time": 417.016,
+          "text": "It's pretty interesting."
+        },
+        {
+          "start_time": 417.016,
+          "end_time": 421.954,
+          "text": "I was -- and Council member Pacheco joined me, we were standing over by the fountain."
+        },
+        {
+          "start_time": 421.954,
+          "end_time": 429.662,
+          "text": "As many of you know there is oftentimes less than what you consider to be positive behaviors."
+        },
+        {
+          "start_time": 429.662,
+          "end_time": 430.963,
+          "text": "This one woman came up to me."
+        },
+        {
+          "start_time": 430.963,
+          "end_time": 433.599,
+          "text": "She said how come there's no garbage cans down here?"
+        },
+        {
+          "start_time": 433.599,
+          "end_time": 437.27,
+          "text": "We've cleaned it up if there were garbage cans."
+        },
+        {
+          "start_time": 437.27,
+          "end_time": 445.845,
+          "text": "I just acknowledged the fact that, you know, that is really true if people do n't have garbage cans handy and they are dwelling in a particular place."
+        },
+        {
+          "start_time": 445.845,
+          "end_time": 451.284,
+          "text": "They're going to throw the garbage on the ground, which is what happens and we continue to clean it up."
+        },
+        {
+          "start_time": 451.284,
+          "end_time": 458.057,
+          "text": "We'll be working with parks and with Spu just to see if we could do something temporarily this summer to help clean that up."
+        },
+        {
+          "start_time": 458.057,
+          "end_time": 465.164,
+          "text": "To empower the people who are there to actually clean up with them and for themselves."
+        },
+        {
+          "start_time": 465.164,
+          "end_time": 477.443,
+          "text": "And also I want to acknowledge the great work that was done, Dan Straus, to help organize for uptown, South Lake Union, Belltown last Friday."
+        },
+        {
+          "start_time": 477.443,
+          "end_time": 482.381,
+          "text": "We spent some of the entire day with some of the best architects and the designers of Sdot."
+        },
+        {
+          "start_time": 482.381,
+          "end_time": 484.884,
+          "text": "We had 45 people there that really know their stuff."
+        },
+        {
+          "start_time": 484.884,
+          "end_time": 496.162,
+          "text": "And looking at what we could do to make Thomas Street east of the arena and West of the arena a place that people feel safe and excited about with art and better lighting."
+        },
+        {
+          "start_time": 496.162,
+          "end_time": 502.668,
+          "text": "As a part of what we're doing this afternoon or this morning later with our civic development and around the arena."
+        },
+        {
+          "start_time": 502.668,
+          "end_time": 505.071,
+          "text": "I will bring this up again about what we could do."
+        },
+        {
+          "start_time": 505.071,
+          "end_time": 511.911,
+          "text": "But the real key thing for Sdot and others, these changes need to be done by October 2021."
+        },
+        {
+          "start_time": 511.911,
+          "end_time": 520.653,
+          "text": "And so when the Puck has dropped that we've got these designs in play and that they are safer, more encouraging for pedestrians and bikes and everybody to get there."
+        },
+        {
+          "start_time": 520.653,
+          "end_time": 524.49,
+          "text": "Just want to bring that up."
+        },
+        {
+          "start_time": 524.49,
+          "end_time": 535.067,
+          "text": "And for a notice and again thank you Sdot for all your work and again, October 21, these things will have to be in place and Snot like delayed and delayed."
+        },
+        {
+          "start_time": 535.067,
+          "end_time": 537.103,
+          "text": "If we need budget items, we'll do it again this year."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 537.103,
+          "end_time": 539.372,
+          "text": "Thank you very much."
+        },
+        {
+          "start_time": 539.372,
+          "end_time": 540.039,
+          "text": "Council member Pacheco."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 540.039,
+          "end_time": 542.008,
+          "text": "Good morning."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 542.008,
+          "end_time": 542.441,
+          "text": "Good morning."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 542.441,
+          "end_time": 548.247,
+          "text": "So there are no related items on the full council agenda today."
+        },
+        {
+          "start_time": 548.247,
+          "end_time": 549.882,
+          "text": "The next meeting is this Wednesday, July 17."
+        },
+        {
+          "start_time": 549.882,
+          "end_time": 557.023,
+          "text": "There will be three items on the agenda on our annual compound resolution."
+        },
+        {
+          "start_time": 557.023,
+          "end_time": 562.161,
+          "text": "A resolution that sets the dockets amendments that the Council will consider next year."
+        },
+        {
+          "start_time": 562.161,
+          "end_time": 566.065,
+          "text": "Two an amendment from director Nathan on the permit backlog."
+        },
+        {
+          "start_time": 566.065,
+          "end_time": 569.969,
+          "text": "And a briefing from Opcd on their industrial lands work plan."
+        },
+        {
+          "start_time": 569.969,
+          "end_time": 580.313,
+          "text": "And for the events for this week, I'm really happy to partner up with Council member Gonzalez on our domestic violence lunch and learn on services and gaps."
+        },
+        {
+          "start_time": 580.313,
+          "end_time": 590.222,
+          "text": "We'll be looking to identify the systemic barriers, gaps, challenges that we currently have in our existing systems."
+        },
+        {
+          "start_time": 590.222,
+          "end_time": 598.764,
+          "text": "I really want to send an appreciation and gratitude to the organizations that will be joining us, the coalition and the gender base violence."
+        },
+        {
+          "start_time": 598.764,
+          "end_time": 608.307,
+          "text": "New beginnings, ending domestic violence, the Washington state coalition against the domestic violence, Seattle police Department's support team and the Seattle city attorney's office for domestic violence."
+        },
+        {
+          "start_time": 608.307,
+          "end_time": 617.45,
+          "text": "And I want to send an appreciation as well to the two staff members that have been leading the charge for us."
+        },
+        {
+          "start_time": 617.45,
+          "end_time": 619.485,
+          "text": "Roxana Gomez."
+        },
+        {
+          "start_time": 619.485,
+          "end_time": 620.586,
+          "text": "Thank you very much."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 620.586,
+          "end_time": 621.887,
+          "text": "Council member Juarez?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 621.887,
+          "end_time": 623.756,
+          "text": "Thank you, Council President."
+        },
+        {
+          "start_time": 623.756,
+          "end_time": 624.29,
+          "text": "Good morning everybody."
+        },
+        {
+          "start_time": 624.29,
+          "end_time": 627.326,
+          "text": "I do n't even know where to begin."
+        },
+        {
+          "start_time": 627.326,
+          "end_time": 630.329,
+          "text": "So I'm going to do the regular stuff first."
+        },
+        {
+          "start_time": 630.329,
+          "end_time": 632.298,
+          "text": "Then I have a few other words."
+        },
+        {
+          "start_time": 632.298,
+          "end_time": 639.405,
+          "text": "First of all I want to thank Council member Herbold for our lunch and learn that we did for the AIDS Memorial Pathway last week."
+        },
+        {
+          "start_time": 639.405,
+          "end_time": 641.14,
+          "text": "And it was a success."
+        },
+        {
+          "start_time": 641.14,
+          "end_time": 648.314,
+          "text": "We learned all about how the Memorial Pathway is going to be built and how the program with the artwork and what it will look like."
+        },
+        {
+          "start_time": 648.314,
+          "end_time": 658.724,
+          "text": "It was a very emotional and beautiful presentation where people had the opportunity to Enshrine the historic efforts of advocates, fighting to end HIV aids discrimination."
+        },
+        {
+          "start_time": 658.724,
+          "end_time": 670.403,
+          "text": "So many young lives were lost in the 80s and the 90S to this disease and for us in this city for the first time to have a Memorial and art to commemorate and honor their lives was amazing."
+        },
+        {
+          "start_time": 670.403,
+          "end_time": 671.537,
+          "text": "So thank you again Council member Herbold."
+        },
+        {
+          "start_time": 671.537,
+          "end_time": 678.944,
+          "text": "A big thank you to Council member Rasmusen."
+        },
+        {
+          "start_time": 678.944,
+          "end_time": 684.25,
+          "text": "Randy from our arts director."
+        },
+        {
+          "start_time": 684.25,
+          "end_time": 686.218,
+          "text": "Jason Plourd and Michelle Hassen."
+        },
+        {
+          "start_time": 686.218,
+          "end_time": 691.891,
+          "text": "That's the AIDS Memorial Pathway."
+        },
+        {
+          "start_time": 691.891,
+          "end_time": 697.296,
+          "text": "And Christian Ramirez for their creativity."
+        },
+        {
+          "start_time": 697.296,
+          "end_time": 702.068,
+          "text": "When this first started, we got money in the budget and this Council approved it and moved it forward."
+        },
+        {
+          "start_time": 702.068,
+          "end_time": 711.377,
+          "text": "It's nice to see these types of memorials, things finally coming true."
+        },
+        {
+          "start_time": 711.377,
+          "end_time": 722.621,
+          "text": "Civic arenas at 10:30, we're going to talk about the overlay district for Seattle center, the key arena use agreement with Seattle storm, and the public skate Plaza near Thomas street."
+        },
+        {
+          "start_time": 722.621,
+          "end_time": 732.765,
+          "text": "As you know Council President, this is in line with the three prior agreements or ordinances that this council passed, the development agreement, the lease agreement, and the integration agreement."
+        },
+        {
+          "start_time": 732.765,
+          "end_time": 746.979,
+          "text": "We never do this for ourselves, all of us who are here and certainly supportive of the big Pat on the backs because we passed this $1.6 billion project for a new Seattle center and we are on or way at no taxpayers dollars."
+        },
+        {
+          "start_time": 746.979,
+          "end_time": 747.446,
+          "text": "That's no easy fee."
+        },
+        {
+          "start_time": 747.446,
+          "end_time": 760.292,
+          "text": "We're the only city in the country that has done that, own the property, N taxes, and we're moving forward."
+        },
+        {
+          "start_time": 760.292,
+          "end_time": 764.53,
+          "text": "Like we did with Sodo and blew it off after paying the bonds."
+        },
+        {
+          "start_time": 764.53,
+          "end_time": 775.374,
+          "text": "This Wednesday, July 17, I have my Committee, civic communities."
+        },
+        {
+          "start_time": 775.374,
+          "end_time": 780.613,
+          "text": "And they will present their racial show of justice initiative report."
+        },
+        {
+          "start_time": 780.613,
+          "end_time": 783.349,
+          "text": "A reappointment for the library board of trustees."
+        },
+        {
+          "start_time": 783.349,
+          "end_time": 784.183,
+          "text": "Jay has been great."
+        },
+        {
+          "start_time": 784.183,
+          "end_time": 787.486,
+          "text": "He led us through the library levy."
+        },
+        {
+          "start_time": 787.486,
+          "end_time": 790.322,
+          "text": "As you know it's on the ballot."
+        },
+        {
+          "start_time": 790.322,
+          "end_time": 793.793,
+          "text": "Following the Seattle parks and Rec I have two ordinances for briefing and possible vote."
+        },
+        {
+          "start_time": 793.793,
+          "end_time": 800.065,
+          "text": "The first vote in presentation will be the discovery park King County Outfall legislation."
+        },
+        {
+          "start_time": 800.065,
+          "end_time": 807.606,
+          "text": "This ordinance is your basic technical essential governmental service function, where we maintain an oval pipeline and channel."
+        },
+        {
+          "start_time": 807.606,
+          "end_time": 815.014,
+          "text": "The second one, which is near and dear to my heart up in D5, the Thornton Creek acquisition on 125th."
+        },
+        {
+          "start_time": 815.014,
+          "end_time": 820.419,
+          "text": "This ordinance allows for parks to require the D for open space, park and recreation purposes."
+        },
+        {
+          "start_time": 820.419,
+          "end_time": 826.058,
+          "text": "This is a wonderful opportunity for natural lands and green space."
+        },
+        {
+          "start_time": 826.058,
+          "end_time": 828.294,
+          "text": "I've been driving by this property for over 30 years."
+        },
+        {
+          "start_time": 828.294,
+          "end_time": 831.13,
+          "text": "It's on the North fork of Thornton Creek."
+        },
+        {
+          "start_time": 831.13,
+          "end_time": 831.997,
+          "text": "It's absolutely beautiful."
+        },
+        {
+          "start_time": 831.997,
+          "end_time": 832.364,
+          "text": "It's for sale."
+        },
+        {
+          "start_time": 832.364,
+          "end_time": 838.27,
+          "text": "We're hoping we can buy it and preserve it, and we can create an opportunity for more green space."
+        },
+        {
+          "start_time": 838.27,
+          "end_time": 841.941,
+          "text": "Not only up in D5, but obviously for the city of Seattle."
+        },
+        {
+          "start_time": 841.941,
+          "end_time": 846.745,
+          "text": "So I look forward to the committee in the briefing and what we're going to learn on how we can purchase this property."
+        },
+        {
+          "start_time": 846.745,
+          "end_time": 861.327,
+          "text": "A big thank you to the county, who all worked hard on this to bring this forward and, of course, the D5 community, which has been very instrumental in working with us in bringing this piece of property."
+        },
+        {
+          "start_time": 861.327,
+          "end_time": 868.634,
+          "text": "It's literally six blocks from my house, so I feel like I'm going to benefit a little bit more than everybody else."
+        },
+        {
+          "start_time": 868.634,
+          "end_time": 877.977,
+          "text": "The last meeting before August Council recess scheduled for a special meeting for Wednesday, July 31, at 12:00 to 1:30."
+        },
+        {
+          "start_time": 877.977,
+          "end_time": 887.553,
+          "text": "Just to let you know I may take a page out of Council member Gonzalez's network, since I'll be turning the big 6-0 on Monday, I might have to take the day off."
+        },
+        {
+          "start_time": 887.553,
+          "end_time": 888.52,
+          "text": "Okay, the boss says do it."
+        },
+        {
+          "start_time": 888.52,
+          "end_time": 889.922,
+          "text": "I'm going to do it."
+        },
+        {
+          "start_time": 889.922,
+          "end_time": 897.096,
+          "text": "Just on a personal note, I want to send a special thank you to Council member Gonzalez, Mosqueda, and Pacheco."
+        },
+        {
+          "start_time": 897.096,
+          "end_time": 901.9,
+          "text": "We are all Texting this weekend."
+        },
+        {
+          "start_time": 901.9,
+          "end_time": 910.209,
+          "text": "We all felt a certain amount of family about the new politics, not new politics, go back to where you come from."
+        },
+        {
+          "start_time": 910.209,
+          "end_time": 918.717,
+          "text": "What that kind of paranoid and form of politics does to our people is violence."
+        },
+        {
+          "start_time": 918.717,
+          "end_time": 925.591,
+          "text": "I guess I'm at a point in my life any time I think something ca n't get worse, it has n't."
+        },
+        {
+          "start_time": 925.591,
+          "end_time": 933.532,
+          "text": "It comes back like worse than a bad rash except for this point it's people who are literally living in fear in tent cities."
+        },
+        {
+          "start_time": 933.532,
+          "end_time": 940.339,
+          "text": "I have to continue to remind people that human values, progressive values or democratic values."
+        },
+        {
+          "start_time": 940.339,
+          "end_time": 946.612,
+          "text": "I do n't know what I'm going to tell my children, when they say mom, what did you do when all of this was going on."
+        },
+        {
+          "start_time": 946.612,
+          "end_time": 952.651,
+          "text": "I just feel like we have to do something."
+        },
+        {
+          "start_time": 952.651,
+          "end_time": 954.353,
+          "text": "I know Council member Gonzalez and Mosqueda."
+        },
+        {
+          "start_time": 954.353,
+          "end_time": 957.823,
+          "text": "I know all of you do and Pacheco."
+        },
+        {
+          "start_time": 957.823,
+          "end_time": 964.763,
+          "text": "I Retched out to those three because of our history and our background."
+        },
+        {
+          "start_time": 964.763,
+          "end_time": 974.74,
+          "text": "I would like to remind people that when you say go back to where you come from, we are where we come from and North America is our land."
+        },
+        {
+          "start_time": 974.74,
+          "end_time": 987.986,
+          "text": "I just want to end on that NOTE I hope we're going to move forward and people are not going to give up and allow this type of hate and racism to divide us."
+        },
+        {
+          "start_time": 987.986,
+          "end_time": 988.32,
+          "text": "Thank you."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 988.32,
+          "end_time": 990.689,
+          "text": "Thank you Council member Juarez."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 990.689,
+          "end_time": 991.657,
+          "text": "Can I just say thank you?"
+        },
+        {
+          "start_time": 991.657,
+          "end_time": 1001.567,
+          "text": "As always one of the things I love about this Council is the fact we really are coming from lots of different places, but thank you for bringing this up."
+        },
+        {
+          "start_time": 1001.567,
+          "end_time": 1021.32,
+          "text": "One of the most outrageous things when I heard those Tweets was not only the stupidity, the anger, the hatred that that continues to foam it, but also that absolutely irresponsible nature of those comments because at least three out of the four women were born here in this country, please."
+        },
+        {
+          "start_time": 1021.32,
+          "end_time": 1032.598,
+          "text": "I think it was Bronx, Cincinnati, Detroit, and as bad of an outrageous statement I could have ever heard, but then it's absolutely not true, we are all Americans here."
+        },
+        {
+          "start_time": 1032.598,
+          "end_time": 1037.036,
+          "text": "We need to be supporting each other."
+        },
+        {
+          "start_time": 1037.036,
+          "end_time": 1037.97,
+          "text": "Thanks for reaching out."
+        },
+        {
+          "start_time": 1037.97,
+          "end_time": 1047.179,
+          "text": "Let's just continue this sense of where we are all together in this and figure out a way that we could continue to lead in our city and be as strong as we possibly can."
+        },
+        {
+          "start_time": 1047.179,
+          "end_time": 1054.119,
+          "text": "I want to acknowledge the fact that I recognize how much additional pain that you have gone through and thanks for bringing it up."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1054.119,
+          "end_time": 1060.159,
+          "text": "Thank you Council member Juarez."
+        },
+        {
+          "start_time": 1060.159,
+          "end_time": 1060.726,
+          "text": "Council member Herbold?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1060.726,
+          "end_time": 1068.167,
+          "text": "So in the interest as Council President Herbold said."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1068.167,
+          "end_time": 1069.168,
+          "text": "Is your microphone on?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1069.168,
+          "end_time": 1077.009,
+          "text": "In the interest of showing leadership as Council member Herbold said, I have a very short report today."
+        },
+        {
+          "start_time": 1077.009,
+          "end_time": 1082.314,
+          "text": "I have regional committee updates, attending Puget sound, economic development board last week."
+        },
+        {
+          "start_time": 1082.314,
+          "end_time": 1085.184,
+          "text": "Attending the flood control district board this week."
+        },
+        {
+          "start_time": 1085.184,
+          "end_time": 1118.183,
+          "text": "And then on Sunday, I just want to say a few words about the fact that the South Park library is having a reopening celebration for those of you who do n't know recently there have been some done for the last two months and the improvements that have been made are to support the changing ways that they are using the libraries and to make the branch more enjoyable useful place to collaborate."
+        },
+        {
+          "start_time": 1118.183,
+          "end_time": 1122.588,
+          "text": "And the event will be happening on Sunday between 2:00 and 5:00 P.M."
+        },
+        {
+          "start_time": 1122.588,
+          "end_time": 1124.756,
+          "text": "And there will be a variety of the festivities."
+        },
+        {
+          "start_time": 1124.756,
+          "end_time": 1126.325,
+          "text": "I hope you can join us."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1126.325,
+          "end_time": 1129.428,
+          "text": "Thank you Council member Herbold."
+        },
+        {
+          "start_time": 1129.428,
+          "end_time": 1130.095,
+          "text": "Council member Mosqueda?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1130.095,
+          "end_time": 1132.264,
+          "text": "Good morning Council President."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1132.264,
+          "end_time": 1132.664,
+          "text": "Good morning."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1132.664,
+          "end_time": 1140.239,
+          "text": "I will announce there will be two items on today's full council agenda from the housing health energy and workers rights committee."
+        },
+        {
+          "start_time": 1140.239,
+          "end_time": 1146.378,
+          "text": "The first is a bill that I'm very excited about and I believe all of you are as well."
+        },
+        {
+          "start_time": 1146.378,
+          "end_time": 1154.386,
+          "text": "That's amended Council bill 119542, this ordinance relates to provider inflationary adjustments for social justice contracts."
+        },
+        {
+          "start_time": 1154.386,
+          "end_time": 1173.872,
+          "text": "I just want to say thank you to a handful of you for engaging with us in writing amendments and to all of you for being at various hearings over the last six months and for providing your input as we try to identify ways to lift up our social service providers who especially are providing services to our most vulnerable."
+        },
+        {
+          "start_time": 1173.872,
+          "end_time": 1182.247,
+          "text": "As you'll remember last year in the budget we allocated a 2% increase to both Non-General Fund and general fund contracts in last year's budget cycle."
+        },
+        {
+          "start_time": 1182.247,
+          "end_time": 1194.726,
+          "text": "We also committed to find a way to stabilize that type of adjustments so that every year where there is an adjustment, they do n't feed to worry about making up the adjustments."
+        },
+        {
+          "start_time": 1194.726,
+          "end_time": 1206.071,
+          "text": "We're talking about services for youth development, senior centers, community clinics, folks who are serving, those who have experienced domestic violence, also helping to prevent that type of situation."
+        },
+        {
+          "start_time": 1206.071,
+          "end_time": 1214.212,
+          "text": "Those who are working in food banks and meal programs and homeless shelters as well as prevention from falling into homelessness by providing housing assistance."
+        },
+        {
+          "start_time": 1214.212,
+          "end_time": 1220.619,
+          "text": "We talk about this being the backbone of the social service network in our city."
+        },
+        {
+          "start_time": 1220.619,
+          "end_time": 1236.735,
+          "text": "The consequence of us not having the ability to give inflationary adjustments automatically have resulted in organizations having 40 to 50% turnover and vacancy rates in these very organizations that are trying to provide services."
+        },
+        {
+          "start_time": 1236.735,
+          "end_time": 1244.409,
+          "text": "So one of the things I'm excited about, the work they have done over the past few years to help us identify the amendment."
+        },
+        {
+          "start_time": 1244.409,
+          "end_time": 1252.05,
+          "text": "And that I will be fully supporting that recognizes our intent to make sure we're stabilizing these workers."
+        },
+        {
+          "start_time": 1252.05,
+          "end_time": 1258.156,
+          "text": "We have adjustments and needs that are affecting the cost of rent and utilities and other operational costs."
+        },
+        {
+          "start_time": 1258.156,
+          "end_time": 1267.599,
+          "text": "The consequences of those that are fixed costs, where we have variable costs, we see a reduction in staff."
+        },
+        {
+          "start_time": 1267.599,
+          "end_time": 1272.004,
+          "text": "When the position Vacates, the position turns over, it's not filled."
+        },
+        {
+          "start_time": 1272.004,
+          "end_time": 1279.077,
+          "text": "Sometimes we recognize that people are taking other jobs because it's much more affordable or for them to be able to stabilize their families."
+        },
+        {
+          "start_time": 1279.077,
+          "end_time": 1287.019,
+          "text": "Really appreciate the work you did, council member Herbold over the last few days to include that language and thank you for bringing that amendment forward today."
+        },
+        {
+          "start_time": 1287.019,
+          "end_time": 1296.895,
+          "text": "I also want to thank Council member Bagshaw for her work with us as we work on how to evaluate these dollars going to actually help us stabilize these organizations."
+        },
+        {
+          "start_time": 1296.895,
+          "end_time": 1301.066,
+          "text": "Are they providing a direct impact to the workers, are they providing a direct impact to the clients."
+        },
+        {
+          "start_time": 1301.066,
+          "end_time": 1305.304,
+          "text": "Thank you for the work that you've done especially on the Lookback period as we do the evaluation."
+        },
+        {
+          "start_time": 1305.304,
+          "end_time": 1316.281,
+          "text": "And also to make sure that evaluation does n't just sit on a shelf, that there will be action on it."
+        },
+        {
+          "start_time": 1316.281,
+          "end_time": 1318.183,
+          "text": "So really appreciate all of you."
+        },
+        {
+          "start_time": 1318.183,
+          "end_time": 1323.321,
+          "text": "Thank you Council member O'Brien and Herbold, you had a chance to talk to some of the folks last week."
+        },
+        {
+          "start_time": 1323.321,
+          "end_time": 1325.424,
+          "text": "Thank you all for your engagement on this issue."
+        },
+        {
+          "start_time": 1325.424,
+          "end_time": 1331.83,
+          "text": "I know it's been a long time in the making, and excited to see us get this over the hurdle today."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1331.83,
+          "end_time": 1332.164,
+          "text": "Very good."
+        },
+        {
+          "start_time": 1332.164,
+          "end_time": 1334.232,
+          "text": "Council member Bagshaw?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1334.232,
+          "end_time": 1340.338,
+          "text": "Well Council member Mosqueda, I appreciate all of the work that you have done as well."
+        },
+        {
+          "start_time": 1340.338,
+          "end_time": 1349.614,
+          "text": "And so I do n't want this to be a thank You-A-Thon, but seriously your heart and the way you approached this is very meaningful."
+        },
+        {
+          "start_time": 1349.614,
+          "end_time": 1376.274,
+          "text": "To all of you who were at meeting or not at the meeting last week, I had proposed an amendment that would make sure that 2020 budget and the 2021 budget were covered, but it was quite clear that the amendment was not going to pass, but also I want to acknowledge that supporting the service providers is one of the most important things we can do."
+        },
+        {
+          "start_time": 1376.274,
+          "end_time": 1379.878,
+          "text": "You threaded the needle very well."
+        },
+        {
+          "start_time": 1379.878,
+          "end_time": 1387.085,
+          "text": "I'm delighted with the resolution that you're bringing forward, Council President, that you two drafted over the weekend."
+        },
+        {
+          "start_time": 1387.085,
+          "end_time": 1392.824,
+          "text": "That'll acknowledge our intention that we would like this money to go into workers salaries."
+        },
+        {
+          "start_time": 1392.824,
+          "end_time": 1394.926,
+          "text": "We also know we ca n't dictate that."
+        },
+        {
+          "start_time": 1394.926,
+          "end_time": 1417.849,
+          "text": "But it's a good first start, something that we are doing and I'll be working with our budget office over the next few months to make sure that that's incorporated in whatever budget action that the Mayor brings down, so we can not get distracted during our actual October and November budget deliberations."
+        },
+        {
+          "start_time": 1417.849,
+          "end_time": 1422.687,
+          "text": "Hopefully we could just move forward and not continue to have to debate whether it's a good idea or not."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1422.687,
+          "end_time": 1423.388,
+          "text": "Thank you."
+        },
+        {
+          "start_time": 1423.388,
+          "end_time": 1423.922,
+          "text": "Council member Mosqueda?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1423.922,
+          "end_time": 1427.826,
+          "text": "Thank you very much Council president and Council member Bagshaw."
+        },
+        {
+          "start_time": 1427.826,
+          "end_time": 1431.43,
+          "text": "I do have a few more items, Thenly be really quick."
+        },
+        {
+          "start_time": 1431.43,
+          "end_time": 1441.873,
+          "text": "We also have for today's full council agenda, the appointment of Victor Losata serving on the domestic workers' standard board."
+        },
+        {
+          "start_time": 1441.873,
+          "end_time": 1444.442,
+          "text": "With his appointment, the board will now be complete."
+        },
+        {
+          "start_time": 1444.442,
+          "end_time": 1448.346,
+          "text": "His appointment seat was chosen by the board as we outlined in the legislation."
+        },
+        {
+          "start_time": 1448.346,
+          "end_time": 1458.156,
+          "text": "Really excited to have the full domestic workers standards board up and running, the very month we went live with these new requirements for domestic workers."
+        },
+        {
+          "start_time": 1458.156,
+          "end_time": 1465.831,
+          "text": "The next housing health energy and workers' rights exit tee will be on Wednesday, July 17."
+        },
+        {
+          "start_time": 1465.831,
+          "end_time": 1467.999,
+          "text": "This was a carry over from our last meeting."
+        },
+        {
+          "start_time": 1467.999,
+          "end_time": 1474.172,
+          "text": "We will also have a briefing and a discussion on the hotel workers legislation, focusing on retention and workload."
+        },
+        {
+          "start_time": 1474.172,
+          "end_time": 1479.878,
+          "text": "These are two of the items we were going to discuss last week, but moving it to this week's agenda."
+        },
+        {
+          "start_time": 1479.878,
+          "end_time": 1484.316,
+          "text": "We will also have a possible vote on notice of intent to \u00c3\u00basell legislation and discussion."
+        },
+        {
+          "start_time": 1484.316,
+          "end_time": 1495.16,
+          "text": "I want to quickly flag thanks to Council member Gonzalez's office and your leadership as well, we're going to be adding to your amazing packet of hotel worker legislation materials."
+        },
+        {
+          "start_time": 1495.16,
+          "end_time": 1510.342,
+          "text": "A revised copy of our schedule will be adding basically another month to the discussion, so we can have more in depth discussions about the four components of the legislation and appreciate your staff bringing us the ideas for rolling out additional times."
+        },
+        {
+          "start_time": 1510.342,
+          "end_time": 1512.51,
+          "text": "Those work really well for us."
+        },
+        {
+          "start_time": 1512.51,
+          "end_time": 1525.19,
+          "text": "I think my colleagues on the committee will agree, we will try to do a better job of outlining what could be expected at the committee meetings, so we're not packing in a million things like you saw last week."
+        },
+        {
+          "start_time": 1525.19,
+          "end_time": 1527.792,
+          "text": "So much to do though at a Timeline here."
+        },
+        {
+          "start_time": 1527.792,
+          "end_time": 1530.295,
+          "text": "We will get it done by October then."
+        },
+        {
+          "start_time": 1530.295,
+          "end_time": 1534.232,
+          "text": "By September then."
+        },
+        {
+          "start_time": 1534.232,
+          "end_time": 1538.87,
+          "text": "Weekly, let's see, on Wednesday, I'll be doing a site visit of the Tacoma stability site."
+        },
+        {
+          "start_time": 1538.87,
+          "end_time": 1548.213,
+          "text": "People might know this is where we have the large tent in Tacoma and we also have the Weld or palette shelters that are outside."
+        },
+        {
+          "start_time": 1548.213,
+          "end_time": 1554.019,
+          "text": "Very interested in learning more about the palette shelters to house folks that are insulated."
+        },
+        {
+          "start_time": 1554.019,
+          "end_time": 1557.556,
+          "text": "You can paint the outside, two of the questions that people ask."
+        },
+        {
+          "start_time": 1557.556,
+          "end_time": 1560.825,
+          "text": "So we're going to go down there and take a visit of that on Tuesday morning."
+        },
+        {
+          "start_time": 1560.825,
+          "end_time": 1568.266,
+          "text": "I will be speaking at the summer health educational program, put together by the University of Washington school of medicine."
+        },
+        {
+          "start_time": 1568.266,
+          "end_time": 1569.935,
+          "text": "And really appreciate your time."
+        },
+        {
+          "start_time": 1569.935,
+          "end_time": 1570.602,
+          "text": "Thank you."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1570.602,
+          "end_time": 1571.603,
+          "text": "Very good."
+        },
+        {
+          "start_time": 1571.603,
+          "end_time": 1572.237,
+          "text": "Thank you."
+        },
+        {
+          "start_time": 1572.237,
+          "end_time": 1572.771,
+          "text": "Council member Bagshaw?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1572.771,
+          "end_time": 1579.678,
+          "text": "And another thing that you and I are working on and we continue to work on this week is the Childcare effort here in city hall."
+        },
+        {
+          "start_time": 1579.678,
+          "end_time": 1586.184,
+          "text": "And I want to say thank you to the Northwest center who is joining us this week and I believe it's Thursday."
+        },
+        {
+          "start_time": 1586.184,
+          "end_time": 1587.986,
+          "text": "We are meeting with them."
+        },
+        {
+          "start_time": 1587.986,
+          "end_time": 1600.265,
+          "text": "Our deal office Department education and early learning has been taking the lead and in regards to some things thanks to the executive for making sure that we have that contract moving forward."
+        },
+        {
+          "start_time": 1600.265,
+          "end_time": 1605.604,
+          "text": "We have the architects coming around, looking at multiple sites."
+        },
+        {
+          "start_time": 1605.604,
+          "end_time": 1610.308,
+          "text": "We can do what they have actually done at King county in the Chinook building."
+        },
+        {
+          "start_time": 1610.308,
+          "end_time": 1625.924,
+          "text": "So just appreciating the fact that we're working on this as a team and I believe that we will see something resembling the work plan by the time budget will get here in October."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1625.924,
+          "end_time": 1627.625,
+          "text": "Very good."
+        },
+        {
+          "start_time": 1627.625,
+          "end_time": 1628.226,
+          "text": "Council member Gonzalez?"
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1628.226,
+          "end_time": 1629.761,
+          "text": "Thank you."
+        },
+        {
+          "start_time": 1629.761,
+          "end_time": 1632.998,
+          "text": "Nothing on this afternoon's agenda from my committee."
+        },
+        {
+          "start_time": 1632.998,
+          "end_time": 1638.136,
+          "text": "He already signed the proclamation and Council member Pacheco spoke about my special committee this Tuesday."
+        },
+        {
+          "start_time": 1638.136,
+          "end_time": 1639.337,
+          "text": "That is all."
+        }
+      ]
+    },
+    {
+      "speaker": "",
+      "data": [
+        {
+          "start_time": 1639.337,
+          "end_time": 1641.272,
+          "text": "That's strong leadership right there."
+        },
+        {
+          "start_time": 1641.272,
+          "end_time": 1642.307,
+          "text": "You see that?"
+        },
+        {
+          "start_time": 1642.307,
+          "end_time": 1645.677,
+          "text": "Okay, so that will conclude our preview of today's actions."
+        },
+        {
+          "start_time": 1645.677,
+          "end_time": 1650.248,
+          "text": "We want a full Quorum here at 10:30 for our select Committee on civic arenas."
+        },
+        {
+          "start_time": 1650.248,
+          "end_time": 1651.182,
+          "text": "Huge project for the city."
+        },
+        {
+          "start_time": 1651.182,
+          "end_time": 1655.653,
+          "text": "Look forward to seeing everyone at 10:30."
+        },
+        {
+          "start_time": 1655.653,
+          "end_time": 1657.689,
+          "text": "That'll stand adjourned."
+        }
+      ]
+    }
+  ]
+}

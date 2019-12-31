@@ -5,6 +5,7 @@
     1. [Raw](#format:-raw)
     2. [Timestamped Words](#format:-timestamped-words)
     3. [Timestamped Sentences](#format:-timestamped-sentences)
+    4. [Timestamped Speaker Turns](#format:-timestamped-speaker-turns)
 3. [Notes](#notes)
 
 ---
@@ -51,9 +52,40 @@ A middle ground between `format: raw` and `format: timestamped-words`. Like all,
 happen on a sentence level), ten `data` portion is a large list where each `text` portion of each dictionary in the list
 is a single sentence (including any punctuation returned from the model).
 
+### Format: Timestamped Speaker Turns
+An enhancement of `format: timestamped-sentences`. Like all, it has the basic `format`, `annotations`, and `confidence`.
+However, the `data` section is a large list of speaker turns, where each speaker turn is a dictionary with keys: `speaker`
+and `data`. `speaker` is a text representing the identity of the speaker. `speaker` can be an empty string if the speaker
+is unknown. `data` is a list of sentences belonging to a particular speaker turn. These sentences have the same structure
+as the elements of `data` of `format: timestamped-sentences`.
+
+The basic layout of a `format: timestamped-speaker-turns` format currently for CDP instances will be the following JSON block:
+
+```json
+{
+    "format": "timestamped-speaker-turns",
+    "annotations": [
+        {}
+    ],
+    "confidence": 0.0,
+    "data": [
+        {
+            "speaker": "speaker-0",
+            "data": [
+                {
+                    "start_time": 0.0,
+                    "text": "{TRANSCRIPT_TEXT_PORTION}",
+                    "end_time": 2.6
+                }
+            ]
+        }
+    ]  
+}
+```
 ---
 ## Notes
-The `EventGatherPipeline` will set the "primary" transcript for each event gathered to `timestamped-sentences` if
-available. If `timestamped-sentences` was not returned by the speech recognition model in the outputs object, it will
-then choose, `timestamped-words`. Again if `timestamped-words` is not available, it will default to `raw` which should
-always be available regardless of which speech recognition model you choose or create.
+The `EventGatherPipeline` will set the "primary" transcript for each event gathered to `timestamped-speaker-turns` if
+available. If `timestamped-speaker-turns` was not returned by the speech recognition model in the outputs object, it will
+then choose, `timestamped-sentences`. If `timestamped-sentences` was not returned by the speech recognition model in the
+outputs object, it will then choose, `timestamped-words`. Again if `timestamped-words` is not available, it will default to
+`raw` which should always be available regardless of which speech recognition model you choose or create.

@@ -36,10 +36,19 @@
         "object_kwargs": {}
     },
     "speech_recognition_model": {
-        "module_path": "cdptools.sr_models.google_cloud_sr_model",
-        "object_name": "GoogleCloudSRModel",
-        "object_kwargs": {
-            "credentials_path": "/home/cdptools/credentials/cdp-seattle.json"
+        "try": {
+            "module_path": "cdptools.sr_models.webvtt_sr_model",
+            "object_name": "WebVTTSRModel",
+            "object_kwargs": {
+                "new_turn_pattern": "&gt;"
+            }
+        },
+        "catch": {
+            "module_path": "cdptools.sr_models.google_cloud_sr_model",
+            "object_name": "GoogleCloudSRModel",
+            "object_kwargs": {
+                "credentials_path": "/home/cdptools/credentials/cdp-seattle.json"
+            }
         }
     }
 }

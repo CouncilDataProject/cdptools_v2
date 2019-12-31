@@ -55,8 +55,9 @@ is a single sentence (including any punctuation returned from the model).
 ### Format: Timestamped Speaker Turns
 An enhancement of `format: timestamped-sentences`. Like all, it has the basic `format`, `annotations`, and `confidence`.
 However, the `data` section is a large list of speaker turns, where each speaker turn is a dictionary with keys: `speaker`
-and `data`. `speaker` is a text representing the identity of the speaker. `data` is a list of sentences belonging to
-a particular speaker turn. These sentences have the same structure as the elements of `data` of `format: timestamped-sentences`.
+and `data`. `speaker` is a text representing the identity of the speaker. `speaker` can be an empty string if the speaker
+is unknown. `data` is a list of sentences belonging to a particular speaker turn. These sentences have the same structure
+as the elements of `data` of `format: timestamped-sentences`.
 
 The basic layout of a `format: timestamped-speaker-turns` format currently for CDP instances will be the following JSON block:
 

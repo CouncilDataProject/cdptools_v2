@@ -175,14 +175,19 @@ can start a Docker image (an instance of the built Docker container) by running:
 sudo bash run.sh
 ```
 
+_**Note:** The above `run.sh` script also mounts the `cdptools` directory to the docker image, what this means is that
+you will be able to edit the files both like normal on whichever editor you choose or in the bash terminal connected to
+the docker image. The files are shared between the image and your system._
+
 Once connected the Docker image, run:
 ```bash
-pip3 install -e cdptools[all]
+pip install -e cdptools[all]
 ```
 
 28. Once the dependencies are all installed, edit your configuration file for the system found at
 `cdptools/configs/seattle-event-pipeline.json`. Specifically, change the filename for the credentials file to the name
-of the credentials file you downloaded anywhere where there is the key `"credentials_path"`.
+of the credentials file you downloaded anywhere where there is the key `"credentials_path"` and change the file store
+`"bucket_name"` to whatever your bucket address is.
 29. To start a single gathering of events run:
 
 ```bash

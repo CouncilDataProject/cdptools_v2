@@ -111,7 +111,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-raw">Format: Raw</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-speaker-turns">Format: Timestamped Speaker Turns</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id3">Notes</a></li>
 </ul>
 </li>
@@ -452,6 +453,15 @@
         <span class="n">video</span> <span class="o">=</span> <span class="n">video_and_thumbnail</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;onclick&quot;</span><span class="p">)</span>
         <span class="n">seattle_channel_page</span> <span class="o">=</span> <span class="n">video_and_thumbnail</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">)</span>
 
+        <span class="c1"># Find video&#39;s caption vtt file uri</span>
+        <span class="c1"># Partial URI of caption file ends with .vtt</span>
+        <span class="n">caption_uri_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-zA-Z0-9/_]+\.vtt&quot;</span><span class="p">,</span> <span class="n">video</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">caption_uri_search</span><span class="p">:</span>
+            <span class="n">closed_caption_route</span> <span class="o">=</span> <span class="s2">&quot;https://seattlechannel.org/documents/seattlechannel/closedcaption/&quot;</span>
+            <span class="n">caption_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{closed_caption_route}</span><span class="s2">{caption_uri_search.group(0)}&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">caption_uri</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="c1"># Onclick returns a javascript function</span>
         <span class="c1"># Try to find the url the function redirects to</span>
         <span class="k">try</span><span class="p">:</span>
@@ -477,7 +487,8 @@
             <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="n">SeattleEventScraper</span><span class="o">.</span><span class="n">_clean_string</span><span class="p">(</span><span class="n">body</span><span class="p">),</span>
             <span class="s2">&quot;event_datetime&quot;</span><span class="p">:</span> <span class="n">event_dt</span><span class="p">,</span>
             <span class="s2">&quot;source_uri&quot;</span><span class="p">:</span> <span class="n">SeattleEventScraper</span><span class="o">.</span><span class="n">_resolve_route</span><span class="p">(</span><span class="n">complete_sibling</span><span class="p">,</span> <span class="n">seattle_channel_page</span><span class="p">),</span>
-            <span class="s2">&quot;video_uri&quot;</span><span class="p">:</span> <span class="n">video</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;video_uri&quot;</span><span class="p">:</span> <span class="n">video</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;caption_uri&quot;</span><span class="p">:</span> <span class="n">caption_uri</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">event</span>
 
@@ -597,7 +608,8 @@
         <span class="n">formatted_event_details</span> <span class="o">=</span> <span class="p">{</span>
             <span class="o">**</span><span class="n">parsed_details</span><span class="p">,</span>
             <span class="s2">&quot;source_uri&quot;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;source_uri&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;video_uri&quot;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">]</span>
+            <span class="s2">&quot;video_uri&quot;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;caption_uri&quot;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;caption_uri&quot;</span><span class="p">]</span>
         <span class="p">}</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Attached legistar event details for event: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">formatted_event_details</span><span class="p">[</span><span class="s2">&quot;source_uri&quot;</span><span class="p">]))</span>
         <span class="k">return</span> <span class="n">formatted_event_details</span>

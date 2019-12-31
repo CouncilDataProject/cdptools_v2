@@ -113,7 +113,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-speaker-turns">Format: Timestamped Speaker Turns</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
 </ul>
 </li>
@@ -344,6 +345,12 @@ a URI to an audio file, and returns a saved transcript text local path. However,
 transcripts for city council meetings, maybe you will write a module that simply takes an audio URI and requests the
 already high quality transcript back, no need for any processing. These are both valid speech recognition models, it’s
 simply that one of them produces transcripts that have 100% confidence.</p>
+<p>If your city provides closed caption files for city council meetings, you can write a module that takes the closed caption
+file and produce transcripts. If not all city council meetings have closed caption files, you can use a mixture of speech
+recognition models. That is, if there is a closed caption file, use that to produce transcripts. If there is no closed
+caption file you can use a <code class="docutils literal notranslate"><span class="pre">sr_models.GoogleCloudSRModel</span></code> to produce transcripts from an audio file. Please see
+<code class="docutils literal notranslate"><span class="pre">cdptools/cdptools/tests/data/example_event_pipeline_config_with_mixture_sr_model.json</span></code> for an example on how
+to configure a mixture of speech recognition models for your pipeline.</p>
 <p>If you want to develop your own speech recognition model, please first read about
 <a class="reference external" href="transcript_formats.html">supported transcript formats</a>.</p>
 </div>

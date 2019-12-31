@@ -111,7 +111,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-raw">Format: Raw</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-speaker-turns">Format: Timestamped Speaker Turns</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id3">Notes</a></li>
 </ul>
 </li>
@@ -240,6 +241,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">RequestException</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">get_module_version</span>
@@ -287,11 +289,26 @@
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
             <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
-            <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
-            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">try_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;try&quot;</span><span class="p">]</span>
+            <span class="n">catch_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;catch&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">caption_sr_model</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+                <span class="n">module_path</span><span class="o">=</span><span class="n">try_model</span><span class="p">[</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+                <span class="n">object_name</span><span class="o">=</span><span class="n">try_model</span><span class="p">[</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+                <span class="n">object_kwargs</span><span class="o">=</span><span class="n">try_model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+                <span class="n">module_path</span><span class="o">=</span><span class="n">catch_model</span><span class="p">[</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+                <span class="n">object_name</span><span class="o">=</span><span class="n">catch_model</span><span class="p">[</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+                <span class="n">object_kwargs</span><span class="o">=</span><span class="n">catch_model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
+                <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
+                <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
+                <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="p">)</span>
 
 <div class="viewcode-block" id="EventGatherPipeline.task_audio_get_or_copy"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_audio_get_or_copy">[docs]</a>    <span class="k">def</span> <span class="nf">task_audio_get_or_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -348,7 +365,13 @@
 
             <span class="k">return</span> <span class="n">audio_uri</span></div>
 
-<div class="viewcode-block" id="EventGatherPipeline.task_transcript_get_or_create"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_transcript_get_or_create">[docs]</a>    <span class="k">def</span> <span class="nf">task_transcript_get_or_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">audio_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="EventGatherPipeline.task_transcript_get_or_create"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_transcript_get_or_create">[docs]</a>    <span class="k">def</span> <span class="nf">task_transcript_get_or_create</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">caption_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or create and return transcript resource uri provied key.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -357,45 +380,62 @@
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.task_transcript_get_or_create&quot;</span><span class="p">,</span>
             <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">audio_uri</span><span class="p">],</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">,</span> <span class="n">caption_uri</span><span class="p">],</span>
             <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
-            <span class="c1"># Setup temporary filenames</span>
-            <span class="n">tmp_raw_transcript_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_raw_transcript_0.json&quot;</span>
-            <span class="n">tmp_ts_words_transcript_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_words_transcript_0.json&quot;</span>
-            <span class="n">tmp_ts_sentences_transcript_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_sentences_transcript_0.json&quot;</span>
+            <span class="c1"># Setup temporary filenames, sorted by preference</span>
+            <span class="n">tmp_filenames</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_speaker_turns_transcript_0.json&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_sentences_transcript_0.json&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_ts_words_transcript_0.json&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="s2">_raw_transcript_0.json&quot;</span>
+            <span class="p">]</span>
 
-            <span class="c1"># Check if raw transcript already exists in file store</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="c1"># Try get the best variant of transcript</span>
-                <span class="c1"># Timestamped sentences first</span>
+            <span class="c1"># Iterate through tmp_filenames and check if any of them exists</span>
+            <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">for</span> <span class="n">tmp_filename</span> <span class="ow">in</span> <span class="n">tmp_filenames</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_ts_sentences_transcript_filepath</span><span class="p">)</span>
+                    <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_filename</span><span class="p">)</span>
+                    <span class="k">break</span>
                 <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                    <span class="c1"># Timestamped words second</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_ts_words_transcript_filepath</span><span class="p">)</span>
-                    <span class="c1"># Default to raw transcript</span>
-                    <span class="c1"># If this isn&#39;t found, the first try except block will break and entirely new transcripts will be</span>
-                    <span class="c1"># generated.</span>
-                    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                        <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_raw_transcript_filepath</span><span class="p">)</span>
+                    <span class="k">continue</span>
 
+            <span class="c1"># Transcript already exist</span>
+            <span class="k">if</span> <span class="n">main_transcript_uri</span><span class="p">:</span>
                 <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">main_transcript_uri</span><span class="p">)</span>
                 <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span>
                     <span class="n">table</span><span class="o">=</span><span class="s2">&quot;transcript&quot;</span><span class="p">,</span>
                     <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;file_id&quot;</span><span class="p">,</span> <span class="n">main_transcript_details</span><span class="p">[</span><span class="s2">&quot;file_id&quot;</span><span class="p">])],</span>
                     <span class="n">limit</span><span class="o">=</span><span class="mi">1</span>
                 <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span>
-            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                <span class="c1"># Transcribe audio</span>
-                <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span>
-                    <span class="n">audio_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
-                    <span class="n">phrases</span><span class="o">=</span><span class="n">phrases</span><span class="p">,</span>
-                    <span class="n">raw_transcript_save_path</span><span class="o">=</span><span class="n">tmp_raw_transcript_filepath</span><span class="p">,</span>
-                    <span class="n">timestamped_words_save_path</span><span class="o">=</span><span class="n">tmp_ts_words_transcript_filepath</span><span class="p">,</span>
-                    <span class="n">timestamped_sentences_save_path</span><span class="o">=</span><span class="n">tmp_ts_sentences_transcript_filepath</span><span class="p">,</span>
-                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># List of tmp_filenames exhausted without break, so there must be no transcripts</span>
+                <span class="c1"># Create entirely new transcripts</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Create transcript from caption_uri</span>
+                    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caption_sr_model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span>
+                        <span class="n">file_uri</span><span class="o">=</span><span class="n">caption_uri</span><span class="p">,</span>
+                        <span class="n">raw_transcript_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">timestamped_sentences_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">timestamped_speaker_turns_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="n">RequestException</span><span class="p">):</span>
+                    <span class="c1"># Either there is no caption_sr_model for this pipeline or</span>
+                    <span class="c1"># caption_sr_model was unable to create transcripts, due to invalid caption_uri</span>
+                    <span class="c1"># Create transcripts from video_uri</span>
+
+                    <span class="c1"># Run audio task</span>
+                    <span class="n">audio_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_audio_get_or_copy</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">)</span>
+
+                    <span class="c1"># Transcribe audio</span>
+                    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span>
+                        <span class="n">file_uri</span><span class="o">=</span><span class="n">audio_uri</span><span class="p">,</span>
+                        <span class="n">phrases</span><span class="o">=</span><span class="n">phrases</span><span class="p">,</span>
+                        <span class="n">raw_transcript_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                        <span class="n">timestamped_words_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="n">timestamped_sentences_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="p">)</span>
 
                 <span class="c1"># Store and register transcript files</span>
                 <span class="n">raw_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">raw_path</span><span class="p">)</span>
@@ -423,6 +463,18 @@
                     <span class="n">ts_sentences_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">ts_sentences_transcript_uri</span><span class="p">)</span>
                     <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_sentences_path</span><span class="p">)</span>
                     <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_sentences_transcript_file_details</span>
+
+                <span class="c1"># Store and register speaker turns transcript file</span>
+                <span class="c1"># Set as main transcript</span>
+                <span class="k">if</span> <span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_speaker_turns_path</span><span class="p">:</span>
+                    <span class="n">ts_speaker_turns_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+                        <span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_speaker_turns_path</span>
+                    <span class="p">)</span>
+                    <span class="n">ts_speaker_turns_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span>
+                        <span class="n">ts_speaker_turns_transcript_uri</span>
+                    <span class="p">)</span>
+                    <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_speaker_turns_path</span><span class="p">)</span>
+                    <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_speaker_turns_transcript_file_details</span>
 
             <span class="k">return</span> <span class="n">main_transcript_details</span><span class="p">,</span> <span class="n">confidence</span></div>
 
@@ -521,14 +573,16 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processing event: </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">]))</span>
 
-                <span class="c1"># Run audio task</span>
-                <span class="n">audio_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_audio_get_or_copy</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">])</span>
-
                 <span class="c1"># Create list of phrases to send to sr model</span>
                 <span class="n">phrases</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;minutes_items&quot;</span><span class="p">]]</span>
 
                 <span class="c1"># Run transcript task</span>
-                <span class="n">transcript_file_details</span><span class="p">,</span> <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_transcript_get_or_create</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">audio_uri</span><span class="p">,</span> <span class="n">phrases</span><span class="p">)</span>
+                <span class="n">transcript_file_details</span><span class="p">,</span> <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_transcript_get_or_create</span><span class="p">(</span>
+                    <span class="n">key</span><span class="p">,</span>
+                    <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">],</span>
+                    <span class="n">event</span><span class="p">[</span><span class="s2">&quot;caption_uri&quot;</span><span class="p">],</span>
+                    <span class="n">phrases</span>
+                <span class="p">)</span>
 
                 <span class="c1"># Attach transcript details to event</span>
                 <span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>

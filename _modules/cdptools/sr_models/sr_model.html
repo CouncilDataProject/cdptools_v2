@@ -111,7 +111,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-raw">Format: Raw</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../transcript_formats.html#format-timestamped-speaker-turns">Format: Timestamped Speaker Turns</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../transcript_formats.html#id3">Notes</a></li>
 </ul>
 </li>
@@ -248,6 +249,7 @@
     <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">timestamped_words_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">timestamped_sentences_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">timestamped_speaker_turns_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">extras</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
@@ -290,10 +292,11 @@
 <div class="viewcode-block" id="SRModel.transcribe"><a class="viewcode-back" href="../../../cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel.transcribe">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">transcribe</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">audio_uri</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+        <span class="n">file_uri</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
         <span class="n">raw_transcript_save_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
         <span class="n">timestamped_words_save_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">timestamped_sentences_save_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timestamped_speaker_turns_save_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SRModelOutputs</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -301,14 +304,16 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        audio_uri: Union[str, Path]</span>
-<span class="sd">            The uri to the audio file to transcribe.</span>
+<span class="sd">        file_uri: Union[str, Path]</span>
+<span class="sd">            The uri to the audio file or caption file to transcribe.</span>
 <span class="sd">        raw_transcript_save_path: Union[str, Path]</span>
 <span class="sd">            Where the raw transcript should be saved to.</span>
 <span class="sd">        timestamped_words_save_path: Optional[Union[str, Path]]</span>
 <span class="sd">            If a timestamped words formatted transcript is produced, where it should be saved to.</span>
 <span class="sd">        timestamped_sentences_save_path: Optional[Union[str, Path]]</span>
 <span class="sd">            If a timestamped sentences formatted transcript is produced, where it should be saved to.</span>
+<span class="sd">        timestamped_speaker_turns_save_path: Optional[Union[str, Path]]</span>
+<span class="sd">            If a timestamped speaker turns formatted transcript is produced, where it should be saved to.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -321,7 +326,8 @@
             <span class="n">Path</span><span class="p">(</span><span class="n">raw_transcript_save_path</span><span class="p">),</span>
             <span class="mf">1.0</span><span class="p">,</span>
             <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_words_save_path</span><span class="p">),</span>
-            <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_sentences_save_path</span><span class="p">)</span>
+            <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_sentences_save_path</span><span class="p">),</span>
+            <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_speaker_turns_save_path</span><span class="p">)</span>
         <span class="p">)</span></div></div>
 </pre></div>
 

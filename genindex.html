@@ -112,7 +112,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-raw">Format: Raw</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-words">Format: Timestamped Words</a></li>
-<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-sentences">Format: Timestamped Sentences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript_formats.html#format-timestamped-speaker-turns">Format: Timestamped Speaker Turns</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="transcript_formats.html#id3">Notes</a></li>
 </ul>
 </li>
@@ -315,10 +316,10 @@
 </li>
       <li><a href="cdptools.file_stores.html#module-cdptools.file_stores.exceptions">cdptools.file_stores.exceptions (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.file_stores.html#module-cdptools.file_stores.file_store">cdptools.file_stores.file_store (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.indexers.html#module-cdptools.indexers">cdptools.indexers (module)</a>
 </li>
       <li><a href="cdptools.indexers.html#module-cdptools.indexers.indexer">cdptools.indexers.indexer (module)</a>
@@ -348,6 +349,8 @@
       <li><a href="cdptools.sr_models.html#module-cdptools.sr_models.constants">cdptools.sr_models.constants (module)</a>
 </li>
       <li><a href="cdptools.sr_models.html#module-cdptools.sr_models.sr_model">cdptools.sr_models.sr_model (module)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#module-cdptools.sr_models.webvtt_sr_model">cdptools.sr_models.webvtt_sr_model (module)</a>
 </li>
       <li><a href="cdptools.indexers.html#cdptools.indexers.indexer.Indexer.clean_text_for_indexing">clean_text_for_indexing() (cdptools.indexers.indexer.Indexer static method)</a>
 </li>
@@ -687,10 +690,10 @@
         <li><a href="cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_upload_index">(cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.databases.html#cdptools.databases.database.TermResult.term">term() (cdptools.databases.database.TermResult property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.databases.html#cdptools.databases.database.TermResult">TermResult (class in cdptools.databases.database)</a>
 </li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Match.terms">terms() (cdptools.databases.database.Match property)</a>
@@ -701,12 +704,20 @@
 </li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.timestamped_sentences_path">timestamped_sentences_path() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
 </li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.constants.TranscriptFormats.timestamped_speaker_turns">timestamped_speaker_turns (cdptools.sr_models.constants.TranscriptFormats attribute)</a>
+</li>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.timestamped_speaker_turns_path">timestamped_speaker_turns_path() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
+</li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.constants.TranscriptFormats.timestamped_words">timestamped_words (cdptools.sr_models.constants.TranscriptFormats attribute)</a>
 </li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.timestamped_words_path">timestamped_words_path() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
 </li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel.transcribe">transcribe() (cdptools.sr_models.sr_model.SRModel method)</a>
+
+      <ul>
+        <li><a href="cdptools.sr_models.html#cdptools.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe">(cdptools.sr_models.webvtt_sr_model.WebVTTSRModel method)</a>
 </li>
+      </ul></li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.constants.TranscriptFormats">TranscriptFormats (class in cdptools.sr_models.constants)</a>
 </li>
       <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunIO.type">type() (cdptools.dev_utils.run_manager.RunIO property)</a>
@@ -763,12 +774,14 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereCondition">WhereCondition (class in cdptools.databases.database)</a>
+      <li><a href="cdptools.sr_models.html#cdptools.sr_models.webvtt_sr_model.WebVTTSRModel">WebVTTSRModel (class in cdptools.sr_models.webvtt_sr_model)</a>
 </li>
-      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators">WhereOperators (class in cdptools.databases.database)</a>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereCondition">WhereCondition (class in cdptools.databases.database)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators">WhereOperators (class in cdptools.databases.database)</a>
+</li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Database.wipe_table">wipe_table() (cdptools.databases.database.Database method)</a>
 </li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel.wrap_and_format_transcript_data">wrap_and_format_transcript_data() (cdptools.sr_models.sr_model.SRModel static method)</a>

@@ -128,7 +128,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id10">Local Development Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id11">Production Server Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id12">Running Pipelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id13">Running Pipelines</a></li>
 </ul>
 </li>
 </ul>
@@ -474,10 +474,12 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventParseError</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">event_dt</span><span class="p">)</span>
 
-        <span class="c1"># If the event was not today, ignore it.</span>
+        <span class="c1"># If the event was not in the last two weeks, ignore it.</span>
+        <span class="c1"># We check the last two weeks over just the last day because sometimes events are posted late and such.</span>
+        <span class="c1"># Additionally, by always collecting the last two weeks, we generally get more info from legistar.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_date</span><span class="p">:</span>
             <span class="n">now</span> <span class="o">=</span> <span class="n">SeattleEventScraper</span><span class="o">.</span><span class="n">pstnow</span><span class="p">()</span>
-            <span class="n">yesterday</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">yesterday</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">event_dt</span> <span class="o">&gt;</span> <span class="n">yesterday</span> <span class="ow">and</span> <span class="n">event_dt</span> <span class="o">&lt;</span> <span class="n">now</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventOutOfTimeboundsError</span><span class="p">(</span><span class="n">event_dt</span><span class="p">,</span> <span class="n">yesterday</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
 

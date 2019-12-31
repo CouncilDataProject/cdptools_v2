@@ -130,7 +130,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#id10">Local Development Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id11">Production Server Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id12">Running Pipelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Running Pipelines</a></li>
 </ul>
 </li>
 </ul>
@@ -418,14 +418,18 @@ can start a Docker image (an instance of the built Docker container) by running:
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo bash run.sh
 </pre></div>
 </div>
+<p><strong>*Note:</strong> The above <code class="docutils literal notranslate"><span class="pre">run.sh</span></code> script also mounts the <code class="docutils literal notranslate"><span class="pre">cdptools</span></code> directory to the docker image, what this means is that
+you will be able to edit the files both like normal on whichever editor you choose or in the bash terminal connected to
+the docker image. The files are shared between the image and your system._</p>
 <p>Once connected the Docker image, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install -e cdptools<span class="o">[</span>all<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -e cdptools<span class="o">[</span>all<span class="o">]</span>
 </pre></div>
 </div>
 <ol class="arabic simple">
 <li><p>Once the dependencies are all installed, edit your configuration file for the system found at
 <code class="docutils literal notranslate"><span class="pre">cdptools/configs/seattle-event-pipeline.json</span></code>. Specifically, change the filename for the credentials file to the name
-of the credentials file you downloaded anywhere where there is the key <code class="docutils literal notranslate"><span class="pre">&quot;credentials_path&quot;</span></code>.</p></li>
+of the credentials file you downloaded anywhere where there is the key <code class="docutils literal notranslate"><span class="pre">&quot;credentials_path&quot;</span></code> and change the file store
+<code class="docutils literal notranslate"><span class="pre">&quot;bucket_name&quot;</span></code> to whatever your bucket address is.</p></li>
 <li><p>To start a single gathering of events run:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>run_cdp_pipeline EventGatherPipeline cdptools/configs/seattle-event-gather-pipeline.json
@@ -466,12 +470,14 @@ changing the event pipeline configuration file.</p>
 web interactions which can be done on any machine.</p></li>
 <li><p>Because you are creating a production instance, probably best to not pre-pend the <code class="docutils literal notranslate"><span class="pre">stg-</span></code> to your project name.</p></li>
 <li><p>It is recommended to not <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code> the project repository and instead simply run
-<code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">cdptools[google-cloud]</span></code> for a couple of reasons. First, not cloning the repository and removing the <code class="docutils literal notranslate"><span class="pre">-e</span></code>
+<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cdptools[seattle]</span></code> for a couple of reasons. First, not cloning the repository and removing the <code class="docutils literal notranslate"><span class="pre">-e</span></code>
 means the code that is actually running is no longer editable, which for a production server is generally a good thing.
-Second, specifying <code class="docutils literal notranslate"><span class="pre">google-cloud</span></code> over <code class="docutils literal notranslate"><span class="pre">all</span></code> means there will be less dependencies installed on the machine.</p></li>
+Second, specifying <code class="docutils literal notranslate"><span class="pre">seattle</span></code> over <code class="docutils literal notranslate"><span class="pre">all</span></code> means there will be less dependencies installed on the machine.</p></li>
 </ol>
-<div class="section" id="id12">
-<h3>Running Pipelines<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>You may also need to ensure the bucket is “viewable” by <code class="docutils literal notranslate"><span class="pre">allUsers</span></code> on Google Cloud Console. Details <a class="reference external" href="https://stackoverflow.com/questions/40232188/allow-public-read-access-on-a-gcs-bucket#answer-49809949">here</a>.
+If you want to have a front end for the system you will also need to allow CORS requests. Details <a class="reference external" href="https://cloud.google.com/storage/docs/cross-origin">here</a>.</p>
+<div class="section" id="id13">
+<h3>Running Pipelines<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <p>If you have made it this far in the deployment README, I applaud you. The last couple comments to add are about running
 pipelines. Currently at <code class="docutils literal notranslate"><span class="pre">v2.0.0</span></code> launch of the project, the idea of <em>“backfilling”</em> was pushed to a later date because
 of how costly this can be (upwards of $10,000). Instead, pipelines at <code class="docutils literal notranslate"><span class="pre">v2.0.0</span></code> launch only have forward gathering,

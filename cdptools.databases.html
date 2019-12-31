@@ -130,7 +130,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id10">Local Development Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deployment_instructions.html#id11">Production Server Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id12">Running Pipelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment_instructions.html#id13">Running Pipelines</a></li>
 </ul>
 </li>
 </ul>
@@ -387,6 +387,28 @@ event details for this event but in Legistar’s system.</p></li>
 </dd></dl>
 
 <dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_event_entity">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_event_entity</code><span class="sig-paren">(</span><em class="sig-param">event_id: str, label: str, value: Union[str, int, float, datetime.datetime]</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_event_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_event_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload an event entity. Because entities can be values that are other than strings, most databases,
+should cast this to a string prior to storage. This is also why will store the data type (dtype).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for which event this entity was referenced in.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The label for the entity. Ex: ‘location’, ‘person’, etc.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value for the entity. Ex: ‘Bruce Harrell’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="cdptools.databases.database.Database.get_or_upload_event_minutes_item">
 <em class="property">abstract </em><code class="sig-name descname">get_or_upload_event_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">event_id: str</em>, <em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">index: int</em>, <em class="sig-param">decision: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_event_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_event_minutes_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get or upload the join of an event and a minutes item.</p>
@@ -404,6 +426,26 @@ event details for this event but in Legistar’s system.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Dict[str, Union[str, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.database.Database.get_or_upload_event_topic">
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_event_topic</code><span class="sig-paren">(</span><em class="sig-param">event_id: str</em>, <em class="sig-param">topic: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_event_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_event_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload an event topic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for which event this topic is related to.</p></li>
+<li><p><strong>topic</strong> (<em>str</em>) – The term or terms (as a string) that define the topic as a unique topic.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -433,13 +475,14 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 
 <dl class="method">
 <dt id="cdptools.databases.database.Database.get_or_upload_minutes_item">
-<em class="property">abstract </em><code class="sig-name descname">get_or_upload_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">name: str, matter: Optional[str], legistar_event_item_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_minutes_item" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_or_upload_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">matter: Optional[str] = None</em>, <em class="sig-param">title: Optional[str] = None</em>, <em class="sig-param">legistar_event_item_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_minutes_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get or upload a minutes item. In Legistar this is commonly referred to as an event item.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – A name for the minutes item. Ex: “Appointment of Rene J. Peters, Jr.”</p></li>
-<li><p><strong>matter</strong> (<em>str</em>) – A matter name for the minutes item. Ex: “Appt 01373”</p></li>
+<li><p><strong>matter</strong> (<em>Optional[str]</em>) – A matter name for the minutes item. Ex: “Appt 01373”</p></li>
+<li><p><strong>title</strong> (<em>Optional[str]</em>) – A human readable name for the minutes item. Ex: “A resolution regarding adoption of a Green New Deal.”</p></li>
 <li><p><strong>legistar_event_item_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventItemId</cite>.</p></li>
 </ul>
 </dd>

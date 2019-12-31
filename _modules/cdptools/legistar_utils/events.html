@@ -128,7 +128,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id10">Local Development Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id11">Production Server Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id12">Running Pipelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id13">Running Pipelines</a></li>
 </ul>
 </li>
 </ul>
@@ -455,10 +455,12 @@
     <span class="n">minutes_items</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">legistar_event_item</span> <span class="ow">in</span> <span class="n">legistar_event_details</span><span class="p">[</span><span class="s2">&quot;EventItems&quot;</span><span class="p">]:</span>
         <span class="c1"># Choose name based off available data</span>
-        <span class="k">if</span> <span class="n">legistar_event_item</span><span class="p">[</span><span class="s2">&quot;EventItemMatterName&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">legistar_event_item</span><span class="p">[</span><span class="s2">&quot;EventItemTitle&quot;</span><span class="p">]:</span>
+            <span class="n">minutes_item_name</span> <span class="o">=</span> <span class="n">_clean_legistar_string_data</span><span class="p">(</span><span class="n">legistar_event_item</span><span class="p">[</span><span class="s2">&quot;EventItemTitle&quot;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">legistar_event_item</span><span class="p">[</span><span class="s2">&quot;EventItemMatterName&quot;</span><span class="p">]:</span>
             <span class="n">minutes_item_name</span> <span class="o">=</span> <span class="n">_clean_legistar_string_data</span><span class="p">(</span><span class="n">legistar_event_item</span><span class="p">[</span><span class="s2">&quot;EventItemMatterName&quot;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">minutes_item_name</span> <span class="o">=</span> <span class="n">_clean_legistar_string_data</span><span class="p">(</span><span class="n">legistar_event_item</span><span class="p">[</span><span class="s2">&quot;EventItemTitle&quot;</span><span class="p">])</span>
+            <span class="n">minutes_item_matter</span> <span class="o">=</span> <span class="n">_clean_legistar_string_data</span><span class="p">(</span><span class="n">legistar_event_item</span><span class="p">[</span><span class="s2">&quot;EventItemMatterFile&quot;</span><span class="p">])</span>
 
         <span class="c1"># Choose matter name based off available data</span>
         <span class="k">if</span> <span class="n">legistar_event_item</span><span class="p">[</span><span class="s2">&quot;EventItemMatterName&quot;</span><span class="p">]:</span>

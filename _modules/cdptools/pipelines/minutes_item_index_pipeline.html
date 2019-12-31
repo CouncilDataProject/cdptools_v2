@@ -128,7 +128,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id10">Local Development Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../deployment_instructions.html#id11">Production Server Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id12">Running Pipelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../deployment_instructions.html#id13">Running Pipelines</a></li>
 </ul>
 </li>
 </ul>
@@ -360,13 +360,17 @@
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">local_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">_external_resource_copy</span><span class="p">(</span><span class="n">di_f</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">],</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                         <span class="n">parsed</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">local_path</span><span class="p">))</span>
-                        <span class="c1"># Sometimes the content can&#39;t be parsed 🤷</span>
-                        <span class="k">if</span> <span class="n">parsed</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]:</span>
-                            <span class="n">di_transcript_document</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-                                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">parsed</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span>
-                                <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                                <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="mf">1.0</span>
-                            <span class="p">})</span>
+                        <span class="c1"># Sometimes the content isn&#39;t a supported type by tika 🤷</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="c1"># Sometimes the content can&#39;t be parsed 🤷</span>
+                            <span class="k">if</span> <span class="n">parsed</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]:</span>
+                                <span class="n">di_transcript_document</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">parsed</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span>
+                                    <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                                    <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="mf">1.0</span>
+                                <span class="p">})</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                            <span class="k">pass</span>
                     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span>
                         <span class="k">pass</span>
 

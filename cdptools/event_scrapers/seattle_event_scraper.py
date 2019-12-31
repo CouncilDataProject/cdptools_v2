@@ -240,10 +240,12 @@ class SeattleEventScraper(EventScraper):
         except AttributeError:
             raise exceptions.EventParseError(body, event_dt)
 
-        # If the event was not today, ignore it.
+        # If the event was not in the last two weeks, ignore it.
+        # We check the last two weeks over just the last day because sometimes events are posted late and such.
+        # Additionally, by always collecting the last two weeks, we generally get more info from legistar.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
-            yesterday = now - timedelta(days=7)
+            yesterday = now - timedelta(days=14)
             if not (event_dt > yesterday and event_dt < now):
                 raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 

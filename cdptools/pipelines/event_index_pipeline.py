@@ -110,7 +110,7 @@ class EventIndexPipeline(Pipeline):
             with tempfile.TemporaryDirectory() as tmpdir:
                 # Get the event corpus map and download most recent transcripts to local machine
                 log.info("Downloading most recent transcripts")
-                event_corpus_map = transcript_tools.download_most_recent_transcripts(
+                event_corpus_map = transcript_tools.download_event_transcripts(
                     db=self.database,
                     fs=self.file_store,
                     save_dir=tmpdir

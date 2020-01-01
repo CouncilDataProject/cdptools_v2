@@ -70,7 +70,7 @@ def test_event_index_pipeline(
         pipeline = EventIndexPipeline(example_config)
 
         # Mock the transcript manifest get
-        with mock.patch("cdptools.research_utils.transcripts.download_most_recent_transcripts") as mock_transcript_get:
+        with mock.patch("cdptools.research_utils.transcripts.download_event_transcripts") as mock_transcript_get:
             mock_transcript_get.return_value = {
                 "event_0": example_transcript_sentences_0,
                 "event_1": example_transcript_sentences_1

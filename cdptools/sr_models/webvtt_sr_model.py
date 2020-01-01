@@ -4,14 +4,14 @@
 import io
 import json
 import logging
-import nltk
 import re
+from pathlib import Path
+from typing import Dict, List, Union
+
+import nltk
 import requests
 import truecase
 import webvtt
-
-from pathlib import Path
-from typing import List, Dict, Union
 
 from . import constants
 from .sr_model import SRModel, SRModelOutputs
@@ -24,13 +24,18 @@ log = logging.getLogger(__name__)
 
 
 class WebVTTSRModel(SRModel):
-    def __init__(self, new_turn_pattern: str, **kwargs):
+    def __init__(self, new_turn_pattern: str, confidence: float = 1, **kwargs):
         # Download punkt for truecase module
         nltk.download("punkt")
         # New speaker turn must begin with one or more new_turn_pattern str
         self.new_turn_pattern = r"^({})+\s*(.+)$".format(new_turn_pattern)
         # Sentence must be ended by period, question mark, or exclamation point.
         self.end_of_sentence_pattern = r"^.+[.?!]\s*$"
+
+        # Confidence is tricky. We allow it to be a parameter because closed captions aren't always
+        # 100% accurate. For Seattle, I would guess they are about 97% accurate.
+        # Maybe something todo in the future is actually compute their accuracy.
+        self.confidence = confidence
 
     def _normalize_text(self, text: str) -> str:
         normalized_text = truecase.get_true_case(text)
@@ -139,19 +144,19 @@ class WebVTTSRModel(SRModel):
         raw_transcript = self.wrap_and_format_transcript_data(
             data=raw_transcript,
             transcript_format=constants.TranscriptFormats.raw,
-            confidence=1
+            confidence=self.confidence
         )
 
         timestamped_sentences = self.wrap_and_format_transcript_data(
             data=timestamped_sentences,
             transcript_format=constants.TranscriptFormats.timestamped_sentences,
-            confidence=1
+            confidence=self.confidence
         )
 
         timestamped_speaker_turns = self.wrap_and_format_transcript_data(
             data=timestamped_speaker_turns,
             transcript_format=constants.TranscriptFormats.timestamped_speaker_turns,
-            confidence=1
+            confidence=self.confidence
         )
 
         # Write files
@@ -167,7 +172,7 @@ class WebVTTSRModel(SRModel):
         # Return the save path
         return SRModelOutputs(
             raw_path=raw_transcript_save_path,
-            confidence=1,
+            confidence=self.confidence,
             timestamped_sentences_path=timestamped_sentences_save_path,
             timestamped_speaker_turns_path=timestamped_speaker_turns_save_path
         )

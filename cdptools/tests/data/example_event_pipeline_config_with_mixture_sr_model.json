@@ -22,7 +22,7 @@
         "object_name": "GCSFileStore",
         "object_kwargs": {
             "credentials_path": "/home/cdptools/credentials/cdp_seattle_cloud_platform_all.json",
-            "bucket_name": "stg-cdp-seattle.appspot.com"
+            "bucket_name": "fake-cdp-instance.appspot.com"
         }
     },
     "audio_splitter": {

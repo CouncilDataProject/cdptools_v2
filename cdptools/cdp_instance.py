@@ -64,8 +64,8 @@ class CDPInstance:
 
     def get_transcript_manifest(self, order_by_field: str = "confidence") -> pd.DataFrame:
         """
-        Get a pandas dataframe that can act as a manifest of the transcripts available for each
-        event stored in a CDP instance's database.
+        Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
+        instance's database.
 
         Parameters
         ----------
@@ -77,8 +77,7 @@ class CDPInstance:
         Returns
         -------
         manifest: pandas.DataFrame
-            A dataframe with transcript, event, body, and file details where each row includes transcript details for
-            the event of that row.
+            A dataframe where each row has transcript, event, body, and file details for the event at that row.
         """
 
         return transcripts_utils.get_transcript_manifest(
@@ -92,7 +91,7 @@ class CDPInstance:
         save_dir: Optional[Path] = None,
     ) -> Dict[str, Path]:
         """
-        Download the most recent versions of event transcripts.
+        Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.
 
         Parameters
         ----------
@@ -108,7 +107,7 @@ class CDPInstance:
         Returns
         -------
         event_corpus_map: Dict[str, Path]
-            A dictionary mapping event id to local Path of the most recent transcript for that event.
+            A dictionary mapping event id to a local Path for a transcript for that event.
         """
 
         return transcripts_utils.download_event_transcripts(

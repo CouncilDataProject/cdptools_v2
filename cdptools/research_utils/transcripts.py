@@ -51,8 +51,8 @@ def _get_file(file_id: str, db: Database) -> Dict[str, Any]:
 
 def get_transcript_manifest(db: Database, order_by_field: str = "confidence") -> pd.DataFrame:
     """
-    Get a pandas dataframe that can act as a manifest of the most recent transcript available for each event stored in a
-    CDP instance's database.
+    Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
+    instance's database.
 
     Parameters
     ----------
@@ -66,8 +66,7 @@ def get_transcript_manifest(db: Database, order_by_field: str = "confidence") ->
     Returns
     -------
     manifest: pandas.DataFrame
-        A dataframe with transcript, event, body, and file details where each row is the most recent transcript for the
-        event of that row.
+        A dataframe where each row has transcript, event, body, and file details for the event at that row.
     """
 
     # Get transcript dataset
@@ -128,7 +127,7 @@ def download_event_transcripts(
     save_dir: Optional[Union[str, Path]] = None
 ) -> Dict[str, Path]:
     """
-    Download the most recent versions of event transcripts.
+    Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.
 
     Parameters
     ----------
@@ -147,7 +146,7 @@ def download_event_transcripts(
     Returns
     -------
     event_corpus_map: Dict[str, Path]
-        A dictionary mapping event id to local Path of the most recent transcript for that event.
+        A dictionary mapping event id to a local Path for a transcript for that event.
     """
 
     # Use current directory is None provided

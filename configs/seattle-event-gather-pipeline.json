@@ -40,7 +40,8 @@
             "module_path": "cdptools.sr_models.webvtt_sr_model",
             "object_name": "WebVTTSRModel",
             "object_kwargs": {
-                "new_turn_pattern": "&gt;"
+                "new_turn_pattern": "&gt;",
+                "confidence": 0.97
             }
         },
         "catch": {

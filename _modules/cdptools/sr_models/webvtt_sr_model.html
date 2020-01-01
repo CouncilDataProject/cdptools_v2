@@ -238,14 +238,14 @@
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">nltk</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">nltk</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">truecase</span>
 <span class="kn">import</span> <span class="nn">webvtt</span>
-
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="kn">from</span> <span class="nn">.sr_model</span> <span class="kn">import</span> <span class="n">SRModel</span><span class="p">,</span> <span class="n">SRModelOutputs</span>
@@ -258,13 +258,18 @@
 
 
 <div class="viewcode-block" id="WebVTTSRModel"><a class="viewcode-back" href="../../../cdptools.sr_models.html#cdptools.sr_models.webvtt_sr_model.WebVTTSRModel">[docs]</a><span class="k">class</span> <span class="nc">WebVTTSRModel</span><span class="p">(</span><span class="n">SRModel</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_turn_pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_turn_pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Download punkt for truecase module</span>
         <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;punkt&quot;</span><span class="p">)</span>
         <span class="c1"># New speaker turn must begin with one or more new_turn_pattern str</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^(</span><span class="si">{}</span><span class="s2">)+\s*(.+)$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_turn_pattern</span><span class="p">)</span>
         <span class="c1"># Sentence must be ended by period, question mark, or exclamation point.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_of_sentence_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^.+[.?!]\s*$&quot;</span>
+
+        <span class="c1"># Confidence is tricky. We allow it to be a parameter because closed captions aren&#39;t always</span>
+        <span class="c1"># 100% accurate. For Seattle, I would guess they are about 97% accurate.</span>
+        <span class="c1"># Maybe something todo in the future is actually compute their accuracy.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="n">confidence</span>
 
     <span class="k">def</span> <span class="nf">_normalize_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">normalized_text</span> <span class="o">=</span> <span class="n">truecase</span><span class="o">.</span><span class="n">get_true_case</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -373,19 +378,19 @@
         <span class="n">raw_transcript</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_and_format_transcript_data</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">raw_transcript</span><span class="p">,</span>
             <span class="n">transcript_format</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span>
-            <span class="n">confidence</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">confidence</span>
         <span class="p">)</span>
 
         <span class="n">timestamped_sentences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_and_format_transcript_data</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">timestamped_sentences</span><span class="p">,</span>
             <span class="n">transcript_format</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_sentences</span><span class="p">,</span>
-            <span class="n">confidence</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">confidence</span>
         <span class="p">)</span>
 
         <span class="n">timestamped_speaker_turns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_and_format_transcript_data</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">timestamped_speaker_turns</span><span class="p">,</span>
             <span class="n">transcript_format</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_speaker_turns</span><span class="p">,</span>
-            <span class="n">confidence</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">confidence</span>
         <span class="p">)</span>
 
         <span class="c1"># Write files</span>
@@ -401,7 +406,7 @@
         <span class="c1"># Return the save path</span>
         <span class="k">return</span> <span class="n">SRModelOutputs</span><span class="p">(</span>
             <span class="n">raw_path</span><span class="o">=</span><span class="n">raw_transcript_save_path</span><span class="p">,</span>
-            <span class="n">confidence</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
             <span class="n">timestamped_sentences_path</span><span class="o">=</span><span class="n">timestamped_sentences_save_path</span><span class="p">,</span>
             <span class="n">timestamped_speaker_turns_path</span><span class="o">=</span><span class="n">timestamped_speaker_turns_save_path</span>
         <span class="p">)</span></div></div>

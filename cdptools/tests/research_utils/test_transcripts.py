@@ -108,12 +108,10 @@ def test_download_transcripts(example_transcript, order_by_field):
                     assert len(event_corpus_map) == 1
 
                     # It should have one transcript and the manifest CSV
-                    tmpdir_contents = list(Path(tmpdir).iterdir())
-                    assert len(tmpdir_contents) == 2
+                    assert len(list(Path(tmpdir).iterdir())) == 2
 
                     # Assert that the transcript path in the manifest is also correct
                     manifest = pd.read_csv(Path(tmpdir) / "transcript_manifest.csv")
-                    assert Path(manifest.local_path[0]) in tmpdir_contents
                     with open(manifest.local_path[0], "r") as copied_file:
                         copied_transcript = json.load(copied_file)
 

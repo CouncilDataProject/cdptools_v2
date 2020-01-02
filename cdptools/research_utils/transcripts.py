@@ -120,6 +120,13 @@ def get_transcript_manifest(db: Database, order_by_field: str = "confidence") ->
     return events
 
 
+def _download_file(filename: str, fs: FileStore, save_dir: Path) -> Dict[str, Union[str, Path]]:
+    return {
+        "filename": filename,
+        "local_path": str(fs.download_file(filename=filename, save_path=save_dir, overwrite=True))
+    }
+
+
 def download_transcripts(
     db: Database,
     fs: FileStore,
@@ -163,11 +170,15 @@ def download_transcripts(
     selected_transcripts = get_transcript_manifest(db=db, order_by_field=order_by_field)
 
     # Create download file partial
-    file_download = partial(fs.download_file, save_dir=save_dir, overwrite=True)
+    file_download = partial(_download_file, fs=fs, save_dir=save_dir,)
 
     # Begin storage
     with ThreadPoolExecutor() as exe:
-        exe.map(file_download, selected_transcripts.filename)
+        results = list(exe.map(file_download, selected_transcripts.filename))
+
+    # Add column in transcript manifest for the path to the local file
+    results = pd.DataFrame(results)
+    selected_transcripts = selected_transcripts.merge(results, on="filename", suffixes=("_event", "_transcript"))
 
     # Write manifest
     selected_transcripts.to_csv(save_dir / "transcript_manifest.csv", index=False)
@@ -177,6 +188,6 @@ def download_transcripts(
     for transcript_details in selected_transcripts.to_dict("records"):
         event_corpus_map[transcript_details["event_id"]] = Path(
             save_dir / transcript_details["filename"]
-        ).resolve(strict=False)
+        ).resolve(strict=True)
 
     return event_corpus_map

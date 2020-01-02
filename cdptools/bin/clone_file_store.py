@@ -68,7 +68,7 @@ def main():
     with ThreadPoolExecutor() as exe:
         exe.map(proc_func, pages)
 
-    log.info("Cloned filestore of bucket: {} to bucket: {}".format(source_bucket, target_bucket))
+    log.info("Cloned filestore of bucket: {source_bucket} to bucket: {target_bucket}")
 
 
 if __name__ == "__main__":

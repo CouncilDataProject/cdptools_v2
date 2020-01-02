@@ -210,7 +210,7 @@ class GCSFileStore(FileStore):
         filename: str
     ) -> str:
         self._bucket.delete_blob(filename)
-        return "Deleted file: {}".format(filename)
+        return f"Deleted file: {filename}"
 
     def delete_page(
         self,
@@ -218,7 +218,7 @@ class GCSFileStore(FileStore):
     ) -> str:
         for blob in page:
             self.delete_file(blob.name)
-        return "Deleted page in bucket: {}".format(self._bucket.name)
+        return f"Deleted page in bucket: {self._bucket.name}"
 
     def clear_bucket(
             self
@@ -229,8 +229,8 @@ class GCSFileStore(FileStore):
         with ThreadPoolExecutor() as exe:
             exe.map(self.delete_page, pages)
 
-        log.info("Cleared bucket: {}".format(self._bucket.name))
-        return "Cleared bucket: {}".format(self._bucket.name)
+        log.info(f"Cleared bucket: {self._bucket.name}")
+        return f"Cleared bucket: {self._bucket.name}"
 
     def __str__(self):
         # With credentials

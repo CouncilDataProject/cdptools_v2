@@ -388,10 +388,10 @@
 </li>
       <li><a href="cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.download_file">download_file() (cdptools.file_stores.file_store.FileStore method)</a>
 </li>
-      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance.download_most_recent_transcripts">download_most_recent_transcripts() (cdptools.cdp_instance.CDPInstance method)</a>
+      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance.download_transcripts">download_transcripts() (cdptools.cdp_instance.CDPInstance method)</a>
 
       <ul>
-        <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.download_most_recent_transcripts">(in module cdptools.research_utils.transcripts)</a>
+        <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.download_transcripts">(in module cdptools.research_utils.transcripts)</a>
 </li>
       </ul></li>
       <li><a href="cdptools.indexers.html#cdptools.indexers.indexer.Indexer.drop_terms_from_index_below_value">drop_terms_from_index_below_value() (cdptools.indexers.indexer.Indexer static method)</a>
@@ -403,6 +403,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.eq">eq (cdptools.databases.database.WhereOperators attribute)</a>
+</li>
+      <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.TrancriptJoin.event_id">event_id() (cdptools.research_utils.transcripts.TrancriptJoin property)</a>
 </li>
       <li><a href="cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline">EventGatherPipeline (class in cdptools.pipelines.event_gather_pipeline)</a>
 </li>
@@ -466,12 +468,6 @@
 </li>
       <li><a href="cdptools.html#cdptools.get_module_version">get_module_version() (in module cdptools)</a>
 </li>
-      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance.get_most_recent_transcript_manifest">get_most_recent_transcript_manifest() (cdptools.cdp_instance.CDPInstance method)</a>
-
-      <ul>
-        <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.get_most_recent_transcript_manifest">(in module cdptools.research_utils.transcripts)</a>
-</li>
-      </ul></li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_algorithm">get_or_upload_algorithm() (cdptools.databases.database.Database method)</a>
 </li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_body">get_or_upload_body() (cdptools.databases.database.Database method)</a>
@@ -480,12 +476,12 @@
 </li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_event_entity">get_or_upload_event_entity() (cdptools.databases.database.Database method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_event_minutes_item">get_or_upload_event_minutes_item() (cdptools.databases.database.Database method)</a>
 </li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_event_topic">get_or_upload_event_topic() (cdptools.databases.database.Database method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_file">get_or_upload_file() (cdptools.databases.database.Database method)</a>
 </li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_minutes_item">get_or_upload_minutes_item() (cdptools.databases.database.Database method)</a>
@@ -512,6 +508,12 @@
 </li>
       <li><a href="cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_routes">get_routes() (cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper method)</a>
 </li>
+      <li><a href="cdptools.html#cdptools.cdp_instance.CDPInstance.get_transcript_manifest">get_transcript_manifest() (cdptools.cdp_instance.CDPInstance method)</a>
+
+      <ul>
+        <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.get_transcript_manifest">(in module cdptools.research_utils.transcripts)</a>
+</li>
+      </ul></li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.gt">gt (cdptools.databases.database.WhereOperators attribute)</a>
 </li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.WhereOperators.gteq">gteq (cdptools.databases.database.WhereOperators attribute)</a>
@@ -696,10 +698,10 @@
       </ul></li>
       <li><a href="cdptools.databases.html#cdptools.databases.database.TermResult.term">term() (cdptools.databases.database.TermResult property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.databases.html#cdptools.databases.database.TermResult">TermResult (class in cdptools.databases.database)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cdptools.databases.html#cdptools.databases.database.Match.terms">terms() (cdptools.databases.database.Match property)</a>
 </li>
       <li><a href="cdptools.indexers.html#cdptools.indexers.tfidf_indexer.TFIDFIndexer">TFIDFIndexer (class in cdptools.indexers.tfidf_indexer)</a>
@@ -716,12 +718,16 @@
 </li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModelOutputs.timestamped_words_path">timestamped_words_path() (cdptools.sr_models.sr_model.SRModelOutputs property)</a>
 </li>
+      <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.TrancriptJoin">TrancriptJoin (class in cdptools.research_utils.transcripts)</a>
+</li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel.transcribe">transcribe() (cdptools.sr_models.sr_model.SRModel method)</a>
 
       <ul>
         <li><a href="cdptools.sr_models.html#cdptools.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe">(cdptools.sr_models.webvtt_sr_model.WebVTTSRModel method)</a>
 </li>
       </ul></li>
+      <li><a href="cdptools.research_utils.html#cdptools.research_utils.transcripts.TrancriptJoin.transcript_details">transcript_details() (cdptools.research_utils.transcripts.TrancriptJoin property)</a>
+</li>
       <li><a href="cdptools.sr_models.html#cdptools.sr_models.constants.TranscriptFormats">TranscriptFormats (class in cdptools.sr_models.constants)</a>
 </li>
       <li><a href="cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunIO.type">type() (cdptools.dev_utils.run_manager.RunIO property)</a>

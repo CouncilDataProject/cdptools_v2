@@ -344,7 +344,7 @@
             <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
                 <span class="c1"># Get the event corpus map and download most recent transcripts to local machine</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloading most recent transcripts&quot;</span><span class="p">)</span>
-                <span class="n">event_corpus_map</span> <span class="o">=</span> <span class="n">transcript_tools</span><span class="o">.</span><span class="n">download_most_recent_transcripts</span><span class="p">(</span>
+                <span class="n">event_corpus_map</span> <span class="o">=</span> <span class="n">transcript_tools</span><span class="o">.</span><span class="n">download_transcripts</span><span class="p">(</span>
                     <span class="n">db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
                     <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
                     <span class="n">save_dir</span><span class="o">=</span><span class="n">tmpdir</span>

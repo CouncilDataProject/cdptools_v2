@@ -253,21 +253,43 @@
 </div>
 <div class="section" id="module-cdptools.research_utils.transcripts">
 <span id="cdptools-research-utils-transcripts-module"></span><h2>cdptools.research_utils.transcripts module<a class="headerlink" href="#module-cdptools.research_utils.transcripts" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.research_utils.transcripts.TrancriptJoin">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.research_utils.transcripts.</code><code class="sig-name descname">TrancriptJoin</code><span class="sig-paren">(</span><em class="sig-param">event_id</em>, <em class="sig-param">transcript_details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/research_utils/transcripts.html#TrancriptJoin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.research_utils.transcripts.TrancriptJoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of TrancriptJoin(event_id, transcript_details)</p>
+<dl class="method">
+<dt id="cdptools.research_utils.transcripts.TrancriptJoin.event_id">
+<em class="property">property </em><code class="sig-name descname">event_id</code><a class="headerlink" href="#cdptools.research_utils.transcripts.TrancriptJoin.event_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.research_utils.transcripts.TrancriptJoin.transcript_details">
+<em class="property">property </em><code class="sig-name descname">transcript_details</code><a class="headerlink" href="#cdptools.research_utils.transcripts.TrancriptJoin.transcript_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
-<dt id="cdptools.research_utils.transcripts.download_most_recent_transcripts">
-<code class="sig-prename descclassname">cdptools.research_utils.transcripts.</code><code class="sig-name descname">download_most_recent_transcripts</code><span class="sig-paren">(</span><em class="sig-param">db: cdptools.databases.database.Database</em>, <em class="sig-param">fs: cdptools.file_stores.file_store.FileStore</em>, <em class="sig-param">save_dir: Union[str</em>, <em class="sig-param">pathlib.Path</em>, <em class="sig-param">None] = None</em><span class="sig-paren">)</span> &#x2192; Dict[str, pathlib.Path]<a class="reference internal" href="_modules/cdptools/research_utils/transcripts.html#download_most_recent_transcripts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.research_utils.transcripts.download_most_recent_transcripts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download the most recent versions of event transcripts.</p>
+<dt id="cdptools.research_utils.transcripts.download_transcripts">
+<code class="sig-prename descclassname">cdptools.research_utils.transcripts.</code><code class="sig-name descname">download_transcripts</code><span class="sig-paren">(</span><em class="sig-param">db: cdptools.databases.database.Database</em>, <em class="sig-param">fs: cdptools.file_stores.file_store.FileStore</em>, <em class="sig-param">order_by_field: str = 'confidence'</em>, <em class="sig-param">save_dir: Union[str</em>, <em class="sig-param">pathlib.Path</em>, <em class="sig-param">None] = None</em><span class="sig-paren">)</span> &#x2192; Dict[str, pathlib.Path]<a class="reference internal" href="_modules/cdptools/research_utils/transcripts.html#download_transcripts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.research_utils.transcripts.download_transcripts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>db</strong> (<em>Database</em>) – An already initialized database object connected to a CDP instance’s database.</p></li>
 <li><p><strong>fs</strong> (<em>FileStore</em>) – An already initialized file store object connected to a CDP instance’s file store.</p></li>
+<li><p><strong>order_by_field</strong> (<em>str</em>) – Which field to order the transcripts by to select the first (highest value) of.
+Default: “confidence”
+Choices: [“created”, “confidence”]</p></li>
 <li><p><strong>save_dir</strong> (<em>Optional[Union[str, Path]]</em>) – An optional path of where to save the transcripts and manifest CSV. If None provided, uses current directory.
 Always overwrites existing transcripts with the same name if they already exist in the provided directory.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>event_corpus_map</strong> – A dictionary mapping event id to local Path of the most recent transcript for that event.</p>
+<dd class="field-even"><p><strong>event_corpus_map</strong> – A dictionary mapping event id to a local Path for a transcript for that event.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Dict[str, Path]</p>
@@ -276,17 +298,21 @@ Always overwrites existing transcripts with the same name if they already exist 
 </dd></dl>
 
 <dl class="function">
-<dt id="cdptools.research_utils.transcripts.get_most_recent_transcript_manifest">
-<code class="sig-prename descclassname">cdptools.research_utils.transcripts.</code><code class="sig-name descname">get_most_recent_transcript_manifest</code><span class="sig-paren">(</span><em class="sig-param">db: cdptools.databases.database.Database</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="_modules/cdptools/research_utils/transcripts.html#get_most_recent_transcript_manifest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.research_utils.transcripts.get_most_recent_transcript_manifest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a pandas dataframe that can act as a manifest of the most recent transcript available for each event stored in a
-CDP instance’s database.</p>
+<dt id="cdptools.research_utils.transcripts.get_transcript_manifest">
+<code class="sig-prename descclassname">cdptools.research_utils.transcripts.</code><code class="sig-name descname">get_transcript_manifest</code><span class="sig-paren">(</span><em class="sig-param">db: cdptools.databases.database.Database</em>, <em class="sig-param">order_by_field: str = 'confidence'</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="_modules/cdptools/research_utils/transcripts.html#get_transcript_manifest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.research_utils.transcripts.get_transcript_manifest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
+instance’s database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>db</strong> (<em>Database</em>) – An already initialized database object connected to a CDP instance’s database.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> (<em>Database</em>) – An already initialized database object connected to a CDP instance’s database.</p></li>
+<li><p><strong>order_by_field</strong> (<em>str</em>) – Which field to order the transcripts by to select the first (highest value) of.
+Default: “confidence”
+Choices: [“created”, “confidence”]</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>manifest</strong> – A dataframe with transcript, event, body, and file details where each row is the most recent transcript for the
-event of that row.</p>
+<dd class="field-even"><p><strong>manifest</strong> – A dataframe where each row has transcript, event, body, and file details for the event at that row.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>

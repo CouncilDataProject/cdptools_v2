@@ -325,11 +325,11 @@ this package are objects to do just that; connect and request data from CDP inst
 <span class="c1"># [{&quot;event_id&quot;: &quot;0123&quot;, ...}, ...]</span>
 </pre></div>
 </div>
-<p><a href="#id7"><span class="problematic" id="id8">**</span></a><em>Download the most recent transcripts for all events:</em>**</p>
+<p><a href="#id7"><span class="problematic" id="id8">**</span></a><em>Download the highest confidence transcript for each event:</em>**</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cdptools</span> <span class="kn">import</span> <span class="n">CDPInstance</span><span class="p">,</span> <span class="n">configs</span>
 <span class="n">seattle</span> <span class="o">=</span> <span class="n">CDPInstance</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">SEATTLE</span><span class="p">)</span>
 
-<span class="n">event_corpus_map</span> <span class="o">=</span> <span class="n">seattle</span><span class="o">.</span><span class="n">download_most_recent_transcripts</span><span class="p">()</span>
+<span class="n">event_corpus_map</span> <span class="o">=</span> <span class="n">seattle</span><span class="o">.</span><span class="n">download_transcripts</span><span class="p">()</span>
 <span class="c1"># Returns a dictionary mapping event id to a local path of the transcript</span>
 <span class="c1"># {&quot;0123abc...&quot;: &quot;~/4567def...&quot;}</span>
 </pre></div>

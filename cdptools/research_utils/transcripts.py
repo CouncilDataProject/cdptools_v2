@@ -159,21 +159,22 @@ def download_transcripts(
     # Make the save directory if not already exists
     save_dir.mkdir(parents=True, exist_ok=True)
 
-    # Get most recent transcript data
-    most_recent = get_transcript_manifest(db=db, order_by_field=order_by_field)
+    # Get transcript data
+    selected_transcripts = get_transcript_manifest(db=db, order_by_field=order_by_field)
+
+    # Create download file partial
+    file_download = partial(fs.download_file, save_dir=save_dir, overwrite=True)
 
     # Begin storage
-    most_recent.apply(
-        lambda r: fs.download_file(r["filename"], save_dir, overwrite=True),
-        axis=1
-    )
+    with ThreadPoolExecutor() as exe:
+        exe.map(file_download, selected_transcripts.filename)
 
     # Write manifest
-    most_recent.to_csv(save_dir / "transcript_manifest.csv", index=False)
+    selected_transcripts.to_csv(save_dir / "transcript_manifest.csv", index=False)
 
     # Create event corpus map
     event_corpus_map = {}
-    for transcript_details in most_recent.to_dict("records"):
+    for transcript_details in selected_transcripts.to_dict("records"):
         event_corpus_map[transcript_details["event_id"]] = Path(
             save_dir / transcript_details["filename"]
         ).resolve(strict=False)

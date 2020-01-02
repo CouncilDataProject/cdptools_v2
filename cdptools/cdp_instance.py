@@ -110,7 +110,7 @@ class CDPInstance:
             A dictionary mapping event id to a local Path for a transcript for that event.
         """
 
-        return transcripts_utils.download_event_transcripts(
+        return transcripts_utils.download_transcripts(
             db=self.database,
             fs=self.file_store,
             order_by_field=order_by_field,

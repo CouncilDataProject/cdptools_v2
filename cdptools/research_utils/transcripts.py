@@ -120,7 +120,7 @@ def get_transcript_manifest(db: Database, order_by_field: str = "confidence") ->
     return events
 
 
-def download_event_transcripts(
+def download_transcripts(
     db: Database,
     fs: FileStore,
     order_by_field: str = "confidence",

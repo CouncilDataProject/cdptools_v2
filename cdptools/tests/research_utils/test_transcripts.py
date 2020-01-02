@@ -22,7 +22,7 @@ def example_transcript(data_dir):
     ("created"),
     pytest.param("not-a-valid-field", marks=pytest.mark.raises(exception=ValueError))
 ])
-def test_download_event_transcripts(example_transcript, order_by_field):
+def test_download_transcripts(example_transcript, order_by_field):
     with tempfile.TemporaryDirectory() as tmpdir:
         with mock.patch.object(
             CloudFirestoreDatabase,
@@ -77,7 +77,7 @@ def test_download_event_transcripts(example_transcript, order_by_field):
                     fs = GCSFileStore("fake-cdp-instance.appspot.com")
 
                     # Get the event corpus map
-                    event_corpus_map = transcript_tools.download_event_transcripts(
+                    event_corpus_map = transcript_tools.download_transcripts(
                         db=db,
                         fs=fs,
                         order_by_field=order_by_field,

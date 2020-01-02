@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from shutil import copyfile
 from unittest import mock
 
+import pandas as pd
 import pytest
 
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
@@ -17,6 +18,21 @@ from cdptools.research_utils import transcripts as transcript_tools
 @pytest.fixture
 def example_transcript(data_dir):
     return data_dir / "example_transcript_sentences.json"
+
+
+class MockedStreamedRead:
+    def __init__(self, data: str):
+        self.data = data
+
+    def raise_for_status(self):
+        return True
+
+    def __enter__(self):
+        self.raw = open(self.data, "rb")
+        return self
+
+    def __exit__(self, exception_type, exception_value, tb):
+        self.raw.close()
 
 
 @pytest.mark.parametrize("order_by_field", [
@@ -65,18 +81,16 @@ def test_download_transcripts(example_transcript, order_by_field):
                 return_value={
                     "file_id": "1",
                     "content_type": None,
-                    "filename": "example_transcript_sentences.json",  # This doesn't really matter
+                    "filename": "example_transcript_sentences.json",
                     "created": datetime(2019, 7, 20, 1, 53, 10, 726978),
                     "description": None,
-                    "uri": "doesnt-matter"
+                    "uri": example_transcript
                 }
             ):
 
-                # Interrupt and copy file
-                with mock.patch("cdptools.file_stores.file_store.FileStore._external_resource_copy") as mocked_copy:
-                    save_path = Path(tmpdir) / "example_transcript_sentences.json"
-                    copyfile(example_transcript, save_path)
-                    mocked_copy.return_value = save_path
+                # Interrupt the request to open the file stream
+                with mock.patch("requests.get") as mocked_request:
+                    mocked_request.return_value = MockedStreamedRead(example_transcript)
 
                     # Initialize objects
                     db = CloudFirestoreDatabase("fake-cdp-instance")
@@ -94,4 +108,16 @@ def test_download_transcripts(example_transcript, order_by_field):
                     assert len(event_corpus_map) == 1
 
                     # It should have one transcript and the manifest CSV
-                    assert len(list(Path(tmpdir).iterdir())) == 2
+                    tmpdir_contents = list(Path(tmpdir).iterdir())
+                    assert len(tmpdir_contents) == 2
+
+                    # Assert that the transcript path in the manifest is also correct
+                    manifest = pd.read_csv(Path(tmpdir) / "transcript_manifest.csv")
+                    assert Path(manifest.local_path[0]) in tmpdir_contents
+                    with open(manifest.local_path[0], "r") as copied_file:
+                        copied_transcript = json.load(copied_file)
+
+                    with open(example_transcript, "r") as original_file:
+                        original_transcript = json.load(original_file)
+
+                    assert copied_transcript == original_transcript

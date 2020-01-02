@@ -52,14 +52,16 @@ requirements = [
     "python-Levenshtein==0.12.0",
     "requests==2.22.0",
     "schedule==0.6.0",
-    "tika==1.19"
+    "tika==1.19",
+    "webvtt-py==0.4.3",
+    "truecase==0.0.5"
 ]
 
-local_requirements = [
+extra_requirements = [
     "appdirs>=1.4.3"
 ]
 
-google_cloud_requirements = [
+seattle_requirements = [
     "firebase-admin==2.17.0",
     "google-cloud-speech==1.2.0",
     "google-cloud-storage==1.17.0"
@@ -70,12 +72,12 @@ extra_requirements = {
     "setup": setup_requirements,
     "dev": dev_requirements,
     "interactive": interactive_requirements,
-    "local": local_requirements,
-    "google-cloud": google_cloud_requirements,
+    "extras": extra_requirements,
+    "seattle": seattle_requirements,
     "all": [
         *requirements,
-        *local_requirements,
-        *google_cloud_requirements,
+        *extra_requirements,
+        *seattle_requirements,
         *test_requirements,
         *setup_requirements,
         *dev_requirements,
@@ -115,6 +117,6 @@ setup(
     tests_require=test_requirements,
     extras_require=extra_requirements,
     url="https://github.com/CouncilDataProject/cdptools",
-    version="2.0.3",
+    version="2.0.4",
     zip_safe=False,
 )

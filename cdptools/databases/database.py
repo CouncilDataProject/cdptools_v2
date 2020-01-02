@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
 
+import pandas as pd
+
 from . import exceptions
 
 ###############################################################################
@@ -74,6 +76,14 @@ class Match:
 
     def __repr__(self):
         return str(self)
+
+
+ENTITY_DTYPE_MAP = {
+    str: "STRING",
+    int: "INTEGER",
+    float: "DOUBLE",
+    datetime: "TIMESTAMP"
+}
 
 
 ###############################################################################
@@ -240,6 +250,65 @@ class Database(ABC):
         """
         return []
 
+    @staticmethod
+    def _reshape_list_of_rows_to_dict(
+        rows: List[Dict[str, Any]],
+        table: str
+    ) -> Dict[str, Dict[str, Any]]:
+        """
+        Reshape a list of rows to a dictionary of rows.
+
+        Parameters
+        ----------
+        rows: List[Dict[str, Any]]
+            The rows returned from a `select_rows_as_list call`.
+        table: str
+            The name of the table to retrieve data from.
+
+        Returns
+        -------
+        formatted: Dict[str, Dict[str, Any]]
+            The rows returned as a dictionary mapping unique id to a dictionary of that rows data from
+            the table queried. If no rows are provided, returns an empty dictionary.
+        """
+        # Format
+        formatted = {}
+        for row in rows:
+            unique_id = row[f"{table}_id"]
+            formatted[unique_id] = row
+
+        return formatted
+
+    @staticmethod
+    def _reshape_list_of_rows_to_dataframe(
+        rows: List[Dict[str, Any]],
+        table: Optional[str] = None
+    ):
+        """
+        Simply cast a list of rows to a dataframe.
+
+        Parameters
+        ----------
+        rows: List[Dict[str, Any]]
+            The rows returned from a `select_rows_as_list_call`.
+        table: Optional[str]
+            If provided, the unique id for each row will be used as the index value.
+
+        Returns
+        -------
+        formatted: pandas.DataFrame
+            The rows returned as a pandas DataFrame object. If table was provided the index of the dataframe will be
+            the unique id's for that table.
+        """
+        # Cast to dataframe
+        formatted = pd.DataFrame(rows)
+
+        # Optionally set the index based on the table name
+        if table:
+            formatted = formatted.set_index(f"{table}_id")
+
+        return formatted
+
     @abstractmethod
     def get_or_upload_body(self, name: str, description: Optional[str]) -> Dict[str, str]:
         """
@@ -263,7 +332,8 @@ class Database(ABC):
     def get_or_upload_minutes_item(
         self,
         name: str,
-        matter: Optional[str],
+        matter: Optional[str] = None,
+        title: Optional[str] = None,
         legistar_event_item_id: Optional[int] = None
     ) -> Dict:
         """
@@ -273,8 +343,10 @@ class Database(ABC):
         ---------
         name: str
             A name for the minutes item. Ex: "Appointment of Rene J. Peters, Jr."
-        matter: str
+        matter: Optional[str]
             A matter name for the minutes item. Ex: "Appt 01373"
+        title: Optional[str]
+            A human readable name for the minutes item. Ex: "A resolution regarding adoption of a Green New Deal."
         legistar_event_item_id: Optional[int]
             If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventItemId`.
 
@@ -643,6 +715,68 @@ class Database(ABC):
         Returns
         -------
         details: Dict[str, str]
+            A dictionary containing the data that was either uploaded or found.
+        """
+        return {}
+
+    @abstractmethod
+    def get_or_upload_event_topic(self, event_id: str, topic: str) -> Dict:
+        """
+        Get or upload an event topic.
+
+        Parameters
+        ----------
+        event_id: str
+            The id for which event this topic is related to.
+        topic: str
+            The term or terms (as a string) that define the topic as a unique topic.
+
+        Returns
+        -------
+        details: Dict[str, Any]
+            A dictionary containing the data that was either uploaded or found.
+        """
+        return {}
+
+    @staticmethod
+    def _determine_event_entity_dtype(value: Union[str, int, float, datetime]) -> str:
+        """
+        To simplify the storage value of the dtype, instead of using specifically Python types, this simply returns a
+        string value for each of the allowed dtypes.
+
+        Parameters
+        ----------
+        value: Union[str, int, float, datetime]
+            The value to determine type for.
+
+        Returns
+        -------
+        dtype: str
+            The storage ready string to store as the data type of the value.
+        """
+        try:
+            return ENTITY_DTYPE_MAP[type(value)]
+        except KeyError:
+            return str(type(value))
+
+    @abstractmethod
+    def get_or_upload_event_entity(self, event_id: str, label: str, value: Union[str, int, float, datetime]) -> Dict:
+        """
+        Get or upload an event entity. Because entities can be values that are other than strings, most databases,
+        should cast this to a string prior to storage. This is also why will store the data type (dtype).
+
+        Parameters
+        ----------
+        event_id: str
+            The id for which event this entity was referenced in.
+        label: str
+            The label for the entity. Ex: 'location', 'person', etc.
+        value: Any
+            The value for the entity. Ex: 'Bruce Harrell'.
+
+        Returns
+        -------
+        details: Dict[str, Any]
             A dictionary containing the data that was either uploaded or found.
         """
         return {}

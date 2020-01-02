@@ -126,13 +126,17 @@ class MinutesItemIndexPipeline(Pipeline):
                     try:
                         local_path = self.file_store._external_resource_copy(di_f["uri"], save_dir, overwrite=True)
                         parsed = parser.from_file(str(local_path))
-                        # Sometimes the content can't be parsed 🤷
-                        if parsed["content"]:
-                            di_transcript_document["data"].append({
-                                "text": parsed["content"],
-                                "start_time": 0.0,
-                                "end_time": 1.0
-                            })
+                        # Sometimes the content isn't a supported type by tika 🤷
+                        try:
+                            # Sometimes the content can't be parsed 🤷
+                            if parsed["content"]:
+                                di_transcript_document["data"].append({
+                                    "text": parsed["content"],
+                                    "start_time": 0.0,
+                                    "end_time": 1.0
+                                })
+                        except KeyError:
+                            pass
                     except requests.exceptions.HTTPError:
                         pass
 

@@ -219,6 +219,15 @@ class SeattleEventScraper(EventScraper):
         video = video_and_thumbnail.find("a").get("onclick")
         seattle_channel_page = video_and_thumbnail.find("a").get("href")
 
+        # Find video's caption vtt file uri
+        # Partial URI of caption file ends with .vtt
+        caption_uri_search = re.search(r"[a-zA-Z0-9/_]+\.vtt", video)
+        if caption_uri_search:
+            closed_caption_route = "https://seattlechannel.org/documents/seattlechannel/closedcaption/"
+            caption_uri = f"{closed_caption_route}{caption_uri_search.group(0)}"
+        else:
+            caption_uri = None
+
         # Onclick returns a javascript function
         # Try to find the url the function redirects to
         try:
@@ -231,10 +240,12 @@ class SeattleEventScraper(EventScraper):
         except AttributeError:
             raise exceptions.EventParseError(body, event_dt)
 
-        # If the event was not today, ignore it.
+        # If the event was not in the last two weeks, ignore it.
+        # We check the last two weeks over just the last day because sometimes events are posted late and such.
+        # Additionally, by always collecting the last two weeks, we generally get more info from legistar.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
-            yesterday = now - timedelta(days=1)
+            yesterday = now - timedelta(days=14)
             if not (event_dt > yesterday and event_dt < now):
                 raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 
@@ -244,7 +255,8 @@ class SeattleEventScraper(EventScraper):
             "body": SeattleEventScraper._clean_string(body),
             "event_datetime": event_dt,
             "source_uri": SeattleEventScraper._resolve_route(complete_sibling, seattle_channel_page),
-            "video_uri": video.replace(" ", "")
+            "video_uri": video.replace(" ", ""),
+            "caption_uri": caption_uri
         }
         return event
 
@@ -364,7 +376,8 @@ class SeattleEventScraper(EventScraper):
         formatted_event_details = {
             **parsed_details,
             "source_uri": event["source_uri"],
-            "video_uri": event["video_uri"]
+            "video_uri": event["video_uri"],
+            "caption_uri": event["caption_uri"]
         }
         log.debug("Attached legistar event details for event: {}".format(formatted_event_details["source_uri"]))
         return formatted_event_details

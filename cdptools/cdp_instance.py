@@ -62,25 +62,43 @@ class CDPInstance:
 
         return self._file_store
 
-    def get_most_recent_transcript_manifest(self) -> pd.DataFrame:
+    def get_transcript_manifest(self, order_by_field: str = "confidence") -> pd.DataFrame:
         """
-        Get a pandas dataframe that can act as a manifest of the most recent transcript available for each
-        event stored in a CDP instance's database.
+        Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
+        instance's database.
+
+        Parameters
+        ----------
+        order_by_field: str
+            Which field to order the transcripts by to select the first (highest value) of.
+            Default: "confidence"
+            Choices: ["created", "confidence"]
 
         Returns
         -------
         manifest: pandas.DataFrame
-            A dataframe with transcript, event, body, and file details where each row is the
-            most recent transcript for the event of that row.
+            A dataframe where each row has transcript, event, body, and file details for the event at that row.
         """
-        return transcripts_utils.get_most_recent_transcript_manifest(self.database)
 
-    def download_most_recent_transcripts(self, save_dir: Optional[Path] = None) -> Dict[str, Path]:
+        return transcripts_utils.get_transcript_manifest(
+            db=self.database,
+            order_by_field=order_by_field
+        )
+
+    def download_transcripts(
+        self,
+        order_by_field: str = "confidence",
+        save_dir: Optional[Path] = None,
+    ) -> Dict[str, Path]:
         """
-        Download the most recent versions of event transcripts.
+        Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.
 
         Parameters
         ----------
+        order_by_field: str
+            Which field to order the transcripts by to select the first (highest value) of.
+            Default: "confidence"
+            Choices: ["created", "confidence"]
         save_dir: Optional[Union[str, Path]]
             An optional path of where to save the transcripts and manifest CSV.
             If None provided, uses current directory.
@@ -89,9 +107,15 @@ class CDPInstance:
         Returns
         -------
         event_corpus_map: Dict[str, Path]
-            A dictionary mapping event id to local Path of the most recent transcript for that event.
+            A dictionary mapping event id to a local Path for a transcript for that event.
         """
-        return transcripts_utils.download_most_recent_transcripts(self.database, self.file_store, save_dir)
+
+        return transcripts_utils.download_transcripts(
+            db=self.database,
+            fs=self.file_store,
+            order_by_field=order_by_field,
+            save_dir=save_dir
+        )
 
     def __str__(self):
         return f"<CDPInstance [database: {self.database}, file_store: {self.file_store}]>"

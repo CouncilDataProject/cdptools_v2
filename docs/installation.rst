@@ -19,7 +19,7 @@ This is the preferred method to install cdptools, as it will always install the 
 The above command only installs the basic dependencies of the project.
 As each CDP instance is different, you will need to install the dependencies speicifc to that instance:
 
-* Seattle: ``pip install cdptools[google-cloud]``
+* Seattle: ``pip install cdptools[seattle]``
 
 Or to install dependencies for all cities use:
 

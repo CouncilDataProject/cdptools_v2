@@ -178,7 +178,7 @@ def select_row_data():
         # Get file details for transcript 6b826b19-1510-4a2a-9a99-f90fc09bca60
         {
             'file_id': 'd6fe106a-868c-4fb9-acb5-d8c7eea618fa',
-            'uri': 'gs://stg-cdp-seattle.appspot.com/13d3085ac6303361e1ec17c7009dfde502d032bc6af7aa7af2101291d6550aac_ts_sentences_transcript_0.json',  # noqa: E501
+            'uri': 'gs://fake-cdp-instance.appspot.com/13d3085ac6303361e1ec17c7009dfde502d032bc6af7aa7af2101291d6550aac_ts_sentences_transcript_0.json',  # noqa: E501
             'content_type': None,
             'filename': '13d3085ac6303361e1ec17c7009dfde502d032bc6af7aa7af2101291d6550aac_ts_sentences_transcript_0.json',  # noqa: E501
             'created': datetime.datetime(2019, 8, 4, 5, 56, 9, 838975),
@@ -190,7 +190,7 @@ def select_row_data():
             'filename': '99854f8d28e55cfd8408a8d6330bef151fe5d4f31c943e45b3b0642e20fc3048_ts_sentences_transcript_0.json',  # noqa: E501
             'created': datetime.datetime(2019, 8, 4, 5, 45, 47, 442422),
             'description': None,
-            'uri': 'gs://stg-cdp-seattle.appspot.com/99854f8d28e55cfd8408a8d6330bef151fe5d4f31c943e45b3b0642e20fc3048_ts_sentences_transcript_0.json',  # noqa: E501
+            'uri': 'gs://fake-cdp-instance.appspot.com/99854f8d28e55cfd8408a8d6330bef151fe5d4f31c943e45b3b0642e20fc3048_ts_sentences_transcript_0.json',  # noqa: E501
             'content_type': None
         }
     ]

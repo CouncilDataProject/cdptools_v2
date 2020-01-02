@@ -63,7 +63,7 @@ class MockedCollection:
 
 
 EVENT_ITEM = {
-    "name": "projects/stg-cdp-seattle/databases/(default)/documents/event/0e3bd59c-3f07-452c-83cf-e9eebeb73af2",
+    "name": "projects/fake-cdp-instance/databases/(default)/documents/event/0e3bd59c-3f07-452c-83cf-e9eebeb73af2",
     "fields": {
         "video_uri": {"stringValue": "http://video.seattle.gov:8080/media/council/gen_062717V.mp4"},
         "created": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -84,7 +84,7 @@ EVENT_ITEMS = [{
 
 INDEXED_EVENT_TERM_ITEMS_HELLO = [
     {"document": {
-        "name": "projects/stg-cdp-seattle/databases/(default)/documents/indexed_event_term/000",
+        "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/000",
         "fields": {
             "event_id": {"stringValue": "event_id_123"},
             "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -93,7 +93,7 @@ INDEXED_EVENT_TERM_ITEMS_HELLO = [
         }
     }},
     {"document": {
-        "name": "projects/stg-cdp-seattle/databases/(default)/documents/indexed_event_term/111",
+        "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/111",
         "fields": {
             "event_id": {"stringValue": "event_id_234"},
             "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -105,7 +105,7 @@ INDEXED_EVENT_TERM_ITEMS_HELLO = [
 
 INDEXED_EVENT_TERM_ITEMS_WORLD = [
     {"document": {
-        "name": "projects/stg-cdp-seattle/databases/(default)/documents/indexed_event_term/222",
+        "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/222",
         "fields": {
             "event_id": {"stringValue": "event_id_234"},
             "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -155,7 +155,7 @@ def empty_creds_db() -> CloudFirestoreDatabase:
 
 
 @pytest.mark.parametrize("project_id, credentials_path", [
-    ("stg-cdp-seattle", None),
+    ("fake-cdp-instance", None),
     pytest.param(None, "/this/path/doesnt/exist.json", marks=pytest.mark.raises(exception=FileNotFoundError)),
     pytest.param(None, None, marks=pytest.mark.raises(exception=exceptions.MissingParameterError))
 ])

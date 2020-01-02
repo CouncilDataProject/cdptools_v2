@@ -82,12 +82,12 @@ all_events = seattle.database.select_rows_as_list("event")
 # [{"event_id": "0123", ...}, ...]
 ```
 
-***Download the most recent transcripts for all events:***
+***Download the highest confidence transcript for each event:***
 ```python
 from cdptools import CDPInstance, configs
 seattle = CDPInstance(configs.SEATTLE)
 
-event_corpus_map = seattle.download_most_recent_transcripts()
+event_corpus_map = seattle.download_transcripts()
 # Returns a dictionary mapping event id to a local path of the transcript
 # {"0123abc...": "~/4567def..."}
 ```

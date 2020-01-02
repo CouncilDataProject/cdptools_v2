@@ -17,23 +17,17 @@ def example_transcript(data_dir):
     return data_dir / "example_transcript_sentences.json"
 
 
-def test_download_most_recent_transcripts(example_transcript):
+@pytest.mark.parametrize("order_by_field", [
+    ("confidence"),
+    ("created"),
+    pytest.param("not-a-valid-field", marks=pytest.mark.raises(exception=ValueError))
+])
+def test_download_transcripts(example_transcript, order_by_field):
     with tempfile.TemporaryDirectory() as tmpdir:
-        db = CloudFirestoreDatabase("stg-cdp-seattle")
-        fs = GCSFileStore("stg-cdp-seattle.appspot.com")
-
-        # Mock interactions
-        with mock.patch(
-            "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_list"
-        ) as mocked_db_select:
-            mocked_db_select.side_effect = [
-                [{
-                    "transcript_id": "9183055d-300d-4204-8741-57cebbb280a9",
-                    "confidence": 0.9498944201984921,
-                    "event_id": "0a8fcd28-b920-4088-bd73-ceacb304db0f",
-                    "created": datetime(2019, 7, 20, 1, 53, 18, 611107),
-                    "file_id": "76b7b54d-2f9b-4cad-b0b8-039a51937c15"
-                }],
+        with mock.patch.object(
+            CloudFirestoreDatabase,
+            "select_rows_as_list",
+            side_effect=[
                 [{
                     "event_id": "0a8fcd28-b920-4088-bd73-ceacb304db0f",
                     "legistar_event_id": 4023,
@@ -47,26 +41,48 @@ def test_download_most_recent_transcripts(example_transcript):
                     "source_uri": "http://www.seattlechannel.org/CouncilBriefings?videoid=x105823"
                 }],
                 [{
+                    "transcript_id": "9183055d-300d-4204-8741-57cebbb280a9",
+                    "confidence": 0.9498944201984921,
+                    "event_id": "0a8fcd28-b920-4088-bd73-ceacb304db0f",
+                    "created": datetime(2019, 7, 20, 1, 53, 18, 611107),
+                    "file_id": "76b7b54d-2f9b-4cad-b0b8-039a51937c15"
+                }],
+                [{
                     "body_id": "f0867cf1-7bb0-4f28-83c9-a8cac6152ea4",
                     "name": "Council Briefing",
                     "created": datetime(2019, 7, 20, 1, 53, 13, 821791),
                     "description": None
-                }],
-                [{
+                }]
+            ]
+        ):
+
+            with mock.patch.object(
+                CloudFirestoreDatabase,
+                "select_row_by_id",
+                return_value={
                     "file_id": "76b7b54d-2f9b-4cad-b0b8-039a51937c15",
                     "content_type": None,
                     "filename": "fc52ca9f9febd50ece14f46170014936f76f3d0227688ff96fcf7e369404eee7_ts_sentences_transcript_0.json",  # noqa: E501
                     "created": datetime(2019, 7, 20, 1, 53, 10, 726978),
                     "description": None,
-                    "uri": "gs://stg-cdp-seattle.appspot.com/fc52ca9f9febd50ece14f46170014936f76f3d0227688ff96fcf7e369404eee7_ts_sentences_transcript_0.json"  # noqa: E501
-                }]
-            ]
+                    "uri": "gs://fake-cdp-instance.appspot.com/fc52ca9f9febd50ece14f46170014936f76f3d0227688ff96fcf7e369404eee7_ts_sentences_transcript_0.json"  # noqa: E501
+                }
+            ):
 
-            with mock.patch("cdptools.file_stores.gcs_file_store.GCSFileStore.download_file") as mocked_download:
-                mocked_download.return_value = example_transcript
+                with mock.patch("cdptools.file_stores.gcs_file_store.GCSFileStore.download_file") as mocked_download:
+                    mocked_download.return_value = example_transcript
 
-                # Get the event corpus map
-                event_corpus_map = transcript_tools.download_most_recent_transcripts(db, fs, tmpdir)
+                    # Initialize objects
+                    db = CloudFirestoreDatabase("fake-cdp-instance")
+                    fs = GCSFileStore("fake-cdp-instance.appspot.com")
 
-                # Assert structure
-                assert len(event_corpus_map) == 1
+                    # Get the event corpus map
+                    event_corpus_map = transcript_tools.download_transcripts(
+                        db=db,
+                        fs=fs,
+                        order_by_field=order_by_field,
+                        save_dir=tmpdir
+                    )
+
+                    # Assert structure
+                    assert len(event_corpus_map) == 1

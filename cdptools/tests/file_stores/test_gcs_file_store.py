@@ -70,7 +70,7 @@ class MockedBucket:
 
 @pytest.fixture
 def no_creds_fs() -> GCSFileStore:
-    return GCSFileStore("stg-cdp-seattle.appspot.com")
+    return GCSFileStore("fake-cdp-instance.appspot.com")
 
 
 @pytest.fixture
@@ -96,7 +96,7 @@ def empty_creds_fs() -> GCSFileStore:
 
 
 @pytest.mark.parametrize("bucket_name, credentials_path", [
-    ("stg-cdp-seattle.appspot.com", None),
+    ("fake-cdp-instance.appspot.com", None),
     pytest.param(None, "/this/path/doesnt/exist.json", marks=pytest.mark.raises(exception=FileNotFoundError))
 ])
 def test_gcs_file_store_init(bucket_name, credentials_path):

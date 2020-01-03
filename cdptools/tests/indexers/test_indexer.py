@@ -30,8 +30,8 @@ def example_timestamped_speaker_turns(data_dir) -> Path:
 
 
 @pytest.fixture
-def expected_timestamped_speaker_turns_raw(data_dir) -> Path:
-    return data_dir / "expected_timestamped_speaker_turns_raw.txt"
+def example_transcript_speaker_turns_raw(data_dir) -> Path:
+    return data_dir / "example_transcript_speaker_turns_raw.json"
 
 
 @pytest.fixture
@@ -108,7 +108,7 @@ def test_get_raw_transcript_formats(
     example_transcript_words,
     example_transcript_sentences,
     example_timestamped_speaker_turns,
-    expected_timestamped_speaker_turns_raw,
+    example_transcript_speaker_turns_raw,
     example_audio,
     example_event_pipeline_config,
     example_invalid_transcript_format
@@ -131,9 +131,9 @@ def test_get_raw_transcript_formats(
     assert result == raw_transcript
 
     # Get raw for speaker turns testing
-    with open(expected_timestamped_speaker_turns_raw, "r") as read_in:
-        # We strip whitespace at the end because some editors add a newline character
-        speaker_turns_raw = read_in.read().strip()
+    with open(example_transcript_speaker_turns_raw, "r") as read_in:
+        speaker_turns_raw = json.load(read_in)
+        speaker_turns_raw = speaker_turns_raw["data"][0]["text"]
 
     result = Indexer.get_raw_transcript(example_timestamped_speaker_turns)
     assert isinstance(result, str)

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from cdptools.indexers import Indexer
+from cdptools.indexers import Indexer, exceptions
 
 
 @pytest.fixture
@@ -25,6 +25,16 @@ def example_transcript_sentences(data_dir) -> Path:
 
 
 @pytest.fixture
+def example_timestamped_speaker_turns(data_dir) -> Path:
+    return data_dir / "example_transcript_speaker_turns.json"
+
+
+@pytest.fixture
+def example_transcript_speaker_turns_raw(data_dir) -> Path:
+    return data_dir / "example_transcript_speaker_turns_raw.json"
+
+
+@pytest.fixture
 def example_audio(data_dir) -> Path:
     return data_dir / "example_audio.wav"
 
@@ -32,6 +42,11 @@ def example_audio(data_dir) -> Path:
 @pytest.fixture
 def example_event_pipeline_config(data_dir) -> Path:
     return data_dir / "example_event_pipeline_config.json"
+
+
+@pytest.fixture
+def example_invalid_transcript_format(data_dir) -> Path:
+    return data_dir / "example_invalid_transcript_format.json"
 
 
 @pytest.fixture
@@ -92,8 +107,11 @@ def test_get_raw_transcript_formats(
     example_transcript_raw,
     example_transcript_words,
     example_transcript_sentences,
+    example_timestamped_speaker_turns,
+    example_transcript_speaker_turns_raw,
     example_audio,
     example_event_pipeline_config,
+    example_invalid_transcript_format
 ):
     # Get raw for format testing
     with open(example_transcript_raw, "r") as read_in:
@@ -112,12 +130,24 @@ def test_get_raw_transcript_formats(
     assert isinstance(result, str)
     assert result == raw_transcript
 
+    # Get raw for speaker turns testing
+    with open(example_transcript_speaker_turns_raw, "r") as read_in:
+        speaker_turns_raw = json.load(read_in)
+        speaker_turns_raw = speaker_turns_raw["data"][0]["text"]
+
+    result = Indexer.get_raw_transcript(example_timestamped_speaker_turns)
+    assert isinstance(result, str)
+    assert result == speaker_turns_raw
+
     # Check formats that should fail
-    with pytest.raises(TypeError):
+    with pytest.raises(exceptions.UnrecognizedTranscriptFormatError):
         Indexer.get_raw_transcript(example_audio)
 
-    with pytest.raises(TypeError):
+    with pytest.raises(exceptions.UnrecognizedTranscriptFormatError):
         Indexer.get_raw_transcript(example_event_pipeline_config)
+
+    with pytest.raises(exceptions.UnrecognizedTranscriptFormatError):
+        Indexer.get_raw_transcript(example_invalid_transcript_format)
 
 
 @pytest.mark.parametrize("text, expected", [

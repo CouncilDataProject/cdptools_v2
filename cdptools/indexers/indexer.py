@@ -40,7 +40,7 @@ class Indexer(ABC):
     """
 
     @staticmethod
-    def get_raw_transcript(transcipt_path: Union[str, Path]) -> str:
+    def get_raw_transcript(transcript_path: Union[str, Path]) -> str:
         """
         Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.
         If the file format is not supported or if the data contained in the transcript does not follow the specification
@@ -48,7 +48,7 @@ class Indexer(ABC):
 
         Parameters
         ----------
-        transcipt_path: Union[str, Path]
+        transcript_path: Union[str, Path]
             Path to the transcript
 
         Returns

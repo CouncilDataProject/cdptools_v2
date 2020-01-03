@@ -251,6 +251,15 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-cdptools.indexers.exceptions">
+<span id="cdptools-indexers-exceptions-module"></span><h2>cdptools.indexers.exceptions module<a class="headerlink" href="#module-cdptools.indexers.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="cdptools.indexers.exceptions.UnrecognizedTranscriptFormatError">
+<em class="property">exception </em><code class="sig-prename descclassname">cdptools.indexers.exceptions.</code><code class="sig-name descname">UnrecognizedTranscriptFormatError</code><span class="sig-paren">(</span><em class="sig-param">path: Union[str, pathlib.Path], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/indexers/exceptions.html#UnrecognizedTranscriptFormatError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.exceptions.UnrecognizedTranscriptFormatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-cdptools.indexers.indexer">
 <span id="cdptools-indexers-indexer-module"></span><h2>cdptools.indexers.indexer module<a class="headerlink" href="#module-cdptools.indexers.indexer" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -338,13 +347,13 @@ method for searching for events.</p>
 
 <dl class="method">
 <dt id="cdptools.indexers.indexer.Indexer.get_raw_transcript">
-<em class="property">static </em><code class="sig-name descname">get_raw_transcript</code><span class="sig-paren">(</span><em class="sig-param">transcipt_path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.get_raw_transcript"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.get_raw_transcript" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_raw_transcript</code><span class="sig-paren">(</span><em class="sig-param">transcript_path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.get_raw_transcript"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.get_raw_transcript" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.
 If the file format is not supported or if the data contained in the transcript does not follow the specification
 a TypeError is raised.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>transcipt_path</strong> (<em>Union[str, Path]</em>) – Path to the transcript</p>
+<dd class="field-odd"><p><strong>transcript_path</strong> (<em>Union[str, Path]</em>) – Path to the transcript</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>transcript</strong> – The raw text of the opened transcript.</p>

@@ -4,6 +4,14 @@ cdptools.indexers package
 Submodules
 ----------
 
+cdptools.indexers.exceptions module
+-----------------------------------
+
+.. automodule:: cdptools.indexers.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdptools.indexers.indexer module
 --------------------------------
 

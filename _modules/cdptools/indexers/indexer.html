@@ -245,6 +245,9 @@
 
 <span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
 
+<span class="kn">from</span> <span class="nn">..sr_models.constants</span> <span class="kn">import</span> <span class="n">TranscriptFormats</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">exceptions</span>
+
 <span class="c1">###############################################################################</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -274,7 +277,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Indexer.get_raw_transcript"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.get_raw_transcript">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_raw_transcript</span><span class="p">(</span><span class="n">transcipt_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_raw_transcript</span><span class="p">(</span><span class="n">transcript_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.</span>
 <span class="sd">        If the file format is not supported or if the data contained in the transcript does not follow the specification</span>
@@ -282,7 +285,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        transcipt_path: Union[str, Path]</span>
+<span class="sd">        transcript_path: Union[str, Path]</span>
 <span class="sd">            Path to the transcript</span>
 
 <span class="sd">        Returns</span>
@@ -291,28 +294,39 @@
 <span class="sd">            The raw text of the opened transcript.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Enforce path</span>
-        <span class="n">transcipt_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">transcipt_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">transcript_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">transcript_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Check that the transcript follows a known format</span>
-        <span class="k">if</span> <span class="n">transcipt_path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">transcipt_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">read_in</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">transcript_path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">transcript_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">read_in</span><span class="p">:</span>
                 <span class="n">transcript</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">read_in</span><span class="p">)</span>
 
             <span class="c1"># Join all text items into a single string</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">portion</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">portion</span> <span class="ow">in</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]])</span>
-            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Unsure how to handle annotated JSON transcript provided: </span><span class="si">{transcipt_path}</span><span class="s2">&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Please refer to the `transcript_formats.md` file in the documentation for details.&quot;</span>
-                <span class="p">)</span>
+                <span class="c1"># Handle simple transcripts</span>
+                <span class="k">if</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span>
+                    <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span>
+                    <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_words</span><span class="p">,</span>
+                    <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_sentences</span>
+                <span class="p">]:</span>
+                    <span class="n">transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">portion</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">portion</span> <span class="ow">in</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]])</span>
+                <span class="c1"># Handle speaker turns transcripts</span>
+                <span class="k">elif</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_speaker_turns</span><span class="p">:</span>
+                    <span class="n">text_blocks</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">speaker_turn</span> <span class="ow">in</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
+                        <span class="k">for</span> <span class="n">portion</span> <span class="ow">in</span> <span class="n">speaker_turn</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
+                            <span class="n">text_blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">portion</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">])</span>
+                    <span class="n">transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_blocks</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UnrecognizedTranscriptFormatError</span><span class="p">(</span><span class="n">transcript_path</span><span class="p">)</span>
+
+            <span class="c1"># Catch any errors</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UnrecognizedTranscriptFormatError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UnrecognizedTranscriptFormatError</span><span class="p">(</span><span class="n">transcript_path</span><span class="p">)</span>
 
         <span class="c1"># Raise error for all other file formats</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unsure how to handle transcript file format: </span><span class="si">{transcipt_path}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Please refer to the `transcript_formats.md` file in the documentation for details.&quot;</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UnrecognizedTranscriptFormatError</span><span class="p">(</span><span class="n">transcript_path</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">transcript</span></div>
 

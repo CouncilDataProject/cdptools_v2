@@ -80,7 +80,7 @@ ask them nicely to not slam the database with requests.
 
 ![Database Schema Diagram](resources/database_diagram.png)
 
-### Speech Recognition Model
+### Speech Recognition Models
 Things can start to get tricky here. Speech recognition models are where the standard idea of processing may be a bit
 odd. Let's compare a city like Seattle which doesn't produce transcripts of city council meetings to an unnamed city
 that does. The speech recognition model available for Seattle, is the `sr_models.GoogleCloudSRModel`, which accepts

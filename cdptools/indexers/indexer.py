@@ -6,8 +6,9 @@ import logging
 import re
 import string
 from abc import ABC, abstractmethod
+from collections import deque
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 from nltk.stem import PorterStemmer
 
@@ -95,6 +96,179 @@ class Indexer(ABC):
             raise exceptions.UnrecognizedTranscriptFormatError(transcript_path)
 
         return transcript
+
+    @staticmethod
+    def term_is_end_of_sentence(term: str) -> bool:
+        """
+        Does the term provided mark the end of a sentence.
+
+        Parameters
+        ----------
+        term: str
+            The term to check for end of sentence punctuation characters (".", "!", and "?").
+
+        Returns:
+        --------
+        is_end_of_sentence: bool
+            The boolean value indicating whether or not an end of sentence punctuation character was found in the term.
+        """
+        return any(punc in term for punc in [".", "!", "?"])
+
+    @staticmethod
+    def get_context_span_for_index(terms: List[str], index: int, max_span_size: int = 10) -> str:
+        """
+        Get the contextual sentence information for an index given an ordered list of terms.
+
+        Parameters
+        ----------
+        terms: List[str]
+            The ordered list of terms to use for contextual information.
+        index: int
+            The index to use as the starting point for exploration for contextual sentence terms.
+        max_span_size: int
+            The max contextual span size.
+            Default: 10
+
+        Returns
+        -------
+        span: str
+            The contextual sentence span surrounding the index provided.
+
+        Example
+        -------
+        ```
+        get_context_span_for_index(
+            terms=[
+                "Hello",
+                "and",
+                "good",
+                "morning."
+            ],
+            index=0
+        )
+
+        >> "Hello and good morning."
+        ```
+
+        ```
+        get_context_span_for_index(
+            terms=[
+                "But",
+                "I",
+                "don't",
+                "think",
+                "the",
+                "barrier",
+                "is",
+                "so",
+                "high",
+                "to",
+                "allow",
+                "individuals",
+                "to",
+                "use",
+                "the",
+                "service."
+            ],
+            index=0
+        )
+
+        >> "But I don't think the barrier is so high to ..."
+        ```
+
+        ```
+        get_context_span_for_index(
+            terms=[
+                "But",
+                "I",
+                "don't",
+                "think",
+                "the",
+                "barrier",
+                "is",
+                "so",
+                "high",
+                "to",
+                "allow",
+                "individuals",
+                "to",
+                "use",
+                "the",
+                "service."
+            ],
+            index=6
+        )
+
+        >> "... I don't think the barrier is so high to allow ..."
+        ```
+
+        """
+        # Check index provided
+        if index < 0:
+            raise IndexError("For simplicity's sake, we don't support negative index context span retrieval. Sorry.")
+
+        # Window to store valid terms in
+        window = deque()
+        window.append(terms[index])
+
+        # Check if the current term is the last in the sentence already
+        if Indexer.term_is_end_of_sentence(terms[index]):
+            right_side_valid = False
+        else:
+            right_side_valid = True
+            right_side_index = index + 1
+
+        # We can always check left side initially
+        left_side_valid = True
+        left_side_index = index - 1
+        current_exploration_direction = "left"
+
+        # Keep appending items to the window until it his max_span_size and both sides are still valid
+        while len(window) < max_span_size and (left_side_valid or right_side_valid):
+            # If the current exploration direction is leftwards and the left side is still valid, check the left term
+            if current_exploration_direction == "left" and left_side_valid:
+                # If the term is the end of the prior sentence, mark the current position as no longer valid to explore
+                # Also catch if we have hit the beginning of the terms
+                if Indexer.term_is_end_of_sentence(terms[left_side_index]) or left_side_index < 0:
+                    left_side_valid = False
+                # It wasn't the end of the prior sentence so we can append the term to the window
+                else:
+                    window.appendleft(terms[left_side_index])
+                    left_side_index -= 1
+
+            # If the current exploration direction wasn't leftwards, we must be going right
+            # Check if right side is still valid
+            elif right_side_valid:
+                # Check if the right_side_index is greater than or equal to the len of the term list
+                if right_side_index >= len(terms):
+                    right_side_valid = False
+
+                # If the term is the end of the sentence, append it and mark right side as no longer valid
+                elif Indexer.term_is_end_of_sentence(terms[right_side_index]) or right_side_index >= len(terms) - 1:
+                    window.append(terms[right_side_index])
+                    right_side_valid = False
+                # If the term wasn't the end of the sentence, append it and move the index
+                else:
+                    window.append(terms[right_side_index])
+                    right_side_index += 1
+
+            # Rotate which direction we were exploring
+            # If we were heading left and the right side is valid, explore right
+            # We do this because if we were provided an index that is completely in the center of a long sentence
+            # we want a balanced context string
+            if current_exploration_direction == "left" and right_side_valid:
+                current_exploration_direction = "right"
+            # Otherwise we were heading right, set to explore left
+            else:
+                current_exploration_direction = "left"
+
+        # We hit max span size or captured a full sentence
+        if left_side_valid:
+            window.appendleft("...")
+        if right_side_valid:
+            window.append("...")
+
+        return " ".join(window)
 
     @staticmethod
     def clean_text_for_indexing(raw_transcript: str) -> str:

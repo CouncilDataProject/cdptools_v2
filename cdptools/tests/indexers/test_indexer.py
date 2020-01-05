@@ -150,6 +150,245 @@ def test_get_raw_transcript_formats(
         Indexer.get_raw_transcript(example_invalid_transcript_format)
 
 
+@pytest.mark.parametrize("term, expected", [
+    ("hello", False),
+    ("Thanks.", True),
+    ("didn't", False),
+    ("No!", True),
+    ("Is that a question?", True),
+    pytest.param(1, None, marks=pytest.mark.raises(exception=TypeError))
+])
+def test_term_is_end_of_sentence(term, expected):
+    assert Indexer.term_is_end_of_sentence(term) == expected
+
+
+@pytest.mark.parametrize("terms, index, expected", [
+    (
+        [
+            "Hello",
+            "and",
+            "good",
+            "morning."
+        ],
+        0,
+        "Hello and good morning."
+    ),
+    (
+        [
+            "But",
+            "I",
+            "don't",
+            "think",
+            "the",
+            "barrier",
+            "is",
+            "so",
+            "high",
+            "to",
+            "allow",
+            "individuals",
+            "to",
+            "use",
+            "the",
+            "service."
+        ],
+        0,
+        "But I don't think the barrier is so high to ..."
+    ),
+    (
+        [
+            "But",
+            "I",
+            "don't",
+            "think",
+            "the",
+            "barrier",
+            "is",
+            "so",
+            "high",
+            "to",
+            "allow",
+            "individuals",
+            "to",
+            "use",
+            "the",
+            "service."
+        ],
+        6,
+        "... I don't think the barrier is so high to allow ..."
+    ),
+    (
+        [
+            "But",
+            "I",
+            "don't",
+            "think",
+            "the",
+            "barrier",
+            "is",
+            "so",
+            "high",
+            "to",
+            "allow",
+            "individuals",
+            "to",
+            "use",
+            "the",
+            "service."
+        ],
+        15,
+        "... is so high to allow individuals to use the service."
+    ),
+    (
+        [
+            "This",
+            "is",
+            "a",
+            "sentence",
+            "with",
+            "no",
+            "end",
+            "of",
+            "sentence",
+            "punctuation",
+            "but",
+            "really",
+            "why",
+            "would",
+            "someone",
+            "do",
+            "this"
+        ],
+        0,
+        "This is a sentence with no end of sentence punctuation ..."
+    ),
+    (
+        [
+            "This",
+            "is",
+            "a",
+            "sentence",
+            "with",
+            "no",
+            "end",
+            "of",
+            "sentence",
+            "punctuation",
+            "but",
+            "really",
+            "why",
+            "would",
+            "someone",
+            "do",
+            "this"
+        ],
+        7,
+        "... a sentence with no end of sentence punctuation but really ..."
+    ),
+    (
+        [
+            "This",
+            "is",
+            "a",
+            "sentence",
+            "with",
+            "no",
+            "end",
+            "of",
+            "sentence",
+            "punctuation",
+            "but",
+            "really",
+            "why",
+            "would",
+            "someone",
+            "do",
+            "this"
+        ],
+        15,
+        "... of sentence punctuation but really why would someone do this"
+    ),
+    (
+        [
+            "four",
+            "words",
+            "no",
+            "punctuation"
+        ],
+        0,
+        "four words no punctuation"
+    ),
+    (
+        [
+            "four",
+            "words",
+            "no",
+            "punctuation"
+        ],
+        2,
+        "four words no punctuation"
+    ),
+    (
+        [
+            "four",
+            "words",
+            "no",
+            "punctuation"
+        ],
+        3,
+        "four words no punctuation"
+    ),
+    pytest.param(
+        [
+            "But",
+            "I",
+            "don't",
+            "think",
+            "the",
+            "barrier",
+            "is",
+            "so",
+            "high",
+            "to",
+            "allow",
+            "individuals",
+            "to",
+            "use",
+            "the",
+            "service."
+        ],
+        -1,
+        None,
+        marks=pytest.mark.raises(exceptions=IndexError)
+    ),
+    pytest.param(
+        [
+            "But",
+            "I",
+            "don't",
+            "think",
+            "the",
+            "barrier",
+            "is",
+            "so",
+            "high",
+            "to",
+            "allow",
+            "individuals",
+            "to",
+            "use",
+            "the",
+            "service."
+        ],
+        16,
+        None,
+        marks=pytest.mark.raises(exceptions=IndexError)
+    )
+])
+def test_get_context_span_for_index(terms, index, expected):
+    assert Indexer.get_context_span_for_index(terms, index) == expected
+
+
 @pytest.mark.parametrize("text, expected", [
     ("hello world", "hello world"),
     ("hello ", "hello"),

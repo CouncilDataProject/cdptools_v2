@@ -56,8 +56,6 @@ def main():
     source_client = source_fs._client
     source_bucket = source_fs._bucket
 
-    target_bucket = target_fs._bucket
-
     # Clear the target file store of existing files
     target_fs.clear_bucket()
 
@@ -68,7 +66,7 @@ def main():
     with ThreadPoolExecutor() as exe:
         exe.map(proc_func, pages)
 
-    log.info("Cloned filestore of bucket: {source_bucket} to bucket: {target_bucket}")
+    log.info("Cloned filestore of bucket: {source_bucket} to bucket: {target_fs._bucket}")
 
 
 if __name__ == "__main__":

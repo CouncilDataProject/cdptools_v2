@@ -23,6 +23,7 @@ class AppDirsFileStore(FileStore):
     def __init__(self, name: str = "cdp_filestore", owner: str = "cdp", **kwargs):
         # Initialize app dir if not already made
         self._root = Path(appdirs.user_data_dir(name, owner))
+        self._name = name
 
     def _locate_file(self, filename: Union[str, Path]) -> Path:
         log.debug(f"Locating file: {filename}")
@@ -128,6 +129,36 @@ class AppDirsFileStore(FileStore):
         saved_path = Path(shutil.copyfile(stored_uri, save_path))
         log.debug(f"Completed file copy for: {filename}")
         return saved_path
+
+    def delete_file(
+        self,
+        filename: str
+    ) -> Path:
+        # Fix name
+        filename = Path(filename).resolve().name
+
+        # Find filepath to delete
+        path_to_delete = self._locate_file(filename)
+
+        if os.path.isfile(path_to_delete):
+            os.remove(path_to_delete)
+            log.info(f"Deleted file: {filename}.")
+        else:
+            log.info(f"{filename} does not exist.")
+
+        return path_to_delete
+
+    def clear_bucket(
+        self
+    ) -> str:
+        # Delete this bucket and all its contents
+        try:
+            shutil.rmtree(self._root)
+            log.info(f"Deleted bucket: {self._name}")
+        except Exception as e:
+            log.info(f"Encountered exception {e} while trying to clear bucket: {self._name}.")
+
+        return f"Deleted bucket: {self._name}"
 
     def __str__(self):
         return f"<AppDirsFileStore [{self._root}]>"

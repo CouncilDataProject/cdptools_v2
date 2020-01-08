@@ -126,9 +126,6 @@ class WebVTTSRModel(SRModel):
         for speaker_turn in speaker_turns:
             # Get timestamped sentences for a speaker turn
             sentences = self._get_sentences(speaker_turn)
-            for sentence in sentences:
-                normalized_sentence_text = self._normalize_text(sentence["text"])
-                sentence["text"] = normalized_sentence_text
             timestamped_speaker_turns.append({
                 "speaker": "",
                 "data": sentences
@@ -156,6 +153,11 @@ class WebVTTSRModel(SRModel):
         speaker_turns = self._get_speaker_turns(captions)
         # Create timestamped speaker turns transcript
         timestamped_speaker_turns = self._create_timestamped_speaker_turns(speaker_turns)
+        # Normalized the text of transcript
+        for speaker_turn in timestamped_speaker_turns:
+            for sentence in speaker_turn["data"]:
+                normalized_sentence_text = self._normalize_text(sentence["text"])
+                sentence["text"] = normalized_sentence_text
 
         # Create raw transcript
         raw_text = " ".join([sentence["text"] for turn in timestamped_speaker_turns for sentence in turn["data"]])

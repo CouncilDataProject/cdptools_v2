@@ -34,18 +34,39 @@ def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model):
         [
             Caption(text="&gt;&gt; Start of Dialog 1."),
             Caption(text="End of Dialog 1."),
-            Caption(text="&gt;&gt; [ APPLAUSE ] "),
+            Caption(text="&gt;&gt; [ APPLAUSE ]"),
             Caption(text="&gt;&gt; Dialog 2.")
         ],
-        [2, 1, 1]
+        [
+            [
+                "Start of Dialog 1.",
+                "End of Dialog 1."
+            ],
+            [
+                "[ APPLAUSE ]"
+            ],
+            [
+                "Dialog 2."
+            ]
+        ]
     ),
     (
         [
             Caption(text="&gt;&gt; Dialog 1."),
-            Caption(text="&gt;&gt; [ ROLL BEING CALLED ] "),
+            Caption(text="&gt;&gt; [ ROLL BEING CALLED ]"),
             Caption(text="&gt;&gt; Dialog 2."),
         ],
-        [1, 1, 1]
+        [
+            [
+                "Dialog 1."
+            ],
+            [
+                "[ ROLL BEING CALLED ]"
+            ],
+            [
+                "Dialog 2."
+            ]
+        ]
     ),
     (
         [
@@ -53,7 +74,17 @@ def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model):
             Caption(text="&gt;&gt; [ APPLAUSE ]"),
             Caption(text="&gt;&gt; Dialog 2.")
         ],
-        [1, 1, 1]
+        [
+            [
+                "[ LAUGHTER ] Dialog 1."
+            ],
+            [
+                "[ APPLAUSE ]"
+            ],
+            [
+                "Dialog 2."
+            ]
+        ]
     ),
     (
         [
@@ -66,7 +97,16 @@ def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model):
             Caption(text="Sentence"),
             Caption(text="four?")
         ],
-        [1, 3]
+        [
+            [
+                "Sentence one."
+            ],
+            [
+                "Sentence two!",
+                "Sentence three!",
+                "Sentence four?"
+            ]
+        ]
     ),
     (
         [
@@ -75,14 +115,28 @@ def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model):
             Caption(text="&gt;&gt; Sentence"),
             Caption(text="two.")
         ],
-        [1, 1]
+        [
+            [
+                "Sentence one, no sentence ending punctuation"
+            ],
+            [
+                "Sentence two."
+            ]
+        ]
     ),
     (
         [
             Caption(text="Sentence one."),
             Caption(text="ú&gt;&gt; Sentence two.")
         ],
-        [1, 1]
+        [
+            [
+                "Sentence one."
+            ],
+            [
+                "Sentence two."
+            ]
+        ]
     )
 ])
 def test_webvtt_sr_model_create_timestamped_speaker_turns(
@@ -94,9 +148,12 @@ def test_webvtt_sr_model_create_timestamped_speaker_turns(
     timestamped_speaker_turns = example_webvtt_sr_model._create_timestamped_speaker_turns(speaker_turns)
     # Check if the number of speaker turns is correct
     assert len(timestamped_speaker_turns) == len(expected)
-    # Check if the number of sentences per speaker turn is correct
-    for i, number_of_sentences in enumerate(expected):
-        assert len(timestamped_speaker_turns[i]["data"]) == number_of_sentences
+    for i, speaker_turn in enumerate(expected):
+        # Check if the number of sentences per speaker turn is correct
+        assert len(timestamped_speaker_turns[i]["data"]) == len(speaker_turn)
+        # Check if sentence string matches expected sentence string
+        for j, sentence in enumerate(speaker_turn):
+            assert timestamped_speaker_turns[i]["data"][j]["text"] == sentence
 
 
 def test_webvtt_sr_model_transcribe(example_webvtt_sr_model, fake_caption, tmpdir):

@@ -168,6 +168,9 @@ class WebVTTSRModel(SRModel):
         # Create timestamped sentences transcript
         timestamped_sentences = [sentence for turn in timestamped_speaker_turns for sentence in turn['data']]
 
+        # Log completed
+        log.info(f"Completed transcription for: {file_uri}. Confidence: {self.confidence}")\
+
         # Wrap each transcript in the standard format
         raw_transcript = self.wrap_and_format_transcript_data(
             data=raw_transcript,

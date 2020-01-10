@@ -262,7 +262,7 @@
         <span class="c1"># Download punkt for truecase module</span>
         <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;punkt&quot;</span><span class="p">)</span>
         <span class="c1"># New speaker turn must begin with one or more new_turn_pattern str</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^(</span><span class="si">{}</span><span class="s2">)+\s*(.+)$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_turn_pattern</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)+\s*(.+)$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_turn_pattern</span><span class="p">)</span>
         <span class="c1"># Sentence must be ended by period, question mark, or exclamation point.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_of_sentence_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^.+[.?!]\s*$&quot;</span>
 
@@ -283,27 +283,63 @@
         <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
 
-    <span class="k">def</span> <span class="nf">_get_sentences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+    <span class="k">def</span> <span class="nf">_get_captions</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">closed_caption_content</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">webvtt</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">Caption</span><span class="p">]:</span>
         <span class="c1"># Create file-like object of caption file&#39;s content</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_request_caption_content</span><span class="p">(</span><span class="n">file_uri</span><span class="p">))</span>
-        <span class="c1"># Get list of caption block</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">closed_caption_content</span><span class="p">)</span>
+        <span class="c1"># Get list of caption blocks</span>
         <span class="n">captions</span> <span class="o">=</span> <span class="n">webvtt</span><span class="o">.</span><span class="n">read_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span><span class="o">.</span><span class="n">captions</span>
         <span class="n">buffer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">captions</span>
 
+    <span class="k">def</span> <span class="nf">_get_speaker_turns</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">captions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">webvtt</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">Caption</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">webvtt</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">Caption</span><span class="p">]]:</span>
+        <span class="c1"># Create list of speaker turns</span>
+        <span class="n">speaker_turns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># List of captions of a speaker turn</span>
+        <span class="n">speaker_turn</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">caption</span> <span class="ow">in</span> <span class="n">captions</span><span class="p">:</span>
+            <span class="n">new_turn_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span><span class="p">,</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="c1"># Caption block is start of a new speaker turn</span>
+            <span class="k">if</span> <span class="n">new_turn_search</span><span class="p">:</span>
+                <span class="c1"># Remove the new speaker turn pattern from caption&#39;s text</span>
+                <span class="n">caption</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">new_turn_search</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="c1"># Append speaker turn to list of speaker turns</span>
+                <span class="k">if</span> <span class="n">speaker_turn</span><span class="p">:</span>
+                    <span class="n">speaker_turns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">speaker_turn</span><span class="p">)</span>
+                <span class="c1"># Reset speaker_turn with this caption, for start of a new speaker turn</span>
+                <span class="n">speaker_turn</span> <span class="o">=</span> <span class="p">[</span><span class="n">caption</span><span class="p">]</span>
+            <span class="c1"># Caption block is not a start of a new speaker turn</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Append caption to current speaker turn</span>
+                <span class="n">speaker_turn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">caption</span><span class="p">)</span>
+        <span class="c1"># Add the last speaker turn</span>
+        <span class="k">if</span> <span class="n">speaker_turn</span><span class="p">:</span>
+            <span class="n">speaker_turns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">speaker_turn</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">speaker_turns</span>
+
+    <span class="k">def</span> <span class="nf">_get_sentences</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">speaker_turn</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">webvtt</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">Caption</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
         <span class="c1"># Create timestamped sentences</span>
         <span class="n">sentences</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># List of text, representing a sentence</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">caption</span> <span class="ow">in</span> <span class="n">captions</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">caption</span> <span class="ow">in</span> <span class="n">speaker_turn</span><span class="p">:</span>
             <span class="n">start_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="ow">or</span> <span class="n">caption</span><span class="o">.</span><span class="n">start_in_seconds</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
             <span class="n">end_sentence_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_of_sentence_pattern</span><span class="p">,</span> <span class="n">caption</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
             <span class="c1"># Caption block is a end of sentence block</span>
             <span class="k">if</span> <span class="n">end_sentence_search</span><span class="p">:</span>
-                <span class="n">sentence</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span>
-                            <span class="s1">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">caption</span><span class="o">.</span><span class="n">end_in_seconds</span><span class="p">,</span>
-                            <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)}</span>
+                <span class="n">sentence</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span>
+                            <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">caption</span><span class="o">.</span><span class="n">end_in_seconds</span><span class="p">,</span>
+                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)}</span>
                 <span class="n">sentences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
                 <span class="c1"># Reset lines and start_time, for start of new sentence</span>
                 <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
@@ -311,43 +347,24 @@
 
         <span class="c1"># If any leftovers in lines, add a sentence for that.</span>
         <span class="k">if</span> <span class="n">lines</span><span class="p">:</span>
-            <span class="n">sentences</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span>
-                              <span class="s1">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">captions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_in_seconds</span><span class="p">,</span>
-                              <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)})</span>
+            <span class="n">sentences</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span>
+                              <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">speaker_turn</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_in_seconds</span><span class="p">,</span>
+                              <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)})</span>
         <span class="k">return</span> <span class="n">sentences</span>
 
-    <span class="k">def</span> <span class="nf">_get_speaker_turns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]]]]:</span>
-        <span class="c1"># Get timestamped sentences</span>
-        <span class="n">sentences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sentences</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span>
-
-        <span class="c1"># Create timestamped speaker turns</span>
-        <span class="n">turns</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">:</span>
-            <span class="n">new_turn_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_turn_pattern</span><span class="p">,</span> <span class="n">sentence</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
-            <span class="n">text</span> <span class="o">=</span> <span class="n">new_turn_search</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">new_turn_search</span> <span class="k">else</span> <span class="n">sentence</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
-            <span class="n">normalized_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-            <span class="c1"># Sentence block is start of new speaker turn, or turns is empty</span>
-            <span class="k">if</span> <span class="n">new_turn_search</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">turns</span><span class="p">:</span>
-                <span class="n">turn</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s1">&#39;speaker&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="p">{</span>
-                            <span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">sentence</span><span class="p">[</span><span class="s1">&#39;start_time&#39;</span><span class="p">],</span>
-                            <span class="s1">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">sentence</span><span class="p">[</span><span class="s1">&#39;end_time&#39;</span><span class="p">],</span>
-                            <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">normalized_text</span>
-                        <span class="p">}</span>
-                    <span class="p">]</span>
-                <span class="p">}</span>
-                <span class="n">turns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">turn</span><span class="p">)</span>
-            <span class="c1"># Sentence block is part of recent speaker turn</span>
-            <span class="k">elif</span> <span class="n">turns</span><span class="p">:</span>
-                <span class="n">turns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-                    <span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">sentence</span><span class="p">[</span><span class="s1">&#39;start_time&#39;</span><span class="p">],</span>
-                    <span class="s1">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">sentence</span><span class="p">[</span><span class="s1">&#39;end_time&#39;</span><span class="p">],</span>
-                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">normalized_text</span>
-                <span class="p">})</span>
-
-        <span class="k">return</span> <span class="n">turns</span>
+    <span class="k">def</span> <span class="nf">_create_timestamped_speaker_turns</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">speaker_turns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">webvtt</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">Caption</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]]]]:</span>
+        <span class="n">timestamped_speaker_turns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">speaker_turn</span> <span class="ow">in</span> <span class="n">speaker_turns</span><span class="p">:</span>
+            <span class="c1"># Get timestamped sentences for a speaker turn</span>
+            <span class="n">sentences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sentences</span><span class="p">(</span><span class="n">speaker_turn</span><span class="p">)</span>
+            <span class="n">timestamped_speaker_turns</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;speaker&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">sentences</span>
+            <span class="p">})</span>
+        <span class="k">return</span> <span class="n">timestamped_speaker_turns</span>
 
 <div class="viewcode-block" id="WebVTTSRModel.transcribe"><a class="viewcode-back" href="../../../cdptools.sr_models.html#cdptools.sr_models.webvtt_sr_model.WebVTTSRModel.transcribe">[docs]</a>    <span class="k">def</span> <span class="nf">transcribe</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -362,14 +379,25 @@
         <span class="n">timestamped_sentences_save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_sentences_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
         <span class="n">timestamped_speaker_turns_save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_speaker_turns_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
+        <span class="c1"># Get content of file uri</span>
+        <span class="n">closed_caption_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_caption_content</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span>
+        <span class="c1"># Get list of caption blocks from closed caption file</span>
+        <span class="n">captions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_captions</span><span class="p">(</span><span class="n">closed_caption_content</span><span class="p">)</span>
+        <span class="c1"># Convert list of caption blocks to list of speaker turns</span>
+        <span class="n">speaker_turns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_speaker_turns</span><span class="p">(</span><span class="n">captions</span><span class="p">)</span>
         <span class="c1"># Create timestamped speaker turns transcript</span>
-        <span class="n">timestamped_speaker_turns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_speaker_turns</span><span class="p">(</span><span class="n">file_uri</span><span class="p">)</span>
+        <span class="n">timestamped_speaker_turns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_timestamped_speaker_turns</span><span class="p">(</span><span class="n">speaker_turns</span><span class="p">)</span>
+        <span class="c1"># Normalized the text of transcript</span>
+        <span class="k">for</span> <span class="n">speaker_turn</span> <span class="ow">in</span> <span class="n">timestamped_speaker_turns</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">speaker_turn</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
+                <span class="n">normalized_sentence_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_text</span><span class="p">(</span><span class="n">sentence</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">])</span>
+                <span class="n">sentence</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalized_sentence_text</span>
 
         <span class="c1"># Create raw transcript</span>
-        <span class="n">raw_text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">sentence</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="n">timestamped_speaker_turns</span> <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">turn</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]])</span>
-        <span class="n">raw_transcript</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">timestamped_speaker_turns</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;start_time&#39;</span><span class="p">],</span>
-                           <span class="s1">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">timestamped_speaker_turns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;end_time&#39;</span><span class="p">],</span>
-                           <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">raw_text</span><span class="p">}]</span>
+        <span class="n">raw_text</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">sentence</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="n">timestamped_speaker_turns</span> <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">turn</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]])</span>
+        <span class="n">raw_transcript</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">timestamped_speaker_turns</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;start_time&quot;</span><span class="p">],</span>
+                           <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">timestamped_speaker_turns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;end_time&quot;</span><span class="p">],</span>
+                           <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">raw_text</span><span class="p">}]</span>
 
         <span class="c1"># Create timestamped sentences transcript</span>
         <span class="n">timestamped_sentences</span> <span class="o">=</span> <span class="p">[</span><span class="n">sentence</span> <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="n">timestamped_speaker_turns</span> <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">turn</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]]</span>

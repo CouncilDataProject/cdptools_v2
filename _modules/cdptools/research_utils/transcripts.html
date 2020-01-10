@@ -304,7 +304,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Get transcript dataset</span>
-    <span class="n">events</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">1e6</span><span class="p">))</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)))</span>
 
     <span class="c1"># Enforce that the provided order by field is valid</span>
     <span class="n">order_by_field</span> <span class="o">=</span> <span class="n">order_by_field</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -346,7 +346,7 @@
 
     <span class="c1"># Get body details and merge</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
-        <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">1e4</span><span class="p">)),</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e4</span><span class="p">))),</span>
         <span class="n">on</span><span class="o">=</span><span class="s2">&quot;body_id&quot;</span><span class="p">,</span>
         <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_event&quot;</span><span class="p">,</span> <span class="s2">&quot;_body&quot;</span><span class="p">)</span>
     <span class="p">)</span>

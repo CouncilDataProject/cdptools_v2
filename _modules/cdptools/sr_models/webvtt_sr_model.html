@@ -402,6 +402,9 @@
         <span class="c1"># Create timestamped sentences transcript</span>
         <span class="n">timestamped_sentences</span> <span class="o">=</span> <span class="p">[</span><span class="n">sentence</span> <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="n">timestamped_speaker_turns</span> <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">turn</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]]</span>
 
+        <span class="c1"># Log completed</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed transcription for: </span><span class="si">{file_uri}</span><span class="s2">. Confidence: </span><span class="si">{self.confidence}</span><span class="s2">&quot;</span><span class="p">)</span>\
+
         <span class="c1"># Wrap each transcript in the standard format</span>
         <span class="n">raw_transcript</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_and_format_transcript_data</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">raw_transcript</span><span class="p">,</span>

@@ -70,7 +70,7 @@ def get_transcript_manifest(db: Database, order_by_field: str = "confidence") ->
     """
 
     # Get transcript dataset
-    events = pd.DataFrame(db.select_rows_as_list("event", limit=1e6))
+    events = pd.DataFrame(db.select_rows_as_list("event", limit=int(1e6)))
 
     # Enforce that the provided order by field is valid
     order_by_field = order_by_field.lower()
@@ -112,7 +112,7 @@ def get_transcript_manifest(db: Database, order_by_field: str = "confidence") ->
 
     # Get body details and merge
     events = events.merge(
-        pd.DataFrame(db.select_rows_as_list(table="body", limit=1e4)),
+        pd.DataFrame(db.select_rows_as_list(table="body", limit=int(1e4))),
         on="body_id",
         suffixes=("_event", "_body")
     )

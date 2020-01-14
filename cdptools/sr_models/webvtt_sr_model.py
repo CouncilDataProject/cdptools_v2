@@ -28,7 +28,7 @@ class WebVTTSRModel(SRModel):
         # Download punkt for truecase module
         nltk.download("punkt")
         # New speaker turn must begin with one or more new_turn_pattern str
-        self.new_turn_pattern = r"^({})+\s*(.+)$".format(new_turn_pattern)
+        self.new_turn_pattern = r"({})+\s*(.+)$".format(new_turn_pattern)
         # Sentence must be ended by period, question mark, or exclamation point.
         self.end_of_sentence_pattern = r"^.+[.?!]\s*$"
 
@@ -49,27 +49,63 @@ class WebVTTSRModel(SRModel):
         response.raise_for_status()
         return response.text
 
-    def _get_sentences(self, file_uri: str) -> List[Dict[str, Union[str, float]]]:
+    def _get_captions(
+        self,
+        closed_caption_content: str
+    ) -> List[webvtt.structures.Caption]:
         # Create file-like object of caption file's content
-        buffer = io.StringIO(self._request_caption_content(file_uri))
-        # Get list of caption block
+        buffer = io.StringIO(closed_caption_content)
+        # Get list of caption blocks
         captions = webvtt.read_buffer(buffer).captions
         buffer.close()
+        return captions
 
+    def _get_speaker_turns(
+        self,
+        captions: List[webvtt.structures.Caption]
+    ) -> List[List[webvtt.structures.Caption]]:
+        # Create list of speaker turns
+        speaker_turns = []
+        # List of captions of a speaker turn
+        speaker_turn = []
+        for caption in captions:
+            new_turn_search = re.search(self.new_turn_pattern, caption.text)
+            # Caption block is start of a new speaker turn
+            if new_turn_search:
+                # Remove the new speaker turn pattern from caption's text
+                caption.text = new_turn_search.group(2)
+                # Append speaker turn to list of speaker turns
+                if speaker_turn:
+                    speaker_turns.append(speaker_turn)
+                # Reset speaker_turn with this caption, for start of a new speaker turn
+                speaker_turn = [caption]
+            # Caption block is not a start of a new speaker turn
+            else:
+                # Append caption to current speaker turn
+                speaker_turn.append(caption)
+        # Add the last speaker turn
+        if speaker_turn:
+            speaker_turns.append(speaker_turn)
+        return speaker_turns
+
+    def _get_sentences(
+        self,
+        speaker_turn: List[webvtt.structures.Caption]
+    ) -> List[Dict[str, Union[str, float]]]:
         # Create timestamped sentences
         sentences = []
         # List of text, representing a sentence
         lines = []
         start_time = 0
-        for caption in captions:
+        for caption in speaker_turn:
             start_time = start_time or caption.start_in_seconds
             lines.append(caption.text)
             end_sentence_search = re.search(self.end_of_sentence_pattern, caption.text)
             # Caption block is a end of sentence block
             if end_sentence_search:
-                sentence = {'start_time': start_time,
-                            'end_time': caption.end_in_seconds,
-                            'text': ' '.join(lines)}
+                sentence = {"start_time": start_time,
+                            "end_time": caption.end_in_seconds,
+                            "text": " ".join(lines)}
                 sentences.append(sentence)
                 # Reset lines and start_time, for start of new sentence
                 lines = []
@@ -77,43 +113,24 @@ class WebVTTSRModel(SRModel):
 
         # If any leftovers in lines, add a sentence for that.
         if lines:
-            sentences.append({'start_time': start_time,
-                              'end_time': captions[-1].end_in_seconds,
-                              'text': ' '.join(lines)})
+            sentences.append({"start_time": start_time,
+                              "end_time": speaker_turn[-1].end_in_seconds,
+                              "text": " ".join(lines)})
         return sentences
 
-    def _get_speaker_turns(self, file_uri: str) -> List[Dict[str, Union[str, List[Dict[str, Union[str, float]]]]]]:
-        # Get timestamped sentences
-        sentences = self._get_sentences(file_uri)
-
-        # Create timestamped speaker turns
-        turns = []
-        for sentence in sentences:
-            new_turn_search = re.search(self.new_turn_pattern, sentence['text'])
-            text = new_turn_search.group(2) if new_turn_search else sentence['text']
-            normalized_text = self._normalize_text(text)
-            # Sentence block is start of new speaker turn, or turns is empty
-            if new_turn_search or not turns:
-                turn = {
-                    'speaker': '',
-                    'data': [
-                        {
-                            'start_time': sentence['start_time'],
-                            'end_time': sentence['end_time'],
-                            'text': normalized_text
-                        }
-                    ]
-                }
-                turns.append(turn)
-            # Sentence block is part of recent speaker turn
-            elif turns:
-                turns[-1]['data'].append({
-                    'start_time': sentence['start_time'],
-                    'end_time': sentence['end_time'],
-                    'text': normalized_text
-                })
-
-        return turns
+    def _create_timestamped_speaker_turns(
+        self,
+        speaker_turns: List[List[webvtt.structures.Caption]]
+    ) -> List[Dict[str, Union[str, List[Dict[str, Union[str, float]]]]]]:
+        timestamped_speaker_turns = []
+        for speaker_turn in speaker_turns:
+            # Get timestamped sentences for a speaker turn
+            sentences = self._get_sentences(speaker_turn)
+            timestamped_speaker_turns.append({
+                "speaker": "",
+                "data": sentences
+            })
+        return timestamped_speaker_turns
 
     def transcribe(
         self,
@@ -128,17 +145,31 @@ class WebVTTSRModel(SRModel):
         timestamped_sentences_save_path = Path(timestamped_sentences_save_path).resolve()
         timestamped_speaker_turns_save_path = Path(timestamped_speaker_turns_save_path).resolve()
 
+        # Get content of file uri
+        closed_caption_content = self._request_caption_content(file_uri)
+        # Get list of caption blocks from closed caption file
+        captions = self._get_captions(closed_caption_content)
+        # Convert list of caption blocks to list of speaker turns
+        speaker_turns = self._get_speaker_turns(captions)
         # Create timestamped speaker turns transcript
-        timestamped_speaker_turns = self._get_speaker_turns(file_uri)
+        timestamped_speaker_turns = self._create_timestamped_speaker_turns(speaker_turns)
+        # Normalized the text of transcript
+        for speaker_turn in timestamped_speaker_turns:
+            for sentence in speaker_turn["data"]:
+                normalized_sentence_text = self._normalize_text(sentence["text"])
+                sentence["text"] = normalized_sentence_text
 
         # Create raw transcript
-        raw_text = ' '.join([sentence['text'] for turn in timestamped_speaker_turns for sentence in turn['data']])
-        raw_transcript = [{'start_time': timestamped_speaker_turns[0]['data'][0]['start_time'],
-                           'end_time': timestamped_speaker_turns[-1]['data'][-1]['end_time'],
-                           'text': raw_text}]
+        raw_text = " ".join([sentence["text"] for turn in timestamped_speaker_turns for sentence in turn["data"]])
+        raw_transcript = [{"start_time": timestamped_speaker_turns[0]["data"][0]["start_time"],
+                           "end_time": timestamped_speaker_turns[-1]["data"][-1]["end_time"],
+                           "text": raw_text}]
 
         # Create timestamped sentences transcript
         timestamped_sentences = [sentence for turn in timestamped_speaker_turns for sentence in turn['data']]
+
+        # Log completed
+        log.info(f"Completed transcription for: {file_uri}. Confidence: {self.confidence}")\
 
         # Wrap each transcript in the standard format
         raw_transcript = self.wrap_and_format_transcript_data(

@@ -8,13 +8,13 @@ this document with more notes and information. If you want to deploy an exact re
 [configuration and setup](#configuration-and-setup) section.
 
 ### Index
-1. [Background](#background)
-2. [Module Choices](#module-choices)
-3. [Back-end Hosting](#back-end-hosting)
-4. [Configuration and Setup](#configuration-and-setup)
-    * [Local Development Setup](#local-development-setup)
-    * [Production Server Setup](#production-server-setup)
-5. [Running Pipelines](#running-pipelines)
+1. [Background](#id2)
+2. [Module Choices](#id4)
+3. [Back-end Hosting](#id5)
+4. [Configuration and Setup](#id7)
+    * [Local Development Setup](#id10)
+    * [Production Server Setup](#id11)
+5. [Running Pipelines](#id13)
 
 ## Background
 It is generally a good practice to have a staging and a production instance of any system that will be mass producing

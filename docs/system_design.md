@@ -1,15 +1,15 @@
 # Backend Design
 ### Index
-1. [Introduction](#introduction)
-2. [Modules](#modules)
-    1. [Event Scrapers](#event-scrapers)
-    2. [File Stores](#file-stores)
-    3. [Audio Splitters](#audio-splitters)
-    4. [Databases](#databases)
+1. [Introduction](#id1)
+2. [Modules](#id3)
+    1. [Event Scrapers](#id4)
+    2. [File Stores](#id5)
+    3. [Audio Splitters](#id6)
+    4. [Databases](#id7)
     5. [Speech Recognition Models](#speech-recognition-models)
-    6. [Indexers](#indexers)
-    7. [Pipelines](#pipelines)
-3. [Why not Airflow?](#why-not-airflow)
+    6. [Indexers](#id8)
+    7. [Pipelines](#id9)
+3. [Why not Airflow?](#id10)
 
 ---
 ## Introduction

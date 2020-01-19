@@ -6,7 +6,7 @@
     2. [File Stores](#id5)
     3. [Audio Splitters](#id6)
     4. [Databases](#id7)
-    5. [Speech Recognition Models](#speech-recognition-models)
+    5. [Speech Recognition Models](#speech-recognition-model)
     6. [Indexers](#id8)
     7. [Pipelines](#id9)
 3. [Why not Airflow?](#id10)

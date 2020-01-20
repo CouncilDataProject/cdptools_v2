@@ -97,10 +97,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#id5">File Stores</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id6">Audio Splitters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id7">Databases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#speech-recognition-model">Speech Recognition Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id8">Indexers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id9">Pipelines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id10">Why not Airflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">Speech Recognition Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">Indexers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Why not Airflow</a></li>
 </ul>
 </li>
 </ul>
@@ -247,19 +247,19 @@
 <div class="section" id="index">
 <h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li><p><a class="reference external" href="#introduction">Introduction</a></p></li>
-<li><p><a class="reference external" href="#modules">Modules</a></p>
+<li><p><a class="reference external" href="#id1">Introduction</a></p></li>
+<li><p><a class="reference external" href="#id3">Modules</a></p>
 <ol class="arabic simple">
-<li><p><a class="reference external" href="#event-scrapers">Event Scrapers</a></p></li>
-<li><p><a class="reference external" href="#file-stores">File Stores</a></p></li>
-<li><p><a class="reference external" href="#audio-splitters">Audio Splitters</a></p></li>
-<li><p><a class="reference external" href="#databases">Databases</a></p></li>
-<li><p><a class="reference external" href="#speech-recognition-models">Speech Recognition Models</a></p></li>
-<li><p><a class="reference external" href="#indexers">Indexers</a></p></li>
-<li><p><a class="reference external" href="#pipelines">Pipelines</a></p></li>
+<li><p><a class="reference external" href="#id4">Event Scrapers</a></p></li>
+<li><p><a class="reference external" href="#id5">File Stores</a></p></li>
+<li><p><a class="reference external" href="#id6">Audio Splitters</a></p></li>
+<li><p><a class="reference external" href="#id7">Databases</a></p></li>
+<li><p><a class="reference external" href="#speech-recognition-model">Speech Recognition Models</a></p></li>
+<li><p><a class="reference external" href="#id8">Indexers</a></p></li>
+<li><p><a class="reference external" href="#id9">Pipelines</a></p></li>
 </ol>
 </li>
-<li><p><a class="reference external" href="#why-not-airflow">Why not Airflow?</a></p></li>
+<li><p><a class="reference external" href="#id10">Why not Airflow?</a></p></li>
 </ol>
 <hr class="docutils" />
 <div class="section" id="id1">
@@ -336,8 +336,8 @@ open read, as if collaborators want to use the data stored by a CDP instance, it
 ask them nicely to not slam the database with requests.</p>
 <a class="reference external image-reference" href="resources/database_diagram.png"><img alt="Database Schema Diagram" src="_images/database_diagram.png" /></a>
 </div>
-<div class="section" id="speech-recognition-model">
-<h2>Speech Recognition Model<a class="headerlink" href="#speech-recognition-model" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id8">
+<h2>Speech Recognition Models<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
 <p>Things can start to get tricky here. Speech recognition models are where the standard idea of processing may be a bit
 odd. Let’s compare a city like Seattle which doesn’t produce transcripts of city council meetings to an unnamed city
 that does. The speech recognition model available for Seattle, is the <code class="docutils literal notranslate"><span class="pre">sr_models.GoogleCloudSRModel</span></code>, which accepts
@@ -354,8 +354,8 @@ to configure a mixture of speech recognition models for your pipeline.</p>
 <p>If you want to develop your own speech recognition model, please first read about
 <a class="reference external" href="transcript_formats.html">supported transcript formats</a>.</p>
 </div>
-<div class="section" id="id8">
-<h2>Indexers<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id9">
+<h2>Indexers<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
 <p>Indexer objects are used to generate a term value to terms in a corpus. A single document in this corpus could be a
 single transcript, for indexing by events, or could be the merge of many documents to a single string for indexing by
 a different reference, minutes items for example. They need a corpus map which is whatever primary key to a local path
@@ -363,8 +363,8 @@ to a document in the corpus to run. This is a made a module because indexing is 
 index documents” and so while a basic <code class="docutils literal notranslate"><span class="pre">TFIDFIndexer</span></code> is made available as default, if you want to write or implement a
 different indexing algorithm please feel free to do so.</p>
 </div>
-<div class="section" id="id9">
-<h2>Pipelines<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id10">
+<h2>Pipelines<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
 <p>Finally we arrive at pipelines. Pipelines should, similarly to modules, follow the <code class="docutils literal notranslate"><span class="pre">pipelines.Pipeline</span></code> abstract base
 class specification, but they really simply are just a task graph that gets carried out with each task being one of the
 modules already defined. Commonly, a pipeline like these is called a “DAG”, or “Directed Acyclic Graph”. This style of
@@ -372,8 +372,8 @@ managing task graphs has been made popular by tools like <a class="reference ext
 configuration files that dictate which modules to use and any extra arguments needed to be passed to them then allow the
 entire pipeline to run.</p>
 <hr class="docutils" />
-<div class="section" id="id10">
-<h3>Why not Airflow<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h3>Why not Airflow<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <p>Circling back to the original intent of these tools: CDP aims to be highly modular and still reusable by many cities.
 However, if individuals who want to see data for their own city council can’t set up Airflow, and don’t have a
 computation cluster to support it’s operations, then what is the point of making the system modular? So yes, while many

@@ -2,10 +2,10 @@
 ### Index
 1. [Introduction](#introduction)
 2. [Formats](#formats)
-    1. [Raw](#format:-raw)
-    2. [Timestamped Words](#format:-timestamped-words)
-    3. [Timestamped Sentences](#format:-timestamped-sentences)
-    4. [Timestamped Speaker Turns](#format:-timestamped-speaker-turns)
+    1. [Raw](#format-raw)
+    2. [Timestamped Words](#format-timestamped-words)
+    3. [Timestamped Sentences](#format-timestamped-sentences)
+    4. [Timestamped Speaker Turns](#format-timestamped-speaker-turns)
 3. [Notes](#notes)
 
 ---

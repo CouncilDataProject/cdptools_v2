@@ -50,8 +50,9 @@ requirements = [
     "nltk==3.4.5",
     "pandas==0.25.0",
     "python-Levenshtein==0.12.0",
-    "requests==2.22.0",
+    "requests[security]==2.22.0",
     "schedule==0.6.0",
+    "setuptools>=44.0.0",
     "tika==1.19",
     "webvtt-py==0.4.3",
     "truecase==0.0.5"
@@ -62,6 +63,7 @@ extra_requirements = [
 ]
 
 seattle_requirements = [
+    "cryptography>=2.8",
     "firebase-admin==2.17.0",
     "google-cloud-speech==1.2.0",
     "google-cloud-storage==1.17.0"

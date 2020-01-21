@@ -6,7 +6,6 @@ from pathlib import Path
 
 from cdptools import get_module_version
 from ..dev_utils import load_custom_object
-from ..event_scrapers import seattle_event_scraper as scraper
 
 logging.basicConfig(
     level=logging.INFO,
@@ -39,13 +38,13 @@ def main():
     args = Args()
 
     try:
-        event_scraper = scraper.SeattleEventScraper()
-        event = event_scraper.get_single_event(args.event_url, backfill=True)
         pipeline = load_custom_object.load_custom_object(
             module_path="cdptools.pipelines",
             object_name="EventGatherPipeline",
             object_kwargs={"config_path": args.config_path}
         )
+
+        event = pipeline.event_scraper.get_single_event(args.event_url, backfill=True)
 
         log.info(f"CDPTools Version: {get_module_version()}")
         log.info(f"Initializing: EventGatherPipeline")

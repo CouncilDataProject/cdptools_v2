@@ -494,6 +494,107 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">event</span>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_single_seattle_channel_event_by_main_content</span><span class="p">(</span>
+        <span class="n">event_container</span><span class="p">:</span> <span class="n">BeautifulSoup</span><span class="p">,</span>
+        <span class="n">source_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">ignore_date</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse a single event from the html of a Seattle Channel event block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event_container: BeautifulSoup</span>
+<span class="sd">            A BeautifulSoup object created from reading a single event div block from SeattleChannel.</span>
+<span class="sd">        source_uri: str</span>
+<span class="sd">            The source uri for the event. The video id in the query param will be the video id of the processed event.</span>
+<span class="sd">        ignore_date: bool</span>
+<span class="sd">            A boolean information whether or not to ignore the parsed event based of the parsed date.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        event_details: Dict[str, Any]</span>
+<span class="sd">            The fully parsed event details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Find event details</span>
+        <span class="n">event_details</span> <span class="o">=</span> <span class="n">event_container</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s2">&quot;programDescription col-xs-12 col-sm-4&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Find and clean body name</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">event_details</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s2">&quot;episodeTitle&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; - Special Meeting&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; Special Meeting - Public Hearing&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">body_includes_date</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}$&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">body_includes_date</span><span class="p">:</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; {body_includes_date.group(0)}&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Find and clean date</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">event_details</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s2">&quot;episodeDate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">year</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
+        <span class="n">event_dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">month</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">day</span><span class="p">))</span>
+
+        <span class="c1"># Agendas have mixed formatting</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">agenda</span> <span class="o">=</span> <span class="n">event_details</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s2">&quot;episodeDescription&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">agenda</span> <span class="o">=</span> <span class="n">event_details</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s2">&quot;episodeDescription&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventParseError</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">event_dt</span><span class="p">)</span>
+
+        <span class="c1"># The agenda is returned as a single string</span>
+        <span class="c1"># Clean it and split it into its parts</span>
+        <span class="n">agenda</span> <span class="o">=</span> <span class="n">agenda</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Agenda:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">agenda</span> <span class="o">=</span> <span class="n">agenda</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Agenda Items:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Older agendas used commas instead of semicolons</span>
+        <span class="k">if</span> <span class="s2">&quot;;&quot;</span> <span class="ow">in</span> <span class="n">agenda</span><span class="p">:</span>
+            <span class="n">agenda</span> <span class="o">=</span> <span class="n">agenda</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">agenda</span> <span class="o">=</span> <span class="n">agenda</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Find caption vtt file uri from mainContent div&#39;s javascript</span>
+        <span class="c1"># Partial URI of caption file ends with .vtt</span>
+        <span class="n">main_content</span> <span class="o">=</span> <span class="n">event_container</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;mainContent&quot;</span><span class="p">)</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="n">main_content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">)</span>
+        <span class="n">caption_uri_search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-zA-Z0-9/_]+\.vtt&quot;</span><span class="p">,</span> <span class="n">script</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">caption_uri_search</span><span class="p">:</span>
+            <span class="n">base_route</span> <span class="o">=</span> <span class="s2">&quot;https://seattlechannel.org/&quot;</span>
+            <span class="n">caption_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{base_route}</span><span class="s2">{caption_uri_search.group(0)}&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">caption_uri</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># The video url is in the javascript of the mainContent div.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># All seattle channel videos are hosted at &quot;video.seattle.gov/...&quot;</span>
+            <span class="c1"># This will find the true url by searching for a substring that matches the above pattern</span>
+            <span class="c1"># Note: some of the urls have spaces in the video filename which is why the space is included in the</span>
+            <span class="c1"># regex search pattern.</span>
+            <span class="n">video</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;video\.seattle\.gov[a-zA-Z0-9\/_ ]*\.(mp4|flv)&quot;</span><span class="p">,</span> <span class="n">script</span><span class="o">.</span><span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">video</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{video}</span><span class="s2">&quot;</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventParseError</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">event_dt</span><span class="p">)</span>
+
+        <span class="c1"># If the event was not in the last two weeks, ignore it.</span>
+        <span class="c1"># We check the last two weeks over just the last day because sometimes events are posted late and such.</span>
+        <span class="c1"># Additionally, by always collecting the last two weeks, we generally get more info from legistar.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_date</span><span class="p">:</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">SeattleEventScraper</span><span class="o">.</span><span class="n">pstnow</span><span class="p">()</span>
+            <span class="n">yesterday</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">event_dt</span> <span class="o">&gt;</span> <span class="n">yesterday</span> <span class="ow">and</span> <span class="n">event_dt</span> <span class="o">&lt;</span> <span class="n">now</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventOutOfTimeboundsError</span><span class="p">(</span><span class="n">event_dt</span><span class="p">,</span> <span class="n">yesterday</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+
+        <span class="c1"># Construct event</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;minutes_items&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">SeattleEventScraper</span><span class="o">.</span><span class="n">_clean_string</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">agenda</span><span class="p">],</span>
+            <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="n">SeattleEventScraper</span><span class="o">.</span><span class="n">_clean_string</span><span class="p">(</span><span class="n">body</span><span class="p">),</span>
+            <span class="s2">&quot;event_datetime&quot;</span><span class="p">:</span> <span class="n">event_dt</span><span class="p">,</span>
+            <span class="s2">&quot;source_uri&quot;</span><span class="p">:</span> <span class="n">source_uri</span><span class="p">,</span>
+            <span class="s2">&quot;video_uri&quot;</span><span class="p">:</span> <span class="n">video</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;caption_uri&quot;</span><span class="p">:</span> <span class="n">caption_uri</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">event</span>
+
     <span class="k">def</span> <span class="nf">_collect_sub_route_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
         <span class="c1"># Get page</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -647,6 +748,38 @@
 
         <span class="c1"># Return events</span>
         <span class="k">return</span> <span class="n">parsed_events</span></div>
+
+<div class="viewcode-block" id="SeattleEventScraper.get_single_event"><a class="viewcode-back" href="../../../cdptools.event_scrapers.html#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_single_event">[docs]</a>    <span class="k">def</span> <span class="nf">get_single_event</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">backfill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="c1"># Get page</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+
+        <span class="c1"># Check status</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="c1"># Convert to soup</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Try to parse event</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_single_seattle_channel_event_by_main_content</span><span class="p">(</span><span class="n">soup</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">backfill</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attach_legistar_details_to_event</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_minutes_items</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventOutOfTimeboundsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Log as warning</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ignored event for </span><span class="si">{uri}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventParseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Log as error</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Errored event for </span><span class="si">{uri}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;SeattleEventScraper [</span><span class="si">{self.main_route}</span><span class="s2">]&gt;&quot;</span>

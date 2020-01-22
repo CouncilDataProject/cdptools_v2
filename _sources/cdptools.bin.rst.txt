@@ -12,6 +12,14 @@ cdptools.bin.clone\_db module
    :undoc-members:
    :show-inheritance:
 
+cdptools.bin.process\_single\_event module
+------------------------------------------
+
+.. automodule:: cdptools.bin.process_single_event
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdptools.bin.run\_cdp\_pipeline module
 --------------------------------------
 

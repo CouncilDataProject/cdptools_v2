@@ -275,6 +275,22 @@ use for processing and storage information.</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="cdptools.event_scrapers.event_scraper.EventScraper.get_single_event">
+<em class="property">abstract </em><code class="sig-name descname">get_single_event</code><span class="sig-paren">(</span><em class="sig-param">uri: str</em>, <em class="sig-param">backfill: bool = False</em><span class="sig-paren">)</span> &#x2192; Dict[str, Any]<a class="reference internal" href="_modules/cdptools/event_scrapers/event_scraper.html#EventScraper.get_single_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.event_scraper.EventScraper.get_single_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get event details for a single event required to run the rest of an event pipeline.</p>
+<p>This can be used for processing single events that might not have been properly processed with the above
+get_events method when running a EventGatherPipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>event</strong> – A dicitonary containing event details for the rest of an event pipeline to use for processing and storage info.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -333,6 +349,22 @@ use for processing and storage information.</p>
 <dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_routes">
 <code class="sig-name descname">get_routes</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#SeattleEventScraper.get_routes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_routes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_single_event">
+<code class="sig-name descname">get_single_event</code><span class="sig-paren">(</span><em class="sig-param">uri: str</em>, <em class="sig-param">backfill: bool = False</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#SeattleEventScraper.get_single_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_single_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get event details for a single event required to run the rest of an event pipeline.</p>
+<p>This can be used for processing single events that might not have been properly processed with the above
+get_events method when running a EventGatherPipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>event</strong> – A dicitonary containing event details for the rest of an event pipeline to use for processing and storage info.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.pstnow">

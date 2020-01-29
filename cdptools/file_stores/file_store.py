@@ -6,7 +6,7 @@ import logging
 import shutil
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import requests
 
@@ -228,3 +228,17 @@ class FileStore(ABC):
             Message notifying that the bucket has been cleared.
         """
         return ""
+
+    @abstractmethod
+    def list_all_files(
+        self
+    ) -> List[str]:
+        """
+        Returns a list of all filepaths in the file store bucket.
+
+        Returns
+        -------
+        file_path_list: List[str]
+            List of all the filepaths in the bucket.
+        """
+        return []

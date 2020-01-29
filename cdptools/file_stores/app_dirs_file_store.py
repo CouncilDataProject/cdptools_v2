@@ -5,7 +5,7 @@ import logging
 import os
 import shutil
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import appdirs
 
@@ -138,6 +138,7 @@ class AppDirsFileStore(FileStore):
         filename = Path(filename).resolve().name
 
         # Find filepath to delete
+        # TODO fix use of _locate_file when file not present in directory
         path_to_delete = self._locate_file(filename)
 
         if os.path.isfile(path_to_delete):
@@ -159,6 +160,18 @@ class AppDirsFileStore(FileStore):
             log.info(f"Encountered exception {e} while trying to clear bucket: {self._name}.")
 
         return f"Deleted bucket: {self._name}"
+
+    def list_all_files(
+        self
+    ) -> List[str]:
+        filepath_list = []
+
+        for dirpath, dirnames, filenames in os.walk(self._root):
+            for filename in filenames:
+                filepath = os.path.join(dirpath, filename)
+                filepath_list.append(filepath)
+
+        return filepath_list
 
     def __str__(self):
         return f"<AppDirsFileStore [{self._root}]>"

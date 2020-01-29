@@ -4,7 +4,7 @@
 import logging
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import requests
 from google.cloud import storage
@@ -221,7 +221,7 @@ class GCSFileStore(FileStore):
         return f"Deleted page in bucket: {self._bucket.name}"
 
     def clear_bucket(
-            self
+        self
     ) -> str:
         # Gather the files by pages so we can delete in parallel
         pages = self._client.list_blobs(self._bucket).pages
@@ -231,6 +231,32 @@ class GCSFileStore(FileStore):
 
         log.info(f"Cleared bucket: {self._bucket.name}")
         return f"Cleared bucket: {self._bucket.name}"
+
+    def list_page(
+        self,
+        page: Page
+    ) -> List[str]:
+        file_list = []
+        for blob in page:
+            file_list.append(blob.name)
+
+        return file_list
+
+    def list_all_files(
+        self
+    ) -> List[str]:
+        # Gather the files by pages
+        pages = self._client.list_blobs(self._bucket).pages
+
+        full_list = []
+        with ThreadPoolExecutor() as exe:
+            # Add list of file from each page to full list
+            for page in pages:
+                future = exe.submit(self.list_page, page)
+                sub_list = future.result()
+                full_list += sub_list
+
+        return full_list
 
     def __str__(self):
         # With credentials

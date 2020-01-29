@@ -1,12 +1,12 @@
 import argparse
 import logging
+import json
 from pathlib import Path
-
-from google.api_core.page_iterator import Page
 
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
-import cdptools.file_stores.gcs_file_store as fs
+import cdptools.file_stores.file_store as fs
+from ..dev_utils import load_custom_object
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,43 +28,52 @@ class Args(argparse.Namespace):
             description="Clone source file store to target file store."
         )
 
-        p.add_argument("--target_bucket", type=str, help="Target bucket name.", required=True)
-        p.add_argument("--target_credentials", type=Path, help="Credentials of target file store.", required=True)
+        p.add_argument("--source_config_path", type=Path,
+                       help="Path to a configuration file with details for the source file store.", required=True)
+        p.add_argument("--target_config_path", type=Path,
+                       help="Path to a configuration file with details for the target file store.", required=True)
         p.add_argument("--debug", action="store_true", dest="debug", help="Show traceback if the script were to fail.")
-        p.add_argument('--source_bucket', help="Source bucket name.", required=True)
-        p.add_argument('--source_credentials', type=Path, help="Credentials of source file store.")
 
         p.parse_args(namespace=self)
 
 
-def clone_page(page: Page, source_fs: fs.GCSFileStore, target_fs: fs.GCSFileStore):
-    for blob in page:
-        # download file takes in a filename and returns a path
-        downloaded_path = source_fs.download_file(blob.name, overwrite=True)
+def read_config_file(config_path: Path):
+    resolved_config_path = config_path.resolve(strict=True)
 
-        # upload file takes in a path
-        target_fs.upload_file(downloaded_path)
+    with open(resolved_config_path, "r") as read_in:
+        return json.load(read_in)
+
+
+def load_file_store(config_json) -> fs.FileStore:
+    return load_custom_object.load_custom_object(
+        module_path=config_json["file_store"]["module_path"],
+        object_name=config_json["file_store"]["object_name"],
+        object_kwargs=config_json["file_store"].get("object_kwargs", {})
+    )
+
+
+def clone_file(file_name: str, source_fs, target_fs):
+    # download file takes in a filename and returns the path
+    downloaded_path = source_fs.download_file(file_name, overwrite=True)
+
+    # upload file takes in a path, removes the downloaded ones
+    target_fs.upload_file(downloaded_path, remove=True)
 
 
 def main():
     args = Args()
 
-    source_fs = fs.GCSFileStore(args.source_bucket, args.source_credentials)
-    target_fs = fs.GCSFileStore(args.target_bucket, args.target_credentials)
+    source_config = read_config_file(args.source_config_path)
+    target_config = read_config_file(args.target_config_path)
 
-    # We call client list_blobs method as use of the bucket's list_blobs method is deprecated
-    source_client = source_fs._client
-    source_bucket = source_fs._bucket
+    source_fs = load_file_store(source_config)
+    target_fs = load_file_store(target_config)
 
-    # Clear the target file store of existing files
-    target_fs.clear_bucket()
+    files = source_fs.list_all_files()
 
-    # Get blobs in pages so we can use threading
-    pages = source_client.list_blobs(source_bucket).pages
-
-    proc_func = partial(clone_page, source_fs=source_fs, target_fs=target_fs)
+    proc_func = partial(clone_file, source_fs=source_fs, target_fs=target_fs)
     with ThreadPoolExecutor() as exe:
-        exe.map(proc_func, pages)
+        exe.map(proc_func, files)
 
     log.info("Cloned filestore of bucket: {source_bucket} to bucket: {target_fs._bucket}")
 

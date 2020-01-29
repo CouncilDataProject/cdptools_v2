@@ -104,7 +104,8 @@ setup(
     entry_points={
         "console_scripts": [
             "run_cdp_pipeline=cdptools.bin.run_cdp_pipeline:main",
-            "clone_db=cdptools.bin.clone_db:main"
+            "clone_db=cdptools.bin.clone_db:main",
+            "process_single_event=cdptools.bin.process_single_event:main"
         ],
     },
     install_requires=requirements,

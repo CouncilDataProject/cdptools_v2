@@ -245,7 +245,7 @@ class SeattleEventScraper(EventScraper):
         # Additionally, by always collecting the last two weeks, we generally get more info from legistar.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
-            yesterday = now - timedelta(days=14)
+            yesterday = now - timedelta(days=8)
             if not (event_dt > yesterday and event_dt < now):
                 raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 

@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -479,7 +479,7 @@
         <span class="c1"># Additionally, by always collecting the last two weeks, we generally get more info from legistar.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_date</span><span class="p">:</span>
             <span class="n">now</span> <span class="o">=</span> <span class="n">SeattleEventScraper</span><span class="o">.</span><span class="n">pstnow</span><span class="p">()</span>
-            <span class="n">yesterday</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+            <span class="n">yesterday</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">event_dt</span> <span class="o">&gt;</span> <span class="n">yesterday</span> <span class="ow">and</span> <span class="n">event_dt</span> <span class="o">&lt;</span> <span class="n">now</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">EventOutOfTimeboundsError</span><span class="p">(</span><span class="n">event_dt</span><span class="p">,</span> <span class="n">yesterday</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
 
@@ -667,12 +667,20 @@
         <span class="c1"># Fast return for only one event returned</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">legistar_events</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">selected_event</span> <span class="o">=</span> <span class="n">legistar_events</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Catch when no legistar events found for the meeting</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">legistar_events</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Reduce events to not include cancelled events</span>
             <span class="n">cancelled_reduced</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">legistar_events</span> <span class="k">if</span> <span class="n">e</span><span class="p">[</span><span class="s2">&quot;EventAgendaStatusName&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Cancelled&quot;</span><span class="p">]</span>
 
             <span class="c1"># Get body names</span>
             <span class="n">available_bodies</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">e</span><span class="p">[</span><span class="s2">&quot;EventBodyName&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">cancelled_reduced</span><span class="p">])</span>
+
+            <span class="c1"># In the case that there were events in legistar but they were all cancelled, this will catch</span>
+            <span class="c1"># no events found for the meeting</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">available_bodies</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
 
             <span class="c1"># Check if the Seattle Channel body name (basically a &quot;display name&quot;) is present in the list</span>
             <span class="c1"># If so, choose the events with that exact body name</span>

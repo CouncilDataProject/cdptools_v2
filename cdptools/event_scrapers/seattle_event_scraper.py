@@ -245,7 +245,7 @@ class SeattleEventScraper(EventScraper):
         # Additionally, by always collecting the last two weeks, we generally get more info from legistar.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
-            yesterday = now - timedelta(days=14)
+            yesterday = now - timedelta(days=8)
             if not (event_dt > yesterday and event_dt < now):
                 raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 
@@ -433,12 +433,20 @@ class SeattleEventScraper(EventScraper):
         # Fast return for only one event returned
         if len(legistar_events) == 1:
             selected_event = legistar_events[0]
+        # Catch when no legistar events found for the meeting
+        elif len(legistar_events) == 0:
+            return None
         else:
             # Reduce events to not include cancelled events
             cancelled_reduced = [e for e in legistar_events if e["EventAgendaStatusName"] != "Cancelled"]
 
             # Get body names
             available_bodies = set([e["EventBodyName"] for e in cancelled_reduced])
+
+            # In the case that there were events in legistar but they were all cancelled, this will catch
+            # no events found for the meeting
+            if len(available_bodies) == 0:
+                return None
 
             # Check if the Seattle Channel body name (basically a "display name") is present in the list
             # If so, choose the events with that exact body name

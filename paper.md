@@ -6,22 +6,24 @@ tags:
   - Transcription 
 authors:
   - name: Jackson Brown 
-    orcid: 0000-0003-0872-7098 # Add Orchid ID 
-    affiliation: "1"
+    orcid: 0000-0003-2564-0373 # Add Orchid ID 
+    affiliation: "1", "3"
   - name: To Huynh 
     orcid: 0000-0003-0872-7098 # Add Orchid ID 
-    affiliation: "2"
+    affiliation: "3"
   - name: Isaac Na
     orcid: 0000-0003-0872-7098 # Add Orchid ID 
-    affiliation: "2"
+    affiliation: "3"
   - name: Nicholas M. Weber 
-    orcid: 0000-0003-0872-7098 # Add Orchid ID 
-    affiliation: "2"
+    orcid: 0000-0002-6008-3763 # Add Orchid ID 
+    affiliation: "2", "3"
 affiliations:
  - name: Allen Institute for Cell Science 
    index: 1
  - name: University of Washington - Seattle 
    index: 2
+ - name: Council Data Project
+   index: 3
 date: 10 February 2020
 bibliography: paper.bib
 

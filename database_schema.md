@@ -83,6 +83,19 @@ For example: a person has two terms as city council member for D4 then a term as
 Roles can also be tied to committee chairs.
 For example: a council member spends a term on the transportation committee and then spends a term on the finance
 committee.
+```
+role_id: {
+    person_id: str
+    title: str
+    body_id: str
+    body_name: str
+    start_date: datetime
+    end_date: datetime
+    seat_id: str
+    external_source_id: int
+    created: datetime
+}
+```
 
 ### Matter
 A matter is specifically a legislative matter. A bill, resolution, initiative, etc. It has a sponser which may be a

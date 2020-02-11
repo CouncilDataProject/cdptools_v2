@@ -62,13 +62,13 @@ person_id: {
     picture_uri: str
     is_active: bool
     is_council_president: bool
-    most_recent_district_id: str
-    most_recent_district_name: str
-    most_recent_district_map_file_id: str
-    most_recent_district_map_uri: str
+    most_recent_seat_id: str
+    most_recent_seat_name: str
+    most_recent_seat_map_file_id: str
+    most_recent_seat_map_uri: str
     most_recent_chair_body_id: str
     most_recent_chair_body_name: str
-    terms_serving_in_current_district_role: int
+    terms_serving_in_current_seat_role: int
     terms_serving_in_current_committee_chair_role: int
     external_source_id: int
     created: datetime

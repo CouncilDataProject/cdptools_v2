@@ -97,6 +97,19 @@ role_id: {
 }
 ```
 
+### Seat
+A seat is an electable office on the City Council.
+```
+seat_id: {
+    name: str
+    electoral_area: str
+    type: str
+    map_file_id: str
+    map_uri: str
+    created: datetime
+}
+```
+
 ### Matter
 A matter is specifically a legislative matter. A bill, resolution, initiative, etc. It has a sponser which may be a
 person or a body.

@@ -86,6 +86,7 @@ committee.
 ```
 role_id: {
     person_id: str
+    person_name: str
     title: str
     body_id: str
     body_name: str

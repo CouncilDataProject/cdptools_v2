@@ -103,7 +103,7 @@ A seat is an electable office on the City Council.
 seat_id: {
     name: str
     electoral_area: str
-    type: str
+    electoral_type: str
     map_file_id: str
     map_uri: str
     created: datetime

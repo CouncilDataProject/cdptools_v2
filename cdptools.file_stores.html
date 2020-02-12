@@ -251,8 +251,118 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="cdptools-file-stores-app-dirs-file-store-module">
-<h2>cdptools.file_stores.app_dirs_file_store module<a class="headerlink" href="#cdptools-file-stores-app-dirs-file-store-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cdptools.file_stores.app_dirs_file_store">
+<span id="cdptools-file-stores-app-dirs-file-store-module"></span><h2>cdptools.file_stores.app_dirs_file_store module<a class="headerlink" href="#module-cdptools.file_stores.app_dirs_file_store" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.file_stores.app_dirs_file_store.AppDirsFileStore">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.file_stores.app_dirs_file_store.</code><code class="sig-name descname">AppDirsFileStore</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'cdp_filestore'</em>, <em class="sig-param">owner: str = 'cdp'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/file_stores/app_dirs_file_store.html#AppDirsFileStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.app_dirs_file_store.AppDirsFileStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cdptools.file_stores.file_store.FileStore" title="cdptools.file_stores.file_store.FileStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">cdptools.file_stores.file_store.FileStore</span></code></a></p>
+<dl class="method">
+<dt id="cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.clear_bucket">
+<code class="sig-name descname">clear_bucket</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/file_stores/app_dirs_file_store.html#AppDirsFileStore.clear_bucket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.clear_bucket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the bucket of all files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>clear_bucket_message</strong> – Message notifying that the bucket has been cleared.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.delete_file">
+<code class="sig-name descname">delete_file</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/cdptools/file_stores/app_dirs_file_store.html#AppDirsFileStore.delete_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.delete_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The name of the file in the file store to delete.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>deleted_file_name</strong> – Message containing the name of the file deleted.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.download_file">
+<code class="sig-name descname">download_file</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em>, <em class="sig-param">save_path: Union[str</em>, <em class="sig-param">pathlib.Path</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">overwrite: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/cdptools/file_stores/app_dirs_file_store.html#AppDirsFileStore.download_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.download_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the file if neccessary and return the Path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the file in the file store that you want to download.</p></li>
+<li><p><strong>save_path</strong> (<em>Optional[Union[str, Path]] = None</em>) – An optional save path / destination to store the file locally.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – Boolean value indicating whether or not to overwrite a file that already exists in the destination.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>save_path</strong> – The local path of the downloaded file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.get_file_uri">
+<code class="sig-name descname">get_file_uri</code><span class="sig-paren">(</span><em class="sig-param">filename: Union[str, pathlib.Path], **kwargs</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/file_stores/app_dirs_file_store.html#AppDirsFileStore.get_file_uri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.get_file_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a file path/ uri given a filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The file you are requesting a file uri for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>uri</strong> – If the file is found, the file uri is returned as a string. If it isn’t a FileNotFoundError is raised.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.list_all_files">
+<code class="sig-name descname">list_all_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="_modules/cdptools/file_stores/app_dirs_file_store.html#AppDirsFileStore.list_all_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.list_all_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all filepaths in the file store bucket.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>file_path_list</strong> – List of all the filepaths in the bucket.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.upload_file">
+<code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param">filepath: Union[str, pathlib.Path], save_name: Optional[str] = None, remove: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/file_stores/app_dirs_file_store.html#AppDirsFileStore.upload_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.app_dirs_file_store.AppDirsFileStore.upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>Union[str, Path]</em>) – The filepath to the file you want to store.</p></li>
+<li><p><strong>save_name</strong> (<em>Optional[str]</em>) – An optional save name to store the file as instead of it’s current name.</p></li>
+<li><p><strong>remove</strong> (<em>bool</em>) – Boolean value indicating whether or not to remove the local file after storage in the file store.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>uri</strong> – The uri for the stored file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-cdptools.file_stores.exceptions">
 <span id="cdptools-file-stores-exceptions-module"></span><h2>cdptools.file_stores.exceptions module<a class="headerlink" href="#module-cdptools.file_stores.exceptions" title="Permalink to this headline">¶</a></h2>
@@ -270,6 +380,20 @@
 <em class="property">class </em><code class="sig-prename descclassname">cdptools.file_stores.file_store.</code><code class="sig-name descname">FileStore</code><a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <dl class="method">
+<dt id="cdptools.file_stores.file_store.FileStore.clear_bucket">
+<em class="property">abstract </em><code class="sig-name descname">clear_bucket</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore.clear_bucket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore.clear_bucket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the bucket of all files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>clear_bucket_message</strong> – Message notifying that the bucket has been cleared.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="cdptools.file_stores.file_store.FileStore.compute_sha256_for_file">
 <em class="property">static </em><code class="sig-name descname">compute_sha256_for_file</code><span class="sig-paren">(</span><em class="sig-param">filepath: Union[str, pathlib.Path], block_size: int = 1048576</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore.compute_sha256_for_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore.compute_sha256_for_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a SHA256 hexdigest for a file. Works for large files.</p>
@@ -282,6 +406,23 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>digest</strong> – The result of completing the SHA256 hash and taking the hexdigest.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.file_store.FileStore.delete_file">
+<em class="property">abstract </em><code class="sig-name descname">delete_file</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore.delete_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore.delete_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The name of the file in the file store to delete.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>deleted_file_name</strong> – Message containing the name of the file deleted.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
@@ -323,6 +464,20 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.file_stores.file_store.FileStore.list_all_files">
+<em class="property">abstract </em><code class="sig-name descname">list_all_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="_modules/cdptools/file_stores/file_store.html#FileStore.list_all_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.file_stores.file_store.FileStore.list_all_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all filepaths in the file store bucket.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>file_path_list</strong> – List of all the filepaths in the bucket.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[str]</p>
 </dd>
 </dl>
 </dd></dl>

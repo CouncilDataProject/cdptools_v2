@@ -12,6 +12,14 @@ cdptools.bin.clone\_db module
    :undoc-members:
    :show-inheritance:
 
+cdptools.bin.clone\_file\_store module
+--------------------------------------
+
+.. automodule:: cdptools.bin.clone_file_store
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 cdptools.bin.process\_single\_event module
 ------------------------------------------
 

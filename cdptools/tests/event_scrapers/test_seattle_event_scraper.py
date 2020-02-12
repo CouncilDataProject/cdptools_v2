@@ -51,6 +51,27 @@ def test_clean_string(s, expected):
     assert actual == expected
 
 
+MOCK_SOUP_SINGLE_EVENT = ""
+with open("cdptools/tests/event_scrapers/test_data/seattle-channel.html") as markup:
+    MOCK_SOUP_SINGLE_EVENT = BeautifulSoup(markup.read(), features="html.parser")
+
+MOCK_URI_SINGLE_EVENT = "http://www.seattlechannel.org/mayor-and-council/city-council/2018/2019-civic-development-public-assets-and-native-communities-committee/?videoid=x107461"  # noqa: E501
+EXPECTED_SINGLE_EVENT = {
+    'minutes_items': ["Chair's Report", 'Public Comment', 'Appointments and Reappointments to Board of Park Commissioners,Seattle Park District Community Oversight Committee, andCentral Waterfront Oversight committee', 'Review of Amended and Restated Monorail System Concession Agreement', 'CB 119661 -relating to Seattle Parks and Recreation (Terry Pettus Park Addition)', 'CB 119700: relating to the Central Waterfront Project (Ocean Pavilion)'],  # noqa: E501
+    'body': 'Civic Development, Public Assets, and Native Communities Committee',
+    'event_datetime': datetime(2019, 12, 4, 0, 0),
+    'source_uri': 'http://www.seattlechannel.org/mayor-and-council/city-council/2018/2019-civic-development-public-assets-and-native-communities-committee/?videoid=x107461',  # noqa: E501
+    'video_uri': 'https://video.seattle.gov/media/council/civdev_120419_2541939V.mp4', 'caption_uri': 'https://seattlechannel.org/documents/seattlechannel/closedcaption/2019/civdev_120419_2541939.vtt'  # noqa: E501
+}
+
+
+def test_parse_single_seattle_channel_event():
+    event = SeattleEventScraper._parse_single_seattle_channel_event_by_main_content(MOCK_SOUP_SINGLE_EVENT,
+                                                                                    MOCK_URI_SINGLE_EVENT,
+                                                                                    ignore_date=True)
+    assert event == EXPECTED_SINGLE_EVENT
+
+
 now = SeattleEventScraper.pstnow()
 MOCK_EVENT = {
     "agenda_items": ["Public Comment", "CB 999999"],

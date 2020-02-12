@@ -4,10 +4,13 @@
 import logging
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import requests
 from google.cloud import storage
+from google.api_core.page_iterator import Page
+
+from concurrent.futures import ThreadPoolExecutor
 
 from . import exceptions
 from .file_store import FileStore
@@ -201,6 +204,59 @@ class GCSFileStore(FileStore):
             return self._download_file_with_creds(filename, save_path, overwrite)
 
         return self._download_file_no_creds(filename, save_path, overwrite)
+
+    def delete_file(
+        self,
+        filename: str
+    ) -> str:
+        self._bucket.delete_blob(filename)
+        return f"Deleted file: {filename}"
+
+    def delete_page(
+        self,
+        page: Page
+    ) -> str:
+        for blob in page:
+            self.delete_file(blob.name)
+        return f"Deleted page in bucket: {self._bucket.name}"
+
+    def clear_bucket(
+        self
+    ) -> str:
+        # Gather the files by pages so we can delete in parallel
+        pages = self._client.list_blobs(self._bucket).pages
+
+        with ThreadPoolExecutor() as exe:
+            exe.map(self.delete_page, pages)
+
+        log.info(f"Cleared bucket: {self._bucket.name}")
+        return f"Cleared bucket: {self._bucket.name}"
+
+    def list_page(
+        self,
+        page: Page
+    ) -> List[str]:
+        file_list = []
+        for blob in page:
+            file_list.append(blob.name)
+
+        return file_list
+
+    def list_all_files(
+        self
+    ) -> List[str]:
+        # Gather the files by pages
+        pages = self._client.list_blobs(self._bucket).pages
+
+        full_list = []
+        with ThreadPoolExecutor() as exe:
+            # Add list of file from each page to full list
+            for page in pages:
+                future = exe.submit(self.list_page, page)
+                sub_list = future.result()
+                full_list += sub_list
+
+        return full_list
 
     def __str__(self):
         # With credentials

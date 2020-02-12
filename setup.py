@@ -105,7 +105,8 @@ setup(
         "console_scripts": [
             "run_cdp_pipeline=cdptools.bin.run_cdp_pipeline:main",
             "clone_db=cdptools.bin.clone_db:main",
-            "process_single_event=cdptools.bin.process_single_event:main"
+            "process_single_event=cdptools.bin.process_single_event:main",
+            "clone_file_store=cdptools.bin.clone_file_store:main"
         ],
     },
     install_requires=requirements,

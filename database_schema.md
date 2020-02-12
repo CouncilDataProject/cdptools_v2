@@ -64,6 +64,7 @@ person_id: {
     is_council_president: bool
     most_recent_seat_id: str
     most_recent_seat_name: str
+    most_recent_seat_electoral_area: str
     most_recent_seat_map_file_id: str
     most_recent_seat_map_uri: str
     most_recent_chair_body_id: str

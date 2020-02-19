@@ -82,9 +82,10 @@ body_id: {
     description: str
     created: datetime
     ended: datetime
+    is_active: bool
     chair_person_id: str
     external_source_id: str
-    is_select: bool
+    tag: str
 }
 ```
 

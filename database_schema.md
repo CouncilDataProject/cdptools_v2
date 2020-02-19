@@ -81,7 +81,8 @@ body_id: {
     name: str
     description: str
     created: datetime
-    ended: datetime
+    start_date: datetime
+    end_date: datetime
     is_active: bool
     chair_person_id: str
     external_source_id: str

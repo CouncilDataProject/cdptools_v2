@@ -1,32 +1,32 @@
 ---
 title: 'CDP-Tools_'
 tags:
-  - Social Science 
-  - Local governance 
-  - Transcription 
+  - Social Science
+  - Local governance
+  - Transcription
 authors:
-  - name: Jackson Brown 
-    orcid: 0000-0003-2564-0373 # Add Orchid ID 
+  - name: Jackson Brown
+    orcid: 0000-0003-2564-0373 # Add Orchid ID
     affiliation: "1", "3"
-  - name: To Huynh 
-    orcid: 0000-0002-9664-3662 # Add Orchid ID 
+  - name: To Huynh
+    orcid: 0000-0002-9664-3662 # Add Orchid ID
     affiliation: "2", "3"
   - name: Isaac Na
-    orcid: 0000-0002-0182-1615 # Add Orchid ID 
+    orcid: 0000-0002-0182-1615 # Add Orchid ID
     affiliation: "3", "4"
-  - name: Nicholas M. Weber 
-    orcid: 0000-0002-6008-3763 # Add Orchid ID 
+  - name: Nicholas M. Weber
+    orcid: 0000-0002-6008-3763 # Add Orchid ID
     affiliation: "2", "3"
 affiliations:
- - name: Allen Institute for Cell Science 
+ - name: Allen Institute for Cell Science
    index: 1
- - name: University of Washington - Seattle 
+ - name: University of Washington - Seattle
    index: 2
  - name: Council Data Project
    index: 3
- - name: Washington University in St. Louis, McKelvey School of Engineering.
+ - name: Washington University in St. Louis
    index: 4
-   
+
 date: 10 February 2020
 bibliography: paper.bib
 

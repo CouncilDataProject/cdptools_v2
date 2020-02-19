@@ -76,6 +76,31 @@ person_id: {
 }
 ```
 
+### Body
+```
+body_id: {
+    name: str
+    description: str
+    created: datetime
+    start_date: datetime
+    end_date: datetime
+    is_active: bool
+    chair_person_id: str
+    external_source_id: str
+    tag: str
+}
+```
+
+### File
+```
+file_id: {
+    uri: str
+    filename: str
+    description: str
+    content_type: str
+    created: datetime
+}
+```
 
 ### Role
 A role is a person's job for a period of time in the city council.
@@ -136,3 +161,7 @@ A table to coordinate file details between a database and file store.
 Any supporting document for a specific events minutes item. Previously this was on the Minutes Item relationship but
 that was incorrect as when querying for every level data, all minutes item documents would be returned regardless of
 meeting. Example: an event showing all "future" amendments to a matter.
+
+### Body
+A body, also known as committee, is a subset of city council members that stands for a certain topic/purpose.
+An example would be the Seattle "Governance and Education" committee which consists of 6 of the 9 city council members.

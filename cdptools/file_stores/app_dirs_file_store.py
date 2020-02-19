@@ -31,7 +31,7 @@ class AppDirsFileStore(FileStore):
         key = self.compute_sha256_for_file(filename)
 
         # Split key into pairs of two characters
-        sub_dirs = [key[i:i+2] for i in range(0, len(key), 2)]
+        sub_dirs = [key[i:i + 2] for i in range(0, len(key), 2)]
 
         # Construct path parent
         path_parent = self._root

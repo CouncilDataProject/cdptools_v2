@@ -247,6 +247,10 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
             else:
                 index = -1
 
+            # Firebase doesn't like long strings?
+            if len(minutes_item_name) > 800:
+                minutes_item_name = f"{minutes_item_name[:800]}..."
+
             # Construct minutes item
             minutes_item = {
                 "name": minutes_item_name,

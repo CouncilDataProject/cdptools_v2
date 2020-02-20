@@ -481,6 +481,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
+            <span class="c1"># Firebase doesn&#39;t like long strings?</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">minutes_item_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">800</span><span class="p">:</span>
+                <span class="n">minutes_item_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{minutes_item_name[:800]}</span><span class="s2">...&quot;</span>
+
             <span class="c1"># Construct minutes item</span>
             <span class="n">minutes_item</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">minutes_item_name</span><span class="p">,</span>

@@ -17,9 +17,6 @@ event_id: {
     thumbnail_hover_file_id: str
     thumbnail_hover_uri: str
     video_uri: str
-    transcript_id: str
-    transcript_file_id: str
-    transcript_file_uri: str
     keywords: [
         {
             id: str

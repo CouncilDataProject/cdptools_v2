@@ -20,6 +20,7 @@ jobs:
         pip install .[dev]
     - name: Generate Docs
       run: |
+        gitchangelog
         make gen-docs
         touch docs/_build/html/.nojekyll
     - name: Publish Docs
@@ -29,4 +30,3 @@ jobs:
         BASE_BRANCH: master # The branch the action should deploy from.
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: docs/_build/html/ # The folder the action should deploy.
-

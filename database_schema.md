@@ -17,7 +17,6 @@ event_id: {
     thumbnail_hover_file_id: str
     thumbnail_hover_uri: str
     video_uri: str
-    transcript_id: str
     keywords: [
         {
             id: str
@@ -153,6 +152,14 @@ A reference typing a specific person, and an event minutes item together.
 
 ### Transcript
 The primary transcript for an event.
+```
+transcript_id: {
+    event_id: str
+    file_id: str
+    confidence: float
+    created: datetime
+}
+```
 
 ### File
 A table to coordinate file details between a database and file store.

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Contributing &mdash; cdptools 2.0.4 documentation</title>
+  <title>Changelog &mdash; cdptools 2.0.4 documentation</title>
   
 
   
@@ -35,8 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="changelog.html" />
-    <link rel="prev" title="cdptools.sr_models package" href="cdptools.sr_models.html" /> 
+    <link rel="prev" title="Contributing" href="contributing.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -164,22 +163,22 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#get-started">Get Started!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deploying">Deploying</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">(unreleased)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#new">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#fix">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#other">Other</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unreleased">(unreleased)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#new">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fix">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other">Other</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id21">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id23">Other</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id17">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -229,13 +228,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Contributing</li>
+      <li>Changelog</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -245,10 +244,8 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="cdptools.sr_models.html" class="btn btn-neutral float-left" title="cdptools.sr_models package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -257,106 +254,86 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
-<p>Contributions are welcome, and they are greatly appreciated! Every little bit
-helps, and credit will always be given.</p>
-<div class="section" id="get-started">
-<h2>Get Started!<a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h2>
-<p>Ready to contribute? Here’s how to set up <code class="docutils literal notranslate"><span class="pre">cdptools</span></code> for local development.</p>
-<ul>
-<li><p>Fork the <code class="docutils literal notranslate"><span class="pre">cdptools</span></code> repo on GitHub.</p></li>
-<li><p>Clone your fork locally:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>$ git clone --recurse-submodules git@github.com:{your_name_here}/cdptools.git
-</pre></div>
-</div>
-</li>
-<li><p>Add upstream remote:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>$ cd cdptools/
-$ git remote add upstream https://github.com/CouncilDataProject/cdptools.git
-$ git fetch upstream master
-</pre></div>
-</div>
-</li>
-<li><p>Install the project in editable mode. (It is also recommended to work in a virtualenv or anaconda environment):</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>$ pip install -e .[dev]
-</pre></div>
-</div>
-</li>
-<li><p>Create a branch for local development:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>   $ git checkout -b {your_development_type}/short-description
-
-Ex: feature/read-tiff-files or bugfix/handle-file-not-found\ :raw-html-m2r:`&lt;br&gt;`
-Now you can make your changes locally.\ :raw-html-m2r:`&lt;br&gt;`
-</pre></div>
-</div>
-</li>
-<li><p>When you’re done making changes, check that your changes pass linting and tests, including testing other Python
-versions with make:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>$ make build
-</pre></div>
-</div>
-</li>
-<li><p>Commit your changes and push your branch to GitHub.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>   $ git add .
-   $ git commit -m &quot;Resolves gh-###. Your detailed description of your changes.&quot;
-
-If there are new commits from upstream&#39;s master since your last git pull, you need to merge the latest commits from upstream&#39;s master into your branch and resolve any merge conflicts locally. If there are no new commits from upstream&#39;s master, you can skip step a, b, and c.
-
-a. Get the latest commits:
-</pre></div>
-</div>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>   $ git checkout master
-   $ git pull --rebase upstream master
-
-b. Merge the latest commits into your branch:
-</pre></div>
-</div>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>   $ git checkout {your_development_type}/short-description
-
-   $ git rebase master
-   or
-   $ git merge master
-
-c. Resolve any merge conflicts and if needed run ``make build`` again.
-
-Push your branch to GitHub:
-</pre></div>
-</div>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>$ git push origin {your_development_type}/short-description
-</pre></div>
-</div>
-</li>
-<li><p>Submit a pull request through the GitHub website.</p></li>
-<li><p>Once your branch has been merged to master, if you want to keep your fork and local repo clean, you can delete your branch.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>   $ git push origin --delete {your_development_type}/short-description
-   $ git branch -D {your_development_type}/short-description
-
-Keep your local and fork repo&#39;s master up-to-date with upstream&#39;s master:
-</pre></div>
-</div>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>$ git checkout master
-$ git pull --rebase upstream master
-$ git push origin master
-</pre></div>
-</div>
-</li>
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="unreleased">
+<h2>(unreleased)<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="new">
+<h3>New<a class="headerlink" href="#new" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>feature/add-clone-filestore-script  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/102">#102</a>) [Isaac
+Na]</p></li>
+<li><p>feature/process-single-event  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/124">#124</a>) [Isaac
+Na]</p></li>
 </ul>
 </div>
-<div class="section" id="deploying">
-<h2>Deploying<a class="headerlink" href="#deploying" title="Permalink to this headline">¶</a></h2>
-<p>A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed.
-Then run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make prepare-release
-git push
-git push --tags
-git branch -D stable
-git checkout -b stable
-git push --set-upstream origin stable -f
-</pre></div>
+<div class="section" id="fix">
+<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>bugfix/firebase-rejects-queries-with-long-strings  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/135">#135</a>)
+[JacksonMaxfield]</p></li>
+<li><p>bugfix/pipeline-updates  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/128">#128</a>)
+[JacksonMaxfield]</p></li>
+<li><p>bugfix/fix-webvtt-sr-model-speaker-annotation  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/119">#119</a>) [tohuynh]</p></li>
+<li><p>bugfix/future-proof-get-raw-transcript  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/112">#112</a>)
+[JacksonMaxfield]</p></li>
+<li><p>bugfix/fix-download-transcripts-target  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/110">#110</a>)
+[JacksonMaxfield]</p></li>
+<li><p>bugfix/transcript-utils-retrieval  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/106">#106</a>)
+[JacksonMaxfield]</p></li>
+<li><p>bugfix/parametrize-vtt-confidence  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/105">#105</a>)
+[JacksonMaxfield]</p></li>
+</ul>
 </div>
-<p>This will release a new package version on Git + GitHub and publish to PyPI.</p>
+<div class="section" id="other">
+<h3>Other<a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>admin/update-build-procedures  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/137">#137</a>)
+[JacksonMaxfield]</p></li>
+<li><p>ops/move-scraper-test-resources  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/134">#134</a>)
+[JacksonMaxfield]</p></li>
+<li><p>paper/update-affiliation  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/133">#133</a>) [Isaac
+Na]</p></li>
+<li><p>ops/test-seattle-parse-single-event-scraper  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/126">#126</a>) [Isaac
+Na]</p></li>
+<li><p>update affiliations [Nic]</p></li>
+<li><p>push updates to orcids and inst affiliations [Nic]</p></li>
+<li><p>Create paper.md [Nic]</p></li>
+<li><p>admin/update-contributing-doc  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/127">#127</a>) [tohuynh]</p></li>
+<li><p>admin/small-index-updates  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/114">#114</a>) [Amin]</p></li>
+<li><p>admin/pipeline-updates  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/123">#123</a>)
+[JacksonMaxfield]</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="v2-0-4-2019-12-31">
+<h2>v2.0.4 (2019-12-31)<a class="headerlink" href="#v2-0-4-2019-12-31" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id17">
+<h3>New<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>feature/add-timestamped-speaker-turns  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/101">#101</a>) [tohuynh]</p></li>
+<li><p>feature/wipe-target-database-before-cloning  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/97">#97</a>) [Isaac Na]</p></li>
+<li><p>feature/clone-db-with-credentials-or-project-id   (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/96">#96</a>) [Isaac Na]</p></li>
+</ul>
+</div>
+<div class="section" id="id21">
+<h3>Fix<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>bugfix/set-pypi-publish-to-master  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/104">#104</a>)
+[JacksonMaxfield]</p></li>
+</ul>
+</div>
+<div class="section" id="id23">
+<h3>Other<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>admin/various-changes-to-production  (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/103">#103</a>)
+[JacksonMaxfield]</p></li>
+<li><p>Update workflows and issue templates to follow cookiecutter updates
+(<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/99">#99</a>)
+[JacksonMaxfield]</p></li>
+<li><p>Database cloning functionality and Dockerfile fix   (<a class="reference external" href="https://github.com/CouncilDataProject/cdptools/pull/90">#90</a>) [Isaac Na]</p></li>
+</ul>
+</div>
 </div>
 </div>
 

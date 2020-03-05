@@ -169,6 +169,21 @@
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">(unreleased)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#new">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#fix">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#other">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id21">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id23">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
@@ -251,8 +266,718 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="cdptools-databases-cloud-firestore-database-module">
-<h2>cdptools.databases.cloud_firestore_database module<a class="headerlink" href="#cdptools-databases-cloud-firestore-database-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cdptools.databases.cloud_firestore_database">
+<span id="cdptools-databases-cloud-firestore-database-module"></span><h2>cdptools.databases.cloud_firestore_database module<a class="headerlink" href="#module-cdptools.databases.cloud_firestore_database" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.cloud_firestore_database.</code><code class="sig-name descname">CloudFirestoreDatabase</code><span class="sig-paren">(</span><em class="sig-param">project_id: Optional[str] = None</em>, <em class="sig-param">credentials_path: Union[str</em>, <em class="sig-param">pathlib.Path</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">name: Optional[str] = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cdptools.databases.database.Database" title="cdptools.databases.database.Database"><code class="xref py py-class docutils literal notranslate"><span class="pre">cdptools.databases.database.Database</span></code></a></p>
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_event">
+<code class="sig-name descname">get_event</code><span class="sig-paren">(</span><em class="sig-param">video_uri: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find an event using the primary key for events, a video uri.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all downstream data for an event.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_indexed_event_term">
+<code class="sig-name descname">get_indexed_event_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">event_id: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_indexed_event_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_indexed_event_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single indexed event term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – The string term to retrieve.</p></li>
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for the event that term was used during.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_indexed_minutes_item_term">
+<code class="sig-name descname">get_indexed_minutes_item_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">minutes_item_id: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_indexed_minutes_item_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_indexed_minutes_item_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single indexed minutes item term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – The string term to retrieve.</p></li>
+<li><p><strong>minutes_item_id</strong> (<em>str</em>) – The id for the minutes item that term was used in or discussed about.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_algorithm">
+<code class="sig-name descname">get_or_upload_algorithm</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">version: str</em>, <em class="sig-param">description: Optional[str] = None</em>, <em class="sig-param">source: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_algorithm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_algorithm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload an algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A name for the algorithm. Preferred, the full module path for the algorithm.</p></li>
+<li><p><strong>version</strong> (<em>str</em>) – A version string for the algorithm.</p></li>
+<li><p><strong>description</strong> (<em>Optional[str]</em>) – An optional description for the algorithm.</p></li>
+<li><p><strong>source</strong> (<em>Optional[str]</em>) – An optional source uri for the algorithm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_body">
+<code class="sig-name descname">get_or_upload_body</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">description: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the body (council, subcommittee, etc).</p></li>
+<li><p><strong>description</strong> (<em>Optional[str]:</em>) – An optional description of the body.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event">
+<code class="sig-name descname">get_or_upload_event</code><span class="sig-paren">(</span><em class="sig-param">body_id: str</em>, <em class="sig-param">event_datetime: datetime.datetime</em>, <em class="sig-param">source_uri: str</em>, <em class="sig-param">video_uri: str</em>, <em class="sig-param">agenda_file_uri: Optional[str] = None</em>, <em class="sig-param">minutes_file_uri: Optional[str] = None</em>, <em class="sig-param">legistar_event_id: Optional[int] = None</em>, <em class="sig-param">legistar_event_link: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload an event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body_id</strong> (<em>str</em>) – The id for the body this event occured in.</p></li>
+<li><p><strong>event_datetime</strong> (<em>datetime</em>) – The datetime this event occured at.</p></li>
+<li><p><strong>source_uri</strong> (<em>str</em>) – The primary uri for where this event info or video was retrieved from.</p></li>
+<li><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all downstream data for an event.</p></li>
+<li><p><strong>agenda_file_uri</strong> (<em>Optional[str]</em>) – If an agenda file is available for the event, it is recommended to store a uri to the file.</p></li>
+<li><p><strong>minutes_file_uri</strong> (<em>Optional[str]</em>) – If a minutes file is available for the event, it is recommened to store a uri to the file.</p></li>
+<li><p><strong>legistar_event_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventId</cite>.</p></li>
+<li><p><strong>legistar_event_link</strong> (<em>Optional[str]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store a link to the
+event details for this event but in Legistar’s system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, datetime, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event_entity">
+<code class="sig-name descname">get_or_upload_event_entity</code><span class="sig-paren">(</span><em class="sig-param">event_id: str</em>, <em class="sig-param">label: str</em>, <em class="sig-param">value: Any</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_event_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload an event entity. Because entities can be values that are other than strings, most databases,
+should cast this to a string prior to storage. This is also why will store the data type (dtype).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for which event this entity was referenced in.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The label for the entity. Ex: ‘location’, ‘person’, etc.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value for the entity. Ex: ‘Bruce Harrell’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event_minutes_item">
+<code class="sig-name descname">get_or_upload_event_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">event_id: str</em>, <em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">index: int</em>, <em class="sig-param">decision: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_event_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event_minutes_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload the join of an event and a minutes item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for the event this minutes item was referenced in.</p></li>
+<li><p><strong>minutes_item</strong> (<em>id: str</em>) – The id for the minutes item that was referenced.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – The integer index for when this minutes item should be placed in the minutes of an event.</p></li>
+<li><p><strong>decision</strong> (<em>Optional[str]</em>) – If the minutes item was a vote, what was the overall outcome for this minutes item.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event_topic">
+<code class="sig-name descname">get_or_upload_event_topic</code><span class="sig-paren">(</span><em class="sig-param">event_id: str</em>, <em class="sig-param">topic: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_event_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload an event topic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for which event this topic is related to.</p></li>
+<li><p><strong>topic</strong> (<em>str</em>) – The term or terms (as a string) that define the topic as a unique topic.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_file">
+<code class="sig-name descname">get_or_upload_file</code><span class="sig-paren">(</span><em class="sig-param">uri: str</em>, <em class="sig-param">filename: Optional[str] = None</em>, <em class="sig-param">description: Optional[str] = None</em>, <em class="sig-param">content_type: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a file (to the database table, not a file store).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uri</strong> (<em>str</em>) – A uri to the file.</p></li>
+<li><p><strong>filename</strong> (<em>Optional[str]</em>) – An optional filename to store with the file.</p></li>
+<li><p><strong>description</strong> (<em>Optional[str]</em>) – An optional description for the file.</p></li>
+<li><p><strong>content_type</strong> (<em>Optional[str]</em>) – An optional content type for the file.
+Preferred to use MIME types: <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_minutes_item">
+<code class="sig-name descname">get_or_upload_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">matter: Optional[str] = None</em>, <em class="sig-param">title: Optional[str] = None</em>, <em class="sig-param">legistar_event_item_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_minutes_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a minutes item. In Legistar this is commonly referred to as an event item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A name for the minutes item. Ex: “Appointment of Rene J. Peters, Jr.”</p></li>
+<li><p><strong>matter</strong> (<em>Optional[str]</em>) – A matter name for the minutes item. Ex: “Appt 01373”</p></li>
+<li><p><strong>title</strong> (<em>Optional[str]</em>) – A human readable name for the minutes item. Ex: “A resolution regarding adoption of a Green New Deal.”</p></li>
+<li><p><strong>legistar_event_item_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventItemId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_minutes_item_file">
+<code class="sig-name descname">get_or_upload_minutes_item_file</code><span class="sig-paren">(</span><em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">uri: str</em>, <em class="sig-param">name: Optional[str] = None</em>, <em class="sig-param">legistar_matter_attachment_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_minutes_item_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_minutes_item_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a minutes item file. Commonly, minutes items have an associated file such as a presentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minutes_item_id</strong> (<em>str</em>) – A minutes item id this file is associated with.</p></li>
+<li><p><strong>uri</strong> (<em>str</em>) – A uri that can be used to access this file.</p></li>
+<li><p><strong>name</strong> (<em>Optional[str]</em>) – A name for the file.</p></li>
+<li><p><strong>legistar_matter_attachment_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the
+<cite>MatterAttachmentId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_person">
+<code class="sig-name descname">get_or_upload_person</code><span class="sig-paren">(</span><em class="sig-param">full_name: str</em>, <em class="sig-param">email: str</em>, <em class="sig-param">phone: Optional[str] = None</em>, <em class="sig-param">website: Optional[str] = None</em>, <em class="sig-param">legistar_person_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_person" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a city council member (person).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>full_name</strong> (<em>str</em>) – The full name of the city council member.</p></li>
+<li><p><strong>email</strong> (<em>str</em>) – The email of the city council member.</p></li>
+<li><p><strong>phone</strong> (<em>Optional[str]</em>) – The phone number of the city council member.</p></li>
+<li><p><strong>website</strong> (<em>Optional[str]</em>) – The website url of the city council member.</p></li>
+<li><p><strong>legistar_person_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>PersonId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run">
+<code class="sig-name descname">get_or_upload_run</code><span class="sig-paren">(</span><em class="sig-param">algorithm_id: str</em>, <em class="sig-param">begin: datetime.datetime</em>, <em class="sig-param">completed: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run.</p>
+<p>Used as a method for log tracking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>algorithm_id</strong> (<em>str</em>) – The id for the algorithm that ran.</p></li>
+<li><p><strong>begin</strong> (<em>datetime</em>) – The datetime that the algorithm started processing.</p></li>
+<li><p><strong>completed</strong> (<em>datetime</em>) – The datetime that the algorithm finished processing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, datetime]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run_input">
+<code class="sig-name descname">get_or_upload_run_input</code><span class="sig-paren">(</span><em class="sig-param">run_id: str</em>, <em class="sig-param">dtype: str</em>, <em class="sig-param">value: Any</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_run_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> (<em>str</em>) – The id for which run this parameter was used for.</p></li>
+<li><p><strong>dtype</strong> (<em>str</em>) – The data type for the value used.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value for the input.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run_input_file">
+<code class="sig-name descname">get_or_upload_run_input_file</code><span class="sig-paren">(</span><em class="sig-param">run_id: str</em>, <em class="sig-param">file_id: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_run_input_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run_input_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run input file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> (<em>str</em>) – The id for which run this file was used for.</p></li>
+<li><p><strong>file_id</strong> (<em>str</em>) – The id for the file used as an input.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run_output">
+<code class="sig-name descname">get_or_upload_run_output</code><span class="sig-paren">(</span><em class="sig-param">run_id: str</em>, <em class="sig-param">dtype: str</em>, <em class="sig-param">value: Any</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_run_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> (<em>str</em>) – The id for which run this parameter was output from.</p></li>
+<li><p><strong>dtype</strong> (<em>str</em>) – The data type for the value used.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value for the output.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run_output_file">
+<code class="sig-name descname">get_or_upload_run_output_file</code><span class="sig-paren">(</span><em class="sig-param">run_id: str</em>, <em class="sig-param">file_id: str</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_run_output_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_run_output_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a run output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_id</strong> (<em>str</em>) – The id for which run this file was created from.</p></li>
+<li><p><strong>file_id</strong> (<em>str</em>) – The id for the file created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_transcript">
+<code class="sig-name descname">get_or_upload_transcript</code><span class="sig-paren">(</span><em class="sig-param">event_id: str</em>, <em class="sig-param">file_id: str</em>, <em class="sig-param">confidence: Optional[float] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_transcript"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_transcript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a transcript (to the database, a file store).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for the event that this transcript is for.</p></li>
+<li><p><strong>file_id</strong> (<em>str</em>) – The id for the file that contains the transcript data.</p></li>
+<li><p><strong>confidence</strong> (<em>Optional[float]</em>) – If available, a float / double value to store with the transcript for the confidence of the transcription.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_vote">
+<code class="sig-name descname">get_or_upload_vote</code><span class="sig-paren">(</span><em class="sig-param">person_id: str</em>, <em class="sig-param">event_minutes_item_id: str</em>, <em class="sig-param">decision: str</em>, <em class="sig-param">legistar_event_item_vote_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_vote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or upload a person’s vote on a minutes item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>person_id</strong> (<em>str</em>) – The id of the person who voted on an minutes item already tied to an event. (event_minutes_item)</p></li>
+<li><p><strong>event_minutes_item_id</strong> (<em>str</em>) – The id of the minutes item and event join that was voted on.</p></li>
+<li><p><strong>decision</strong> (<em>str</em>) – This individual’s personal decision on the minutes item.</p></li>
+<li><p><strong>legistar_event_item_vote_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>PersonId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, Optional[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.search_events">
+<code class="sig-name descname">search_events</code><span class="sig-paren">(</span><em class="sig-param">query: str</em><span class="sig-paren">)</span> &#x2192; List[cdptools.databases.database.Match]<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.search_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.search_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the stored indexed event terms to query for events given a query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for events using the already stored indexed event term table.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>matches</strong> – An list of match objects sorted in most to least relevant order.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#cdptools.databases.database.Match" title="cdptools.databases.database.Match">Match</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.search_minutes_items">
+<code class="sig-name descname">search_minutes_items</code><span class="sig-paren">(</span><em class="sig-param">query: str</em><span class="sig-paren">)</span> &#x2192; List[cdptools.databases.database.Match]<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.search_minutes_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.search_minutes_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the stored indexed minutes item terms to query for events given a query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for minutes items using the already stored indexed minutes items term
+table.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>matches</strong> – An list of match objects sorted in most to least relevant order.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#cdptools.databases.database.Match" title="cdptools.databases.database.Match">Match</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_row_by_id">
+<code class="sig-name descname">select_row_by_id</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">id: str</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.select_row_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_row_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get row from a table by looking up the value by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data by id from.</p></li>
+<li><p><strong>id</strong> (<em>str</em>) – The id of the data to retrieve data for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>If the row was found, the data from that row is returned as a dictionary. If not found, None is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_dataframe">
+<code class="sig-name descname">select_rows_as_dataframe</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">filters: Optional[List[Union[cdptools.databases.database.WhereCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple]]] = None</em>, <em class="sig-param">order_by: Union[cdptools.databases.database.OrderCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">str</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">limit: Optional[int] = None</em>, <em class="sig-param">set_id_to_index: bool = False</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.select_rows_as_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dataframe of rows from a table optionally using filters (a list of where conditions), ordering, and limit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data from.</p></li>
+<li><p><strong>filters</strong> (<em>Optional[List[Union[WhereCondition, List, Tuple]]]</em>) – A list of filters (where conditions) to add filter down the query.</p></li>
+<li><p><strong>order_by</strong> (<em>Optional[Union[OrderCondition, List, Tuple, str]]</em>) – An order by condition to order the results by before returning.</p></li>
+<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query provided.
+Commonly, running queries without credentials will have a default limit value.</p></li>
+<li><p><strong>set_id_to_index</strong> (<em>bool</em>) – Boolean value to determine whether or not the unique id values for this data should be used as the index of
+the dataframe.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a pandas DataFrame, where each rwow is a unique row from the
+table queried. If no rows are found, returns an empty DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_dictionary">
+<code class="sig-name descname">select_rows_as_dictionary</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">filters: Optional[List[Union[cdptools.databases.database.WhereCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple]]] = None</em>, <em class="sig-param">order_by: Union[cdptools.databases.database.OrderCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">str</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">limit: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, Any]]<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.select_rows_as_dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dictionary of rows from a table optionally using filters (a list of where conditions), ordering, and
+limit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data from.</p></li>
+<li><p><strong>filters</strong> (<em>Optional[List[Union[WhereCondition, List, Tuple]]]</em>) – A list of filters (where conditions) to add filter down the query.</p></li>
+<li><p><strong>order_by</strong> (<em>Optional[Union[OrderCondition, List, Tuple, str]]</em>) – An order by condition to order the results by before returning.</p></li>
+<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query provided.
+Commonly, running queries without credentials will have a default limit value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a dictionary mapping unique id to a dictionary of that rows data from
+the table queried. If no rows are found, returns an empty dictionary.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Dict[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_list">
+<code class="sig-name descname">select_rows_as_list</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">filters: Optional[List[Union[cdptools.databases.database.WhereCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple]]] = None</em>, <em class="sig-param">order_by: Union[cdptools.databases.database.OrderCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">str</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">limit: Optional[int] = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.select_rows_as_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data from.</p></li>
+<li><p><strong>filters</strong> (<em>Optional[List[Union[WhereCondition, List, Tuple]]]</em>) – A list of filters (where conditions) to add filter down the query.</p></li>
+<li><p><strong>order_by</strong> (<em>Optional[Union[OrderCondition, List, Tuple, str]]</em>) – An order by condition to order the results by before returning.</p></li>
+<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query provided.
+Commonly, running queries without credentials will have a default limit value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a List of Dictionaries, where each dictionary is a unique row from the
+table queried. If no rows are found, returns an empty list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Dict[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.tables">
+<em class="property">property </em><code class="sig-name descname">tables</code><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic database tables property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>_tables</strong> – A list of table names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.upload_or_update_indexed_event_term">
+<code class="sig-name descname">upload_or_update_indexed_event_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">event_id: str</em>, <em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.upload_or_update_indexed_event_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.upload_or_update_indexed_event_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload or update a single indexed event term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – A term used during an event.</p></li>
+<li><p><strong>event_id</strong> (<em>str</em>) – The id for the event the term was used during.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that event that indicates that terms relevance to that event.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.upload_or_update_indexed_minutes_item_term">
+<code class="sig-name descname">upload_or_update_indexed_minutes_item_term</code><span class="sig-paren">(</span><em class="sig-param">term: str</em>, <em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.upload_or_update_indexed_minutes_item_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.upload_or_update_indexed_minutes_item_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload or update a single indexed minutes_item item term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – A term used during an event.</p></li>
+<li><p><strong>minutes_item_id</strong> (<em>str</em>) – The id for the minutes item that term was used in or discussed about.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that minutes item that indicates that terms relevance to that
+minutes item.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Union[str, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.wipe_table">
+<code class="sig-name descname">wipe_table</code><span class="sig-paren">(</span><em class="sig-param">table</em>, <em class="sig-param">batch_size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.wipe_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.wipe_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wipe the input table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table</strong> (<em>str</em>) – A string tablename in the database to be deleted.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.cloud_firestore_database.</code><code class="sig-name descname">CloudFirestoreWhereOperators</code><a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreWhereOperators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.contains">
+<code class="sig-name descname">contains</code><em class="property">: str</em><em class="property"> = 'ARRAY_CONTAINS'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.contains" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.eq">
+<code class="sig-name descname">eq</code><em class="property">: str</em><em class="property"> = 'EQUAL'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.eq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.gt">
+<code class="sig-name descname">gt</code><em class="property">: str</em><em class="property"> = 'GREATER_THAN'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.gt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.gteq">
+<code class="sig-name descname">gteq</code><em class="property">: str</em><em class="property"> = 'GREATER_THAN_OR_EQUAL'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.gteq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.lt">
+<code class="sig-name descname">lt</code><em class="property">: str</em><em class="property"> = 'LESS_THAN'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.lt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.lteq">
+<code class="sig-name descname">lteq</code><em class="property">: str</em><em class="property"> = 'LESS_THAN_OR_EQUAL'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreWhereOperators.lteq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cdptools.databases.cloud_firestore_database.NoCredResponseTypes">
+<em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.cloud_firestore_database.</code><code class="sig-name descname">NoCredResponseTypes</code><a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#NoCredResponseTypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.NoCredResponseTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.NoCredResponseTypes.boolean">
+<code class="sig-name descname">boolean</code><em class="property">: str</em><em class="property"> = 'booleanValue'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.NoCredResponseTypes.boolean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.NoCredResponseTypes.double">
+<code class="sig-name descname">double</code><em class="property">: str</em><em class="property"> = 'doubleValue'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.NoCredResponseTypes.double" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.NoCredResponseTypes.dt">
+<code class="sig-name descname">dt</code><em class="property">: str</em><em class="property"> = 'timestampValue'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.NoCredResponseTypes.dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.NoCredResponseTypes.integer">
+<code class="sig-name descname">integer</code><em class="property">: str</em><em class="property"> = 'integerValue'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.NoCredResponseTypes.integer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.NoCredResponseTypes.null">
+<code class="sig-name descname">null</code><em class="property">: str</em><em class="property"> = 'nullValue'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.NoCredResponseTypes.null" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cdptools.databases.cloud_firestore_database.NoCredResponseTypes.string">
+<code class="sig-name descname">string</code><em class="property">: str</em><em class="property"> = 'stringValue'</em><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.NoCredResponseTypes.string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-cdptools.databases.database">
 <span id="cdptools-databases-database-module"></span><h2>cdptools.databases.database module<a class="headerlink" href="#module-cdptools.databases.database" title="Permalink to this headline">¶</a></h2>

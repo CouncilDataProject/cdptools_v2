@@ -59,9 +59,9 @@ versions with make:
     or
     $ git merge master
     ```
-    
+
     c. Resolve any merge conflicts and if needed run `make build` again.
-    
+
     Push your branch to GitHub:
     ```
     $ git push origin {your_development_type}/short-description
@@ -75,7 +75,7 @@ versions with make:
     $ git push origin --delete {your_development_type}/short-description
     $ git branch -D {your_development_type}/short-description
     ```
- 
+
     Keep your local and fork repo's master up-to-date with upstream's master:
     ```
     $ git checkout master
@@ -89,10 +89,13 @@ A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed.
 Then run:
 
-```
-$ bumpversion patch # possible: major / minor / patch
-$ git push
-$ git push --tags
+```bash
+make prepare-release
+git push
+git push --tags
+git branch -D stable
+git checkout -b stable
+git push --set-upstream origin stable -f
 ```
 
-Make and merge a PR to branch `stable` and GitHub will then deploy to PyPI once merged.
+This will release a new package version on Git + GitHub and publish to PyPI.

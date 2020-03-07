@@ -137,8 +137,34 @@ seat_id: {
 ```
 
 ### Matter
-A matter is specifically a legislative matter. A bill, resolution, initiative, etc. It has a sponser which may be a
-person or a body.
+A matter is specifically a legislative matter. A bill, resolution, initiative, etc.
+```
+matter_id: {
+    name: str
+    matter_type_id: str
+    title: str
+    status: str
+    agenda_date: datetime
+    keywords: [
+        {
+            id: str
+            phrase: str
+        }
+    ]
+    external_source_id: int
+    updated: datetime
+}
+```
+
+### Matter Type
+A matter type can be Council Bill, Resolution, Appointment, etc.
+```
+matter_type_id: {
+    name: str
+    external_source_id: int
+    created: datetime
+}
+```
 
 ### Minutes Item
 A minutes item is anything found on the agenda / minutes.

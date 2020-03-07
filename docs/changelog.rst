@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-(unreleased)
-------------
+v2.0.5 (2020-03-07)
+-------------------
 
 New
 ~~~
@@ -39,6 +39,9 @@ Fix
 
 Other
 ~~~~~
+- admin/update-build-procedures  (`#137
+  <https://github.com/CouncilDataProject/cdptools/pull/137>`_)
+  [JacksonMaxfield]
 - ops/move-scraper-test-resources  (`#134
   <https://github.com/CouncilDataProject/cdptools/pull/134>`_)
   [JacksonMaxfield]

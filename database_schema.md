@@ -144,7 +144,11 @@ matter_id: {
     matter_type_id: str
     title: str
     status: str
-    agenda_date: datetime
+    most_recent_event: {
+        id: str
+        body: str
+        datetime: datetime
+    }
     keywords: [
         {
             id: str

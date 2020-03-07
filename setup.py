@@ -122,6 +122,6 @@ setup(
     tests_require=test_requirements,
     extras_require=extra_requirements,
     url="https://github.com/CouncilDataProject/cdptools",
-    version="2.0.4",
+    version="2.0.5",
     zip_safe=False,
 )

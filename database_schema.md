@@ -153,6 +153,7 @@ matter_id: {
     ]
     external_source_id: int
     updated: datetime
+    created: datetime
 }
 ```
 

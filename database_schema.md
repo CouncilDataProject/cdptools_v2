@@ -149,6 +149,11 @@ matter_id: {
         body: str
         datetime: datetime
     }
+    next_event : {
+        id: str
+        body: str
+        datetime: datetime
+    }
     keywords: [
         {
             id: str

@@ -136,6 +136,76 @@ seat_id: {
 }
 ```
 
+### Minutes Item
+```
+minutes_item: {
+    minutes_item_file_id: str
+    minutes_item_id: str
+    name: str
+    uri: str
+    title: str
+    matter: {
+      matter_id: str
+      matter_name: str
+      matter_title: str
+    }
+    created: datetime
+}
+```
+
+### Event Minutes Item
+```
+event_minutes_item: {
+    event_minutes_item_id: str
+    event_id: str
+    minutes_item_id: str
+    index: int
+    decision: str
+    matter: {
+      matter_id: str
+      matter_name: str
+    }
+    votes: [
+        {
+            vote_id: str
+            person_id: str
+            person_name: str
+            vote_decision: str
+        }
+    ]
+}
+```
+
+### Vote
+```
+vote: {
+    matter: {
+        matter_id: str
+        matter_title: str
+        matter_name: str
+        matter_type_name: str
+    }
+    event: {
+        event_id: str
+        event_body_name: str
+        event_datetime: datetime
+        event_minutes_item_id: str
+    }
+    minutes_item: {
+        minutes_item_id: str
+        minutes_item_decision: str
+    }
+    person: {
+        person_id: str
+        person_full_name: str
+    }
+    vote_decision: str
+    external_vote_item_id: str
+    created: datetime
+    is_majority: bool
+}
+```
+
 ### Matter
 A matter is specifically a legislative matter. A bill, resolution, initiative, etc.
 ```

@@ -47,10 +47,9 @@ interactive_requirements = [
 requirements = [
     "beautifulsoup4==4.8.0",
     "ffmpeg-python==0.2.0",
-    "fuzzywuzzy==0.17.0",
+    "rapidfuzz==0.2.1",
     "nltk==3.4.5",
     "pandas==0.25.0",
-    "python-Levenshtein==0.12.0",
     "requests[security]==2.22.0",
     "schedule==0.6.0",
     "setuptools>=44.0.0",

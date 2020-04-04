@@ -139,16 +139,16 @@ seat_id: {
 ### Minutes Item
 ```
 minutes_item: {
-    minutes_item_file_id: str
     minutes_item_id: str
     name: str
-    uri: str
     title: str
+    description: str
     matter: {
       matter_id: str
       matter_name: str
       matter_title: str
     }
+    external_source_id: str
     created: datetime
 }
 ```
@@ -158,12 +158,16 @@ minutes_item: {
 event_minutes_item: {
     event_minutes_item_id: str
     event_id: str
-    minutes_item_id: str
+    minutes_item: {
+      minutes_item_id: str
+      minutes_item_name: str
+    }
     index: int
     decision: str
     matter: {
       matter_id: str
       matter_name: str
+      matter_title: str
     }
     votes: [
         {
@@ -171,6 +175,13 @@ event_minutes_item: {
             person_id: str
             person_name: str
             vote_decision: str
+        }
+    ]
+    files: [
+        {
+           event_minutes_item_file_id: str //can probably just shortened the field name to just id
+           name: str
+           uri: str
         }
     ]
 }

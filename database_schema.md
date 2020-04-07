@@ -200,11 +200,10 @@ vote: {
         event_id: str
         event_body_name: str
         event_datetime: datetime
-        event_minutes_item_id: str
     }
-    minutes_item: {
-        minutes_item_id: str
-        minutes_item_decision: str
+    event_minutes_item: {
+        event_minutes_item_id: str
+        event_minutes_item_decision: str
     }
     person: {
         person_id: str

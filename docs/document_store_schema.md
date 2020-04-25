@@ -31,6 +31,8 @@ event_id: {
         {
             id: str
             name: str
+            title: str
+            type: str
             decision: str
         }
     ]
@@ -223,6 +225,7 @@ minutes_item_id: {
       id: str
       name: str
       title: str
+      type: str
     }
     external_source_id: optional[any]
     created: datetime
@@ -252,6 +255,7 @@ event_minutes_item_id: {
       id: str
       name: str
       title: str
+      type: str
     }
     votes: [
         {
@@ -292,8 +296,8 @@ _Schema_
 vote_id: {
     matter: {
         id: str
-        title: str
         name: str
+        title: str
         type: str
     }
     event: {

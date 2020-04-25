@@ -4,7 +4,7 @@
 An event can be a normally scheduled meeting, a special event such as a press conference or election debate, and, can be
 upcoming or historical.
 
-### Schema
+_Schema_
 ```
 event_id: {
     body: {
@@ -54,9 +54,9 @@ event_id: {
 }
 ```
 
-### Examples
+_Examples_
 
-### Notes
+_Notes_
 Because the `event` collection can contain future events, their may be no thumbnail for the video. In this case, having
 a default thumbnail is suggested. Once an event have occurred, do not make a new event, but update the same event.
 Instead of labeling them as optional, any of the list attributes are rather just empty lists until filled.
@@ -66,7 +66,7 @@ Instead of labeling them as optional, any of the list attributes are rather just
 Primarily the councilors, this could technically include the mayor or city manager, or any other "normal" presenters and
 attendees of meetings.
 
-### Schema
+_Schema_
 ```
 person_id: {
     router_id: optional[str]
@@ -99,7 +99,7 @@ person_id: {
 }
 ```
 
-### Examples
+_Examples_
 
 
 ## Body
@@ -107,7 +107,7 @@ A body, also known as committee, is a subset of city council members that stands
 An example would be the Seattle "Governance and Education" committee which consists of 6 of the 9 city council members.
 This can however include general categories such as "Debate", or "Press Conference", etc.
 
-### Schema
+_Schema_
 ```
 body_id: {
     name: str
@@ -123,13 +123,13 @@ body_id: {
 }
 ```
 
-### Examples
+_Examples_
 
 
 ## File
 A collection to coordinate file details between a database and file store.
 
-### Schema
+_Schema_
 ```
 file_id: {
     uri: str
@@ -140,13 +140,13 @@ file_id: {
 }
 ```
 
-### Examples
+_Examples_
 
 
 ## Transcript
 The primary transcript for an event.
 
-### Schema
+_Schema_
 ```
 transcript_id: {
     event_id: str
@@ -156,13 +156,13 @@ transcript_id: {
 }
 ```
 
-### Examples
+_Examples_
 
 
 ## Seat
 A seat is an electable office on the City Council or Executive position.
 
-### Schema
+_Schema_
 ```
 seat_id: {
     name: str
@@ -174,9 +174,9 @@ seat_id: {
 }
 ```
 
-### Examples
+_Examples_
 
-### Notes
+_Notes_
 These are managed from a pre-populate database script that should be ran prior to any other "streaming" data entering
 the system.
 
@@ -187,7 +187,7 @@ For example: a person has two terms as city council member for D4 then a term as
 Roles can also be tied to committee chairs. For example: a council member spends a term on the transportation committee
 and then spends a term on the finance committee.
 
-### Schema
+_Schema_
 ```
 role_id: {
     person: {
@@ -207,19 +207,17 @@ role_id: {
 }
 ```
 
-### Examples
+_Examples_
 
 
 ## Minutes Item
 A minutes item is anything found on the agenda / minutes. This can be a matter but it can be a presentation or budget
 file, etc
 
-### Schema
+_Schema_
 ```
 minutes_item_id: {
-    minutes_item_id: str
     name: str
-    title: str
     description: optional[str]
     matter: {
       id: str
@@ -231,16 +229,16 @@ minutes_item_id: {
 }
 ```
 
-### Examples
+_Examples_
 
-### Notes
+_Notes_
 The `matter` field is optional based off if the minutes is tied to a matter or not.
 
 
 ## Event Minutes Item
 A reference tying a specific minutes item to a specific event.
 
-### Schema
+_Schema_
 ```
 event_minutes_item_id: {
     event_id: str
@@ -272,9 +270,9 @@ event_minutes_item_id: {
 }
 ```
 
-### Examples
+_Examples_
 
-### Notes
+_Notes_
 Similar to `Minutes Item`, `matter`, `votes`, and `files` are all optional depending on if they are actually present.
 
 These files can be thought are any supporting document for a specific events minutes item. Previously this was on the
@@ -289,7 +287,7 @@ local municipality.
 ## Vote
 A reference typing a specific person, and an event minutes item together.
 
-### Schema
+_Schema_
 ```
 vote_id: {
     matter: {
@@ -318,13 +316,13 @@ vote_id: {
 }
 ```
 
-### Examples
+_Examples_
 
 
 ## Matter
 A matter is specifically a legislative matter. A bill, resolution, initiative, etc.
 
-### Schema
+_Schema_
 ```
 matter_id: {
     name: str
@@ -356,16 +354,16 @@ matter_id: {
 }
 ```
 
-### Examples
+_Examples_
 
-### Notes
+_Notes_
 Depending on if the matter has gone through council yet, `most_recent_event` and `next_event` can be optional.
 
 
 ## Matter Type
 A matter type can be Council Bill, Resolution, Appointment, etc.
 
-### Schema
+_Schema_
 ```
 matter_type_id: {
     name: str
@@ -374,7 +372,7 @@ matter_type_id: {
 }
 ```
 
-### Examples
+_Examples_
 
 ---
 

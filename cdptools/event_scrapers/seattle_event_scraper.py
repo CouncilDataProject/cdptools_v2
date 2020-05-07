@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import requests
 from bs4 import BeautifulSoup
-from fuzzywuzzy import process
+from rapidfuzz import process
 
 from ..legistar_utils import events as legistar_event_tools
 from . import exceptions

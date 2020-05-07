@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Union
 
 import requests
-from fuzzywuzzy import fuzz
+from rapidfuzz import fuzz
 
 ###############################################################################
 
@@ -134,7 +134,7 @@ def get_matching_legistar_event_by_minutes_match(
     for the list provided. An example of this function being used may be found in SeattleEventScraper, but as a general
     use case, this will be used when a city has two separate systems for storing video and storing legistar data and
     you need to match up the video data with the legistar data. Event matching is determined by minutes item text set
-    difference. For details, on that algorithm, look at `fuzzywuzzy.fuzz.token_set_ratio`.
+    difference. For details, on that algorithm, look at `rapidfuzz.fuzz.token_set_ratio`.
 
     Parameters
     ----------

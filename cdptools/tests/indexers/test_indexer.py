@@ -338,6 +338,26 @@ def test_term_is_end_of_sentence(term, expected):
         3,
         "four words no punctuation"
     ),
+    (
+        [
+            "four",
+            "words.",
+            "yes",
+            "punctuation"
+        ],
+        1,
+        "four words."
+    ),
+    (
+        [
+            "four",
+            "words.",
+            "yes",
+            "punctuation"
+        ],
+        3,
+        "yes punctuation"
+    ),
     pytest.param(
         [
             "But",

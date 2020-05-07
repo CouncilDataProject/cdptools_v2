@@ -38,7 +38,7 @@ class Args(argparse.Namespace):
 def pass_through(row, target_db, table):
     row.pop('updated', None)
     row.pop('created', None)
-    row.pop(str(table)+'_id', None)
+    row.pop(f"{table}_id", None)
     target_db._cdp_table_to_function_dict[table](**row)
 
 

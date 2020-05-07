@@ -13,10 +13,10 @@ from . import exceptions
 
 
 cdp_tables = [
-        'minutes_item_file', 'vote', 'person', 'run_input',
-        'indexed_minutes_item_term', 'minutes_item', 'event_minutes_item',
-        'run', 'run_output', 'transcript', 'file', 'run_input_file', 'algorithm',
-        'indexed_event_term', 'event', 'body', 'run_output_file']
+    'minutes_item_file', 'vote', 'person', 'run_input',
+    'indexed_minutes_item_term', 'minutes_item', 'event_minutes_item',
+    'run', 'run_output', 'transcript', 'file', 'run_input_file', 'algorithm',
+    'indexed_event_term', 'event', 'body', 'run_output_file']
 
 
 class WhereCondition(NamedTuple):

@@ -24,6 +24,7 @@ dev_requirements = [
     "bumpversion>=0.5.3",
     "coverage>=5.0a4",
     "flake8>=3.7.7",
+    "gitchangelog>=3.0.4",
     "ipython>=7.5.0",
     "m2r>=0.2.1",
     "pytest>=4.3.0",
@@ -50,8 +51,9 @@ requirements = [
     "nltk==3.4.5",
     "pandas==0.25.0",
     "python-Levenshtein==0.12.0",
-    "requests==2.22.0",
+    "requests[security]==2.22.0",
     "schedule==0.6.0",
+    "setuptools>=44.0.0",
     "tika==1.19",
     "webvtt-py==0.4.3",
     "truecase==0.0.5"
@@ -62,6 +64,7 @@ extra_requirements = [
 ]
 
 seattle_requirements = [
+    "cryptography>=2.8",
     "firebase-admin==2.17.0",
     "google-cloud-speech==1.2.0",
     "google-cloud-storage==1.17.0"
@@ -102,7 +105,9 @@ setup(
     entry_points={
         "console_scripts": [
             "run_cdp_pipeline=cdptools.bin.run_cdp_pipeline:main",
-            "clone_db=cdptools.bin.clone_db:main"
+            "clone_db=cdptools.bin.clone_db:main",
+            "process_single_event=cdptools.bin.process_single_event:main",
+            "clone_file_store=cdptools.bin.clone_file_store:main"
         ],
     },
     install_requires=requirements,
@@ -117,6 +122,6 @@ setup(
     tests_require=test_requirements,
     extras_require=extra_requirements,
     url="https://github.com/CouncilDataProject/cdptools",
-    version="2.0.4",
+    version="2.0.5",
     zip_safe=False,
 )

@@ -296,7 +296,7 @@ class Indexer(ABC):
 
         # Remove stopwords
         joined_stopwords = "|".join(STOPWORDS)
-        cleaned_transcript = re.sub(r"\b("+joined_stopwords+r")\b", "", cleaned_transcript)
+        cleaned_transcript = re.sub(r"\b(" + joined_stopwords + r")\b", "", cleaned_transcript)
 
         # Remove gaps in string
         cleaned_transcript = re.sub(r" {2,}", " ", cleaned_transcript)

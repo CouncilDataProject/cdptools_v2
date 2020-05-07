@@ -6,7 +6,7 @@ import logging
 import shutil
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import requests
 
@@ -194,3 +194,51 @@ class FileStore(ABC):
         """
 
         return Path("/tmp/file.tmp")
+
+    @abstractmethod
+    def delete_file(
+        self,
+        filename: str
+    ) -> str:
+        """
+        Delete the file.
+
+        Parameters
+        ----------
+        filename: str
+            The name of the file in the file store to delete.
+
+        Returns
+        -------
+        deleted_file_name: str
+            Message containing the name of the file deleted.
+        """
+        return ""
+
+    @abstractmethod
+    def clear_bucket(
+        self
+    ) -> str:
+        """
+        Clear the bucket of all files.
+
+        Returns
+        -------
+        clear_bucket_message: str
+            Message notifying that the bucket has been cleared.
+        """
+        return ""
+
+    @abstractmethod
+    def list_all_files(
+        self
+    ) -> List[str]:
+        """
+        Returns a list of all filepaths in the file store bucket.
+
+        Returns
+        -------
+        file_path_list: List[str]
+            List of all the filepaths in the bucket.
+        """
+        return []

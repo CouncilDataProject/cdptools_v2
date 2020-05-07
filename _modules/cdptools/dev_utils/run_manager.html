@@ -168,16 +168,21 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">(unreleased)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#new">New</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#fix">Fix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id3">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">Fix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#other">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id23">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -372,7 +377,7 @@
             <span class="c1"># Resolve</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RunIO must be single files or values. Received </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RunIO must be single files or values. Received </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">io_type</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_input_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RunIO</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">value</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">io_type</span> <span class="o">==</span> <span class="s2">&quot;output&quot;</span><span class="p">:</span>
@@ -428,7 +433,7 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_io</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">io_type</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RunIO objects may only be initialized with a type and value. Received: </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RunIO objects may only be initialized with a type and value. Received: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="c1"># Make serializable</span>
             <span class="n">serializable_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_serializable_type</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">io_type</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">serializable_value</span><span class="p">:</span>
@@ -497,13 +502,13 @@
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_files</span><span class="p">:</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fs</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_remove_files</span><span class="p">)</span>
             <span class="n">input_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">uri</span><span class="p">))</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored {len(self._input_files)} input files in </span><span class="si">{self._fs}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> input files in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_fs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">output_files</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_files</span><span class="p">:</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fs</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_remove_files</span><span class="p">)</span>
             <span class="n">output_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">uri</span><span class="p">))</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored {len(self._output_files)} output files in </span><span class="si">{self._fs}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> output files in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_fs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">algorithm_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">get_or_upload_algorithm</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_algorithm_name</span><span class="p">,</span>
@@ -514,7 +519,7 @@
 
         <span class="c1"># Create run</span>
         <span class="n">run_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">get_or_upload_run</span><span class="p">(</span><span class="n">algorithm_details</span><span class="p">[</span><span class="s2">&quot;algorithm_id&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_began</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_completed</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created run: </span><span class="si">{run_details}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created run: </span><span class="si">{</span><span class="n">run_details</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># Create file inputs and outputs in db</span>
         <span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">input_files</span><span class="p">:</span>
@@ -538,7 +543,7 @@
         <span class="c1"># Handle exception</span>
         <span class="k">if</span> <span class="n">exception_type</span><span class="p">:</span>
             <span class="c1"># Write traceback to file</span>
-            <span class="n">traceback_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;exception_log_{str(uuid4())}.err&quot;</span><span class="p">)</span>
+            <span class="n">traceback_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;exception_log_</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span><span class="si">}</span><span class="s2">.err&quot;</span><span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">traceback_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">exception_log</span><span class="p">:</span>
                 <span class="n">exception_log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
 

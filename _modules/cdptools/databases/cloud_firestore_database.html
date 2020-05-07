@@ -168,16 +168,21 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">(unreleased)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#new">New</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#fix">Fix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id3">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">Fix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#other">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id23">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -396,14 +401,14 @@
 
         <span class="c1"># Found, return expansion</span>
         <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{table}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">result</span><span class="p">}</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">result</span><span class="p">}</span>
 
         <span class="c1"># Not found, return None</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_select_row_by_id_no_creds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="c1"># Fill target uri</span>
-        <span class="n">target_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self._db_uri}</span><span class="s2">/</span><span class="si">{table}</span><span class="s2">/</span><span class="si">{id}</span><span class="s2">&quot;</span>
+        <span class="n">target_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_uri</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="c1"># Get</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">target_uri</span><span class="p">)</span>
@@ -417,9 +422,9 @@
         <span class="c1"># Check for error</span>
         <span class="k">if</span> <span class="s2">&quot;fields&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
             <span class="c1"># Format response</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{table}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_jsonify_firestore_response</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">])}</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_jsonify_firestore_response</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">])}</span>
 
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No row with id: </span><span class="si">{id}</span><span class="s2"> exists.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No row with id: </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> exists.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CloudFirestoreDatabase.select_row_by_id"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_row_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">select_row_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="c1"># With credentials</span>
@@ -456,7 +461,7 @@
             <span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
 
         <span class="c1"># Get and expand</span>
-        <span class="k">return</span> <span class="p">[{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{table}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="o">**</span><span class="n">i</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ref</span><span class="o">.</span><span class="n">stream</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="p">[{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="o">**</span><span class="n">i</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ref</span><span class="o">.</span><span class="n">stream</span><span class="p">()]</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_convert_base_where_operator_to_cloud_firestore_where_operator</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -473,7 +478,7 @@
         <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">WhereOperators</span><span class="o">.</span><span class="n">lteq</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">CloudFirestoreWhereOperators</span><span class="o">.</span><span class="n">lteq</span>
 
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsure how to convert where operator: </span><span class="si">{op}</span><span class="s2">. &quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsure how to convert where operator: </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">. &quot;</span>
                          <span class="sa">f</span><span class="s2">&quot;No mapping exists between base operators and cloud firestore specific operators.&quot;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
@@ -491,7 +496,7 @@
         <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">NoCredResponseTypes</span><span class="o">.</span><span class="n">null</span>
 
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsure how to determine cloud firestore type from object: </span><span class="si">{val}</span><span class="s2"> (type: {type(val)})&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsure how to determine cloud firestore type from object: </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> (type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_select_rows_as_list_no_creds</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -521,7 +526,7 @@
                 <span class="c1"># Handle datetimes</span>
                 <span class="n">filter_val</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">value</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filter_val</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
-                    <span class="n">filter_val</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;{filter_val.isoformat()}Z&quot;</span>
+                    <span class="n">filter_val</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filter_val</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">Z&quot;</span>
 
                 <span class="c1"># Add filter to structuredQuery</span>
                 <span class="n">constructed_filters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
@@ -565,7 +570,7 @@
 
         <span class="c1"># Post</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self._db_uri}</span><span class="s2">:runQuery&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_uri</span><span class="si">}</span><span class="s2">:runQuery&quot;</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;structuredQuery&quot;</span><span class="p">:</span> <span class="n">structuredQuery</span>
             <span class="p">})</span>
@@ -584,7 +589,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span>
                 <span class="p">{</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{table}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="n">document</span><span class="p">[</span><span class="s2">&quot;document&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>  <span class="c1"># Get last item in the uri</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="n">document</span><span class="p">[</span><span class="s2">&quot;document&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>  <span class="c1"># Get last item in the uri</span>
                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_jsonify_firestore_response</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s2">&quot;document&quot;</span><span class="p">][</span><span class="s2">&quot;fields&quot;</span><span class="p">])</span>
                 <span class="p">}</span> <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">response</span>
             <span class="p">]</span>
@@ -718,13 +723,13 @@
             <span class="c1"># Store the row</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="o">.</span><span class="n">collection</span><span class="p">(</span><span class="n">table</span><span class="p">)</span><span class="o">.</span><span class="n">document</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Uploaded values: </span><span class="si">{values}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;To id: </span><span class="si">{id}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;On table: </span><span class="si">{table}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Uploaded values: </span><span class="si">{</span><span class="n">values</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;To id: </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;On table: </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
             <span class="c1"># Return row</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{table}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">}</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">}</span>
 
 <div class="viewcode-block" id="CloudFirestoreDatabase.get_or_upload_body"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_body">[docs]</a>    <span class="k">def</span> <span class="nf">get_or_upload_body</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_or_upload_row</span><span class="p">(</span>
@@ -1173,9 +1178,9 @@
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_credentials_path</span><span class="p">:</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;CloudFirestoreDatabase [</span><span class="si">{self._credentials_path}</span><span class="s2">]&gt;&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;CloudFirestoreDatabase [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_credentials_path</span><span class="si">}</span><span class="s2">]&gt;&quot;</span>
 
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;CloudFirestoreDatabase [</span><span class="si">{self._project_id}</span><span class="s2">]&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;CloudFirestoreDatabase [</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_project_id</span><span class="si">}</span><span class="s2">]&gt;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>

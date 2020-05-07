@@ -170,16 +170,21 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">(unreleased)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#new">New</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fix">Fix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#other">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id21">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id23">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id21">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id27">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -361,6 +366,101 @@ method for searching for events.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="cdptools.indexers.indexer.Indexer.get_context_span_for_index">
+<em class="property">static </em><code class="sig-name descname">get_context_span_for_index</code><span class="sig-paren">(</span><em class="sig-param">terms: List[str], index: int, max_span_size: int = 10</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.get_context_span_for_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.get_context_span_for_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the contextual sentence information for an index given an ordered list of terms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>terms</strong> (<em>List[str]</em>) – The ordered list of terms to use for contextual information.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – The index to use as the starting point for exploration for contextual sentence terms.</p></li>
+<li><p><strong>max_span_size</strong> (<em>int</em>) – The max contextual span size.
+Default: 10</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>span</strong> – The contextual sentence span surrounding the index provided.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a>`
+get_context_span_for_index(</p>
+<blockquote>
+<div><dl class="simple">
+<dt>terms=[</dt><dd><p>“Hello”,
+“and”,
+“good”,
+“morning.”</p>
+</dd>
+</dl>
+<p>],
+index=0</p>
+</div></blockquote>
+<p>)</p>
+<p>&gt;&gt; “Hello and good morning.”
+<a href="#id7"><span class="problematic" id="id8">``</span></a><a href="#id9"><span class="problematic" id="id10">`</span></a></p>
+<p><a href="#id11"><span class="problematic" id="id12">``</span></a>`
+get_context_span_for_index(</p>
+<blockquote>
+<div><dl class="simple">
+<dt>terms=[</dt><dd><p>“But”,
+“I”,
+“don’t”,
+“think”,
+“the”,
+“barrier”,
+“is”,
+“so”,
+“high”,
+“to”,
+“allow”,
+“individuals”,
+“to”,
+“use”,
+“the”,
+“service.”</p>
+</dd>
+</dl>
+<p>],
+index=0</p>
+</div></blockquote>
+<p>)</p>
+<p>&gt;&gt; “But I don’t think the barrier is so high to …”
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a>`
+get_context_span_for_index(</p>
+<blockquote>
+<div><dl class="simple">
+<dt>terms=[</dt><dd><p>“But”,
+“I”,
+“don’t”,
+“think”,
+“the”,
+“barrier”,
+“is”,
+“so”,
+“high”,
+“to”,
+“allow”,
+“individuals”,
+“to”,
+“use”,
+“the”,
+“service.”</p>
+</dd>
+</dl>
+<p>],
+index=6</p>
+</div></blockquote>
+<p>)</p>
+<p>&gt;&gt; “… I don’t think the barrier is so high to allow …”
+<a href="#id19"><span class="problematic" id="id20">``</span></a><a href="#id21"><span class="problematic" id="id22">`</span></a></p>
+</dd></dl>
+
+<dl class="method">
 <dt id="cdptools.indexers.indexer.Indexer.get_raw_transcript">
 <em class="property">static </em><code class="sig-name descname">get_raw_transcript</code><span class="sig-paren">(</span><em class="sig-param">transcript_path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.get_raw_transcript"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.get_raw_transcript" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.
@@ -375,6 +475,22 @@ a TypeError is raised.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="cdptools.indexers.indexer.Indexer.term_is_end_of_sentence">
+<em class="property">static </em><code class="sig-name descname">term_is_end_of_sentence</code><span class="sig-paren">(</span><em class="sig-param">term: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.term_is_end_of_sentence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.term_is_end_of_sentence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the term provided mark the end of a sentence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>str</em>) – The term to check for end of sentence punctuation characters (“.”, “!”, and “?”).</p></li>
+<li><p><strong>Returns</strong></p></li>
+<li><p><strong>——–</strong></p></li>
+<li><p><strong>is_end_of_sentence</strong> (<em>bool</em>) – The boolean value indicating whether or not an end of sentence punctuation character was found in the term.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -419,7 +535,7 @@ a TypeError is raised.</p>
 <dd class="field-even"><p><p><strong>word_event_scores</strong> – A dictionary of values per event per word that will be stored in the CDP instance’s database and used as a
 method for searching for events.</p>
 <p>Example:
-<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a>json
+<a href="#id23"><span class="problematic" id="id24">``</span></a><a href="#id25"><span class="problematic" id="id26">`</span></a>json
 {</p>
 <blockquote>
 <div><dl class="simple">

@@ -168,16 +168,21 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">(unreleased)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#new">New</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#fix">Fix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id3">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">Fix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#other">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id23">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -260,7 +265,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Could not parse event for: </span><span class="si">{self.body}</span><span class="s2"> </span><span class="si">{self.dt}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Could not parse event for: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="LegistarLookupError"><a class="viewcode-back" href="../../../cdptools.event_scrapers.html#cdptools.event_scrapers.exceptions.LegistarLookupError">[docs]</a><span class="k">class</span> <span class="nc">LegistarLookupError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -270,7 +275,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Could not find Legistar event for: </span><span class="si">{self.body}</span><span class="s2"> </span><span class="si">{self.dt}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Could not find Legistar event for: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="EventOutOfTimeboundsError"><a class="viewcode-back" href="../../../cdptools.event_scrapers.html#cdptools.event_scrapers.exceptions.EventOutOfTimeboundsError">[docs]</a><span class="k">class</span> <span class="nc">EventOutOfTimeboundsError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -281,7 +286,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Event is out of expected time bounds. Received: </span><span class="si">{self.current}</span><span class="s2"> Bounds: </span><span class="si">{self.begin}</span><span class="s2"> - </span><span class="si">{self.end}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Event is out of expected time bounds. Received: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="si">}</span><span class="s2"> Bounds: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">begin</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="si">}</span><span class="s2">&quot;</span></div>
 </pre></div>
 
            </div>

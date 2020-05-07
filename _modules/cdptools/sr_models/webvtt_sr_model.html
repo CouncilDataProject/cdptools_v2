@@ -168,16 +168,21 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">(unreleased)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#new">New</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#fix">Fix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id3">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">Fix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#other">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id23">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -289,7 +294,7 @@
     <span class="k">def</span> <span class="nf">_normalize_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">normalized_text</span> <span class="o">=</span> <span class="n">truecase</span><span class="o">.</span><span class="n">get_true_case</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="c1"># Fix some punctuation issue, e.g. `roughly$ 19` bececomes `roughly $19`</span>
-        <span class="n">normalized_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;([#$(&lt;[{]) &quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot; {x.group(1)}&quot;</span><span class="p">,</span> <span class="n">normalized_text</span><span class="p">)</span>
+        <span class="n">normalized_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;([#$(&lt;[{]) &quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">normalized_text</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">normalized_text</span>
 
     <span class="k">def</span> <span class="nf">_request_caption_content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -418,7 +423,7 @@
         <span class="n">timestamped_sentences</span> <span class="o">=</span> <span class="p">[</span><span class="n">sentence</span> <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="n">timestamped_speaker_turns</span> <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">turn</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]]</span>
 
         <span class="c1"># Log completed</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed transcription for: </span><span class="si">{file_uri}</span><span class="s2">. Confidence: </span><span class="si">{self.confidence}</span><span class="s2">&quot;</span><span class="p">)</span>\
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completed transcription for: </span><span class="si">{</span><span class="n">file_uri</span><span class="si">}</span><span class="s2">. Confidence: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">confidence</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>\
 
         <span class="c1"># Wrap each transcript in the standard format</span>
         <span class="n">raw_transcript</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_and_format_transcript_data</span><span class="p">(</span>

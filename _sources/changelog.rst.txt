@@ -2,6 +2,22 @@ Changelog
 =========
 
 
+(unreleased)
+------------
+
+New
+~~~
+- feature/add-get-context-span-utility  (`#115
+  <https://github.com/CouncilDataProject/cdptools/pull/115>`_)
+  [JacksonMaxfield]
+
+Fix
+~~~
+- bugfix/upper-bound-sphinx  (`#143
+  <https://github.com/CouncilDataProject/cdptools/pull/143>`_)
+  [JacksonMaxfield]
+
+
 v2.0.5 (2020-03-07)
 -------------------
 

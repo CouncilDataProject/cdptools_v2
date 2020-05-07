@@ -171,18 +171,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#unreleased">(unreleased)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#new">New</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#fix">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id3">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">Fix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#other">Other</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id4">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id7">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id15">Other</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id21">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id23">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -261,7 +262,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">fuzz</span>
+<span class="kn">from</span> <span class="nn">rapidfuzz</span> <span class="kn">import</span> <span class="n">fuzz</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -388,7 +389,7 @@
 <span class="sd">    for the list provided. An example of this function being used may be found in SeattleEventScraper, but as a general</span>
 <span class="sd">    use case, this will be used when a city has two separate systems for storing video and storing legistar data and</span>
 <span class="sd">    you need to match up the video data with the legistar data. Event matching is determined by minutes item text set</span>
-<span class="sd">    difference. For details, on that algorithm, look at `fuzzywuzzy.fuzz.token_set_ratio`.</span>
+<span class="sd">    difference. For details, on that algorithm, look at `rapidfuzz.fuzz.token_set_ratio`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

@@ -173,18 +173,19 @@
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">(unreleased)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#new">New</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#fix">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id3">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">Fix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog.html#other">Other</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id4">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id7">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id15">Other</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id21">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id27">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id23">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id27">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id29">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -281,7 +282,7 @@
 
 <dl class="function">
 <dt id="cdptools.legistar_utils.events.get_legistar_events_for_timespan">
-<code class="sig-prename descclassname">cdptools.legistar_utils.events.</code><code class="sig-name descname">get_legistar_events_for_timespan</code><span class="sig-paren">(</span><em class="sig-param">client: str</em>, <em class="sig-param">begin: datetime.datetime = datetime.datetime(2020</em>, <em class="sig-param">5</em>, <em class="sig-param">7</em>, <em class="sig-param">5</em>, <em class="sig-param">19</em>, <em class="sig-param">36</em>, <em class="sig-param">721131)</em>, <em class="sig-param">end: datetime.datetime = datetime.datetime(2020</em>, <em class="sig-param">5</em>, <em class="sig-param">8</em>, <em class="sig-param">5</em>, <em class="sig-param">19</em>, <em class="sig-param">36</em>, <em class="sig-param">721133)</em>, <em class="sig-param">store_each_response: bool = False</em><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="reference internal" href="_modules/cdptools/legistar_utils/events.html#get_legistar_events_for_timespan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.legistar_utils.events.get_legistar_events_for_timespan" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">cdptools.legistar_utils.events.</code><code class="sig-name descname">get_legistar_events_for_timespan</code><span class="sig-paren">(</span><em class="sig-param">client: str</em>, <em class="sig-param">begin: datetime.datetime = datetime.datetime(2020</em>, <em class="sig-param">5</em>, <em class="sig-param">7</em>, <em class="sig-param">5</em>, <em class="sig-param">26</em>, <em class="sig-param">6</em>, <em class="sig-param">36071)</em>, <em class="sig-param">end: datetime.datetime = datetime.datetime(2020</em>, <em class="sig-param">5</em>, <em class="sig-param">8</em>, <em class="sig-param">5</em>, <em class="sig-param">26</em>, <em class="sig-param">6</em>, <em class="sig-param">36074)</em>, <em class="sig-param">store_each_response: bool = False</em><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="reference internal" href="_modules/cdptools/legistar_utils/events.html#get_legistar_events_for_timespan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.legistar_utils.events.get_legistar_events_for_timespan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all legistar events and each events minutes items, people, and votes, for a client for a given timespan.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -310,7 +311,7 @@ and attaches agenda items, minutes items, any attachments, called “EventItems�
 for the list provided. An example of this function being used may be found in SeattleEventScraper, but as a general
 use case, this will be used when a city has two separate systems for storing video and storing legistar data and
 you need to match up the video data with the legistar data. Event matching is determined by minutes item text set
-difference. For details, on that algorithm, look at <cite>fuzzywuzzy.fuzz.token_set_ratio</cite>.</p>
+difference. For details, on that algorithm, look at <cite>rapidfuzz.fuzz.token_set_ratio</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

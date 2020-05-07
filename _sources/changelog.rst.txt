@@ -17,6 +17,12 @@ Fix
   <https://github.com/CouncilDataProject/cdptools/pull/143>`_)
   [JacksonMaxfield]
 
+Other
+~~~~~
+- admin/replace-fuzzywuzzy-with-rapidfuzz  (`#140
+  <https://github.com/CouncilDataProject/cdptools/pull/140>`_)
+  [JacksonMaxfield, maxbachmann]
+
 
 v2.0.5 (2020-03-07)
 -------------------

@@ -20,7 +20,7 @@ class CDPInstanceConfig:
         database_object_kwargs: Dict[str, Any],
         file_store_module_path: str,
         file_store_object_name: str,
-        file_store_object_kwargs: Dict[str, Any]
+        file_store_object_kwargs: Dict[str, Any],
     ):
         # Store values
         self.database_module_path = database_module_path
@@ -46,7 +46,7 @@ class CDPInstance:
             self._database = load_custom_object.load_custom_object(
                 self._config.database_module_path,
                 self._config.database_object_name,
-                self._config.database_object_kwargs
+                self._config.database_object_kwargs,
             )
 
         return self._database
@@ -57,12 +57,14 @@ class CDPInstance:
             self._file_store = load_custom_object.load_custom_object(
                 self._config.file_store_module_path,
                 self._config.file_store_object_name,
-                self._config.file_store_object_kwargs
+                self._config.file_store_object_kwargs,
             )
 
         return self._file_store
 
-    def get_transcript_manifest(self, order_by_field: str = "confidence") -> pd.DataFrame:
+    def get_transcript_manifest(
+        self, order_by_field: str = "confidence"
+    ) -> pd.DataFrame:
         """
         Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
         instance's database.
@@ -81,14 +83,11 @@ class CDPInstance:
         """
 
         return transcripts_utils.get_transcript_manifest(
-            db=self.database,
-            order_by_field=order_by_field
+            db=self.database, order_by_field=order_by_field
         )
 
     def download_transcripts(
-        self,
-        order_by_field: str = "confidence",
-        save_dir: Optional[Path] = None,
+        self, order_by_field: str = "confidence", save_dir: Optional[Path] = None,
     ) -> Dict[str, Path]:
         """
         Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.
@@ -114,11 +113,13 @@ class CDPInstance:
             db=self.database,
             fs=self.file_store,
             order_by_field=order_by_field,
-            save_dir=save_dir
+            save_dir=save_dir,
         )
 
     def __str__(self):
-        return f"<CDPInstance [database: {self.database}, file_store: {self.file_store}]>"
+        return (
+            f"<CDPInstance [database: {self.database}, file_store: {self.file_store}]>"
+        )
 
     def __repr__(self):
         return str(self)

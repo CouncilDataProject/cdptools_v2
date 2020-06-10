@@ -35,11 +35,16 @@ class MockedStreamedRead:
         self.raw.close()
 
 
-@pytest.mark.parametrize("order_by_field", [
-    ("confidence"),
-    ("created"),
-    pytest.param("not-a-valid-field", marks=pytest.mark.raises(exception=ValueError))
-])
+@pytest.mark.parametrize(
+    "order_by_field",
+    [
+        ("confidence"),
+        ("created"),
+        pytest.param(
+            "not-a-valid-field", marks=pytest.mark.raises(exception=ValueError)
+        ),
+    ],
+)
 def test_download_transcripts(example_transcript, order_by_field):
     with tempfile.TemporaryDirectory() as tmpdir:
         # Patch select rows as list
@@ -47,32 +52,38 @@ def test_download_transcripts(example_transcript, order_by_field):
             CloudFirestoreDatabase,
             "select_rows_as_list",
             side_effect=[
-                [{
-                    "event_id": "1",
-                    "legistar_event_id": 4023,
-                    "event_datetime": datetime(2019, 7, 15, 9, 30),
-                    "agenda_file_uri": "doesnt-matter",
-                    "minutes_file_uri": None,
-                    "video_uri": "doesnt-matter",
-                    "created": datetime(2019, 7, 20, 1, 53, 14, 77790),
-                    "body_id": "1",
-                    "legistar_event_link": "doesnt-matter",
-                    "source_uri": "http://www.seattlechannel.org/CouncilBriefings?videoid=x105823"
-                }],
-                [{
-                    "transcript_id": "1",
-                    "confidence": 0.9498944201984921,
-                    "event_id": "1",
-                    "created": datetime(2019, 7, 20, 1, 53, 18, 611107),
-                    "file_id": "1"
-                }],
-                [{
-                    "body_id": "1",
-                    "name": "Council Briefing",
-                    "created": datetime(2019, 7, 20, 1, 53, 13, 821791),
-                    "description": None
-                }]
-            ]
+                [
+                    {
+                        "event_id": "1",
+                        "legistar_event_id": 4023,
+                        "event_datetime": datetime(2019, 7, 15, 9, 30),
+                        "agenda_file_uri": "doesnt-matter",
+                        "minutes_file_uri": None,
+                        "video_uri": "doesnt-matter",
+                        "created": datetime(2019, 7, 20, 1, 53, 14, 77790),
+                        "body_id": "1",
+                        "legistar_event_link": "doesnt-matter",
+                        "source_uri": "http://www.seattlechannel.org/CouncilBriefings?videoid=x105823",
+                    }
+                ],
+                [
+                    {
+                        "transcript_id": "1",
+                        "confidence": 0.9498944201984921,
+                        "event_id": "1",
+                        "created": datetime(2019, 7, 20, 1, 53, 18, 611107),
+                        "file_id": "1",
+                    }
+                ],
+                [
+                    {
+                        "body_id": "1",
+                        "name": "Council Briefing",
+                        "created": datetime(2019, 7, 20, 1, 53, 13, 821791),
+                        "description": None,
+                    }
+                ],
+            ],
         ):
             # Patch select row by id
             with mock.patch.object(
@@ -84,8 +95,8 @@ def test_download_transcripts(example_transcript, order_by_field):
                     "filename": "example_transcript_sentences.json",
                     "created": datetime(2019, 7, 20, 1, 53, 10, 726978),
                     "description": None,
-                    "uri": example_transcript
-                }
+                    "uri": example_transcript,
+                },
             ):
 
                 # Interrupt the request to open the file stream
@@ -98,10 +109,7 @@ def test_download_transcripts(example_transcript, order_by_field):
 
                     # Get the event corpus map
                     event_corpus_map = transcript_tools.download_transcripts(
-                        db=db,
-                        fs=fs,
-                        order_by_field=order_by_field,
-                        save_dir=tmpdir
+                        db=db, fs=fs, order_by_field=order_by_field, save_dir=tmpdir
                     )
 
                     # Assert structure

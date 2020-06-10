@@ -29,123 +29,73 @@ def test_webvtt_sr_model_request_caption_content(example_webvtt_sr_model):
         example_webvtt_sr_model._request_caption_content("invalid-caption-uri")
 
 
-@pytest.mark.parametrize("captions, expected", [
-    (
-        [
-            Caption(text="&gt;&gt; Start of Dialog 1."),
-            Caption(text="End of Dialog 1."),
-            Caption(text="&gt;&gt; [ APPLAUSE ]"),
-            Caption(text="&gt;&gt; Dialog 2.")
-        ],
-        [
+@pytest.mark.parametrize(
+    "captions, expected",
+    [
+        (
             [
-                "Start of Dialog 1.",
-                "End of Dialog 1."
+                Caption(text="&gt;&gt; Start of Dialog 1."),
+                Caption(text="End of Dialog 1."),
+                Caption(text="&gt;&gt; [ APPLAUSE ]"),
+                Caption(text="&gt;&gt; Dialog 2."),
             ],
             [
-                "[ APPLAUSE ]"
+                ["Start of Dialog 1.", "End of Dialog 1."],
+                ["[ APPLAUSE ]"],
+                ["Dialog 2."],
             ],
+        ),
+        (
             [
-                "Dialog 2."
-            ]
-        ]
-    ),
-    (
-        [
-            Caption(text="&gt;&gt; Dialog 1."),
-            Caption(text="&gt;&gt; [ ROLL BEING CALLED ]"),
-            Caption(text="&gt;&gt; Dialog 2."),
-        ],
-        [
-            [
-                "Dialog 1."
+                Caption(text="&gt;&gt; Dialog 1."),
+                Caption(text="&gt;&gt; [ ROLL BEING CALLED ]"),
+                Caption(text="&gt;&gt; Dialog 2."),
             ],
+            [["Dialog 1."], ["[ ROLL BEING CALLED ]"], ["Dialog 2."]],
+        ),
+        (
             [
-                "[ ROLL BEING CALLED ]"
+                Caption(text="&gt;&gt; [ LAUGHTER ] Dialog 1."),
+                Caption(text="&gt;&gt; [ APPLAUSE ]"),
+                Caption(text="&gt;&gt; Dialog 2."),
             ],
+            [["[ LAUGHTER ] Dialog 1."], ["[ APPLAUSE ]"], ["Dialog 2."]],
+        ),
+        (
             [
-                "Dialog 2."
-            ]
-        ]
-    ),
-    (
-        [
-            Caption(text="&gt;&gt; [ LAUGHTER ] Dialog 1."),
-            Caption(text="&gt;&gt; [ APPLAUSE ]"),
-            Caption(text="&gt;&gt; Dialog 2.")
-        ],
-        [
-            [
-                "[ LAUGHTER ] Dialog 1."
+                Caption(text="&gt;&gt; Sentence"),
+                Caption(text="one."),
+                Caption(text="&gt;&gt; Sentence"),
+                Caption(text="two!"),
+                Caption(text="Sentence"),
+                Caption(text="three!"),
+                Caption(text="Sentence"),
+                Caption(text="four?"),
             ],
+            [["Sentence one."], ["Sentence two!", "Sentence three!", "Sentence four?"]],
+        ),
+        (
             [
-                "[ APPLAUSE ]"
+                Caption(text="&gt;&gt; Sentence"),
+                Caption(text="one, no sentence ending punctuation"),
+                Caption(text="&gt;&gt; Sentence"),
+                Caption(text="two."),
             ],
-            [
-                "Dialog 2."
-            ]
-        ]
-    ),
-    (
-        [
-            Caption(text="&gt;&gt; Sentence"),
-            Caption(text="one."),
-            Caption(text="&gt;&gt; Sentence"),
-            Caption(text="two!"),
-            Caption(text="Sentence"),
-            Caption(text="three!"),
-            Caption(text="Sentence"),
-            Caption(text="four?")
-        ],
-        [
-            [
-                "Sentence one."
-            ],
-            [
-                "Sentence two!",
-                "Sentence three!",
-                "Sentence four?"
-            ]
-        ]
-    ),
-    (
-        [
-            Caption(text="&gt;&gt; Sentence"),
-            Caption(text="one, no sentence ending punctuation"),
-            Caption(text="&gt;&gt; Sentence"),
-            Caption(text="two.")
-        ],
-        [
-            [
-                "Sentence one, no sentence ending punctuation"
-            ],
-            [
-                "Sentence two."
-            ]
-        ]
-    ),
-    (
-        [
-            Caption(text="Sentence one."),
-            Caption(text="ú&gt;&gt; Sentence two.")
-        ],
-        [
-            [
-                "Sentence one."
-            ],
-            [
-                "Sentence two."
-            ]
-        ]
-    )
-])
+            [["Sentence one, no sentence ending punctuation"], ["Sentence two."]],
+        ),
+        (
+            [Caption(text="Sentence one."), Caption(text="ú&gt;&gt; Sentence two.")],
+            [["Sentence one."], ["Sentence two."]],
+        ),
+    ],
+)
 def test_webvtt_sr_model_create_timestamped_speaker_turns(
-    captions,
-    expected,
-    example_webvtt_sr_model
+    captions, expected, example_webvtt_sr_model
 ):
     speaker_turns = example_webvtt_sr_model._get_speaker_turns(captions)
-    timestamped_speaker_turns = example_webvtt_sr_model._create_timestamped_speaker_turns(speaker_turns)
+    timestamped_speaker_turns = example_webvtt_sr_model._create_timestamped_speaker_turns(
+        speaker_turns
+    )
     # Check if the number of speaker turns is correct
     assert len(timestamped_speaker_turns) == len(expected)
     for i, speaker_turn in enumerate(expected):

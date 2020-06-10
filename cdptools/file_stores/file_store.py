@@ -18,9 +18,10 @@ log = logging.getLogger(__name__)
 
 
 class FileStore(ABC):
-
     @staticmethod
-    def compute_sha256_for_file(filepath: Union[str, Path], block_size: int = 1024 * 1024) -> Path:
+    def compute_sha256_for_file(
+        filepath: Union[str, Path], block_size: int = 1024 * 1024
+    ) -> Path:
         """
         Compute a SHA256 hexdigest for a file. Works for large files.
 
@@ -80,7 +81,9 @@ class FileStore(ABC):
         return not any(path.startswith(h) for h in external_headers)
 
     @staticmethod
-    def _external_resource_copy(uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False) -> Path:
+    def _external_resource_copy(
+        uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+    ) -> Path:
         """
         Copy an external resource to a local destination on the machine.
 
@@ -145,7 +148,7 @@ class FileStore(ABC):
         filepath: Union[str, Path],
         save_name: Optional[str] = None,
         remove: bool = False,
-        **kwargs
+        **kwargs,
     ) -> str:
         """
         Store a file.
@@ -173,7 +176,7 @@ class FileStore(ABC):
         filename: str,
         save_path: Optional[Union[str, Path]] = None,
         overwrite: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Path:
         """
         Download the file if neccessary and return the Path.
@@ -196,10 +199,7 @@ class FileStore(ABC):
         return Path("/tmp/file.tmp")
 
     @abstractmethod
-    def delete_file(
-        self,
-        filename: str
-    ) -> str:
+    def delete_file(self, filename: str) -> str:
         """
         Delete the file.
 
@@ -216,9 +216,7 @@ class FileStore(ABC):
         return ""
 
     @abstractmethod
-    def clear_bucket(
-        self
-    ) -> str:
+    def clear_bucket(self) -> str:
         """
         Clear the bucket of all files.
 
@@ -230,9 +228,7 @@ class FileStore(ABC):
         return ""
 
     @abstractmethod
-    def list_all_files(
-        self
-    ) -> List[str]:
+    def list_all_files(self) -> List[str]:
         """
         Returns a list of all filepaths in the file store bucket.
 

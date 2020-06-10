@@ -22,7 +22,6 @@ log = logging.getLogger(__name__)
 
 
 class EventGatherPipeline(Pipeline):
-
     def __init__(self, config_path: Union[str, Path]):
         # Resolve config path
         config_path = config_path.resolve(strict=True)
@@ -38,22 +37,22 @@ class EventGatherPipeline(Pipeline):
         self.event_scraper = load_custom_object.load_custom_object(
             module_path=self.config["event_scraper"]["module_path"],
             object_name=self.config["event_scraper"]["object_name"],
-            object_kwargs=self.config["event_scraper"].get("object_kwargs", {})
+            object_kwargs=self.config["event_scraper"].get("object_kwargs", {}),
         )
         self.database = load_custom_object.load_custom_object(
             module_path=self.config["database"]["module_path"],
             object_name=self.config["database"]["object_name"],
-            object_kwargs={**self.config["database"].get("object_kwargs", {})}
+            object_kwargs={**self.config["database"].get("object_kwargs", {})},
         )
         self.file_store = load_custom_object.load_custom_object(
             module_path=self.config["file_store"]["module_path"],
             object_name=self.config["file_store"]["object_name"],
-            object_kwargs=self.config["file_store"].get("object_kwargs", {})
+            object_kwargs=self.config["file_store"].get("object_kwargs", {}),
         )
         self.audio_splitter = load_custom_object.load_custom_object(
             module_path=self.config["audio_splitter"]["module_path"],
             object_name=self.config["audio_splitter"]["object_name"],
-            object_kwargs=self.config["audio_splitter"].get("object_kwargs", {})
+            object_kwargs=self.config["audio_splitter"].get("object_kwargs", {}),
         )
         try:
             try_model = self.config["speech_recognition_model"]["try"]
@@ -61,19 +60,21 @@ class EventGatherPipeline(Pipeline):
             self.caption_sr_model = load_custom_object.load_custom_object(
                 module_path=try_model["module_path"],
                 object_name=try_model["object_name"],
-                object_kwargs=try_model.get("object_kwargs", {})
+                object_kwargs=try_model.get("object_kwargs", {}),
             )
 
             self.sr_model = load_custom_object.load_custom_object(
                 module_path=catch_model["module_path"],
                 object_name=catch_model["object_name"],
-                object_kwargs=catch_model.get("object_kwargs", {})
+                object_kwargs=catch_model.get("object_kwargs", {}),
             )
         except KeyError:
             self.sr_model = load_custom_object.load_custom_object(
                 module_path=self.config["speech_recognition_model"]["module_path"],
                 object_name=self.config["speech_recognition_model"]["object_name"],
-                object_kwargs=self.config["speech_recognition_model"].get("object_kwargs", {})
+                object_kwargs=self.config["speech_recognition_model"].get(
+                    "object_kwargs", {}
+                ),
             )
 
     def task_audio_get_or_copy(self, key: str, video_uri: str) -> str:
@@ -86,7 +87,7 @@ class EventGatherPipeline(Pipeline):
             algorithm_name="EventGatherPipeline.task_audio_get_or_copy",
             algorithm_version=get_module_version(),
             inputs=[key, video_uri],
-            remove_files=True
+            remove_files=True,
         ) as run:
             # Check if audio already exists in file store
             tmp_audio_filepath = f"{key}_audio.wav"
@@ -101,14 +102,13 @@ class EventGatherPipeline(Pipeline):
                     suffix = ""
                 tmp_video_filepath = f"tmp_{key}_video.{suffix}"
                 tmp_video_filepath = self.file_store._external_resource_copy(
-                    uri=video_uri,
-                    dst=tmp_video_filepath
+                    uri=video_uri, dst=tmp_video_filepath
                 )
 
                 # Split and store the audio in temporary file prior to upload
                 tmp_audio_filepath = self.audio_splitter.split(
                     video_read_path=tmp_video_filepath,
-                    audio_save_path=tmp_audio_filepath
+                    audio_save_path=tmp_audio_filepath,
                 )
                 tmp_audio_log_out_filepath = tmp_audio_filepath.with_suffix(".out")
                 tmp_audio_log_err_filepath = tmp_audio_filepath.with_suffix(".err")
@@ -118,8 +118,12 @@ class EventGatherPipeline(Pipeline):
 
                 # Store audio and logs
                 audio_uri = self.file_store.upload_file(filepath=tmp_audio_filepath)
-                audio_log_out_uri = self.file_store.upload_file(filepath=tmp_audio_log_out_filepath)
-                audio_log_err_uri = self.file_store.upload_file(filepath=tmp_audio_log_err_filepath)
+                audio_log_out_uri = self.file_store.upload_file(
+                    filepath=tmp_audio_log_out_filepath
+                )
+                audio_log_err_uri = self.file_store.upload_file(
+                    filepath=tmp_audio_log_err_filepath
+                )
                 # Store database records
                 self.database.get_or_upload_file(audio_uri)
                 self.database.get_or_upload_file(audio_log_out_uri)
@@ -136,7 +140,7 @@ class EventGatherPipeline(Pipeline):
         key: str,
         video_uri: str,
         caption_uri: Optional[str] = None,
-        phrases: Optional[List[str]] = None
+        phrases: Optional[List[str]] = None,
     ):
         """
         Get or create and return transcript resource uri provied key.
@@ -147,14 +151,14 @@ class EventGatherPipeline(Pipeline):
             algorithm_name="EventGatherPipeline.task_transcript_get_or_create",
             algorithm_version=get_module_version(),
             inputs=[key, video_uri, caption_uri],
-            remove_files=True
+            remove_files=True,
         ) as run:
             # Setup temporary filenames, sorted by preference
             tmp_filenames = [
                 f"{key}_ts_speaker_turns_transcript_0.json",
                 f"{key}_ts_sentences_transcript_0.json",
                 f"{key}_ts_words_transcript_0.json",
-                f"{key}_raw_transcript_0.json"
+                f"{key}_raw_transcript_0.json",
             ]
 
             # Iterate through tmp_filenames and check if any of them exists
@@ -162,18 +166,22 @@ class EventGatherPipeline(Pipeline):
 
             for tmp_filename in tmp_filenames:
                 try:
-                    main_transcript_uri = self.file_store.get_file_uri(filename=tmp_filename)
+                    main_transcript_uri = self.file_store.get_file_uri(
+                        filename=tmp_filename
+                    )
                     break
                 except FileNotFoundError:
                     continue
 
             # Transcript already exist
             if main_transcript_uri:
-                main_transcript_details = self.database.get_or_upload_file(main_transcript_uri)
+                main_transcript_details = self.database.get_or_upload_file(
+                    main_transcript_uri
+                )
                 confidence = self.database.select_rows_as_list(
                     table="transcript",
                     filters=[("file_id", main_transcript_details["file_id"])],
-                    limit=1
+                    limit=1,
                 )[0]["confidence"]
             else:
                 # List of tmp_filenames exhausted without break, so there must be no transcripts
@@ -184,7 +192,7 @@ class EventGatherPipeline(Pipeline):
                         file_uri=caption_uri,
                         raw_transcript_save_path=tmp_filenames[-1],
                         timestamped_sentences_save_path=tmp_filenames[1],
-                        timestamped_speaker_turns_save_path=tmp_filenames[0]
+                        timestamped_speaker_turns_save_path=tmp_filenames[0],
                     )
                 except (AttributeError, RequestException):
                     # Either there is no caption_sr_model for this pipeline or
@@ -204,8 +212,12 @@ class EventGatherPipeline(Pipeline):
                     )
 
                 # Store and register transcript files
-                raw_transcript_uri = self.file_store.upload_file(filepath=outputs.raw_path)
-                raw_transcript_file_details = self.database.get_or_upload_file(raw_transcript_uri)
+                raw_transcript_uri = self.file_store.upload_file(
+                    filepath=outputs.raw_path
+                )
+                raw_transcript_file_details = self.database.get_or_upload_file(
+                    raw_transcript_uri
+                )
                 run.register_output(outputs.raw_path)
 
                 # Default to using the raw output as main transcript
@@ -215,8 +227,12 @@ class EventGatherPipeline(Pipeline):
                 # Timestamped transcripts are optional
                 # If available store them but also set as main transcript
                 if outputs.timestamped_words_path:
-                    ts_words_transcript_uri = self.file_store.upload_file(filepath=outputs.timestamped_words_path)
-                    ts_words_transcript_file_details = self.database.get_or_upload_file(ts_words_transcript_uri)
+                    ts_words_transcript_uri = self.file_store.upload_file(
+                        filepath=outputs.timestamped_words_path
+                    )
+                    ts_words_transcript_file_details = self.database.get_or_upload_file(
+                        ts_words_transcript_uri
+                    )
                     run.register_output(outputs.timestamped_words_path)
                     main_transcript_details = ts_words_transcript_file_details
 
@@ -226,7 +242,9 @@ class EventGatherPipeline(Pipeline):
                     ts_sentences_transcript_uri = self.file_store.upload_file(
                         filepath=outputs.timestamped_sentences_path
                     )
-                    ts_sentences_transcript_file_details = self.database.get_or_upload_file(ts_sentences_transcript_uri)
+                    ts_sentences_transcript_file_details = self.database.get_or_upload_file(
+                        ts_sentences_transcript_uri
+                    )
                     run.register_output(outputs.timestamped_sentences_path)
                     main_transcript_details = ts_sentences_transcript_file_details
 
@@ -250,7 +268,7 @@ class EventGatherPipeline(Pipeline):
             file_store=self.file_store,
             algorithm_name="EventGatherPipeline.task_parse_and_upload_constructed_event",
             algorithm_version=get_module_version(),
-            inputs=[event["source_uri"]]
+            inputs=[event["source_uri"]],
         ):
             # Store or get body details
             body_details = self.database.get_or_upload_body(event["body"])
@@ -264,7 +282,7 @@ class EventGatherPipeline(Pipeline):
                 agenda_file_uri=event["agenda_file_uri"],
                 minutes_file_uri=event["minutes_file_uri"],
                 legistar_event_id=event["legistar_event_id"],
-                legistar_event_link=event["legistar_event_link"]
+                legistar_event_link=event["legistar_event_link"],
             )
 
             # Store or get all minute_items
@@ -273,7 +291,7 @@ class EventGatherPipeline(Pipeline):
                 minutes_item_details = self.database.get_or_upload_minutes_item(
                     name=m_item["name"],
                     matter=m_item["matter"],
-                    legistar_event_item_id=m_item["legistar_event_item_id"]
+                    legistar_event_item_id=m_item["legistar_event_item_id"],
                 )
 
                 # Store any attachments
@@ -282,7 +300,9 @@ class EventGatherPipeline(Pipeline):
                         minutes_item_id=minutes_item_details["minutes_item_id"],
                         uri=attachment["uri"],
                         name=attachment["name"],
-                        legistar_matter_attachment_id=attachment["legistar_matter_attachment_id"]
+                        legistar_matter_attachment_id=attachment[
+                            "legistar_matter_attachment_id"
+                        ],
                     )
 
                 # Attach minutes item to event
@@ -290,7 +310,7 @@ class EventGatherPipeline(Pipeline):
                     event_id=event_details["event_id"],
                     minutes_item_id=minutes_item_details["minutes_item_id"],
                     index=m_item["index"],
-                    decision=m_item["decision"]
+                    decision=m_item["decision"],
                 )
 
                 # Store any votes and persons
@@ -300,21 +320,25 @@ class EventGatherPipeline(Pipeline):
                         email=vote["person"]["email"],
                         phone=vote["person"]["phone"],
                         website=vote["person"]["website"],
-                        legistar_person_id=vote["person"]["legistar_person_id"]
+                        legistar_person_id=vote["person"]["legistar_person_id"],
                     )
 
                     self.database.get_or_upload_vote(
                         person_id=person_details["person_id"],
-                        event_minutes_item_id=event_minutes_item_details["event_minutes_item_id"],
+                        event_minutes_item_id=event_minutes_item_details[
+                            "event_minutes_item_id"
+                        ],
                         decision=vote["decision"],
-                        legistar_event_item_vote_id=vote["legistar_event_item_vote_id"]
+                        legistar_event_item_vote_id=vote["legistar_event_item_vote_id"],
                     )
 
             # Link event to transcript
             self.database.get_or_upload_transcript(
                 event_id=event_details["event_id"],
-                file_id=event["transcript_details"]["transcript_file_details"]["file_id"],
-                confidence=event["transcript_details"]["confidence"]
+                file_id=event["transcript_details"]["transcript_file_details"][
+                    "file_id"
+                ],
+                confidence=event["transcript_details"]["confidence"],
             )
 
             return event_details
@@ -330,7 +354,7 @@ class EventGatherPipeline(Pipeline):
             algorithm_name="EventGatherPipeline.process_event",
             algorithm_version=get_module_version(),
             inputs=[event["source_uri"]],
-            remove_files=True
+            remove_files=True,
         ):
             # Check event already exists in database
             found_event = self.database.get_event(event["video_uri"])
@@ -343,22 +367,26 @@ class EventGatherPipeline(Pipeline):
                 phrases = [item["name"] for item in event["minutes_items"]]
 
                 # Run transcript task
-                transcript_file_details, confidence = self.task_transcript_get_or_create(
-                    key,
-                    event["video_uri"],
-                    event["caption_uri"],
-                    phrases
+                (
+                    transcript_file_details,
+                    confidence,
+                ) = self.task_transcript_get_or_create(
+                    key, event["video_uri"], event["caption_uri"], phrases
                 )
 
                 # Attach transcript details to event
                 event["transcript_details"] = {
                     "transcript_file_details": transcript_file_details,
-                    "confidence": confidence
+                    "confidence": confidence,
                 }
 
                 # Event details
                 event_details = self.task_parse_and_upload_constructed_event(event)
-                log.info("Uploaded event details: {} ({})".format(event_details["event_id"], key))
+                log.info(
+                    "Uploaded event details: {} ({})".format(
+                        event_details["event_id"], key
+                    )
+                )
 
             # Update progress
             log.info("Completed event: {} ({})".format(key, event["video_uri"]))
@@ -370,10 +398,15 @@ class EventGatherPipeline(Pipeline):
             self.file_store,
             "EventGatherPipeline.run",
             get_module_version(),
-            remove_files=True
+            remove_files=True,
         ):
             # Get events
-            with RunManager(self.database, self.file_store, "EventScraper.get_events", get_module_version()):
+            with RunManager(
+                self.database,
+                self.file_store,
+                "EventScraper.get_events",
+                get_module_version(),
+            ):
                 events = self.event_scraper.get_events()
 
             # Multiprocess each event found

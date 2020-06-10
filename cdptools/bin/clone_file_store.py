@@ -10,7 +10,7 @@ from ..dev_utils import load_custom_object
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s"
+    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
 )
 log = logging.getLogger(__name__)
 
@@ -18,21 +18,33 @@ log = logging.getLogger(__name__)
 
 
 class Args(argparse.Namespace):
-
     def __init__(self):
         self.__parse()
 
     def __parse(self):
         p = argparse.ArgumentParser(
             prog="clone_file_store",
-            description="Clone source file store to target file store."
+            description="Clone source file store to target file store.",
         )
 
-        p.add_argument("--source_config_path", type=Path,
-                       help="Path to a configuration file with details for the source file store.", required=True)
-        p.add_argument("--target_config_path", type=Path,
-                       help="Path to a configuration file with details for the target file store.", required=True)
-        p.add_argument("--debug", action="store_true", dest="debug", help="Show traceback if the script were to fail.")
+        p.add_argument(
+            "--source_config_path",
+            type=Path,
+            help="Path to a configuration file with details for the source file store.",
+            required=True,
+        )
+        p.add_argument(
+            "--target_config_path",
+            type=Path,
+            help="Path to a configuration file with details for the target file store.",
+            required=True,
+        )
+        p.add_argument(
+            "--debug",
+            action="store_true",
+            dest="debug",
+            help="Show traceback if the script were to fail.",
+        )
 
         p.parse_args(namespace=self)
 
@@ -48,7 +60,7 @@ def load_file_store(config_json) -> fs.FileStore:
     return load_custom_object.load_custom_object(
         module_path=config_json["file_store"]["module_path"],
         object_name=config_json["file_store"]["object_name"],
-        object_kwargs=config_json["file_store"].get("object_kwargs", {})
+        object_kwargs=config_json["file_store"].get("object_kwargs", {}),
     )
 
 
@@ -75,7 +87,9 @@ def main():
     with ThreadPoolExecutor() as exe:
         exe.map(proc_func, files)
 
-    log.info("Cloned filestore of bucket: {source_bucket} to bucket: {target_fs._bucket}")
+    log.info(
+        "Cloned filestore of bucket: {source_bucket} to bucket: {target_fs._bucket}"
+    )
 
 
 if __name__ == "__main__":

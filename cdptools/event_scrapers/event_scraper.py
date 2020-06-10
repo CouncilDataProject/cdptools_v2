@@ -8,7 +8,6 @@ from typing import Any, Dict, List
 
 
 class EventScraper(ABC):
-
     @abstractmethod
     def get_events(self) -> List[Dict[str, Any]]:
         """
@@ -27,11 +26,7 @@ class EventScraper(ABC):
         return []
 
     @abstractmethod
-    def get_single_event(
-        self,
-        uri: str,
-        backfill: bool = False
-    ) -> Dict[str, Any]:
+    def get_single_event(self, uri: str, backfill: bool = False) -> Dict[str, Any]:
         """
         Get event details for a single event required to run the rest of an event pipeline.
 

@@ -19,7 +19,9 @@ class AudioSplitter(ABC):
     """
 
     @abstractmethod
-    def split(self, video_read_path: Union[str, Path], audio_save_path: Union[str, Path]) -> Path:
+    def split(
+        self, video_read_path: Union[str, Path], audio_save_path: Union[str, Path]
+    ) -> Path:
         """
         Split and store the audio from a video file.
 

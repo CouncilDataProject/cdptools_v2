@@ -20,14 +20,15 @@ class SRModelOutputs(NamedTuple):
 
 
 class SRModel(ABC):
-
     @staticmethod
     def wrap_and_format_transcript_data(
         data: constants.TranscriptDataJSON,
         transcript_format: str,
         confidence: float,
-        annotations: List[Dict[str, Any]] = []
-    ) -> Dict[str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]]:
+        annotations: List[Dict[str, Any]] = [],
+    ) -> Dict[
+        str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]
+    ]:
         """
         A very simple function to just make sure that a transcript has all the details neccessary prior to storing as a
         JSON file.
@@ -52,7 +53,7 @@ class SRModel(ABC):
             "format": transcript_format,
             "annotations": annotations,
             "confidence": confidence,
-            "data": data
+            "data": data,
         }
 
     @abstractmethod
@@ -93,5 +94,5 @@ class SRModel(ABC):
             1.0,
             Path(timestamped_words_save_path),
             Path(timestamped_sentences_save_path),
-            Path(timestamped_speaker_turns_save_path)
+            Path(timestamped_speaker_turns_save_path),
         )

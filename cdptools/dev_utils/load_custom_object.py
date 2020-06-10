@@ -12,7 +12,9 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-def load_custom_object(module_path: Union[str, List[str]], object_name: str, object_kwargs: Dict) -> object:
+def load_custom_object(
+    module_path: Union[str, List[str]], object_name: str, object_kwargs: Dict
+) -> object:
     """
     Load a custom object with kwargs.
 

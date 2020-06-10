@@ -22,12 +22,15 @@ log = logging.getLogger(__name__)
 # Ensure stopwords are downloaded
 try:
     from nltk.corpus import stopwords
+
     STOPWORDS = stopwords.words("english")
 except LookupError:
     import nltk
+
     nltk.download("stopwords")
     log.info("Downloaded nltk stopwords")
     from nltk.corpus import stopwords
+
     STOPWORDS = stopwords.words("english")
 
 ###############################################################################
@@ -74,11 +77,15 @@ class Indexer(ABC):
                 if transcript["format"] in [
                     TranscriptFormats.raw,
                     TranscriptFormats.timestamped_words,
-                    TranscriptFormats.timestamped_sentences
+                    TranscriptFormats.timestamped_sentences,
                 ]:
-                    transcript = " ".join([portion["text"] for portion in transcript["data"]])
+                    transcript = " ".join(
+                        [portion["text"] for portion in transcript["data"]]
+                    )
                 # Handle speaker turns transcripts
-                elif transcript["format"] == TranscriptFormats.timestamped_speaker_turns:
+                elif (
+                    transcript["format"] == TranscriptFormats.timestamped_speaker_turns
+                ):
                     text_blocks = []
                     for speaker_turn in transcript["data"]:
                         for portion in speaker_turn["data"]:
@@ -115,7 +122,9 @@ class Indexer(ABC):
         return any(punc in term for punc in [".", "!", "?"])
 
     @staticmethod
-    def get_context_span_for_index(terms: List[str], index: int, max_span_size: int = 10) -> str:
+    def get_context_span_for_index(
+        terms: List[str], index: int, max_span_size: int = 10
+    ) -> str:
         """
         Get the contextual sentence information for an index given an ordered list of terms.
 
@@ -205,7 +214,9 @@ class Indexer(ABC):
         """
         # Check index provided
         if index < 0:
-            raise IndexError("For simplicity's sake, we don't support negative index context span retrieval. Sorry.")
+            raise IndexError(
+                "For simplicity's sake, we don't support negative index context span retrieval. Sorry."
+            )
 
         # Window to store valid terms in
         window = deque()
@@ -229,7 +240,10 @@ class Indexer(ABC):
             if current_exploration_direction == "left" and left_side_valid:
                 # If the term is the end of the prior sentence, mark the current position as no longer valid to explore
                 # Also catch if we have hit the beginning of the terms
-                if Indexer.term_is_end_of_sentence(terms[left_side_index]) or left_side_index < 0:
+                if (
+                    Indexer.term_is_end_of_sentence(terms[left_side_index])
+                    or left_side_index < 0
+                ):
                     left_side_valid = False
                 # It wasn't the end of the prior sentence so we can append the term to the window
                 else:
@@ -244,7 +258,10 @@ class Indexer(ABC):
                     right_side_valid = False
 
                 # If the term is the end of the sentence, append it and mark right side as no longer valid
-                elif Indexer.term_is_end_of_sentence(terms[right_side_index]) or right_side_index >= len(terms) - 1:
+                elif (
+                    Indexer.term_is_end_of_sentence(terms[right_side_index])
+                    or right_side_index >= len(terms) - 1
+                ):
                     window.append(terms[right_side_index])
                     right_side_valid = False
                 # If the term wasn't the end of the sentence, append it and move the index
@@ -292,11 +309,15 @@ class Indexer(ABC):
         cleaned_transcript = cleaned_transcript.replace("\n", " ").replace("\t", " ")
 
         # Remove punctuation
-        cleaned_transcript = re.sub(f"[{re.escape(string.punctuation)}]", "", cleaned_transcript)
+        cleaned_transcript = re.sub(
+            f"[{re.escape(string.punctuation)}]", "", cleaned_transcript
+        )
 
         # Remove stopwords
         joined_stopwords = "|".join(STOPWORDS)
-        cleaned_transcript = re.sub(r"\b(" + joined_stopwords + r")\b", "", cleaned_transcript)
+        cleaned_transcript = re.sub(
+            r"\b(" + joined_stopwords + r")\b", "", cleaned_transcript
+        )
 
         # Remove gaps in string
         cleaned_transcript = re.sub(r" {2,}", " ", cleaned_transcript)
@@ -319,8 +340,7 @@ class Indexer(ABC):
 
     @staticmethod
     def drop_terms_from_index_below_value(
-        index: Dict[str, Dict[str, float]],
-        minimum_value_allowed: float = 0.0
+        index: Dict[str, Dict[str, float]], minimum_value_allowed: float = 0.0
     ) -> Dict[str, Dict[str, float]]:
         """
         Drop any terms from an index that have a value less than or equal to the provided.
@@ -360,7 +380,9 @@ class Indexer(ABC):
         return cleaned
 
     @abstractmethod
-    def generate_index(self, event_corpus_map: Dict[str, Path], **kwargs) -> Dict[str, Dict[str, float]]:
+    def generate_index(
+        self, event_corpus_map: Dict[str, Path], **kwargs
+    ) -> Dict[str, Dict[str, float]]:
         """
         Given an event corpus map, compute word event values that will act as a search index.
 

@@ -23,7 +23,7 @@ class RunIO(NamedTuple):
     value: Any
 
 
-class RunManager():
+class RunManager:
     """
     A RunManager can be used to track the IO of an algorithm and log begin and completed times. Additionally, will
     gracefully handle when an algorithm errors. Depending on IO type, if any IO is a pathlib.Path, the full file will be
@@ -42,7 +42,7 @@ class RunManager():
         inputs: Optional[List[Union[List, Tuple, RunIO]]] = [],
         algorithm_description: Optional[str] = None,
         algorithm_source: Optional[str] = None,
-        remove_files: bool = False
+        remove_files: bool = False,
     ):
         """
         Construct a RunManager object to track algorithm IO.
@@ -95,7 +95,9 @@ class RunManager():
         # Create empty outputs list
         self._outputs = []
 
-    def _make_serializable_type(self, value: Any, io_type: str = "input") -> Optional[Any]:
+    def _make_serializable_type(
+        self, value: Any, io_type: str = "input"
+    ) -> Optional[Any]:
         """
         Make an IO value serializable.
 
@@ -123,7 +125,9 @@ class RunManager():
             # Resolve
             value = value.resolve(strict=True)
             if value.is_dir():
-                raise IsADirectoryError(f"RunIO must be single files or values. Received {value}")
+                raise IsADirectoryError(
+                    f"RunIO must be single files or values. Received {value}"
+                )
             if io_type == "input":
                 self._input_files.append(RunIO(str(type(value)), value))
             elif io_type == "output":
@@ -132,7 +136,9 @@ class RunManager():
 
         return str(value)
 
-    def _create_io(self, value: Union[Any, List, Tuple, RunIO], io_type: str = "input") -> Optional[RunIO]:
+    def _create_io(
+        self, value: Union[Any, List, Tuple, RunIO], io_type: str = "input"
+    ) -> Optional[RunIO]:
         """
         Create a RunIO object from the provided value.
 
@@ -179,7 +185,9 @@ class RunManager():
             if len(value) == 1:
                 return self._create_io(value[0], io_type)
             if len(value) != 2:
-                raise ValueError(f"RunIO objects may only be initialized with a type and value. Received: {value}")
+                raise ValueError(
+                    f"RunIO objects may only be initialized with a type and value. Received: {value}"
+                )
             # Make serializable
             serializable_value = self._make_serializable_type(value[1], io_type)
             if serializable_value:
@@ -260,11 +268,13 @@ class RunManager():
             name=self._algorithm_name,
             version=self._algorithm_version,
             description=self._algorithm_description,
-            source=self._algorithm_source
+            source=self._algorithm_source,
         )
 
         # Create run
-        run_details = self._db.get_or_upload_run(algorithm_details["algorithm_id"], self._began, self._completed)
+        run_details = self._db.get_or_upload_run(
+            algorithm_details["algorithm_id"], self._began, self._completed
+        )
         log.debug(f"Created run: {run_details}")
 
         # Create file inputs and outputs in db

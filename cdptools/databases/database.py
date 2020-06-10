@@ -13,10 +13,24 @@ from . import exceptions
 
 
 cdp_tables = [
-    'minutes_item_file', 'vote', 'person', 'run_input',
-    'indexed_minutes_item_term', 'minutes_item', 'event_minutes_item',
-    'run', 'run_output', 'transcript', 'file', 'run_input_file', 'algorithm',
-    'indexed_event_term', 'event', 'body', 'run_output_file']
+    "minutes_item_file",
+    "vote",
+    "person",
+    "run_input",
+    "indexed_minutes_item_term",
+    "minutes_item",
+    "event_minutes_item",
+    "run",
+    "run_output",
+    "transcript",
+    "file",
+    "run_input_file",
+    "algorithm",
+    "indexed_event_term",
+    "event",
+    "body",
+    "run_output_file",
+]
 
 
 class WhereCondition(NamedTuple):
@@ -82,7 +96,7 @@ ENTITY_DTYPE_MAP = {
     str: "STRING",
     int: "INTEGER",
     float: "DOUBLE",
-    datetime: "TIMESTAMP"
+    datetime: "TIMESTAMP",
 }
 
 
@@ -90,7 +104,6 @@ ENTITY_DTYPE_MAP = {
 
 
 class Database(ABC):
-
     @staticmethod
     def _construct_where_condition(filt: Union[WhereCondition, List, Tuple]):
         """
@@ -225,7 +238,7 @@ class Database(ABC):
         table: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """
         Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.
@@ -252,8 +265,7 @@ class Database(ABC):
 
     @staticmethod
     def _reshape_list_of_rows_to_dict(
-        rows: List[Dict[str, Any]],
-        table: str
+        rows: List[Dict[str, Any]], table: str
     ) -> Dict[str, Dict[str, Any]]:
         """
         Reshape a list of rows to a dictionary of rows.
@@ -281,8 +293,7 @@ class Database(ABC):
 
     @staticmethod
     def _reshape_list_of_rows_to_dataframe(
-        rows: List[Dict[str, Any]],
-        table: Optional[str] = None
+        rows: List[Dict[str, Any]], table: Optional[str] = None
     ):
         """
         Simply cast a list of rows to a dataframe.
@@ -310,7 +321,9 @@ class Database(ABC):
         return formatted
 
     @abstractmethod
-    def get_or_upload_body(self, name: str, description: Optional[str]) -> Dict[str, str]:
+    def get_or_upload_body(
+        self, name: str, description: Optional[str]
+    ) -> Dict[str, str]:
         """
         Get or upload a body.
 
@@ -334,7 +347,7 @@ class Database(ABC):
         name: str,
         matter: Optional[str] = None,
         title: Optional[str] = None,
-        legistar_event_item_id: Optional[int] = None
+        legistar_event_item_id: Optional[int] = None,
     ) -> Dict:
         """
         Get or upload a minutes item. In Legistar this is commonly referred to as an event item.
@@ -363,7 +376,7 @@ class Database(ABC):
         minutes_item_id: str,
         uri: str,
         name: Optional[str] = None,
-        legistar_matter_attachment_id: Optional[int] = None
+        legistar_matter_attachment_id: Optional[int] = None,
     ) -> Dict:
         """
         Get or upload a minutes item file. Commonly, minutes items have an associated file such as a presentation.
@@ -414,7 +427,7 @@ class Database(ABC):
         agenda_file_uri: Optional[str] = None,
         minutes_file_uri: Optional[str] = None,
         legistar_event_id: Optional[int] = None,
-        legistar_event_link: Optional[str] = None
+        legistar_event_link: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload an event.
@@ -452,7 +465,7 @@ class Database(ABC):
         event_id: str,
         minutes_item_id: str,
         index: int,
-        decision: Optional[str] = None
+        decision: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload the join of an event and a minutes item.
@@ -482,7 +495,7 @@ class Database(ABC):
         email: str,
         phone: Optional[str] = None,
         website: Optional[str] = None,
-        legistar_person_id: Optional[int] = None
+        legistar_person_id: Optional[int] = None,
     ) -> Dict:
         """
         Get or upload a city council member (person).
@@ -513,7 +526,7 @@ class Database(ABC):
         person_id: str,
         event_minutes_item_id: str,
         decision: str,
-        legistar_event_item_vote_id: Optional[int] = None
+        legistar_event_item_vote_id: Optional[int] = None,
     ) -> Dict:
         """
         Get or upload a person's vote on a minutes item.
@@ -542,7 +555,7 @@ class Database(ABC):
         uri: str,
         filename: Optional[str] = None,
         description: Optional[str] = None,
-        content_type: Optional[str] = None
+        content_type: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload a file (to the database table, not a file store).
@@ -567,7 +580,9 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_transcript(event_id: str, file_id: str, confidence: Optional[float] = None) -> Dict:
+    def get_or_upload_transcript(
+        event_id: str, file_id: str, confidence: Optional[float] = None
+    ) -> Dict:
         """
         Get or upload a transcript (to the database, a file store).
 
@@ -593,7 +608,7 @@ class Database(ABC):
         name: str,
         version: str,
         description: Optional[str] = None,
-        source: Optional[str] = None
+        source: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload an algorithm.
@@ -617,7 +632,9 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_run(self, algorithm_id: str, begin: datetime, completed: datetime) -> Dict:
+    def get_or_upload_run(
+        self, algorithm_id: str, begin: datetime, completed: datetime
+    ) -> Dict:
         """
         Get or upload a run.
 
@@ -760,7 +777,9 @@ class Database(ABC):
             return str(type(value))
 
     @abstractmethod
-    def get_or_upload_event_entity(self, event_id: str, label: str, value: Union[str, int, float, datetime]) -> Dict:
+    def get_or_upload_event_entity(
+        self, event_id: str, label: str, value: Union[str, int, float, datetime]
+    ) -> Dict:
         """
         Get or upload an event entity. Because entities can be values that are other than strings, most databases,
         should cast this to a string prior to storage. This is also why will store the data type (dtype).
@@ -801,7 +820,9 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def upload_or_update_indexed_event_term(self, term: str, event_id: str, value: float) -> Dict:
+    def upload_or_update_indexed_event_term(
+        self, term: str, event_id: str, value: float
+    ) -> Dict:
         """
         Upload or update a single indexed event term.
 
@@ -858,7 +879,9 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def upload_or_update_indexed_minutes_item_term(self, term: str, minutes_item_id: str, value: float) -> Dict:
+    def upload_or_update_indexed_minutes_item_term(
+        self, term: str, minutes_item_id: str, value: float
+    ) -> Dict:
         """
         Upload or update a single indexed minutes_item item term.
 

@@ -23,12 +23,13 @@ class DocumentDetails(NamedTuple):
 
 
 class TFIDFIndexer(Indexer):
-
     def __init__(self, max_synchronous_jobs: int = 8, **kwargs):
         # Set state
         self.n_workers = max_synchronous_jobs
 
-    def _generate_term_counts_for_document(transcript_details: DocumentDetails) -> Dict[str, Dict[str, float]]:
+    def _generate_term_counts_for_document(
+        transcript_details: DocumentDetails,
+    ) -> Dict[str, Dict[str, float]]:
         # Open the transcript and get raw
         raw = Indexer.get_raw_transcript(transcript_details.path)
 
@@ -38,7 +39,10 @@ class TFIDFIndexer(Indexer):
         # Count terms
         # Thanks python core modules :^)
         terms = cleaned.split(" ")
-        return {"unique_id": transcript_details.unique_id, "term_counts": Counter(terms)}
+        return {
+            "unique_id": transcript_details.unique_id,
+            "term_counts": Counter(terms),
+        }
 
     @staticmethod
     def _combine_term_counts_for_corpus(
@@ -59,7 +63,9 @@ class TFIDFIndexer(Indexer):
         return combined
 
     @staticmethod
-    def _calculate_tfidf_for_corpus(term_counts_corpus: Dict[str, Dict[str, int]]) -> Dict[str, Dict[str, float]]:
+    def _calculate_tfidf_for_corpus(
+        term_counts_corpus: Dict[str, Dict[str, int]]
+    ) -> Dict[str, Dict[str, float]]:
         # N: total number of documents in the corpus
         # Let's use sets to create a list of all unique documents in the term counts corpus
         corpus = set()
@@ -98,16 +104,25 @@ class TFIDFIndexer(Indexer):
 
         return tfidf_corpus
 
-    def generate_index(self, document_corpus_map: Dict[str, Path]) -> Dict[str, Dict[str, float]]:
+    def generate_index(
+        self, document_corpus_map: Dict[str, Path]
+    ) -> Dict[str, Dict[str, float]]:
         # Convert the document corpus map to a list of TranscriptDetails for easier passing to multiprocessing
-        document_corpus_map = [DocumentDetails(unique_id, path) for unique_id, path in document_corpus_map.items()]
+        document_corpus_map = [
+            DocumentDetails(unique_id, path)
+            for unique_id, path in document_corpus_map.items()
+        ]
 
         # We could use sklearn CountVectorizer/ TfidfVectorizer, but meh 🤷
         # I don't think loading all the files into memory and stuffing them into a single list is that great
         # These transcripts can get long....
         # Memory shouldn't be an issue now, but maybe at like ~4000 documents?
         with ProcessPoolExecutor(max_workers=self.n_workers) as exe:
-            results = list(exe.map(TFIDFIndexer._generate_term_counts_for_document, document_corpus_map))
+            results = list(
+                exe.map(
+                    TFIDFIndexer._generate_term_counts_for_document, document_corpus_map
+                )
+            )
 
         # Combine the single unique id results
         results = self._combine_term_counts_for_corpus(results)

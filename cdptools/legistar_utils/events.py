@@ -27,6 +27,7 @@ class AgendaMatchResults:
         self.selected_event = selected_event
         self.match_scores = match_scores
 
+
 ###############################################################################
 
 
@@ -34,7 +35,7 @@ def get_legistar_events_for_timespan(
     client: str,
     begin: datetime = (datetime.utcnow()),
     end: datetime = (datetime.utcnow() + timedelta(days=1)),
-    store_each_response: bool = False
+    store_each_response: bool = False,
 ) -> List[Dict]:
     """
     Get all legistar events and each events minutes items, people, and votes, for a client for a given timespan.
@@ -69,8 +70,10 @@ def get_legistar_events_for_timespan(
     response = requests.get(
         request_format.format(
             client=client,
-            begin=filter_datetime_format.format(op="ge", dt=str(begin).replace(" ", "T")),
-            end=filter_datetime_format.format(op="lt", dt=str(end).replace(" ", "T"))
+            begin=filter_datetime_format.format(
+                op="ge", dt=str(begin).replace(" ", "T")
+            ),
+            end=filter_datetime_format.format(op="lt", dt=str(end).replace(" ", "T")),
         )
     ).json()
     if store_each_response:
@@ -79,17 +82,19 @@ def get_legistar_events_for_timespan(
     request_counter += 1
 
     # Get all event items for each event
-    item_request_format = LEGISTAR_EVENT_BASE + "/{event_id}/EventItems?AgendaNote=1&MinutesNote=1&Attachments=1"
+    item_request_format = (
+        LEGISTAR_EVENT_BASE
+        + "/{event_id}/EventItems?AgendaNote=1&MinutesNote=1&Attachments=1"
+    )
     for i, event in enumerate(response):
         # Attach the Event Items to the event
         event["EventItems"] = requests.get(
-            item_request_format.format(
-                client=client,
-                event_id=event["EventId"]
-            )
+            item_request_format.format(client=client, event_id=event["EventId"])
         ).json()
         if store_each_response:
-            with open(f"request_{request_counter}_event_{i}_items.json", "w") as write_out:
+            with open(
+                f"request_{request_counter}_event_{i}_items.json", "w"
+            ) as write_out:
                 json.dump(event["EventItems"], write_out)
         request_counter += 1
 
@@ -98,12 +103,13 @@ def get_legistar_events_for_timespan(
             vote_request_format = LEGISTAR_VOTE_BASE + "/{event_item_id}/Votes"
             event_item["EventItemVoteInfo"] = requests.get(
                 vote_request_format.format(
-                    client=client,
-                    event_item_id=event_item["EventItemId"]
+                    client=client, event_item_id=event_item["EventItemId"]
                 )
             ).json()
             if store_each_response:
-                with open(f"request_{request_counter}_event_{i}_item_{j}_votes.json", "w") as write_out:
+                with open(
+                    f"request_{request_counter}_event_{i}_item_{j}_votes.json", "w"
+                ) as write_out:
                     json.dump(event_item["EventItemVoteInfo"], write_out)
             request_counter += 1
 
@@ -112,12 +118,14 @@ def get_legistar_events_for_timespan(
                 person_request_format = LEGISTAR_PERSON_BASE + "/{person_id}"
                 vote_info["PersonInfo"] = requests.get(
                     person_request_format.format(
-                        client=client,
-                        person_id=vote_info["VotePersonId"]
+                        client=client, person_id=vote_info["VotePersonId"]
                     )
                 ).json()
                 if store_each_response:
-                    with open(f"request_{request_counter}_event_{i}_item_{j}_vote_{k}_person.json", "w") as write_out:
+                    with open(
+                        f"request_{request_counter}_event_{i}_item_{j}_vote_{k}_person.json",
+                        "w",
+                    ) as write_out:
                         json.dump(vote_info["PersonInfo"], write_out)
                 request_counter += 1
 
@@ -126,8 +134,7 @@ def get_legistar_events_for_timespan(
 
 
 def get_matching_legistar_event_by_minutes_match(
-    minutes_items_provided: List[str],
-    legistar_events: List[Dict]
+    minutes_items_provided: List[str], legistar_events: List[Dict]
 ) -> AgendaMatchResults:
     """
     Provided a list of strings that represent "display name" minutes items, find the closest matching legistar event
@@ -151,7 +158,9 @@ def get_matching_legistar_event_by_minutes_match(
     """
     # Quick return
     if len(legistar_events) == 1:
-        return AgendaMatchResults(legistar_events[0], {legistar_events[0]["EventId"]: 100})
+        return AgendaMatchResults(
+            legistar_events[0], {legistar_events[0]["EventId"]: 100}
+        )
 
     # Calculate fuzzy match agenda list of string
     elif len(legistar_events) > 1:
@@ -172,7 +181,9 @@ def get_matching_legistar_event_by_minutes_match(
                     event_minutes_items.append(ei["EventItemTitle"])
 
             # Token set ratio
-            match_score = fuzz.token_set_ratio(minutes_items_provided, event_minutes_items)
+            match_score = fuzz.token_set_ratio(
+                minutes_items_provided, event_minutes_items
+            )
 
             # Add score to map
             scores[event["EventId"]] = match_score
@@ -195,7 +206,9 @@ def _clean_legistar_string_data(text: Union[str, None]) -> Union[str, None]:
     return text
 
 
-def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_items: List[str] = []) -> Dict:
+def parse_legistar_event_details(
+    legistar_event_details: Dict, ignore_minutes_items: List[str] = []
+) -> Dict:
     """
     Parse the full legistar event details and format into the CDP ready JSON dictionary for upload.
 
@@ -222,17 +235,27 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
     for legistar_event_item in legistar_event_details["EventItems"]:
         # Choose name based off available data
         if legistar_event_item["EventItemTitle"]:
-            minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemTitle"])
+            minutes_item_name = _clean_legistar_string_data(
+                legistar_event_item["EventItemTitle"]
+            )
         elif legistar_event_item["EventItemMatterName"]:
-            minutes_item_name = _clean_legistar_string_data(legistar_event_item["EventItemMatterName"])
+            minutes_item_name = _clean_legistar_string_data(
+                legistar_event_item["EventItemMatterName"]
+            )
         else:
-            minutes_item_matter = _clean_legistar_string_data(legistar_event_item["EventItemMatterFile"])
+            minutes_item_matter = _clean_legistar_string_data(
+                legistar_event_item["EventItemMatterFile"]
+            )
 
         # Choose matter name based off available data
         if legistar_event_item["EventItemMatterName"]:
-            minutes_item_matter = _clean_legistar_string_data(legistar_event_item["EventItemMatterName"])
+            minutes_item_matter = _clean_legistar_string_data(
+                legistar_event_item["EventItemMatterName"]
+            )
         else:
-            minutes_item_matter = _clean_legistar_string_data(legistar_event_item["EventItemMatterFile"])
+            minutes_item_matter = _clean_legistar_string_data(
+                legistar_event_item["EventItemMatterFile"]
+            )
 
         # Only continue if the minutes item name is not ignored
         if minutes_item_name not in ignore_minutes_items:
@@ -256,16 +279,20 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
                 "name": minutes_item_name,
                 "matter": minutes_item_matter,
                 "index": index,
-                "legistar_event_item_id": int(legistar_event_item["EventItemId"])
+                "legistar_event_item_id": int(legistar_event_item["EventItemId"]),
             }
 
             # Parse attachments
             item_attachments = []
             for matter_attachment in legistar_event_item["EventItemMatterAttachments"]:
                 item_attachment = {
-                    "name": _clean_legistar_string_data(matter_attachment["MatterAttachmentName"]),
+                    "name": _clean_legistar_string_data(
+                        matter_attachment["MatterAttachmentName"]
+                    ),
                     "uri": matter_attachment["MatterAttachmentHyperlink"],
-                    "legistar_matter_attachment_id": int(matter_attachment["MatterAttachmentId"])
+                    "legistar_matter_attachment_id": int(
+                        matter_attachment["MatterAttachmentId"]
+                    ),
                 }
                 item_attachments.append(item_attachment)
 
@@ -273,18 +300,24 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
             votes = []
             if legistar_event_item["EventItemPassedFlagName"]:
                 for vote_info in legistar_event_item["EventItemVoteInfo"]:
-                    votes.append({
-                        "decision": vote_info["VoteValueName"],
-                        "legistar_event_item_vote_id": int(vote_info["VoteId"]),
-                        "person": {
-                            "full_name": vote_info["PersonInfo"]["PersonFullName"],
-                            "email": vote_info["PersonInfo"]["PersonEmail"],
-                            "phone": vote_info["PersonInfo"]["PersonPhone"],
-                            "website": vote_info["PersonInfo"]["PersonWWW"],
-                            "legistar_person_id": vote_info["PersonInfo"]["PersonId"]
+                    votes.append(
+                        {
+                            "decision": vote_info["VoteValueName"],
+                            "legistar_event_item_vote_id": int(vote_info["VoteId"]),
+                            "person": {
+                                "full_name": vote_info["PersonInfo"]["PersonFullName"],
+                                "email": vote_info["PersonInfo"]["PersonEmail"],
+                                "phone": vote_info["PersonInfo"]["PersonPhone"],
+                                "website": vote_info["PersonInfo"]["PersonWWW"],
+                                "legistar_person_id": vote_info["PersonInfo"][
+                                    "PersonId"
+                                ],
+                            },
                         }
-                    })
-                    minutes_item["decision"] = legistar_event_item["EventItemPassedFlagName"]
+                    )
+                    minutes_item["decision"] = legistar_event_item[
+                        "EventItemPassedFlagName"
+                    ]
             else:
                 minutes_item["decision"] = None
 
@@ -305,7 +338,7 @@ def parse_legistar_event_details(legistar_event_details: Dict, ignore_minutes_it
         "minutes_items": minutes_items,
         "legistar_event_id": int(legistar_event_details["EventId"]),
         "legistar_event_link": legistar_event_details["EventInSiteURL"],
-        "minutes_file_uri": legistar_event_details["EventMinutesFile"]
+        "minutes_file_uri": legistar_event_details["EventMinutesFile"],
     }
 
     return parsed_details

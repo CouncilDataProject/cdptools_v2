@@ -17,7 +17,7 @@ from cdptools.dev_utils import load_custom_object
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s"
+    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
 )
 log = logging.getLogger(__name__)
 
@@ -25,24 +25,39 @@ log = logging.getLogger(__name__)
 
 
 class Args(argparse.Namespace):
-
     def __init__(self):
         self.__parse()
 
     def __parse(self):
         p = argparse.ArgumentParser(
-            prog="run_cdp_pipeline",
-            description="Initialize and run a CDP pipeline."
+            prog="run_cdp_pipeline", description="Initialize and run a CDP pipeline."
         )
         p.add_argument("pipeline_type", help="Which pipeline to launch.")
-        p.add_argument("config_path", type=Path, help="Path to a configuration file with details for the pipeline.")
-        p.add_argument("--nm", "--run-every-n-minutes", action="store", dest="schedule", type=int, default=None,
-                       help="Integer to run the specified pipeline every n minutes. Default: Run pipeline once.")
-        p.add_argument("--debug", action="store_true", dest="debug", help="Show traceback if the script were to fail.")
+        p.add_argument(
+            "config_path",
+            type=Path,
+            help="Path to a configuration file with details for the pipeline.",
+        )
+        p.add_argument(
+            "--nm",
+            "--run-every-n-minutes",
+            action="store",
+            dest="schedule",
+            type=int,
+            default=None,
+            help="Integer to run the specified pipeline every n minutes. Default: Run pipeline once.",
+        )
+        p.add_argument(
+            "--debug",
+            action="store_true",
+            dest="debug",
+            help="Show traceback if the script were to fail.",
+        )
         p.parse_args(namespace=self)
 
 
 ###############################################################################
+
 
 def run_cdp_pipeline(args: Args):
     try:
@@ -50,7 +65,7 @@ def run_cdp_pipeline(args: Args):
         pipeline = load_custom_object.load_custom_object(
             module_path="cdptools.pipelines",
             object_name=args.pipeline_type,
-            object_kwargs={"config_path": args.config_path}
+            object_kwargs={"config_path": args.config_path},
         )
 
         log.info(f"CDPTools Version: {get_module_version()}")

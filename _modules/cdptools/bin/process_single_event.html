@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id4">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id7">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id15">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id23">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -254,12 +254,13 @@
             
   <h1>Source code for cdptools.bin.process_single_event</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span> <span class="nn">cdptools</span> <span class="kn">import</span> <span class="n">get_module_version</span>
+
 <span class="kn">from</span> <span class="nn">..dev_utils</span> <span class="kn">import</span> <span class="n">load_custom_object</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
@@ -302,7 +303,7 @@
         <span class="n">event</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">event_scraper</span><span class="o">.</span><span class="n">get_single_event</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">event_url</span><span class="p">,</span> <span class="n">backfill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CDPTools Version: </span><span class="si">{</span><span class="n">get_module_version</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing: EventGatherPipeline&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing: EventGatherPipeline&quot;</span><span class="p">)</span>
 
         <span class="n">pipeline</span><span class="o">.</span><span class="n">process_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>

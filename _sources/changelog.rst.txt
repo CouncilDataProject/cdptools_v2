@@ -19,6 +19,9 @@ Fix
 
 Other
 ~~~~~
+- admin/fix-lint-errors  (`#144
+  <https://github.com/CouncilDataProject/cdptools/pull/144>`_)
+  [JacksonMaxfield]
 - admin/replace-fuzzywuzzy-with-rapidfuzz  (`#140
   <https://github.com/CouncilDataProject/cdptools/pull/140>`_)
   [JacksonMaxfield, maxbachmann]

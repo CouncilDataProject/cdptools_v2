@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id4">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id7">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id15">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id23">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -1058,7 +1058,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="o">.</span><span class="n">collection</span><span class="p">(</span><span class="s2">&quot;indexed_event_term&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">document</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 
         <span class="c1"># Return the newly created row</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;indexed_event_term_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">}</span></div>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;indexed_event_term_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">}</span></div>
 
     <span class="k">def</span> <span class="nf">_search_for_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1144,7 +1144,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="o">.</span><span class="n">collection</span><span class="p">(</span><span class="s2">&quot;indexed_minutes_item_term&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">document</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 
         <span class="c1"># Return the newly created row</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;indexed_minutes_item_term_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">}</span></div>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;indexed_minutes_item_term_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">}</span></div>
 
 <div class="viewcode-block" id="CloudFirestoreDatabase.search_minutes_items"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.search_minutes_items">[docs]</a>    <span class="k">def</span> <span class="nf">search_minutes_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Match</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search</span><span class="p">(</span>

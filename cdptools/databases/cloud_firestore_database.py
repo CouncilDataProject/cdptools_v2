@@ -803,7 +803,7 @@ class CloudFirestoreDatabase(Database):
         self._root.collection("indexed_event_term").document(id).set(values)
 
         # Return the newly created row
-        return {f"indexed_event_term_id": id, **values}
+        return {"indexed_event_term_id": id, **values}
 
     def _search_for_term(self, term: str, table: str) -> List[Dict[str, Union[str, float, datetime]]]:
         """
@@ -889,7 +889,7 @@ class CloudFirestoreDatabase(Database):
         self._root.collection("indexed_minutes_item_term").document(id).set(values)
 
         # Return the newly created row
-        return {f"indexed_minutes_item_term_id": id, **values}
+        return {"indexed_minutes_item_term_id": id, **values}
 
     def search_minutes_items(self, query: str) -> List[Match]:
         return self._search(

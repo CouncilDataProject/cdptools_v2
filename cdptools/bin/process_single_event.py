@@ -1,10 +1,11 @@
 import argparse
-import sys
 import logging
+import sys
 import traceback
 from pathlib import Path
 
 from cdptools import get_module_version
+
 from ..dev_utils import load_custom_object
 
 logging.basicConfig(
@@ -47,7 +48,7 @@ def main():
         event = pipeline.event_scraper.get_single_event(args.event_url, backfill=True)
 
         log.info(f"CDPTools Version: {get_module_version()}")
-        log.info(f"Initializing: EventGatherPipeline")
+        log.info("Initializing: EventGatherPipeline")
 
         pipeline.process_event(event)
     except Exception as e:

@@ -69,7 +69,7 @@ def run_cdp_pipeline(args: Args):
 
         # No schedule passed. Run once
         else:
-            log.info(f"Pipeline will run once.")
+            log.info("Pipeline will run once.")
             log.info("=" * 80)
             pipeline.run()
 

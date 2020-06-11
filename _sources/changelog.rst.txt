@@ -19,6 +19,9 @@ Fix
 
 Other
 ~~~~~
+- admin/reorg-paper-files  (`#146
+  <https://github.com/CouncilDataProject/cdptools/pull/146>`_)
+  [JacksonMaxfield]
 - admin/update-from-cookiecutter  (`#145
   <https://github.com/CouncilDataProject/cdptools/pull/145>`_)
   [JacksonMaxfield]

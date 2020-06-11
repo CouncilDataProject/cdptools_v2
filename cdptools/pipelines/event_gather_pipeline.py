@@ -330,9 +330,7 @@ class EventGatherPipeline(Pipeline):
 
                     self.database.get_or_upload_vote(
                         person_id=person_details["person_id"],
-                        event_minutes_item_id=emi_details[
-                            "event_minutes_item_id"
-                        ],
+                        event_minutes_item_id=emi_details["event_minutes_item_id"],
                         decision=vote["decision"],
                         legistar_event_item_vote_id=vote["legistar_event_item_vote_id"],
                     )

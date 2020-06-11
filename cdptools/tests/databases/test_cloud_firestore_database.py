@@ -7,7 +7,10 @@ from unittest import mock
 import pytest
 from cdptools.databases import WhereOperators, exceptions
 from cdptools.databases.cloud_firestore_database import (
-    CloudFirestoreDatabase, CloudFirestoreWhereOperators, NoCredResponseTypes)
+    CloudFirestoreDatabase,
+    CloudFirestoreWhereOperators,
+    NoCredResponseTypes,
+)
 from firebase_admin import firestore
 
 
@@ -299,7 +302,7 @@ def test_cloud_firestore_database_select_rows_as_list(
 )
 def test_convert_base_where_operator_to_cloud_firestore_where_operator(op, expected):
     assert (
-        CloudFirestoreDatabase._convert_base_where_operator_to_cloud_firestore_where_operator(    # noqa: E501
+        CloudFirestoreDatabase._convert_base_where_operator_to_cloud_firestore_where_operator(  # noqa: E501
             op
         )
         == expected

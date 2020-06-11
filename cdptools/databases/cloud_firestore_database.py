@@ -18,8 +18,15 @@ from firebase_admin import credentials, firestore
 
 from ..indexers import Indexer
 from . import exceptions
-from .database import (Database, Match, OrderCondition, TermResult,
-                       WhereCondition, WhereOperators, cdp_tables)
+from .database import (
+    Database,
+    Match,
+    OrderCondition,
+    TermResult,
+    WhereCondition,
+    WhereOperators,
+    cdp_tables,
+)
 
 ###############################################################################
 

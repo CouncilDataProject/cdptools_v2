@@ -14,8 +14,7 @@ from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.event_scrapers.seattle_event_scraper import SeattleEventScraper
 from cdptools.file_stores.gcs_file_store import GCSFileStore
 from cdptools.pipelines import EventGatherPipeline
-from cdptools.sr_models.google_cloud_sr_model import (GoogleCloudSRModel,
-                                                      SRModelOutputs)
+from cdptools.sr_models.google_cloud_sr_model import GoogleCloudSRModel, SRModelOutputs
 from cdptools.sr_models.webvtt_sr_model import WebVTTSRModel
 from firebase_admin import firestore
 from google.cloud import storage

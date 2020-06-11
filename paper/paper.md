@@ -35,10 +35,8 @@ bibliography: paper.bib
 
 # Figures
 
-Figures can be included like this: ![Example figure.](figure.png)
 
 # Acknowledgements
-
 
 
 # References

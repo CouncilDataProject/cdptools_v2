@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Union
 
 import requests
+
 from rapidfuzz import fuzz
 
 ###############################################################################
@@ -38,7 +39,8 @@ def get_legistar_events_for_timespan(
     store_each_response: bool = False,
 ) -> List[Dict]:
     """
-    Get all legistar events and each events minutes items, people, and votes, for a client for a given timespan.
+    Get all legistar events and each events minutes items, people, and votes, for a
+    client for a given timespan.
 
     Parameters
     ----------
@@ -49,14 +51,16 @@ def get_legistar_events_for_timespan(
     end: datetime
         The timespan end datetime to query for events before.
     store_each_response: bool
-        Option to store each response as they come in. Used to store the data for testing the event gather pipeline.
+        Option to store each response as they come in. Used to store the data for
+        testing the event gather pipeline.
 
     Returns
     -------
     events: List[Dict]
-        All legistar events that occur between the datetimes provided for the client provided. Additionally, requests
-        and attaches agenda items, minutes items, any attachments, called "EventItems", requests votes for any of these
-        "EventItems", and requests person information for any vote.
+        All legistar events that occur between the datetimes provided for the client
+        provided. Additionally, requests and attaches agenda items, minutes items, any
+        attachments, called "EventItems", requests votes for any of these "EventItems",
+        and requests person information for any vote.
     """
     # Request counter
     request_counter = 0
@@ -123,7 +127,8 @@ def get_legistar_events_for_timespan(
                 ).json()
                 if store_each_response:
                     with open(
-                        f"request_{request_counter}_event_{i}_item_{j}_vote_{k}_person.json",
+                        f"request_{request_counter}"
+                        f"_event_{i}_item_{j}_vote_{k}_person.json",
                         "w",
                     ) as write_out:
                         json.dump(vote_info["PersonInfo"], write_out)
@@ -137,11 +142,13 @@ def get_matching_legistar_event_by_minutes_match(
     minutes_items_provided: List[str], legistar_events: List[Dict]
 ) -> AgendaMatchResults:
     """
-    Provided a list of strings that represent "display name" minutes items, find the closest matching legistar event
-    for the list provided. An example of this function being used may be found in SeattleEventScraper, but as a general
-    use case, this will be used when a city has two separate systems for storing video and storing legistar data and
-    you need to match up the video data with the legistar data. Event matching is determined by minutes item text set
-    difference. For details, on that algorithm, look at `rapidfuzz.fuzz.token_set_ratio`.
+    Provided a list of strings that represent "display name" minutes items, find the
+    closest matching legistar event for the list provided. An example of this function
+    being used may be found in SeattleEventScraper, but as a general use case, this
+    will be used when a city has two separate systems for storing video and storing
+    legistar data and you need to match up the video data with the legistar data. Event
+    matching is determined by minutes item text set difference. For details, on that
+    algorithm, look at `rapidfuzz.fuzz.token_set_ratio`.
 
     Parameters
     ----------
@@ -153,8 +160,8 @@ def get_matching_legistar_event_by_minutes_match(
     Returns
     -------
     match_details: AgendaMatchResults
-        An object to store the match results. Which contains an attribute for the highest matching and then the scores
-        for the rest of the checked event.
+        An object to store the match results. Which contains an attribute for the
+        highest matching and then the scores for the rest of the checked event.
     """
     # Quick return
     if len(legistar_events) == 1:
@@ -210,15 +217,17 @@ def parse_legistar_event_details(
     legistar_event_details: Dict, ignore_minutes_items: List[str] = []
 ) -> Dict:
     """
-    Parse the full legistar event details and format into the CDP ready JSON dictionary for upload.
+    Parse the full legistar event details and format into the CDP ready JSON dictionary
+    for upload.
 
     Parameters
     ----------
     legistar_event_details: Dict
         The full legistar event details with source and video URIs added.
     ignore_minutes_items: List[str]
-        It is fairly common to have minutes items that can be ignored. Any strings added to this list will be dropped
-        during the formatting of the CDP ready JSON object.
+        It is fairly common to have minutes items that can be ignored. Any strings
+        added to this list will be dropped during the formatting of the CDP ready JSON
+        object.
 
     Returns
     -------

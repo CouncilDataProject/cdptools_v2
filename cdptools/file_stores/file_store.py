@@ -61,7 +61,8 @@ class FileStore(ABC):
     @staticmethod
     def _path_is_local(path: Union[str, Path]) -> bool:
         """
-        Check to make sure that a path provided is on the local machine. Simply checks for common external uri headers.
+        Check to make sure that a path provided is on the local machine. Simply checks
+        for common external uri headers.
 
         Parameters
         ----------
@@ -71,7 +72,8 @@ class FileStore(ABC):
         Returns
         -------
         is_local: bool
-            A boolean value informing whether or not the provided path is a local resource or not.
+            A boolean value informing whether or not the provided path is a local
+            resource or not.
         """
         # Convert path
         path = str(path)
@@ -92,11 +94,11 @@ class FileStore(ABC):
         uri: str
             The uri for the external resource to copy.
         dst: Optional[Union[str, Path]]
-            A specific destination to where the copy should be placed. If None provided stores the resource in the
-            current working directory.
+            A specific destination to where the copy should be placed. If None provided
+            stores the resource in the current working directory.
         overwrite: bool
-            Boolean value indicating whether or not to overwrite a local resource with the same name if it already
-            exists.
+            Boolean value indicating whether or not to overwrite a local resource with
+            the same name if it already exists.
 
         Returns
         -------
@@ -137,7 +139,8 @@ class FileStore(ABC):
         Returns
         -------
         uri: str
-            If the file is found, the file uri is returned as a string. If it isn't a FileNotFoundError is raised.
+            If the file is found, the file uri is returned as a string. If it isn't a
+            FileNotFoundError is raised.
         """
 
         return ""
@@ -160,7 +163,8 @@ class FileStore(ABC):
         save_name: Optional[str]
             An optional save name to store the file as instead of it's current name.
         remove: bool
-            Boolean value indicating whether or not to remove the local file after storage in the file store.
+            Boolean value indicating whether or not to remove the local file after
+            storage in the file store.
 
         Returns
         -------
@@ -188,7 +192,8 @@ class FileStore(ABC):
         save_path: Optional[Union[str, Path]] = None
             An optional save path / destination to store the file locally.
         overwrite: bool
-            Boolean value indicating whether or not to overwrite a file that already exists in the destination.
+            Boolean value indicating whether or not to overwrite a file that already
+            exists in the destination.
 
         Returns
         -------

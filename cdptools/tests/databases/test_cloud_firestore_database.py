@@ -5,14 +5,10 @@ from datetime import datetime
 from unittest import mock
 
 import pytest
-from firebase_admin import firestore
-
 from cdptools.databases import WhereOperators, exceptions
 from cdptools.databases.cloud_firestore_database import (
-    CloudFirestoreDatabase,
-    CloudFirestoreWhereOperators,
-    NoCredResponseTypes,
-)
+    CloudFirestoreDatabase, CloudFirestoreWhereOperators, NoCredResponseTypes)
+from firebase_admin import firestore
 
 
 class MockedResponse:
@@ -66,7 +62,7 @@ class MockedCollection:
 
 
 EVENT_ITEM = {
-    "name": "projects/fake-cdp-instance/databases/(default)/documents/event/0e3bd59c-3f07-452c-83cf-e9eebeb73af2",
+    "name": "projects/fake-cdp-instance/databases/(default)/documents/event/0e3bd59c-3f07-452c-83cf-e9eebeb73af2",  # noqa: E501
     "fields": {
         "video_uri": {
             "stringValue": "http://video.seattle.gov:8080/media/council/gen_062717V.mp4"
@@ -75,8 +71,8 @@ EVENT_ITEM = {
         "event_datetime": {"timestampValue": "2017-06-27T00:00:00Z"},
         "body_id": {"stringValue": "6f38a688-2e96-4e33-841c-883738f9f03d"},
         "source_uri": {
-            "stringValue": "http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448"
-        },  # noqa: E501
+            "stringValue": "http://www.seattlechannel.org/mayor-and-council/city-council/2016/2017-gender-equity-safe-communities-and-new-americans-committee?videoid=x78448"  # noqa: E501
+        },
         "test_boolean_value": {"booleanValue": True},
         "test_null_value": {"nullValue": None},
         "test_float_value": {"doubleValue": "12.12"},
@@ -90,7 +86,7 @@ EVENT_ITEMS = [{"document": EVENT_ITEM}]
 INDEXED_EVENT_TERM_ITEMS_HELLO = [
     {
         "document": {
-            "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/000",
+            "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/000",  # noqa: E501
             "fields": {
                 "event_id": {"stringValue": "event_id_123"},
                 "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -101,7 +97,7 @@ INDEXED_EVENT_TERM_ITEMS_HELLO = [
     },
     {
         "document": {
-            "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/111",
+            "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/111",  # noqa: E501
             "fields": {
                 "event_id": {"stringValue": "event_id_234"},
                 "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -115,7 +111,7 @@ INDEXED_EVENT_TERM_ITEMS_HELLO = [
 INDEXED_EVENT_TERM_ITEMS_WORLD = [
     {
         "document": {
-            "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/222",
+            "name": "projects/fake-cdp-instance/databases/(default)/documents/indexed_event_term/222",  # noqa: E501
             "fields": {
                 "event_id": {"stringValue": "event_id_234"},
                 "updated": {"timestampValue": "2019-04-21T23:58:04.832481Z"},
@@ -143,7 +139,7 @@ def no_creds_db() -> CloudFirestoreDatabase:
 @pytest.fixture
 def creds_db() -> CloudFirestoreDatabase:
     with mock.patch(
-        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"
+        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"  # noqa: E501
     ):
         db = CloudFirestoreDatabase("/fake/path/to/creds.json")
         db._credentials_path = "/fake/path/to/creds.json"
@@ -158,7 +154,7 @@ def creds_db() -> CloudFirestoreDatabase:
 @pytest.fixture
 def empty_creds_db() -> CloudFirestoreDatabase:
     with mock.patch(
-        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"
+        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"  # noqa: E501
     ):
         db = CloudFirestoreDatabase("/fake/path/to/creds.json")
         db._credentials_path = "/fake/path/to/creds.json"
@@ -303,7 +299,7 @@ def test_cloud_firestore_database_select_rows_as_list(
 )
 def test_convert_base_where_operator_to_cloud_firestore_where_operator(op, expected):
     assert (
-        CloudFirestoreDatabase._convert_base_where_operator_to_cloud_firestore_where_operator(
+        CloudFirestoreDatabase._convert_base_where_operator_to_cloud_firestore_where_operator(    # noqa: E501
             op
         )
         == expected
@@ -383,7 +379,8 @@ def test_search_events(no_creds_db):
             assert len(results) == 2
 
             # Check individual event results
-            # We know the order they should be returned in is highest match to lowest match order
+            # We know the order they should be returned in is highest match to lowest
+            # match order
             # Check to make sure that is the case
             assert results[0].unique_id == "event_id_234"
             assert results[0].relevance == 0.8

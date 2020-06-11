@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Any, Dict, NamedTuple, Optional, Union
 
 import pandas as pd
-
 from cdptools.databases import Database, OrderOperators
 from cdptools.file_stores import FileStore
 
@@ -50,8 +49,8 @@ def get_transcript_manifest(
     db: Database, order_by_field: str = "confidence"
 ) -> pd.DataFrame:
     """
-    Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
-    instance's database.
+    Get a pandas dataframe that can act as a manifest of a transcript available for
+    each event stored in a CDP instance's database.
 
     Parameters
     ----------
@@ -65,7 +64,8 @@ def get_transcript_manifest(
     Returns
     -------
     manifest: pandas.DataFrame
-        A dataframe where each row has transcript, event, body, and file details for the event at that row.
+        A dataframe where each row has transcript, event, body, and file details for
+        the event at that row.
     """
 
     # Get transcript dataset
@@ -75,8 +75,9 @@ def get_transcript_manifest(
     order_by_field = order_by_field.lower()
     if order_by_field not in ALLOWED_ORDER_BY_FIELDS:
         raise ValueError(
-            f"Provided `order_by_field` value is not a valid selection for transcript ordering / selection. "
-            f"Received: {order_by_field}. Possible choices: {ALLOWED_ORDER_BY_FIELDS}"
+            f"Provided `order_by_field` value is not a valid selection for transcript "
+            f"ordering / selection. Received: {order_by_field}. "
+            f"Possible choices: {ALLOWED_ORDER_BY_FIELDS}"
         )
 
     # Create transcript get partial
@@ -151,21 +152,25 @@ def download_transcripts(
     save_dir: Optional[Union[str, Path]] = None,
 ) -> Dict[str, Path]:
     """
-    Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.
+    Download a transcript for each event found in a CDP instance. Additionally saves
+    the manifest as a CSV.
 
     Parameters
     ----------
     db: Database
         An already initialized database object connected to a CDP instance's database.
     fs: FileStore
-        An already initialized file store object connected to a CDP instance's file store.
+        An already initialized file store object connected to a CDP instance's file
+        store.
     order_by_field: str
         Which field to order the transcripts by to select the first (highest value) of.
         Default: "confidence"
         Choices: ["created", "confidence"]
     save_dir: Optional[Union[str, Path]]
-        An optional path of where to save the transcripts and manifest CSV. If None provided, uses current directory.
-        Always overwrites existing transcripts with the same name if they already exist in the provided directory.
+        An optional path of where to save the transcripts and manifest CSV. If None
+        provided, uses current directory.
+        Always overwrites existing transcripts with the same name if they already exist
+        in the provided directory.
 
     Returns
     -------

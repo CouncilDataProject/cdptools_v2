@@ -6,18 +6,19 @@ from pathlib import Path
 from typing import List, Union
 from unittest import mock
 
-import pytest
-from firebase_admin import firestore
-from google.cloud import storage
 from requests import RequestException
 
+import pytest
 from cdptools.audio_splitters.ffmpeg_audio_splitter import FFmpegAudioSplitter
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.event_scrapers.seattle_event_scraper import SeattleEventScraper
 from cdptools.file_stores.gcs_file_store import GCSFileStore
 from cdptools.pipelines import EventGatherPipeline
-from cdptools.sr_models.google_cloud_sr_model import GoogleCloudSRModel, SRModelOutputs
+from cdptools.sr_models.google_cloud_sr_model import (GoogleCloudSRModel,
+                                                      SRModelOutputs)
 from cdptools.sr_models.webvtt_sr_model import WebVTTSRModel
+from firebase_admin import firestore
+from google.cloud import storage
 
 from ..databases.test_cloud_firestore_database import MockedCollection
 from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket
@@ -71,7 +72,7 @@ def example_transcript_speaker_turns(data_dir) -> Path:
 @pytest.fixture
 def empty_creds_db() -> CloudFirestoreDatabase:
     with mock.patch(
-        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"
+        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"  # noqa: E501
     ):
         db = CloudFirestoreDatabase("/fake/path/to/creds.json")
         db._credentials_path = "/fake/path/to/creds.json"
@@ -259,12 +260,14 @@ def test_event_pipeline_no_backfill(
         pipeline = mock.Mock(EventGatherPipeline(example_config))
 
         with mock.patch("requests.get") as mock_requests:
-            # No backfill means only routes will be gathered because example html file only includes past events.
+            # No backfill means only routes will be gathered because example html file
+            # only includes past events.
             mock_requests.side_effect = [RequestReturn(example_seattle_routes)]
 
             pipeline.run()
 
-            # This should never be ran because example html files only include past events.
+            # This should never be ran because example html files only include past
+            # events.
             pipeline.process_event.assert_not_called()
 
 
@@ -295,7 +298,8 @@ def test_event_gather_pipeline_with_backfill(
         pipeline = EventGatherPipeline(example_config)
 
         with mock.patch("requests.get") as mock_requests:
-            # Backfill means we need to mock every request call including all the legistar calls
+            # Backfill means we need to mock every request call including all the
+            # legistar calls
             mock_requests.side_effect = [
                 RequestReturn(example_seattle_routes),
                 RequestReturn(example_seattle_route),
@@ -342,7 +346,8 @@ def test_event_pipeline_sr_model_failure(
         pipeline = EventGatherPipeline(example_config_with_mixture_sr_model)
 
         with mock.patch("requests.get") as mock_requests:
-            # Backfill means we need to mock every request call including all the legistar calls
+            # Backfill means we need to mock every request call including all the
+            # legistar calls
             mock_requests.side_effect = [
                 RequestReturn(example_seattle_routes),
                 RequestReturn(example_seattle_route),
@@ -358,7 +363,8 @@ def test_event_pipeline_sr_model_failure(
                 # Interupt calls to os.remove because it deletes test data otherwise
                 with mock.patch("os.remove"):
                     pipeline.run()
-                    # Check if sr_model is called, because caption_sr_model raised RequestException
+                    # Check if sr_model is called, because caption_sr_model raised
+                    # RequestException
                     pipeline.sr_model.transcribe.assert_called()
 
 
@@ -391,7 +397,8 @@ def test_event_pipeline_caption_sr_model_success(
         pipeline = EventGatherPipeline(example_config_with_mixture_sr_model)
 
         with mock.patch("requests.get") as mock_requests:
-            # Backfill means we need to mock every request call including all the legistar calls
+            # Backfill means we need to mock every request call including all the
+            # legistar calls
             mock_requests.side_effect = [
                 RequestReturn(example_seattle_routes),
                 RequestReturn(example_seattle_route),
@@ -407,5 +414,6 @@ def test_event_pipeline_caption_sr_model_success(
                 # Interupt calls to os.remove because it deletes test data otherwise
                 with mock.patch("os.remove"):
                     pipeline.run()
-                    # Check if sr_model is not called, because caption_sr_model return valid outputs
+                    # Check if sr_model is not called, because caption_sr_model return
+                    # valid outputs
                     pipeline.sr_model.transcribe.assert_not_called()

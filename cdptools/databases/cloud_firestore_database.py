@@ -10,28 +10,22 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
+import requests
+
 import firebase_admin
 import pandas as pd
-import requests
 from firebase_admin import credentials, firestore
 
 from ..indexers import Indexer
 from . import exceptions
-from .database import (
-    Database,
-    Match,
-    OrderCondition,
-    TermResult,
-    WhereCondition,
-    WhereOperators,
-    cdp_tables,
-)
+from .database import (Database, Match, OrderCondition, TermResult,
+                       WhereCondition, WhereOperators, cdp_tables)
 
 ###############################################################################
 
 log = logging.getLogger(__name__)
 
-FIRESTORE_BASE_URI = "https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents"
+FIRESTORE_BASE_URI = "https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents"  # noqa: E501
 FIRESTORE_QUERY_ADDITIONS = "{table}?{attachments}&fields=documents(fields%2Cname)"
 
 ###############################################################################
@@ -66,7 +60,8 @@ class CloudFirestoreDatabase(Database):
         cred = credentials.Certificate(str(credentials_path))
 
         # Check name
-        # This is done as if the name is None we just want to initialize the main connection
+        # This is done as if the name is None we just want to initialize the main
+        # connection
         if name:
             firebase_admin.initialize_app(cred, name=name)
         else:
@@ -103,7 +98,7 @@ class CloudFirestoreDatabase(Database):
             "vote": self.get_or_upload_vote,
             "person": self.get_or_upload_person,
             "run_input": self.get_or_upload_run_input,
-            "indexed_minutes_item_term": self.upload_or_update_indexed_minutes_item_term,
+            "indexed_minutes_item_term": self.upload_or_update_indexed_minutes_item_term,  # noqa: E501
             "minutes_item": self.get_or_upload_minutes_item,
             "event_minutes_item": self.get_or_upload_event_minutes_item,
             "run": self.get_or_upload_run,
@@ -236,7 +231,8 @@ class CloudFirestoreDatabase(Database):
 
         raise ValueError(
             f"Unsure how to convert where operator: {op}. "
-            f"No mapping exists between base operators and cloud firestore specific operators."
+            f"No mapping exists between base operators and "
+            f"cloud firestore specific operators."
         )
 
     @staticmethod
@@ -257,7 +253,8 @@ class CloudFirestoreDatabase(Database):
             return NoCredResponseTypes.null
 
         raise ValueError(
-            f"Unsure how to determine cloud firestore type from object: {val} (type: {type(val)})"
+            f"Unsure how to determine cloud firestore type from object: {val} "
+            f"(type: {type(val)})"
         )
 
     def _select_rows_as_list_no_creds(
@@ -288,7 +285,7 @@ class CloudFirestoreDatabase(Database):
                     {
                         "fieldFilter": {
                             "field": {"fieldPath": f.column_name},
-                            "op": self._convert_base_where_operator_to_cloud_firestore_where_operator(
+                            "op": self._convert_base_where_operator_to_cloud_firestore_where_operator(  # noqa: E501
                                 f.operator
                             ),
                             "value": {
@@ -377,7 +374,8 @@ class CloudFirestoreDatabase(Database):
         limit: Optional[int] = None,
     ) -> Dict[str, Dict[str, Any]]:
         """
-        Get a dictionary of rows from a table optionally using filters (a list of where conditions), ordering, and
+        Get a dictionary of rows from a table optionally using filters (a list of where
+        conditions), ordering, and
         limit.
 
         Parameters
@@ -389,14 +387,16 @@ class CloudFirestoreDatabase(Database):
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many rows should be returned that match the query provided.
-            Commonly, running queries without credentials will have a default limit value.
+            An integer limit to how many rows should be returned that match the query
+            provided. Commonly, running queries without credentials will have a default
+            limit value.
 
         Returns
         -------
         results: Dict[str, Dict[str, Any]]
-            The results of the query returned as a dictionary mapping unique id to a dictionary of that rows data from
-            the table queried. If no rows are found, returns an empty dictionary.
+            The results of the query returned as a dictionary mapping unique id to a
+            dictionary of that rows data from the table queried. If no rows are found,
+            returns an empty dictionary.
         """
         # Get, format, and return
         return self._reshape_list_of_rows_to_dict(
@@ -414,7 +414,8 @@ class CloudFirestoreDatabase(Database):
         set_id_to_index: bool = False,
     ) -> pd.DataFrame:
         """
-        Get a dataframe of rows from a table optionally using filters (a list of where conditions), ordering, and limit.
+        Get a dataframe of rows from a table optionally using filters (a list of where
+        conditions), ordering, and limit.
 
         Parameters
         ----------
@@ -425,17 +426,19 @@ class CloudFirestoreDatabase(Database):
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many rows should be returned that match the query provided.
-            Commonly, running queries without credentials will have a default limit value.
+            An integer limit to how many rows should be returned that match the query
+            provided. Commonly, running queries without credentials will have a default
+            limit value.
         set_id_to_index: bool
-            Boolean value to determine whether or not the unique id values for this data should be used as the index of
-            the dataframe.
+            Boolean value to determine whether or not the unique id values for this
+            data should be used as the index of the dataframe.
 
         Returns
         -------
         results: pandas.DataFrame
-            The results of the query returned as a pandas DataFrame, where each rwow is a unique row from the
-            table queried. If no rows are found, returns an empty DataFrame.
+            The results of the query returned as a pandas DataFrame, where each rwow is
+            a unique row from the table queried. If no rows are found, returns an empty
+            DataFrame.
         """
         # Get data
         data = self.select_rows_as_list(
@@ -839,7 +842,8 @@ class CloudFirestoreDatabase(Database):
         # Combine the term results into table results
         table_results = {}
         for term_result in term_results:
-            # Join the results into a main results dictionary where they top level key is the table row id
+            # Join the results into a main results dictionary where they top level key
+            # is the table row id
             for term_details in term_result:
                 if term_details[match_on] in table_results:
                     table_results[term_details[match_on]].append(term_details)

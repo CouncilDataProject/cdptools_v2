@@ -21,7 +21,8 @@ def load_custom_object(
     Parameters
     ----------
     module_path: Union[str, List[str]]
-        Python module path or list of path parts to a custom module. Ex: "cptools.pipeline"
+        Python module path or list of path parts to a custom module.
+        Ex: "cptools.pipeline"
     object_name: str
         Name of the object to retrieve from the module. Ex: "Pipeline"
     object_kwargs: Dict

@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 
 import pytest
-
 from cdptools.indexers import Indexer, exceptions
 
 
@@ -351,7 +350,8 @@ def test_get_context_span_for_index(terms, index, expected):
         ("1 billion", "1 billion"),
         ("98%", "98"),
         ("\n\n\n\nMEMORANDUM\n\nHello\n\tSPR", "memorandum hello spr"),
-        # Would love to learn better methods for handling cases like this but I don't think it matters too much
+        # Would love to learn better methods for handling cases like this but I don't
+        # think it matters too much
         ("1.4 Million", "14 million"),
         ("Will this remove punctuation?!%'", "remov punctuat"),
         ("$10 10.5% $5.5 2%", "10 105 55 2"),

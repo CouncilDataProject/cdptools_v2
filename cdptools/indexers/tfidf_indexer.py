@@ -53,10 +53,12 @@ class TFIDFIndexer(Indexer):
         for id_term_counts in corpus_results:
             # For each term count Counter returned get each term and it's count
             for term, count in id_term_counts["term_counts"].items():
-                # If the term has been seen before, simply add a new entry for the term count for that unique id
+                # If the term has been seen before, simply add a new entry for the term
+                # count for that unique id
                 if term in combined:
                     combined[term][id_term_counts["unique_id"]] = count
-                # If the term hasn't been seen, create a new dictionary to store term count by unique id
+                # If the term hasn't been seen, create a new dictionary to store term
+                # count by unique id
                 else:
                     combined[term] = {id_term_counts["unique_id"]: count}
 
@@ -67,7 +69,8 @@ class TFIDFIndexer(Indexer):
         term_counts_corpus: Dict[str, Dict[str, int]]
     ) -> Dict[str, Dict[str, float]]:
         # N: total number of documents in the corpus
-        # Let's use sets to create a list of all unique documents in the term counts corpus
+        # Let's use sets to create a list of all unique documents in the term counts
+        # corpus
         corpus = set()
         for term in term_counts_corpus:
             # Do set union to continue to add unique items to the corpus map
@@ -83,8 +86,8 @@ class TFIDFIndexer(Indexer):
             for unique_id, tf in term_counts_corpus[term].items():
                 # Compute idf
                 # d_t: documents containing term
-                # The number of documents containing a term is just the length of the available keys for that term
-                # in the term counts corpus
+                # The number of documents containing a term is just the length of the
+                # available keys for that term in the term counts corpus
                 # Ex:
                 # "hello": {
                 #   "0000...": 3,
@@ -95,10 +98,12 @@ class TFIDFIndexer(Indexer):
                 d_t = len(term_counts_corpus[term])
                 idf = math.log(N / d_t)
 
-                # If term already seen, simply add a new entry for the term tfidf value for that unique id
+                # If term already seen, simply add a new entry for the term tfidf value
+                # for that unique id
                 if term in tfidf_corpus:
                     tfidf_corpus[term][unique_id] = tf * idf
-                # If the term hasn't been seen, create a new dictionary to store term tfidf value by unique id
+                # If the term hasn't been seen, create a new dictionary to store term
+                # tfidf value by unique id
                 else:
                     tfidf_corpus[term] = {unique_id: tf * idf}
 
@@ -107,14 +112,16 @@ class TFIDFIndexer(Indexer):
     def generate_index(
         self, document_corpus_map: Dict[str, Path]
     ) -> Dict[str, Dict[str, float]]:
-        # Convert the document corpus map to a list of TranscriptDetails for easier passing to multiprocessing
+        # Convert the document corpus map to a list of TranscriptDetails for easier
+        # passing to multiprocessing
         document_corpus_map = [
             DocumentDetails(unique_id, path)
             for unique_id, path in document_corpus_map.items()
         ]
 
         # We could use sklearn CountVectorizer/ TfidfVectorizer, but meh 🤷
-        # I don't think loading all the files into memory and stuffing them into a single list is that great
+        # I don't think loading all the files into memory and stuffing them into a
+        # single list is that great
         # These transcripts can get long....
         # Memory shouldn't be an issue now, but maybe at like ~4000 documents?
         with ProcessPoolExecutor(max_workers=self.n_workers) as exe:

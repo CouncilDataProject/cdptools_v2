@@ -66,20 +66,22 @@ class CDPInstance:
         self, order_by_field: str = "confidence"
     ) -> pd.DataFrame:
         """
-        Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
-        instance's database.
+        Get a pandas dataframe that can act as a manifest of a transcript available for
+        each event stored in a CDP instance's database.
 
         Parameters
         ----------
         order_by_field: str
-            Which field to order the transcripts by to select the first (highest value) of.
+            Which field to order the transcripts by to select the
+            first (highest value) of.
             Default: "confidence"
             Choices: ["created", "confidence"]
 
         Returns
         -------
         manifest: pandas.DataFrame
-            A dataframe where each row has transcript, event, body, and file details for the event at that row.
+            A dataframe where each row has transcript, event, body, and file details
+            for the event at that row.
         """
 
         return transcripts_utils.get_transcript_manifest(
@@ -90,23 +92,27 @@ class CDPInstance:
         self, order_by_field: str = "confidence", save_dir: Optional[Path] = None,
     ) -> Dict[str, Path]:
         """
-        Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.
+        Download a transcript for each event found in a CDP instance. Additionally
+        saves the manifest as a CSV.
 
         Parameters
         ----------
         order_by_field: str
-            Which field to order the transcripts by to select the first (highest value) of.
+            Which field to order the transcripts by to select the
+            first (highest value) of.
             Default: "confidence"
             Choices: ["created", "confidence"]
         save_dir: Optional[Union[str, Path]]
             An optional path of where to save the transcripts and manifest CSV.
             If None provided, uses current directory.
-            Always overwrites existing transcripts with the same name if they already exist in the provided directory.
+            Always overwrites existing transcripts with the same name if they already
+            exist in the provided directory.
 
         Returns
         -------
         event_corpus_map: Dict[str, Path]
-            A dictionary mapping event id to a local Path for a transcript for that event.
+            A dictionary mapping event id to a local Path for a transcript for that
+            event.
         """
 
         return transcripts_utils.download_transcripts(

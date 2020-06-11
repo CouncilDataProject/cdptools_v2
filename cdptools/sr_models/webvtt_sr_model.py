@@ -8,8 +8,9 @@ import re
 from pathlib import Path
 from typing import Dict, List, Union
 
-import nltk
 import requests
+
+import nltk
 import truecase
 import webvtt
 
@@ -32,8 +33,9 @@ class WebVTTSRModel(SRModel):
         # Sentence must be ended by period, question mark, or exclamation point.
         self.end_of_sentence_pattern = r"^.+[.?!]\s*$"
 
-        # Confidence is tricky. We allow it to be a parameter because closed captions aren't always
-        # 100% accurate. For Seattle, I would guess they are about 97% accurate.
+        # Confidence is tricky. We allow it to be a parameter because closed captions
+        # aren't always 100% accurate. For Seattle, I would guess they are about 97%
+        # accurate.
         # Maybe something todo in the future is actually compute their accuracy.
         self.confidence = confidence
 

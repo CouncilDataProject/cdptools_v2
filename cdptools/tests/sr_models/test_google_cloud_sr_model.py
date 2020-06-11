@@ -5,9 +5,8 @@ import random
 from unittest import mock
 
 import pytest
-from google.cloud import speech_v1p1beta1 as speech
-
 from cdptools.sr_models.google_cloud_sr_model import GoogleCloudSRModel
+from google.cloud import speech_v1p1beta1 as speech
 
 
 @pytest.fixture
@@ -99,11 +98,12 @@ def test_google_cloud_sr_model_init(fake_creds_path):
         ([str(i) for i in range(600)], [str(i) for i in range(500)]),
         (
             [
-                "this will be chunked to less than one hundred characters because that is the maximum allowed by google "
-                "cloud speech recognition"
+                "this will be chunked to less than one hundred characters because that "
+                "is the maximum allowed by google cloud speech recognition"
             ],
             [
-                "this will be chunked to less than one hundred characters because that is the maximum allowed by"
+                "this will be chunked to less than one hundred characters because that "
+                "is the maximum allowed by"
             ],
         ),
         (["-" * 100] * 200, ["-" * 100] * 100),

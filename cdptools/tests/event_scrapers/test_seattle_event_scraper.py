@@ -5,7 +5,6 @@ from datetime import datetime
 
 import pytest
 from bs4 import BeautifulSoup
-
 from cdptools.event_scrapers.seattle_event_scraper import SeattleEventScraper
 
 
@@ -15,22 +14,22 @@ from cdptools.event_scrapers.seattle_event_scraper import SeattleEventScraper
         (
             "http://www.seattlechannel.org/CityCouncil",
             "images/seattlechannel/videoimages/channelGeneric.jpg",
-            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",
+            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",  # noqa: E501
         ),
         (
             "http://www.seattlechannel.org/CityCouncil/",
             "/images/seattlechannel/videoimages/channelGeneric.jpg",
-            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",
+            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",  # noqa: E501
         ),
         (
             "http://www.seattlechannel.org/CityCouncil",
-            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",
-            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",
+            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",  # noqa: E501
+            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",  # noqa: E501
         ),
         (
             "http://www.seattlechannel.org/CityCouncil/",
-            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",
-            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",
+            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",  # noqa: E501
+            "http://www.seattlechannel.org/images/seattlechannel/videoimages/channelGeneric.jpg",  # noqa: E501
         ),
     ],
 )
@@ -68,9 +67,9 @@ EXPECTED_SINGLE_EVENT = {
     "minutes_items": [
         "Chair's Report",
         "Public Comment",
-        "Appointments and Reappointments to Board of Park Commissioners,Seattle Park District Community Oversight Committee, andCentral Waterfront Oversight committee",
+        "Appointments and Reappointments to Board of Park Commissioners,Seattle Park District Community Oversight Committee, andCentral Waterfront Oversight committee",  # noqa: E501
         "Review of Amended and Restated Monorail System Concession Agreement",
-        "CB 119661 -relating to Seattle Parks and Recreation (Terry Pettus Park Addition)",
+        "CB 119661 -relating to Seattle Parks and Recreation (Terry Pettus Park Addition)",  # noqa: E501
         "CB 119700: relating to the Central Waterfront Project (Ocean Pavilion)",
     ],  # noqa: E501
     "body": "Civic Development, Public Assets, and Native Communities Committee",
@@ -99,8 +98,8 @@ MOCK_EVENT = {
 }
 m_d_y = "{}/{}/{}".format(now.month, now.day, now.year)
 m_d_sy = "{}/{}/{}".format(now.month, now.day, str(now.year)[2:])
-MOCK_EVENT_HTML = """<div class="row borderBottomNone paginationItem"><div class="col-xs-12 col-sm-4 col-md-3"><a href="/testing?videoid=x99999" onclick="javascript:loadJWPlayer7('http://video.seattle.gov:8080/media/council/tests_032919.mp4','/images/seattlechannel/videoimages/channelGeneric.jpg', &quot;&lt;p&gt;The City of Seattle conducts a hearing on testing Council Data Project parsers. &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&quot;, 'Example Body on Tests', '{m_d_sy}', '1:31:24', '9021807', false,'x93428', '', '', '', '', '', '', '', '', ''); return false;" target=""><img alt="Example Body on Tests {m_d_sy}" class="img-responsive" src="images/seattlechannel/videoimages/channelGeneric.jpg" title="Example Body on Tests {m_d_sy}"/></a></div><div class="col-xs-12 col-sm-8 col-md-9"><div class="titleDateContainer"><h2 class="paginationTitle"><a href="/testing?videoid=x99999" onclick="javascript:loadJWPlayer7('http://video.seattle.gov:8080/media/council/tests_032919.mp4','images/seattlechannel/videoimages/channelGeneric.jpg', &quot;&lt;p&gt;The City of Seattle conducts a hearing on testing Council Data Project parsers. &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&quot;, 'Example Body on Tests', '{m_d_sy}', '1:31:24', '9021807', false,'x93428', '', '', '', '', '', '', '', '', ''); return false;" title="Example Body on Tests {m_d_sy}">Example Body on Tests</a></h2><div class="videoDate">{m_d_y}</div></div><div class="titleExcerptText"><p>Agenda: Public Comment; CB 999999.</p><p></p></div></div></div>""".format(
+MOCK_EVENT_HTML = """<div class="row borderBottomNone paginationItem"><div class="col-xs-12 col-sm-4 col-md-3"><a href="/testing?videoid=x99999" onclick="javascript:loadJWPlayer7('http://video.seattle.gov:8080/media/council/tests_032919.mp4','/images/seattlechannel/videoimages/channelGeneric.jpg', &quot;&lt;p&gt;The City of Seattle conducts a hearing on testing Council Data Project parsers. &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&quot;, 'Example Body on Tests', '{m_d_sy}', '1:31:24', '9021807', false,'x93428', '', '', '', '', '', '', '', '', ''); return false;" target=""><img alt="Example Body on Tests {m_d_sy}" class="img-responsive" src="images/seattlechannel/videoimages/channelGeneric.jpg" title="Example Body on Tests {m_d_sy}"/></a></div><div class="col-xs-12 col-sm-8 col-md-9"><div class="titleDateContainer"><h2 class="paginationTitle"><a href="/testing?videoid=x99999" onclick="javascript:loadJWPlayer7('http://video.seattle.gov:8080/media/council/tests_032919.mp4','images/seattlechannel/videoimages/channelGeneric.jpg', &quot;&lt;p&gt;The City of Seattle conducts a hearing on testing Council Data Project parsers. &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&quot;, 'Example Body on Tests', '{m_d_sy}', '1:31:24', '9021807', false,'x93428', '', '', '', '', '', '', '', '', ''); return false;" title="Example Body on Tests {m_d_sy}">Example Body on Tests</a></h2><div class="videoDate">{m_d_y}</div></div><div class="titleExcerptText"><p>Agenda: Public Comment; CB 999999.</p><p></p></div></div></div>""".format(  # noqa: E501
     m_d_y=m_d_y, m_d_sy=m_d_sy
-)  # noqa: E501
+)
 MOCK_EVENT_SOUP = BeautifulSoup(MOCK_EVENT_HTML, "html.parser")
 SIBLING_ROUTE = "http://www.seattlechannel.org/CityCouncil"

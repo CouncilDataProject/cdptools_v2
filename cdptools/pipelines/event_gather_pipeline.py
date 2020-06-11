@@ -7,8 +7,9 @@ import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from requests import RequestException
 from typing import Any, Dict, List, Optional, Union
+
+from requests import RequestException
 
 from .. import get_module_version
 from ..dev_utils import RunManager, load_custom_object
@@ -184,7 +185,8 @@ class EventGatherPipeline(Pipeline):
                     limit=1,
                 )[0]["confidence"]
             else:
-                # List of tmp_filenames exhausted without break, so there must be no transcripts
+                # List of tmp_filenames exhausted without break, so there must be no
+                # transcripts
                 # Create entirely new transcripts
                 try:
                     # Create transcript from caption_uri
@@ -196,7 +198,8 @@ class EventGatherPipeline(Pipeline):
                     )
                 except (AttributeError, RequestException):
                     # Either there is no caption_sr_model for this pipeline or
-                    # caption_sr_model was unable to create transcripts, due to invalid caption_uri
+                    # caption_sr_model was unable to create transcripts, due to invalid
+                    # caption_uri
                     # Create transcripts from video_uri
 
                     # Run audio task
@@ -242,11 +245,11 @@ class EventGatherPipeline(Pipeline):
                     ts_sentences_transcript_uri = self.file_store.upload_file(
                         filepath=outputs.timestamped_sentences_path
                     )
-                    ts_sentences_transcript_file_details = self.database.get_or_upload_file(
+                    ts_sentences_file_details = self.database.get_or_upload_file(
                         ts_sentences_transcript_uri
                     )
                     run.register_output(outputs.timestamped_sentences_path)
-                    main_transcript_details = ts_sentences_transcript_file_details
+                    main_transcript_details = ts_sentences_file_details
 
                 # Store and register speaker turns transcript file
                 # Set as main transcript
@@ -254,11 +257,11 @@ class EventGatherPipeline(Pipeline):
                     ts_speaker_turns_transcript_uri = self.file_store.upload_file(
                         filepath=outputs.timestamped_speaker_turns_path
                     )
-                    ts_speaker_turns_transcript_file_details = self.database.get_or_upload_file(
+                    ts_spearker_turns_file_details = self.database.get_or_upload_file(
                         ts_speaker_turns_transcript_uri
                     )
                     run.register_output(outputs.timestamped_speaker_turns_path)
-                    main_transcript_details = ts_speaker_turns_transcript_file_details
+                    main_transcript_details = ts_spearker_turns_file_details
 
             return main_transcript_details, confidence
 
@@ -266,7 +269,9 @@ class EventGatherPipeline(Pipeline):
         with RunManager(
             database=self.database,
             file_store=self.file_store,
-            algorithm_name="EventGatherPipeline.task_parse_and_upload_constructed_event",
+            algorithm_name=(
+                "EventGatherPipeline.task_parse_and_upload_constructed_event"
+            ),
             algorithm_version=get_module_version(),
             inputs=[event["source_uri"]],
         ):
@@ -306,7 +311,7 @@ class EventGatherPipeline(Pipeline):
                     )
 
                 # Attach minutes item to event
-                event_minutes_item_details = self.database.get_or_upload_event_minutes_item(
+                emi_details = self.database.get_or_upload_event_minutes_item(
                     event_id=event_details["event_id"],
                     minutes_item_id=minutes_item_details["minutes_item_id"],
                     index=m_item["index"],
@@ -325,7 +330,7 @@ class EventGatherPipeline(Pipeline):
 
                     self.database.get_or_upload_vote(
                         person_id=person_details["person_id"],
-                        event_minutes_item_id=event_minutes_item_details[
+                        event_minutes_item_id=emi_details[
                             "event_minutes_item_id"
                         ],
                         decision=vote["decision"],

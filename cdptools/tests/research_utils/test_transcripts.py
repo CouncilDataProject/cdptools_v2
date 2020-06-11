@@ -9,7 +9,6 @@ from unittest import mock
 
 import pandas as pd
 import pytest
-
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.file_stores.gcs_file_store import GCSFileStore
 from cdptools.research_utils import transcripts as transcript_tools
@@ -63,7 +62,7 @@ def test_download_transcripts(example_transcript, order_by_field):
                         "created": datetime(2019, 7, 20, 1, 53, 14, 77790),
                         "body_id": "1",
                         "legistar_event_link": "doesnt-matter",
-                        "source_uri": "http://www.seattlechannel.org/CouncilBriefings?videoid=x105823",
+                        "source_uri": "http://www.seattlechannel.org/CouncilBriefings?videoid=x105823",  # noqa: E501
                     }
                 ],
                 [

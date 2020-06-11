@@ -40,18 +40,20 @@ class Indexer(ABC):
     """
     Why is this not just a single function?
 
-    Like audio splitters, to pass arguments to the instance of the class and retain state may be useful. In this case,
-    while computing the scores for every meeting memory may be a constrant, or in the case where a developer wants to
-    artifically inflate the scores for certain events or words to highlight something that can be done on an object
-    instance rather than just a function instance.
+    Like audio splitters, to pass arguments to the instance of the class and retain
+    state may be useful. In this case, while computing the scores for every meeting
+    memory may be a constrant, or in the case where a developer wants to artifically
+    inflate the scores for certain events or words to highlight something that can be
+    done on an object instance rather than just a function instance.
     """
 
     @staticmethod
     def get_raw_transcript(transcript_path: Union[str, Path]) -> str:
         """
-        Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.
-        If the file format is not supported or if the data contained in the transcript does not follow the specification
-        a TypeError is raised.
+        Attempts to open either a raw or annotated json transcript format and return
+        the raw transcript as a string. If the file format is not supported or if the
+        data contained in the transcript does not follow the specification a TypeError
+        is raised.
 
         Parameters
         ----------
@@ -112,12 +114,14 @@ class Indexer(ABC):
         Parameters
         ----------
         term: str
-            The term to check for end of sentence punctuation characters (".", "!", and "?").
+            The term to check for end of sentence punctuation characters
+            (".", "!", and "?").
 
         Returns:
         --------
         is_end_of_sentence: bool
-            The boolean value indicating whether or not an end of sentence punctuation character was found in the term.
+            The boolean value indicating whether or not an end of sentence punctuation
+            character was found in the term.
         """
         return any(punc in term for punc in [".", "!", "?"])
 
@@ -126,14 +130,16 @@ class Indexer(ABC):
         terms: List[str], index: int, max_span_size: int = 10
     ) -> str:
         """
-        Get the contextual sentence information for an index given an ordered list of terms.
+        Get the contextual sentence information for an index given an ordered list of
+        terms.
 
         Parameters
         ----------
         terms: List[str]
             The ordered list of terms to use for contextual information.
         index: int
-            The index to use as the starting point for exploration for contextual sentence terms.
+            The index to use as the starting point for exploration for contextual
+            sentence terms.
         max_span_size: int
             The max contextual span size.
             Default: 10
@@ -215,7 +221,8 @@ class Indexer(ABC):
         # Check index provided
         if index < 0:
             raise IndexError(
-                "For simplicity's sake, we don't support negative index context span retrieval. Sorry."
+                "For simplicity's sake, we don't support negative index context span "
+                "retrieval. Sorry."
             )
 
         # Window to store valid terms in
@@ -234,45 +241,53 @@ class Indexer(ABC):
         left_side_index = index - 1
         current_exploration_direction = "left"
 
-        # Keep appending items to the window until it his max_span_size and both sides are still valid
+        # Keep appending items to the window until it his max_span_size and both sides
+        # are still valid
         while len(window) < max_span_size and (left_side_valid or right_side_valid):
-            # If the current exploration direction is leftwards and the left side is still valid, check the left term
+            # If the current exploration direction is leftwards and the left side is
+            # still valid, check the left term
             if current_exploration_direction == "left" and left_side_valid:
-                # If the term is the end of the prior sentence, mark the current position as no longer valid to explore
+                # If the term is the end of the prior sentence, mark the current
+                # position as no longer valid to explore
                 # Also catch if we have hit the beginning of the terms
                 if (
                     Indexer.term_is_end_of_sentence(terms[left_side_index])
                     or left_side_index < 0
                 ):
                     left_side_valid = False
-                # It wasn't the end of the prior sentence so we can append the term to the window
+                # It wasn't the end of the prior sentence so we can append the term to
+                # the window
                 else:
                     window.appendleft(terms[left_side_index])
                     left_side_index -= 1
 
-            # If the current exploration direction wasn't leftwards, we must be going right
+            # If the current exploration direction wasn't leftwards, we must be going
+            # right
             # Check if right side is still valid
             elif right_side_valid:
-                # Check if the right_side_index is greater than or equal to the len of the term list
+                # Check if the right_side_index is greater than or equal to the len of
+                # the term list
                 if right_side_index >= len(terms):
                     right_side_valid = False
 
-                # If the term is the end of the sentence, append it and mark right side as no longer valid
+                # If the term is the end of the sentence, append it and mark right side
+                # as no longer valid
                 elif (
                     Indexer.term_is_end_of_sentence(terms[right_side_index])
                     or right_side_index >= len(terms) - 1
                 ):
                     window.append(terms[right_side_index])
                     right_side_valid = False
-                # If the term wasn't the end of the sentence, append it and move the index
+                # If the term wasn't the end of the sentence, append it and move the
+                # index
                 else:
                     window.append(terms[right_side_index])
                     right_side_index += 1
 
             # Rotate which direction we were exploring
             # If we were heading left and the right side is valid, explore right
-            # We do this because if we were provided an index that is completely in the center of a long sentence
-            # we want a balanced context string
+            # We do this because if we were provided an index that is completely in the
+            # center of a long sentence we want a balanced context string
             if current_exploration_direction == "left" and right_side_valid:
                 current_exploration_direction = "right"
             # Otherwise we were heading right, set to explore left
@@ -343,7 +358,8 @@ class Indexer(ABC):
         index: Dict[str, Dict[str, float]], minimum_value_allowed: float = 0.0
     ) -> Dict[str, Dict[str, float]]:
         """
-        Drop any terms from an index that have a value less than or equal to the provided.
+        Drop any terms from an index that have a value less than or equal to the
+        provided.
 
         Parameters
         ----------
@@ -351,13 +367,15 @@ class Indexer(ABC):
             An index dictionary, the output of an `Indexer.generate_index` run.
 
         minimum_value_allowed: float
-            The float value that all term event values should be compared against. Any term event value less than or
-            equal to the received value will be dropped from the index.
+            The float value that all term event values should be compared against. Any
+            term event value less than or equal to the received value will be dropped
+            from the index.
 
         Returns
         -------
         cleaned_index: Dict[str, Dict[str, float]]
-            The cleaned index that has had values removed based off the received minimum value allowed.
+            The cleaned index that has had values removed based off the received
+            minimum value allowed.
         """
         cleaned = {}
         dropped_count = 0
@@ -367,10 +385,12 @@ class Indexer(ABC):
             for event_id, value in index[term].items():
                 # If the value is strictly greater than the minimum value allowed
                 if value > minimum_value_allowed:
-                    # If the term is already in the cleaned index, add the event and value as a new pair
+                    # If the term is already in the cleaned index, add the event and
+                    # value as a new pair
                     if term in cleaned:
                         cleaned[term][event_id] = value
-                    # If the term is not already in the cleaned index, add a new dictionary to store the pair
+                    # If the term is not already in the cleaned index, add a new
+                    # dictionary to store the pair
                     else:
                         cleaned[term] = {event_id: value}
                 else:
@@ -384,18 +404,20 @@ class Indexer(ABC):
         self, event_corpus_map: Dict[str, Path], **kwargs
     ) -> Dict[str, Dict[str, float]]:
         """
-        Given an event corpus map, compute word event values that will act as a search index.
+        Given an event corpus map, compute word event values that will act as a search
+        index.
 
         Parameters
         ----------
         event_corpus_map: Dict[str, str]
-            A dictionary that maps event id to a local path with transcript to use for indexing.
+            A dictionary that maps event id to a local path with transcript to use for
+            indexing.
 
         Returns
         -------
         word_event_scores: Dict[str, Dict[str, float]]
-            A dictionary of values per event per word that will be stored in the CDP instance's database and used as a
-            method for searching for events.
+            A dictionary of values per event per word that will be stored in the CDP
+            instance's database and used as a method for searching for events.
 
             Example:
             ```json

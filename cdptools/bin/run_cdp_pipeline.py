@@ -9,7 +9,6 @@ import traceback
 from pathlib import Path
 
 import schedule
-
 from cdptools import get_module_version
 from cdptools.dev_utils import load_custom_object
 
@@ -45,7 +44,10 @@ class Args(argparse.Namespace):
             dest="schedule",
             type=int,
             default=None,
-            help="Integer to run the specified pipeline every n minutes. Default: Run pipeline once.",
+            help=(
+                "Integer to run the specified pipeline every n minutes. "
+                "Default: Run pipeline once."
+            ),
         )
         p.add_argument(
             "--debug",

@@ -86,7 +86,8 @@ class EventIndexPipeline(Pipeline):
 
     def task_upload_index(self, index: Dict[str, Dict[str, float]]):
         """
-        Upload a word event scores dictionary. This will completely replace a previous index.
+        Upload a word event scores dictionary. This will completely replace a previous
+        index.
         """
         with RunManager(
             database=self.database,
@@ -95,7 +96,8 @@ class EventIndexPipeline(Pipeline):
             algorithm_version=get_module_version(),
         ):
             # Create upload items
-            # This list of objects is just useful for making it easier to multithread the upload
+            # This list of objects is just useful for making it easier to multithread
+            # the upload
             indexed_event_term_event_values = []
             for term, event_values in index.items():
                 indexed_event_term_event_values.append(
@@ -119,7 +121,8 @@ class EventIndexPipeline(Pipeline):
         ):
             # Store the transcripts locally in a temporary directory
             with tempfile.TemporaryDirectory() as tmpdir:
-                # Get the event corpus map and download most recent transcripts to local machine
+                # Get the event corpus map and download most recent transcripts to
+                # local machine
                 log.info("Downloading most recent transcripts")
                 event_corpus_map = transcript_tools.download_transcripts(
                     db=self.database, fs=self.file_store, save_dir=tmpdir

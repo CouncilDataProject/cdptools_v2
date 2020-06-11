@@ -5,13 +5,12 @@ import datetime
 from unittest import mock
 
 import pytest
-from firebase_admin import firestore
-from google.cloud import storage
-
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.file_stores.gcs_file_store import GCSFileStore
 from cdptools.indexers.tfidf_indexer import TFIDFIndexer
 from cdptools.pipelines import MinutesItemIndexPipeline
+from firebase_admin import firestore
+from google.cloud import storage
 
 from ..databases.test_cloud_firestore_database import MockedCollection
 from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket
@@ -20,7 +19,7 @@ from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket
 @pytest.fixture
 def empty_creds_db() -> CloudFirestoreDatabase:
     with mock.patch(
-        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"
+        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"  # noqa: E501
     ):
         db = CloudFirestoreDatabase("/fake/path/to/creds.json")
         db._credentials_path = "/fake/path/to/creds.json"
@@ -131,7 +130,7 @@ def select_rows_data():
                 "created": datetime.datetime(2019, 8, 4, 5, 46, 0, 76622),
                 "uri": "http://legistar2.granicus.com/seattle/attachments/414ba24b-c342-45f9-bc2d-eaad6f2c9873.docx",  # noqa: E501
                 "minutes_item_id": "604ad8c4-449c-424e-bb75-2bbd3849bf68",
-                "name": "Summary Att A \u2013 Map and \u201cExplorer Voyage\u201d Artwork of Christie Park",
+                "name": "Summary Att A \u2013 Map and \u201cExplorer Voyage\u201d Artwork of Christie Park",  # noqa: E501
             }
         ],
     ]
@@ -163,7 +162,7 @@ def select_row_data():
             "event_datetime": datetime.datetime(2019, 7, 31, 14, 0),
             "agenda_file_uri": "http://legistar2.granicus.com/seattle/meetings/2019/7/4051_A_Finance_and_Neighborhoods_Committee_19-07-31_Committee_Agenda.pdf",  # noqa: E501
             "minutes_file_uri": None,
-            "video_uri": "https://video.seattle.gov/media/council/fin_073119_2551929V.mp4",
+            "video_uri": "https://video.seattle.gov/media/council/fin_073119_2551929V.mp4",  # noqa: E501
             "created": datetime.datetime(2019, 8, 4, 5, 56, 12, 835251),
             "body_id": "1d8dde14-b8e8-4aac-ba10-65165e11b978",
             "legistar_event_link": "https://seattle.legistar.com/MeetingDetail.aspx?LEGID=4051&GID=393&G=FFE3B678-CEF6-4197-84AC-5204EA4CFC0C",  # noqa: E501
@@ -176,7 +175,7 @@ def select_row_data():
             "event_datetime": datetime.datetime(2019, 7, 31, 12, 0),
             "agenda_file_uri": "http://legistar2.granicus.com/seattle/meetings/2019/7/4035_A_Civic_Development%2C_Public_Assets%2C_and_Native_Communities_Committee_19-07-31_Committee_Agenda.pdf",  # noqa: E501
             "minutes_file_uri": None,
-            "video_uri": "https://video.seattle.gov/media/council/civdev_073119_2541928V.mp4",
+            "video_uri": "https://video.seattle.gov/media/council/civdev_073119_2541928V.mp4",  # noqa: E501
             "created": datetime.datetime(2019, 8, 4, 5, 45, 51, 114947),
             "legistar_event_link": "https://seattle.legistar.com/MeetingDetail.aspx?LEGID=4035&GID=393&G=FFE3B678-CEF6-4197-84AC-5204EA4CFC0C",  # noqa: E501
             "body_id": "1bb00f30-c852-4668-840b-b882e8ed5de2",
@@ -248,7 +247,7 @@ def test_minutes_item_index_pipeline(
 
                         # Mock any external file request
                         with mock.patch(
-                            "cdptools.file_stores.gcs_file_store.FileStore._external_resource_copy"
+                            "cdptools.file_stores.gcs_file_store.FileStore._external_resource_copy"  # noqa: E501
                         ) as mocked_resource_copy:
                             mocked_resource_copy.side_effect = [
                                 example_minutes_item_file_0,

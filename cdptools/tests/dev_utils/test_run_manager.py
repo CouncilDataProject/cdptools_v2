@@ -5,12 +5,11 @@ from pathlib import Path
 from unittest import mock
 
 import pytest
-from firebase_admin import firestore
-from google.cloud import storage
-
 from cdptools.databases.cloud_firestore_database import CloudFirestoreDatabase
 from cdptools.dev_utils import RunIO, RunManager
 from cdptools.file_stores.gcs_file_store import GCSFileStore
+from firebase_admin import firestore
+from google.cloud import storage
 
 from ..databases.test_cloud_firestore_database import MockedCollection
 from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket
@@ -19,7 +18,7 @@ from ..file_stores.test_gcs_file_store import MockedBlob, MockedBucket
 @pytest.fixture
 def empty_creds_db() -> CloudFirestoreDatabase:
     with mock.patch(
-        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"
+        "cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase._initialize_creds_db"  # noqa: E501
     ):
         db = CloudFirestoreDatabase("/fake/path/to/creds.json")
         db._credentials_path = "/fake/path/to/creds.json"

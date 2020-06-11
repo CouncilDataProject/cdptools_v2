@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Dict, Union
 
 import requests
+
 from tika import parser
 
 from .. import get_module_version
@@ -62,7 +63,8 @@ class MinutesItemIndexPipeline(Pipeline):
             algorithm_version=get_module_version(),
         ):
             # Get only minutes items that had a decision
-            # This will generally reduce the minutes items to just bills, appointments, etc
+            # This will generally reduce the minutes items to just bills,
+            # appointments, etc
             # Read this stackoverflow for how we are selecting anything that isn't null
             # https://stackoverflow.com/questions/48479532/firestore-select-where-is-not-null
             decision_items = self.database.select_rows_as_list(
@@ -110,7 +112,8 @@ class MinutesItemIndexPipeline(Pipeline):
                     else:
                         di_to_transcripts[di] = [file_details["filename"]]
 
-            # Download and merge transcripts to single file to act as the decision_item_corpus_map
+            # Download and merge transcripts to single file to act as the
+            # decision_item_corpus_map
             di_corpus_map = {}
             for di, files in di_to_transcripts.items():
                 # Collect the transcript texts into a fake transcript document
@@ -131,8 +134,9 @@ class MinutesItemIndexPipeline(Pipeline):
                         transcript = json.load(read_in)
                         di_transcript_document["data"] += transcript["data"]
 
-                # Use the provided save directory to download each minutes item file tied to the decision item
-                # (usually the bill text, a presentation about the project or bill, or document about the appointment)
+                # Use the provided save directory to download each minutes item file
+                # tied to the decision item (usually the bill text, a presentation
+                # about the project or bill, or document about the appointment)
                 # Parse each file and add each file's contents to the transcript data
                 di_files = self.database.select_rows_as_list(
                     "minutes_item_file", filters=[("minutes_item_id", di)]
@@ -201,7 +205,8 @@ class MinutesItemIndexPipeline(Pipeline):
     def _upload_indexed_minutes_item_term_minutes_item_values(
         self, mivft: ValuesForTerm
     ):
-        # Loop through each minutes item and value tied to this term and upload to database
+        # Loop through each minutes item and value tied to this term and upload to
+        # database
         for minutes_item_id, value in mivft.values.items():
             self.database.upload_or_update_indexed_minutes_item_term(
                 term=mivft.term, minutes_item_id=minutes_item_id, value=value
@@ -209,7 +214,8 @@ class MinutesItemIndexPipeline(Pipeline):
 
     def task_upload_index(self, index: Dict[str, Dict[str, float]]):
         """
-        Upload a word minutes item scores dictionary. This will completely replace a previous index.
+        Upload a word minutes item scores dictionary. This will completely replace a
+        previous index.
         """
         with RunManager(
             database=self.database,
@@ -218,7 +224,8 @@ class MinutesItemIndexPipeline(Pipeline):
             algorithm_version=get_module_version(),
         ):
             # Create upload items
-            # This list of objects is just useful for making it easier to multithread the upload
+            # This list of objects is just useful for making it easier to multithread
+            # the upload
             indexed_minutes_item_term_minutes_item_values = []
             for term, minutes_item_values in index.items():
                 indexed_minutes_item_term_minutes_item_values.append(
@@ -242,7 +249,8 @@ class MinutesItemIndexPipeline(Pipeline):
         ):
             # Store the transcripts locally in a temporary directory
             with tempfile.TemporaryDirectory() as tmpdir:
-                # Get the minutes item corpus map and download most recent transcripts to local machine
+                # Get the minutes item corpus map and download most recent transcripts
+                # to local machine
                 log.info("Generating the minutes item corpus (decision item corpus)")
                 minutes_item_corpus = self.task_generate_corpus(tmpdir)
 

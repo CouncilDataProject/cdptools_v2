@@ -13,7 +13,6 @@ log = logging.getLogger(__name__)
 
 
 class Pipeline(ABC):
-
     @abstractmethod
     def run(self):
         """

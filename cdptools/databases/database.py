@@ -13,10 +13,24 @@ from . import exceptions
 
 
 cdp_tables = [
-    'minutes_item_file', 'vote', 'person', 'run_input',
-    'indexed_minutes_item_term', 'minutes_item', 'event_minutes_item',
-    'run', 'run_output', 'transcript', 'file', 'run_input_file', 'algorithm',
-    'indexed_event_term', 'event', 'body', 'run_output_file']
+    "minutes_item_file",
+    "vote",
+    "person",
+    "run_input",
+    "indexed_minutes_item_term",
+    "minutes_item",
+    "event_minutes_item",
+    "run",
+    "run_output",
+    "transcript",
+    "file",
+    "run_input_file",
+    "algorithm",
+    "indexed_event_term",
+    "event",
+    "body",
+    "run_output_file",
+]
 
 
 class WhereCondition(NamedTuple):
@@ -82,7 +96,7 @@ ENTITY_DTYPE_MAP = {
     str: "STRING",
     int: "INTEGER",
     float: "DOUBLE",
-    datetime: "TIMESTAMP"
+    datetime: "TIMESTAMP",
 }
 
 
@@ -90,13 +104,13 @@ ENTITY_DTYPE_MAP = {
 
 
 class Database(ABC):
-
     @staticmethod
     def _construct_where_condition(filt: Union[WhereCondition, List, Tuple]):
         """
         Construct a where condition from the passed filter object.
 
-        For available where condition operators, please view the WhereOperators class attributes.
+        For available where condition operators, please view the WhereOperators class
+        attributes.
 
         Parameters
         ----------
@@ -106,12 +120,16 @@ class Database(ABC):
         Returns
         -------
         filt: WhereCondition
-            If provided an already constructed WhereCondition, simply returns the provided object.
-            If provided a List or Tuple of length two, constructs a WhereCondition with an equal operator.
-            If provided a List or Tuple of length three, constructs a WhereCondition with the contents of the provided.
+            If provided an already constructed WhereCondition, simply returns the
+            provided object.
+            If provided a List or Tuple of length two, constructs a WhereCondition with
+            an equal operator.
+            If provided a List or Tuple of length three, constructs a WhereCondition
+            with the contents of the provided.
             Provided List or Tuple objects should follow the format:
                 {target_to_filter}, {operator}, {target_value}
-            Unless provided a List or Tuple of length two, in which case, should follow the format:
+            Unless provided a List or Tuple of length two, in which case, should follow
+            the format:
                 {target_to_filter}, {target_value}
 
         Examples
@@ -124,11 +142,14 @@ class Database(ABC):
         ))
         # Returns the same WhereCondition that was passed in
 
-        condition = Database._construct_where_condition(["event_id", WhereOperators.gteq, value="abcd"])
+        condition = Database._construct_where_condition(
+            ["event_id", WhereOperators.gteq, value="abcd"]
+        )
         # Returns the same WhereCondition as above
 
         condition = Database._construct_where_condition(("event_id", "abcd"))
-        # Returns a WhereCondition similar to above but the operator is set to equal rather than greater than or equal.
+        # Returns a WhereCondition similar to above but the operator is set to equal
+        rather than greater than or equal.
         ```
         """
         if isinstance(filt, WhereCondition):
@@ -149,7 +170,8 @@ class Database(ABC):
         """
         Construct an orderby condition from the passed by object.
 
-        For available order condition operators, please view the OrderOperators class attributes.
+        For available order condition operators, please view the OrderOperators class
+        attributes.
 
         Parameters
         ----------
@@ -159,10 +181,12 @@ class Database(ABC):
         Returns
         -------
         by: OrderCondition
-            If provided an already constructed OrderCondition, simply returns the provided object.
-            If provided a string, returns and OrderCondition with the provided string being used as the column name
-                and defaults to descending as the operator.
-            If provided a List or Tuple of length two, constructs an OrderCondition with the provided data.
+            If provided an already constructed OrderCondition, simply returns the
+            provided object.
+            If provided a string, returns and OrderCondition with the provided string
+            being used as the column name and defaults to descending as the operator.
+            If provided a List or Tuple of length two, constructs an OrderCondition
+            with the provided data.
             Provided List or Tuple objects should follow the format:
                 {target_to_order}, {operator}
 
@@ -178,11 +202,14 @@ class Database(ABC):
         condition = Database._construct_orderby_condition("event_id")
         # Returns the same OrderCondition as above
 
-        condition = Database._construct_orderby_condition(["event_id", OrderOperators.desc])
+        condition = Database._construct_orderby_condition(
+            ["event_id", OrderOperators.desc]
+        )
         # Returns the same OrderCondition as above
 
         condition = Database._construct_where_condition(("event_id", "ASCENDING")
-        # Returns an OrderCondition similar to above but the operator is set to ascending rather than descending.
+        # Returns an OrderCondition similar to above but the operator is set to
+        ascending rather than descending.
         ```
         """
         if isinstance(by, OrderCondition):
@@ -215,7 +242,8 @@ class Database(ABC):
 
         Returns
         -------
-        If the row was found, the data from that row is returned as a dictionary. If not found, None is returned.
+        If the row was found, the data from that row is returned as a dictionary. If
+        not found, None is returned.
         """
         return {}
 
@@ -225,10 +253,11 @@ class Database(ABC):
         table: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """
-        Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.
+        Get a list of rows from a table optionally using filters (a list of where
+        conditions), ordering, and limit.
 
         Parameters
         ----------
@@ -239,21 +268,22 @@ class Database(ABC):
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many rows should be returned that match the query provided.
-            Commonly, running queries without credentials will have a default limit value.
+            An integer limit to how many rows should be returned that match the query
+            provided. Commonly, running queries without credentials will have a default
+            limit value.
 
         Returns
         -------
         results: List[Dict[str, Any]]
-            The results of the query returned as a List of Dictionaries, where each dictionary is a unique row from the
-            table queried. If no rows are found, returns an empty list.
+            The results of the query returned as a List of Dictionaries, where each
+            dictionary is a unique row from the table queried. If no rows are found,
+            returns an empty list.
         """
         return []
 
     @staticmethod
     def _reshape_list_of_rows_to_dict(
-        rows: List[Dict[str, Any]],
-        table: str
+        rows: List[Dict[str, Any]], table: str
     ) -> Dict[str, Dict[str, Any]]:
         """
         Reshape a list of rows to a dictionary of rows.
@@ -268,8 +298,9 @@ class Database(ABC):
         Returns
         -------
         formatted: Dict[str, Dict[str, Any]]
-            The rows returned as a dictionary mapping unique id to a dictionary of that rows data from
-            the table queried. If no rows are provided, returns an empty dictionary.
+            The rows returned as a dictionary mapping unique id to a dictionary of that
+            rows data from the table queried. If no rows are provided, returns an empty
+            dictionary.
         """
         # Format
         formatted = {}
@@ -281,8 +312,7 @@ class Database(ABC):
 
     @staticmethod
     def _reshape_list_of_rows_to_dataframe(
-        rows: List[Dict[str, Any]],
-        table: Optional[str] = None
+        rows: List[Dict[str, Any]], table: Optional[str] = None
     ):
         """
         Simply cast a list of rows to a dataframe.
@@ -297,8 +327,8 @@ class Database(ABC):
         Returns
         -------
         formatted: pandas.DataFrame
-            The rows returned as a pandas DataFrame object. If table was provided the index of the dataframe will be
-            the unique id's for that table.
+            The rows returned as a pandas DataFrame object. If table was provided the
+            index of the dataframe will be the unique id's for that table.
         """
         # Cast to dataframe
         formatted = pd.DataFrame(rows)
@@ -310,7 +340,9 @@ class Database(ABC):
         return formatted
 
     @abstractmethod
-    def get_or_upload_body(self, name: str, description: Optional[str]) -> Dict[str, str]:
+    def get_or_upload_body(
+        self, name: str, description: Optional[str]
+    ) -> Dict[str, str]:
         """
         Get or upload a body.
 
@@ -334,10 +366,11 @@ class Database(ABC):
         name: str,
         matter: Optional[str] = None,
         title: Optional[str] = None,
-        legistar_event_item_id: Optional[int] = None
+        legistar_event_item_id: Optional[int] = None,
     ) -> Dict:
         """
-        Get or upload a minutes item. In Legistar this is commonly referred to as an event item.
+        Get or upload a minutes item. In Legistar this is commonly referred to as an
+        event item.
 
         Parameters
         ---------
@@ -346,9 +379,11 @@ class Database(ABC):
         matter: Optional[str]
             A matter name for the minutes item. Ex: "Appt 01373"
         title: Optional[str]
-            A human readable name for the minutes item. Ex: "A resolution regarding adoption of a Green New Deal."
+            A human readable name for the minutes item. Ex: "A resolution regarding
+            adoption of a Green New Deal."
         legistar_event_item_id: Optional[int]
-            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventItemId`.
+            If the CDP instance is deployed for a city with Legistar, it is recommended
+            to also store the `EventItemId`.
 
         Returns
         -------
@@ -363,10 +398,11 @@ class Database(ABC):
         minutes_item_id: str,
         uri: str,
         name: Optional[str] = None,
-        legistar_matter_attachment_id: Optional[int] = None
+        legistar_matter_attachment_id: Optional[int] = None,
     ) -> Dict:
         """
-        Get or upload a minutes item file. Commonly, minutes items have an associated file such as a presentation.
+        Get or upload a minutes item file. Commonly, minutes items have an associated
+        file such as a presentation.
 
         Parameters
         ----------
@@ -377,8 +413,8 @@ class Database(ABC):
         name: Optional[str]
             A name for the file.
         legistar_matter_attachment_id: Optional[int]
-            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the
-            `MatterAttachmentId`.
+            If the CDP instance is deployed for a city with Legistar, it is recommended
+            to also store the `MatterAttachmentId`.
 
         Returns
         -------
@@ -395,7 +431,8 @@ class Database(ABC):
         Parameters
         ----------
         video_uri: str
-            A uri that can be used to access the video file used to generate all downstream data for an event.
+            A uri that can be used to access the video file used to generate all
+            downstream data for an event.
 
         Returns
         -------
@@ -414,7 +451,7 @@ class Database(ABC):
         agenda_file_uri: Optional[str] = None,
         minutes_file_uri: Optional[str] = None,
         legistar_event_id: Optional[int] = None,
-        legistar_event_link: Optional[str] = None
+        legistar_event_link: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload an event.
@@ -428,16 +465,21 @@ class Database(ABC):
         source_uri: str
             The primary uri for where this event info or video was retrieved from.
         video_uri: str
-            A uri that can be used to access the video file used to generate all downstream data for an event.
+            A uri that can be used to access the video file used to generate all
+            downstream data for an event.
         agenda_file_uri: Optional[str]
-            If an agenda file is available for the event, it is recommended to store a uri to the file.
+            If an agenda file is available for the event, it is recommended to store a
+            uri to the file.
         minutes_file_uri: Optional[str]
-            If a minutes file is available for the event, it is recommened to store a uri to the file.
+            If a minutes file is available for the event, it is recommened to store a
+            uri to the file.
         legistar_event_id: Optional[int]
-            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventId`.
+            If the CDP instance is deployed for a city with Legistar, it is recommended
+            to also store the `EventId`.
         legistar_event_link: Optional[str]
-            If the CDP instance is deployed for a city with Legistar, it is recommended to also store a link to the
-            event details for this event but in Legistar's system.
+            If the CDP instance is deployed for a city with Legistar, it is recommended
+            to also store a link to the event details for this event but in Legistar's
+            system.
 
         Returns
         -------
@@ -452,7 +494,7 @@ class Database(ABC):
         event_id: str,
         minutes_item_id: str,
         index: int,
-        decision: Optional[str] = None
+        decision: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload the join of an event and a minutes item.
@@ -464,9 +506,11 @@ class Database(ABC):
         minutes_item:id: str
             The id for the minutes item that was referenced.
         index: int
-            The integer index for when this minutes item should be placed in the minutes of an event.
+            The integer index for when this minutes item should be placed in the
+            minutes of an event.
         decision: Optional[str]
-            If the minutes item was a vote, what was the overall outcome for this minutes item.
+            If the minutes item was a vote, what was the overall outcome for this
+            minutes item.
 
         Returns
         -------
@@ -482,7 +526,7 @@ class Database(ABC):
         email: str,
         phone: Optional[str] = None,
         website: Optional[str] = None,
-        legistar_person_id: Optional[int] = None
+        legistar_person_id: Optional[int] = None,
     ) -> Dict:
         """
         Get or upload a city council member (person).
@@ -498,7 +542,8 @@ class Database(ABC):
         website: Optional[str]
             The website url of the city council member.
         legistar_person_id: Optional[int]
-            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `PersonId`.
+            If the CDP instance is deployed for a city with Legistar, it is recommended
+            to also store the `PersonId`.
 
         Returns
         -------
@@ -513,7 +558,7 @@ class Database(ABC):
         person_id: str,
         event_minutes_item_id: str,
         decision: str,
-        legistar_event_item_vote_id: Optional[int] = None
+        legistar_event_item_vote_id: Optional[int] = None,
     ) -> Dict:
         """
         Get or upload a person's vote on a minutes item.
@@ -521,13 +566,15 @@ class Database(ABC):
         Parameters
         ----------
         person_id: str
-            The id of the person who voted on an minutes item already tied to an event. (event_minutes_item)
+            The id of the person who voted on an minutes item already tied to an event.
+            (event_minutes_item)
         event_minutes_item_id: str
             The id of the minutes item and event join that was voted on.
         decision: str
             This individual's personal decision on the minutes item.
         legistar_event_item_vote_id: Optional[int]
-            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `PersonId`.
+            If the CDP instance is deployed for a city with Legistar, it is recommended
+            to also store the `PersonId`.
 
         Returns
         -------
@@ -542,7 +589,7 @@ class Database(ABC):
         uri: str,
         filename: Optional[str] = None,
         description: Optional[str] = None,
-        content_type: Optional[str] = None
+        content_type: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload a file (to the database table, not a file store).
@@ -557,7 +604,8 @@ class Database(ABC):
             An optional description for the file.
         content_type: Optional[str]
             An optional content type for the file.
-            Preferred to use MIME types: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+            Preferred to use MIME types:
+            https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
 
         Returns
         -------
@@ -567,7 +615,9 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_transcript(event_id: str, file_id: str, confidence: Optional[float] = None) -> Dict:
+    def get_or_upload_transcript(
+        event_id: str, file_id: str, confidence: Optional[float] = None
+    ) -> Dict:
         """
         Get or upload a transcript (to the database, a file store).
 
@@ -578,7 +628,8 @@ class Database(ABC):
         file_id: str
             The id for the file that contains the transcript data.
         confidence: Optional[float]
-            If available, a float / double value to store with the transcript for the confidence of the transcription.
+            If available, a float / double value to store with the transcript for the
+            confidence of the transcription.
 
         Returns
         -------
@@ -593,7 +644,7 @@ class Database(ABC):
         name: str,
         version: str,
         description: Optional[str] = None,
-        source: Optional[str] = None
+        source: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload an algorithm.
@@ -617,7 +668,9 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def get_or_upload_run(self, algorithm_id: str, begin: datetime, completed: datetime) -> Dict:
+    def get_or_upload_run(
+        self, algorithm_id: str, begin: datetime, completed: datetime
+    ) -> Dict:
         """
         Get or upload a run.
 
@@ -741,8 +794,8 @@ class Database(ABC):
     @staticmethod
     def _determine_event_entity_dtype(value: Union[str, int, float, datetime]) -> str:
         """
-        To simplify the storage value of the dtype, instead of using specifically Python types, this simply returns a
-        string value for each of the allowed dtypes.
+        To simplify the storage value of the dtype, instead of using specifically
+        Python types, this simply returns a string value for each of the allowed dtypes.
 
         Parameters
         ----------
@@ -760,10 +813,13 @@ class Database(ABC):
             return str(type(value))
 
     @abstractmethod
-    def get_or_upload_event_entity(self, event_id: str, label: str, value: Union[str, int, float, datetime]) -> Dict:
+    def get_or_upload_event_entity(
+        self, event_id: str, label: str, value: Union[str, int, float, datetime]
+    ) -> Dict:
         """
-        Get or upload an event entity. Because entities can be values that are other than strings, most databases,
-        should cast this to a string prior to storage. This is also why will store the data type (dtype).
+        Get or upload an event entity. Because entities can be values that are other
+        than strings, most databases, should cast this to a string prior to storage.
+        This is also why will store the data type (dtype).
 
         Parameters
         ----------
@@ -801,7 +857,9 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def upload_or_update_indexed_event_term(self, term: str, event_id: str, value: float) -> Dict:
+    def upload_or_update_indexed_event_term(
+        self, term: str, event_id: str, value: float
+    ) -> Dict:
         """
         Upload or update a single indexed event term.
 
@@ -812,7 +870,8 @@ class Database(ABC):
         event_id: str
             The id for the event the term was used during.
         value: float
-            The value that term should be given for that event that indicates that terms relevance to that event.
+            The value that term should be given for that event that indicates that
+            terms relevance to that event.
 
         Returns
         -------
@@ -829,7 +888,8 @@ class Database(ABC):
         Parameters
         ----------
         query: str
-            A query string to be used to search for events using the already stored indexed event term table.
+            A query string to be used to search for events using the already stored
+            indexed event term table.
 
         Returns
         -------
@@ -858,7 +918,9 @@ class Database(ABC):
         return {}
 
     @abstractmethod
-    def upload_or_update_indexed_minutes_item_term(self, term: str, minutes_item_id: str, value: float) -> Dict:
+    def upload_or_update_indexed_minutes_item_term(
+        self, term: str, minutes_item_id: str, value: float
+    ) -> Dict:
         """
         Upload or update a single indexed minutes_item item term.
 
@@ -869,8 +931,8 @@ class Database(ABC):
         minutes_item_id: str
             The id for the minutes item that term was used in or discussed about.
         value: float
-            The value that term should be given for that minutes item that indicates that terms relevance to that
-            minutes item.
+            The value that term should be given for that minutes item that indicates
+            that terms relevance to that minutes item.
 
         Returns
         -------
@@ -887,8 +949,8 @@ class Database(ABC):
         Parameters
         ----------
         query: str
-            A query string to be used to search for minutes items using the already stored indexed minutes items term
-            table.
+            A query string to be used to search for minutes items using the already
+            stored indexed minutes items term table.
 
         Returns
         -------

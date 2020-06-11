@@ -10,6 +10,7 @@ from functools import partial
 from typing import Any, Dict, List, Optional, Union
 
 import requests
+
 from bs4 import BeautifulSoup
 from rapidfuzz import process
 
@@ -25,12 +26,13 @@ log = logging.getLogger(__name__)
 
 
 class ParsedEvents(object):
-
     def __init__(
         self,
         success: List[Dict] = None,
         warning: List[exceptions.EventOutOfTimeboundsError] = None,
-        error: List[Union[exceptions.EventParseError, exceptions.LegistarLookupError]] = None
+        error: List[
+            Union[exceptions.EventParseError, exceptions.LegistarLookupError]
+        ] = None,
     ):
         self.success = success if success else []
         self.warning = warning if warning else []
@@ -38,7 +40,6 @@ class ParsedEvents(object):
 
 
 class SeattleEventScraper(EventScraper):
-
     @staticmethod
     def pstnow():
         return datetime.utcnow() - timedelta(hours=7)
@@ -50,7 +51,7 @@ class SeattleEventScraper(EventScraper):
         ignore_minutes_items: List[str] = [],
         legistar_client: str = "seattle",
         max_concurrent_requests: int = None,
-        **kwargs
+        **kwargs,
     ):
         # Store configuration
         self.main_route = main_route
@@ -70,14 +71,16 @@ class SeattleEventScraper(EventScraper):
         Parameters
         ----------
         complete_sibling: str
-            A completed sibling route that can be used to find mutual parents or other contextual information.
+            A completed sibling route that can be used to find mutual parents or other
+            contextual information.
         route: str
             The route to resolve.
 
         Returns
         -------
         resolved_route: str
-            If "http" or "https" is found in the route it is assumed the route is already complete.
+            If "http" or "https" is found in the route it is assumed the route is
+            already complete.
             If not, the sibling is split, tail removed, and the route is attached.
             Returned is the parent sibling joined with the provided route as a child.
         """
@@ -136,7 +139,8 @@ class SeattleEventScraper(EventScraper):
         Returns
         -------
         cleaned: str
-            The cleaned string that has had leading and trailing spaces and punctuation removed.
+            The cleaned string that has had leading and trailing spaces and punctuation
+            removed.
         """
         # Basic cleaning
         s = s.replace("\n", "")
@@ -157,9 +161,7 @@ class SeattleEventScraper(EventScraper):
 
     @staticmethod
     def _parse_seattle_channel_event(
-        event_container: BeautifulSoup,
-        complete_sibling: str,
-        ignore_date: bool = False
+        event_container: BeautifulSoup, complete_sibling: str, ignore_date: bool = False
     ) -> Dict[str, Any]:
         """
         Parse a single event from the html of a Seattle Channel event block.
@@ -167,11 +169,13 @@ class SeattleEventScraper(EventScraper):
         Parameters
         ----------
         event_container: BeautifulSoup
-            A BeautifulSoup object created from reading a single event div block from SeattleChannel.
+            A BeautifulSoup object created from reading a single event div block from
+            SeattleChannel.
         complete_sibling: str
             A complete sibling to the current event containers host page.
         ignore_date: bool
-            A boolean information whether or not to ignore the parsed event based of the parsed date.
+            A boolean information whether or not to ignore the parsed event based of
+            the parsed date.
 
         Returns
         -------
@@ -179,7 +183,9 @@ class SeattleEventScraper(EventScraper):
             The fully parsed event details.
         """
         # Find event details
-        event_details = event_container.find("div", class_="col-xs-12 col-sm-8 col-md-9")
+        event_details = event_container.find(
+            "div", class_="col-xs-12 col-sm-8 col-md-9"
+        )
 
         # Find and clean body name
         body = event_details.find("h2").text.replace("\n", "")
@@ -215,7 +221,9 @@ class SeattleEventScraper(EventScraper):
             agenda = agenda.split(",")
 
         # Find video and thumbnail urls
-        video_and_thumbnail = event_container.find("div", class_="col-xs-12 col-sm-4 col-md-3")
+        video_and_thumbnail = event_container.find(
+            "div", class_="col-xs-12 col-sm-4 col-md-3"
+        )
         video = video_and_thumbnail.find("a").get("onclick")
         seattle_channel_page = video_and_thumbnail.find("a").get("href")
 
@@ -223,7 +231,9 @@ class SeattleEventScraper(EventScraper):
         # Partial URI of caption file ends with .vtt
         caption_uri_search = re.search(r"[a-zA-Z0-9/_]+\.vtt", video)
         if caption_uri_search:
-            closed_caption_route = "https://seattlechannel.org/documents/seattlechannel/closedcaption/"
+            closed_caption_route = (
+                "https://seattlechannel.org/documents/seattlechannel/closedcaption/"
+            )
             caption_uri = f"{closed_caption_route}{caption_uri_search.group(0)}"
         else:
             caption_uri = None
@@ -232,17 +242,22 @@ class SeattleEventScraper(EventScraper):
         # Try to find the url the function redirects to
         try:
             # All seattle channel videos are hosted at "video.seattle.gov/..."
-            # This will find the true url by searching for a substring that matches the above pattern
-            # Note: some of the urls have spaces in the video filename which is why the space is included in the
-            # regex search pattern.
-            video = re.search(r"video\.seattle\.gov[a-zA-Z0-9\/_ ]*\.(mp4|flv)", video).group(0)
+            # This will find the true url by searching for a substring that matches the
+            # above pattern
+            # Note: some of the urls have spaces in the video filename which is why the
+            # space is included in the regex search pattern.
+            video = re.search(
+                r"video\.seattle\.gov[a-zA-Z0-9\/_ ]*\.(mp4|flv)", video
+            ).group(0)
             video = f"https://{video}"
         except AttributeError:
             raise exceptions.EventParseError(body, event_dt)
 
         # If the event was not in the last two weeks, ignore it.
-        # We check the last two weeks over just the last day because sometimes events are posted late and such.
-        # Additionally, by always collecting the last two weeks, we generally get more info from legistar.
+        # We check the last two weeks over just the last day because sometimes events
+        # are posted late and such.
+        # Additionally, by always collecting the last two weeks, we generally get more
+        # info from legistar.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
             yesterday = now - timedelta(days=8)
@@ -251,20 +266,22 @@ class SeattleEventScraper(EventScraper):
 
         # Construct event
         event = {
-            "minutes_items": [SeattleEventScraper._clean_string(item) for item in agenda],
+            "minutes_items": [
+                SeattleEventScraper._clean_string(item) for item in agenda
+            ],
             "body": SeattleEventScraper._clean_string(body),
             "event_datetime": event_dt,
-            "source_uri": SeattleEventScraper._resolve_route(complete_sibling, seattle_channel_page),
+            "source_uri": SeattleEventScraper._resolve_route(
+                complete_sibling, seattle_channel_page
+            ),
             "video_uri": video.replace(" ", ""),
-            "caption_uri": caption_uri
+            "caption_uri": caption_uri,
         }
         return event
 
     @staticmethod
     def _parse_single_seattle_channel_event_by_main_content(
-        event_container: BeautifulSoup,
-        source_uri: str,
-        ignore_date: bool = False
+        event_container: BeautifulSoup, source_uri: str, ignore_date: bool = False
     ) -> Dict[str, Any]:
         """
         Parse a single event from the html of a Seattle Channel event block.
@@ -272,11 +289,14 @@ class SeattleEventScraper(EventScraper):
         Parameters
         ----------
         event_container: BeautifulSoup
-            A BeautifulSoup object created from reading a single event div block from SeattleChannel.
+            A BeautifulSoup object created from reading a single event div block from
+            SeattleChannel.
         source_uri: str
-            The source uri for the event. The video id in the query param will be the video id of the processed event.
+            The source uri for the event. The video id in the query param will be the
+            video id of the processed event.
         ignore_date: bool
-            A boolean information whether or not to ignore the parsed event based of the parsed date.
+            A boolean information whether or not to ignore the parsed event based of
+            the parsed date.
 
         Returns
         -------
@@ -284,7 +304,9 @@ class SeattleEventScraper(EventScraper):
             The fully parsed event details.
         """
         # Find event details
-        event_details = event_container.find("div", class_="programDescription col-xs-12 col-sm-4")
+        event_details = event_container.find(
+            "div", class_="programDescription col-xs-12 col-sm-4"
+        )
 
         # Find and clean body name
         body = event_details.find("div", class_="episodeTitle").text.replace("\n", "")
@@ -295,13 +317,17 @@ class SeattleEventScraper(EventScraper):
             body = body.replace(f" {body_includes_date.group(0)}", "")
 
         # Find and clean date
-        date = event_details.find("div", class_="episodeDate").find(text=True, recursive=False)
+        date = event_details.find("div", class_="episodeDate").find(
+            text=True, recursive=False
+        )
         month, day, year = tuple(date.split("/"))
         event_dt = datetime(int(year), int(month), int(day))
 
         # Agendas have mixed formatting
         try:
-            agenda = event_details.find("div", class_="episodeDescription").find("p").text
+            agenda = (
+                event_details.find("div", class_="episodeDescription").find("p").text
+            )
         except AttributeError:
             try:
                 agenda = event_details.find("div", class_="episodeDescription").text
@@ -322,7 +348,7 @@ class SeattleEventScraper(EventScraper):
         # Find caption vtt file uri from mainContent div's javascript
         # Partial URI of caption file ends with .vtt
         main_content = event_container.find("div", id="mainContent")
-        script = main_content.find('script')
+        script = main_content.find("script")
         caption_uri_search = re.search(r"[a-zA-Z0-9/_]+\.vtt", script.string)
         if caption_uri_search:
             base_route = "https://seattlechannel.org/"
@@ -333,17 +359,22 @@ class SeattleEventScraper(EventScraper):
         # The video url is in the javascript of the mainContent div.
         try:
             # All seattle channel videos are hosted at "video.seattle.gov/..."
-            # This will find the true url by searching for a substring that matches the above pattern
-            # Note: some of the urls have spaces in the video filename which is why the space is included in the
-            # regex search pattern.
-            video = re.search(r"video\.seattle\.gov[a-zA-Z0-9\/_ ]*\.(mp4|flv)", script.string).group(0)
+            # This will find the true url by searching for a substring that matches the
+            # above pattern
+            # Note: some of the urls have spaces in the video filename which is why the
+            # space is included in the regex search pattern.
+            video = re.search(
+                r"video\.seattle\.gov[a-zA-Z0-9\/_ ]*\.(mp4|flv)", script.string
+            ).group(0)
             video = f"https://{video}"
         except AttributeError:
             raise exceptions.EventParseError(body, event_dt)
 
         # If the event was not in the last two weeks, ignore it.
-        # We check the last two weeks over just the last day because sometimes events are posted late and such.
-        # Additionally, by always collecting the last two weeks, we generally get more info from legistar.
+        # We check the last two weeks over just the last day because sometimes events
+        # are posted late and such.
+        # Additionally, by always collecting the last two weeks, we generally get more
+        # info from legistar.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
             yesterday = now - timedelta(days=14)
@@ -352,12 +383,14 @@ class SeattleEventScraper(EventScraper):
 
         # Construct event
         event = {
-            "minutes_items": [SeattleEventScraper._clean_string(item) for item in agenda],
+            "minutes_items": [
+                SeattleEventScraper._clean_string(item) for item in agenda
+            ],
             "body": SeattleEventScraper._clean_string(body),
             "event_datetime": event_dt,
             "source_uri": source_uri,
             "video_uri": video.replace(" ", ""),
-            "caption_uri": caption_uri
+            "caption_uri": caption_uri,
         }
         return event
 
@@ -372,14 +405,18 @@ class SeattleEventScraper(EventScraper):
         soup = BeautifulSoup(response.content, "html.parser")
 
         # Find all event containers
-        event_containers = soup.find_all("div", class_="row borderBottomNone paginationItem")
+        event_containers = soup.find_all(
+            "div", class_="row borderBottomNone paginationItem"
+        )
 
         # Process each event
         events = ParsedEvents()
         for container in event_containers:
             try:
                 # Parse event details from html
-                event = self._parse_seattle_channel_event(container, self.main_route, self.backfill)
+                event = self._parse_seattle_channel_event(
+                    container, self.main_route, self.backfill
+                )
 
                 # Successful parse
                 events.success.append(event)
@@ -403,19 +440,20 @@ class SeattleEventScraper(EventScraper):
 
     @staticmethod
     def _attach_legistar_details_to_event(
-        event: Dict[str, Any],
-        ignore_minutes_items: Optional[List[str]] = None
+        event: Dict[str, Any], ignore_minutes_items: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
-        Query for and attach the best matching legistar event information to the provided event details.
+        Query for and attach the best matching legistar event information to the
+        provided event details.
 
         Parameters
         ----------
         event: Dict[str, Any]
             The parsed event details from the SeattleChannel website.
         ignore_minutes_items: Optional[List[str]]
-            A list of minute item names to ignore when parsing the minutes items from legistar.
-            Useful for minute items that are so commonly used they lack specific value.
+            A list of minute item names to ignore when parsing the minutes items from
+            legistar. Useful for minute items that are so commonly used they lack
+            specific value.
 
         Returns
         -------
@@ -426,7 +464,7 @@ class SeattleEventScraper(EventScraper):
         legistar_events = legistar_event_tools.get_legistar_events_for_timespan(
             "seattle",
             event["event_datetime"],
-            event["event_datetime"] + timedelta(days=1)
+            event["event_datetime"] + timedelta(days=1),
         )
         log.debug("Pulled legistar details for event: {}".format(event["source_uri"]))
 
@@ -438,63 +476,85 @@ class SeattleEventScraper(EventScraper):
             return None
         else:
             # Reduce events to not include cancelled events
-            cancelled_reduced = [e for e in legistar_events if e["EventAgendaStatusName"] != "Cancelled"]
+            cancelled_reduced = [
+                e for e in legistar_events if e["EventAgendaStatusName"] != "Cancelled"
+            ]
 
             # Get body names
             available_bodies = set([e["EventBodyName"] for e in cancelled_reduced])
 
-            # In the case that there were events in legistar but they were all cancelled, this will catch
-            # no events found for the meeting
+            # In the case that there were events in legistar but they were all
+            # cancelled, this will catch no events found for the meeting
             if len(available_bodies) == 0:
                 return None
 
-            # Check if the Seattle Channel body name (basically a "display name") is present in the list
-            # If so, choose the events with that exact body name
+            # Check if the Seattle Channel body name (basically a "display name") is
+            # present in the list. If so, choose the events with that exact body name.
             if event["body"] in available_bodies:
-                legistar_events = [e for e in cancelled_reduced if e["EventBodyName"] == event["body"]]
+                legistar_events = [
+                    e for e in cancelled_reduced if e["EventBodyName"] == event["body"]
+                ]
             # No exact match available, find the closest body name by text diff
             else:
                 # Returns the closest name and the score that made it the closest
-                closest_body_name, score = process.extractOne(event["body"], available_bodies)
+                closest_body_name, score = process.extractOne(
+                    event["body"], available_bodies
+                )
 
-                # For reasons somewhat unknown to me, SeattleChannel has videos for events that don't exist in legistar
-                # We can somewhat detect this by filtering out body names that are drastically different
-                # In the case that the closest body name is less than a 50% match, return None to be cleaned up after
-                # The body names shouldn't be _that_ different which is why we are just ignoring for now
+                # For reasons somewhat unknown to me, SeattleChannel has videos for
+                # events that don't exist in legistar. We can somewhat detect this by
+                # filtering out body names that are drastically different.
+                # In the case that the closest body name is less than a 50% match,
+                # return None to be cleaned up after.
+                # The body names shouldn't be _that_ different which is why we are just
+                # ignoring for now
                 if score < 50:
                     return None
 
                 # Otherwise, use the found body name
-                legistar_events = [e for e in cancelled_reduced if e["EventBodyName"] == closest_body_name]
+                legistar_events = [
+                    e
+                    for e in cancelled_reduced
+                    if e["EventBodyName"] == closest_body_name
+                ]
 
             # Run agenda matching against the events
-            agenda_match_details = legistar_event_tools.get_matching_legistar_event_by_minutes_match(
-                event["minutes_items"],
-                legistar_events
+            match = legistar_event_tools.get_matching_legistar_event_by_minutes_match(
+                event["minutes_items"], legistar_events
             )
 
             # Add the details
-            selected_event = agenda_match_details.selected_event
+            selected_event = match.selected_event
 
         # Parse details
         if ignore_minutes_items is None:
             ignore_minutes_items = []
-        parsed_details = legistar_event_tools.parse_legistar_event_details(selected_event, ignore_minutes_items)
+        parsed_details = legistar_event_tools.parse_legistar_event_details(
+            selected_event, ignore_minutes_items
+        )
 
         # Format the event details
         formatted_event_details = {
             **parsed_details,
             "source_uri": event["source_uri"],
             "video_uri": event["video_uri"],
-            "caption_uri": event["caption_uri"]
+            "caption_uri": event["caption_uri"],
         }
-        log.debug("Attached legistar event details for event: {}".format(formatted_event_details["source_uri"]))
+        log.debug(
+            "Attached legistar event details for event: {}".format(
+                formatted_event_details["source_uri"]
+            )
+        )
         return formatted_event_details
 
     def get_events(self) -> List[Dict]:
         # Complete seattle channel event collection in threadpool
-        with ThreadPoolExecutor(min(self.max_concurrent_requests, os.cpu_count() * 5)) as exe:
-            seattle_channel_results = list(exe.map(self._collect_sub_route_events, self.get_routes()))
+        with ThreadPoolExecutor(
+            min(self.max_concurrent_requests, os.cpu_count() * 5)
+        ) as exe:
+            seattle_channel_results = list(
+                exe.map(self._collect_sub_route_events, self.get_routes())
+            )
 
         # Join body events to single object
         success = []
@@ -508,26 +568,29 @@ class SeattleEventScraper(EventScraper):
         log.info(f"Found {len(results.success)} events from initial gather.")
 
         # Attach legistar agenda item details
-        with ThreadPoolExecutor(min(self.max_concurrent_requests, os.cpu_count() * 5)) as exe:
-            f = partial(self._attach_legistar_details_to_event, ignore_minutes_items=self.ignore_minutes_items)
+        with ThreadPoolExecutor(
+            min(self.max_concurrent_requests, os.cpu_count() * 5)
+        ) as exe:
+            f = partial(
+                self._attach_legistar_details_to_event,
+                ignore_minutes_items=self.ignore_minutes_items,
+            )
             parsed_events = list(exe.map(f, results.success))
 
         # Parsed events can be "None" in the case where legistar lookup failed
         # Clean out the "None"s
         parsed_events = [event for event in parsed_events if event is not None]
 
-        log.info(f"Collected: {len(results.success)}. "
-                 f"Ignored: {len(results.warning)}. "
-                 f"Errored: {len(results.error)}.")
+        log.info(
+            f"Collected: {len(results.success)}. "
+            f"Ignored: {len(results.warning)}. "
+            f"Errored: {len(results.error)}."
+        )
 
         # Return events
         return parsed_events
 
-    def get_single_event(
-        self,
-        uri: str,
-        backfill: bool = False
-    ) -> Dict:
+    def get_single_event(self, uri: str, backfill: bool = False) -> Dict:
         # Get page
         response = requests.get(uri)
 
@@ -540,8 +603,12 @@ class SeattleEventScraper(EventScraper):
         result = {}
         try:
             # Try to parse event
-            result = self._parse_single_seattle_channel_event_by_main_content(soup, uri, backfill)
-            result = self._attach_legistar_details_to_event(result, self.ignore_minutes_items)
+            result = self._parse_single_seattle_channel_event_by_main_content(
+                soup, uri, backfill
+            )
+            result = self._attach_legistar_details_to_event(
+                result, self.ignore_minutes_items
+            )
 
         except exceptions.EventOutOfTimeboundsError as e:
             # Log as warning

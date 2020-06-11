@@ -12,14 +12,17 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-def load_custom_object(module_path: Union[str, List[str]], object_name: str, object_kwargs: Dict) -> object:
+def load_custom_object(
+    module_path: Union[str, List[str]], object_name: str, object_kwargs: Dict
+) -> object:
     """
     Load a custom object with kwargs.
 
     Parameters
     ----------
     module_path: Union[str, List[str]]
-        Python module path or list of path parts to a custom module. Ex: "cptools.pipeline"
+        Python module path or list of path parts to a custom module.
+        Ex: "cptools.pipeline"
     object_name: str
         Name of the object to retrieve from the module. Ex: "Pipeline"
     object_kwargs: Dict

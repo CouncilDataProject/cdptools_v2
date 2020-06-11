@@ -19,7 +19,6 @@ log = logging.getLogger(__name__)
 
 
 class AppDirsFileStore(FileStore):
-
     def __init__(self, name: str = "cdp_filestore", owner: str = "cdp", **kwargs):
         # Initialize app dir if not already made
         self._root = Path(appdirs.user_data_dir(name, owner))
@@ -31,7 +30,7 @@ class AppDirsFileStore(FileStore):
         key = self.compute_sha256_for_file(filename)
 
         # Split key into pairs of two characters
-        sub_dirs = [key[i:i + 2] for i in range(0, len(key), 2)]
+        sub_dirs = [key[i : i + 2] for i in range(0, len(key), 2)]
 
         # Construct path parent
         path_parent = self._root
@@ -58,7 +57,7 @@ class AppDirsFileStore(FileStore):
         filepath: Union[str, Path],
         save_name: Optional[str] = None,
         remove: bool = False,
-        **kwargs
+        **kwargs,
     ) -> str:
         # Resolve the path to enforce path complete
         filepath = Path(filepath).resolve(strict=True)
@@ -107,7 +106,7 @@ class AppDirsFileStore(FileStore):
         filename: str,
         save_path: Optional[Union[str, Path]] = None,
         overwrite: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Path:
         # Fix name
         filename = Path(filename).resolve().name
@@ -130,10 +129,7 @@ class AppDirsFileStore(FileStore):
         log.debug(f"Completed file copy for: {filename}")
         return saved_path
 
-    def delete_file(
-        self,
-        filename: str
-    ) -> Path:
+    def delete_file(self, filename: str) -> Path:
         # Fix name
         filename = Path(filename).resolve().name
 
@@ -149,21 +145,19 @@ class AppDirsFileStore(FileStore):
 
         return path_to_delete
 
-    def clear_bucket(
-        self
-    ) -> str:
+    def clear_bucket(self) -> str:
         # Delete this bucket and all its contents
         try:
             shutil.rmtree(self._root)
             log.info(f"Deleted bucket: {self._name}")
         except Exception as e:
-            log.info(f"Encountered exception {e} while trying to clear bucket: {self._name}.")
+            log.info(
+                f"Encountered exception {e} while trying to clear bucket: {self._name}."
+            )
 
         return f"Deleted bucket: {self._name}"
 
-    def list_all_files(
-        self
-    ) -> List[str]:
+    def list_all_files(self) -> List[str]:
         filepath_list = []
 
         for dirpath, dirnames, filenames in os.walk(self._root):

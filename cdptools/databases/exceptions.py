@@ -27,7 +27,10 @@ class UnstructuredWhereConditionError(Exception):
         self.filt = filt
 
     def __str__(self):
-        return f"WhereCondition's accept at least 2 and at most 3 parameters. Received: {self.filt}"
+        return (
+            f"WhereCondition's accept at least 2 and at most 3 parameters. "
+            f"Received: {self.filt}"
+        )
 
 
 class UnknownTypeWhereConditionError(Exception):
@@ -36,7 +39,10 @@ class UnknownTypeWhereConditionError(Exception):
         self.filt = filt
 
     def __str__(self):
-        return f"WhereCondition's can be created using list or tuple. Received: {type(self.filt)}, {self.filt}"
+        return (
+            f"WhereCondition's can be created using list or tuple. "
+            f"Received: {type(self.filt)}, {self.filt}"
+        )
 
 
 class UnstructuredOrderConditionError(Exception):
@@ -45,7 +51,10 @@ class UnstructuredOrderConditionError(Exception):
         self.by = by
 
     def __str__(self):
-        return f"OrderCondition's accept at least 1 and at most 2 parameters. Received: {self.by}"
+        return (
+            f"OrderCondition's accept at least 1 and at most 2 parameters. "
+            f"Received: {self.by}"
+        )
 
 
 class UnknownTypeOrderConditionError(Exception):
@@ -54,7 +63,10 @@ class UnknownTypeOrderConditionError(Exception):
         self.by = by
 
     def __str__(self):
-        return f"OrderCondition's can be created using list, string, or tuple. Received: {type(self.by)}, {self.by}"
+        return (
+            f"OrderCondition's can be created using list, string, or tuple. "
+            f"Received: {type(self.by)}, {self.by}"
+        )
 
 
 class FailedRequestError(Exception):
@@ -74,4 +86,7 @@ class UniquenessError(Exception):
         self.results = results
 
     def __str__(self):
-        return f"Table: {self.table}, primary keys: {self.pks} not upheld. Query returned: {self.results}"
+        return (
+            f"Table: {self.table}, primary keys: {self.pks} not upheld. "
+            f"Query returned: {self.results}"
+        )

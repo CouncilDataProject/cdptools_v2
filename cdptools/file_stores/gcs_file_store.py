@@ -26,15 +26,16 @@ SUFFIX_CONTENT_TYPE_MAP = {
     ".txt": "text/plain",
     ".err": "text/plain",
     ".out": "text/plain",
-    ".mp4": "video/mp4"
+    ".mp4": "video/mp4",
 }
 
 ###############################################################################
 
 
 class GCSFileStore(FileStore):
-
-    def _initialize_creds_fs(self, bucket_name: str, credentials_path: Union[str, Path]):
+    def _initialize_creds_fs(
+        self, bucket_name: str, credentials_path: Union[str, Path]
+    ):
         # Resolve credentials
         self._credentials_path = Path(credentials_path).resolve(strict=True)
 
@@ -46,7 +47,7 @@ class GCSFileStore(FileStore):
         self,
         bucket_name: str,
         credentials_path: Optional[Union[str, Path]] = None,
-        **kwargs
+        **kwargs,
     ):
         # With credentials:
         if credentials_path:
@@ -151,7 +152,7 @@ class GCSFileStore(FileStore):
         self,
         filename: str,
         save_path: Optional[Union[str, Path]] = None,
-        overwrite: bool = False
+        overwrite: bool = False,
     ) -> Path:
         # Check for existance
         self.get_file_uri(filename)
@@ -183,7 +184,7 @@ class GCSFileStore(FileStore):
         self,
         filename: str,
         save_path: Optional[Union[str, Path]] = None,
-        overwrite: bool = False
+        overwrite: bool = False,
     ) -> Path:
         # Resolve path
         filename = Path(filename).resolve().name
@@ -197,7 +198,7 @@ class GCSFileStore(FileStore):
         filename: str,
         save_path: Optional[Union[str, Path]] = None,
         overwrite: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Path:
         # With credentials
         if self._credentials_path:
@@ -205,24 +206,16 @@ class GCSFileStore(FileStore):
 
         return self._download_file_no_creds(filename, save_path, overwrite)
 
-    def delete_file(
-        self,
-        filename: str
-    ) -> str:
+    def delete_file(self, filename: str) -> str:
         self._bucket.delete_blob(filename)
         return f"Deleted file: {filename}"
 
-    def delete_page(
-        self,
-        page: Page
-    ) -> str:
+    def delete_page(self, page: Page) -> str:
         for blob in page:
             self.delete_file(blob.name)
         return f"Deleted page in bucket: {self._bucket.name}"
 
-    def clear_bucket(
-        self
-    ) -> str:
+    def clear_bucket(self) -> str:
         # Gather the files by pages so we can delete in parallel
         pages = self._client.list_blobs(self._bucket).pages
 
@@ -232,19 +225,14 @@ class GCSFileStore(FileStore):
         log.info(f"Cleared bucket: {self._bucket.name}")
         return f"Cleared bucket: {self._bucket.name}"
 
-    def list_page(
-        self,
-        page: Page
-    ) -> List[str]:
+    def list_page(self, page: Page) -> List[str]:
         file_list = []
         for blob in page:
             file_list.append(blob.name)
 
         return file_list
 
-    def list_all_files(
-        self
-    ) -> List[str]:
+    def list_all_files(self) -> List[str]:
         # Gather the files by pages
         pages = self._client.list_blobs(self._bucket).pages
 

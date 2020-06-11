@@ -14,13 +14,20 @@ def example_video(data_dir) -> Path:
     return data_dir / "example_video.mp4"
 
 
-@pytest.mark.parametrize("audio_save_path", [
-    ("test.wav"),
-    (Path("test.wav")),
-    pytest.param(__file__, marks=pytest.mark.raises(exception=FileExistsError)),
-    pytest.param(Path(__file__), marks=pytest.mark.raises(exception=FileExistsError)),
-    pytest.param(Path(__file__).parent, marks=pytest.mark.raises(exception=IsADirectoryError))
-])
+@pytest.mark.parametrize(
+    "audio_save_path",
+    [
+        ("test.wav"),
+        (Path("test.wav")),
+        pytest.param(__file__, marks=pytest.mark.raises(exception=FileExistsError)),
+        pytest.param(
+            Path(__file__), marks=pytest.mark.raises(exception=FileExistsError)
+        ),
+        pytest.param(
+            Path(__file__).parent, marks=pytest.mark.raises(exception=IsADirectoryError)
+        ),
+    ],
+)
 def test_mocked_save_path(tmpdir, example_video, audio_save_path):
     # Append save name to tmpdir
     audio_save_path = Path(tmpdir) / audio_save_path

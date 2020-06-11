@@ -19,7 +19,6 @@ log = logging.getLogger(__name__)
 
 
 class GoogleCloudSRModel(SRModel):
-
     def __init__(self, credentials_path: Union[str, Path], **kwargs):
         # Resolve credentials
         self.credentials_path = Path(credentials_path).resolve(strict=True)
@@ -36,7 +35,7 @@ class GoogleCloudSRModel(SRModel):
 
                     # Make the phrase a bit nicer by chunking to nearest complete word
                     if " " in cleaned_phrase:
-                        cleaned_phrase = cleaned_phrase[:cleaned_phrase.rfind(" ")]
+                        cleaned_phrase = cleaned_phrase[: cleaned_phrase.rfind(" ")]
 
                     # Append cleaned phrase and increase character count
                     cleaned.append(cleaned_phrase)
@@ -53,22 +52,28 @@ class GoogleCloudSRModel(SRModel):
         timestamped_words_save_path: Union[str, Path],
         timestamped_sentences_save_path: Union[str, Path],
         phrases: Optional[List[str]] = None,
-        **kwargs
+        **kwargs,
     ) -> SRModelOutputs:
         # Check paths
         raw_transcript_save_path = Path(raw_transcript_save_path).resolve()
         timestamped_words_save_path = Path(timestamped_words_save_path).resolve()
-        timestamped_sentences_save_path = Path(timestamped_sentences_save_path).resolve()
+        timestamped_sentences_save_path = Path(
+            timestamped_sentences_save_path
+        ).resolve()
 
         # Create client
         client = speech.SpeechClient.from_service_account_json(self.credentials_path)
 
         # Create basic metadata
         metadata = speech.types.RecognitionMetadata()
-        metadata.interaction_type = speech.enums.RecognitionMetadata.InteractionType.DISCUSSION
+        metadata.interaction_type = (
+            speech.enums.RecognitionMetadata.InteractionType.DISCUSSION
+        )
 
         # Add phrases
-        speech_context = speech.types.SpeechContext(phrases=self._clean_phrases(phrases))
+        speech_context = speech.types.SpeechContext(
+            phrases=self._clean_phrases(phrases)
+        )
 
         # Prepare for transcription
         config = speech.types.RecognitionConfig(
@@ -78,7 +83,7 @@ class GoogleCloudSRModel(SRModel):
             enable_automatic_punctuation=True,
             enable_word_time_offsets=True,
             speech_contexts=[speech_context],
-            metadata=metadata
+            metadata=metadata,
         )
         audio = speech.types.RecognitionAudio(uri=file_uri)
 
@@ -100,9 +105,17 @@ class GoogleCloudSRModel(SRModel):
                 word_list = result.alternatives[0].words
                 if len(word_list) > 0:
                     for word in word_list:
-                        start_time = word.start_time.seconds + word.start_time.nanos * 1e-9
+                        start_time = (
+                            word.start_time.seconds + word.start_time.nanos * 1e-9
+                        )
                         end_time = word.end_time.seconds + word.end_time.nanos * 1e-9
-                        timestamped_words.append({"text": word.word, "start_time": start_time, "end_time": end_time})
+                        timestamped_words.append(
+                            {
+                                "text": word.word,
+                                "start_time": start_time,
+                                "end_time": end_time,
+                            }
+                        )
 
                     # Update confidence stats
                     confidence_sum += result.alternatives[0].confidence
@@ -114,7 +127,10 @@ class GoogleCloudSRModel(SRModel):
         for word_details in timestamped_words:
             # Create new sentence
             if current_sentence is None:
-                current_sentence = {"text": word_details["text"], "start_time": word_details["start_time"]}
+                current_sentence = {
+                    "text": word_details["text"],
+                    "start_time": word_details["start_time"],
+                }
             # Update current sentence
             else:
                 current_sentence["text"] += " {}".format(word_details["text"])
@@ -126,8 +142,16 @@ class GoogleCloudSRModel(SRModel):
                 current_sentence = None
 
         # Create raw transcript
-        raw_transcript = " ".join([sentence_details["text"] for sentence_details in timestamped_sentences])
-        raw_transcript = [{"start_time": 0, "text": raw_transcript, "end_time": timestamped_words[-1]["end_time"]}]
+        raw_transcript = " ".join(
+            [sentence_details["text"] for sentence_details in timestamped_sentences]
+        )
+        raw_transcript = [
+            {
+                "start_time": 0,
+                "text": raw_transcript,
+                "end_time": timestamped_words[-1]["end_time"],
+            }
+        ]
 
         # Compute mean confidence
         if segments > 0:
@@ -140,17 +164,17 @@ class GoogleCloudSRModel(SRModel):
         raw_transcript = self.wrap_and_format_transcript_data(
             data=raw_transcript,
             transcript_format=constants.TranscriptFormats.raw,
-            confidence=confidence
+            confidence=confidence,
         )
         timestamped_words = self.wrap_and_format_transcript_data(
             data=timestamped_words,
             transcript_format=constants.TranscriptFormats.timestamped_words,
-            confidence=confidence
+            confidence=confidence,
         )
         timestamped_sentences = self.wrap_and_format_transcript_data(
             data=timestamped_sentences,
             transcript_format=constants.TranscriptFormats.timestamped_sentences,
-            confidence=confidence
+            confidence=confidence,
         )
 
         # Write files
@@ -168,5 +192,5 @@ class GoogleCloudSRModel(SRModel):
             raw_transcript_save_path,
             confidence,
             timestamped_words_save_path,
-            timestamped_sentences_save_path
+            timestamped_sentences_save_path,
         )

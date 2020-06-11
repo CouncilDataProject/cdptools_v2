@@ -40,14 +40,17 @@ def mocked_request(example_video):
         yield MockRequest
 
 
-@pytest.mark.parametrize("uri, expected", [
-    ("/this/is/local.mp3", True),
-    (Path("/this/is/local.mp3"), True),
-    ("http://external.mp3", False),
-    ("https://external.mp3", False),
-    ("gc://external.mp3", False),
-    ("s3://external.mp3", False)
-])
+@pytest.mark.parametrize(
+    "uri, expected",
+    [
+        ("/this/is/local.mp3", True),
+        (Path("/this/is/local.mp3"), True),
+        ("http://external.mp3", False),
+        ("https://external.mp3", False),
+        ("gc://external.mp3", False),
+        ("s3://external.mp3", False),
+    ],
+)
 def test_path_is_local(uri, expected):
     actual = FileStore._path_is_local(uri)
 

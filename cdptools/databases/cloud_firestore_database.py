@@ -10,21 +10,29 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import uuid4
 
+import requests
+
 import firebase_admin
 import pandas as pd
-import requests
 from firebase_admin import credentials, firestore
 
 from ..indexers import Indexer
 from . import exceptions
-from .database import (Database, Match, OrderCondition, TermResult,
-                       WhereCondition, WhereOperators, cdp_tables)
+from .database import (
+    Database,
+    Match,
+    OrderCondition,
+    TermResult,
+    WhereCondition,
+    WhereOperators,
+    cdp_tables,
+)
 
 ###############################################################################
 
 log = logging.getLogger(__name__)
 
-FIRESTORE_BASE_URI = "https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents"
+FIRESTORE_BASE_URI = "https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents"  # noqa: E501
 FIRESTORE_QUERY_ADDITIONS = "{table}?{attachments}&fields=documents(fields%2Cname)"
 
 ###############################################################################
@@ -49,8 +57,9 @@ class CloudFirestoreWhereOperators:
 
 
 class CloudFirestoreDatabase(Database):
-
-    def _initialize_creds_db(self, credentials_path: Union[str, Path], name: Optional[str] = None):
+    def _initialize_creds_db(
+        self, credentials_path: Union[str, Path], name: Optional[str] = None
+    ):
         # Resolve credentials
         credentials_path = Path(credentials_path).resolve(strict=True)
 
@@ -58,7 +67,8 @@ class CloudFirestoreDatabase(Database):
         cred = credentials.Certificate(str(credentials_path))
 
         # Check name
-        # This is done as if the name is None we just want to initialize the main connection
+        # This is done as if the name is None we just want to initialize the main
+        # connection
         if name:
             firebase_admin.initialize_app(cred, name=name)
         else:
@@ -73,7 +83,7 @@ class CloudFirestoreDatabase(Database):
         project_id: Optional[str] = None,
         credentials_path: Optional[Union[str, Path]] = None,
         name: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         # With credentials:
         if credentials_path:
@@ -91,23 +101,24 @@ class CloudFirestoreDatabase(Database):
             raise exceptions.MissingParameterError(["project_id", "credentials_path"])
 
         self._cdp_table_to_function_dict = {
-            'minutes_item_file': self.get_or_upload_minutes_item_file,
-            'vote': self.get_or_upload_vote,
-            'person': self.get_or_upload_person,
-            'run_input': self.get_or_upload_run_input,
-            'indexed_minutes_item_term': self.upload_or_update_indexed_minutes_item_term,
-            'minutes_item': self.get_or_upload_minutes_item,
-            'event_minutes_item': self.get_or_upload_event_minutes_item,
-            'run': self.get_or_upload_run,
-            'run_output': self.get_or_upload_run_output,
-            'transcript': self.get_or_upload_transcript,
-            'file': self.get_or_upload_file,
-            'run_input_file': self.get_or_upload_run_input_file,
-            'algorithm': self.get_or_upload_algorithm,
-            'indexed_event_term': self.upload_or_update_indexed_event_term,
-            'event': self.get_or_upload_event,
-            'body': self.get_or_upload_body,
-            'run_output_file': self.get_or_upload_run_output_file}
+            "minutes_item_file": self.get_or_upload_minutes_item_file,
+            "vote": self.get_or_upload_vote,
+            "person": self.get_or_upload_person,
+            "run_input": self.get_or_upload_run_input,
+            "indexed_minutes_item_term": self.upload_or_update_indexed_minutes_item_term,  # noqa: E501
+            "minutes_item": self.get_or_upload_minutes_item,
+            "event_minutes_item": self.get_or_upload_event_minutes_item,
+            "run": self.get_or_upload_run,
+            "run_output": self.get_or_upload_run_output,
+            "transcript": self.get_or_upload_transcript,
+            "file": self.get_or_upload_file,
+            "run_input_file": self.get_or_upload_run_input_file,
+            "algorithm": self.get_or_upload_algorithm,
+            "indexed_event_term": self.upload_or_update_indexed_event_term,
+            "event": self.get_or_upload_event,
+            "body": self.get_or_upload_body,
+            "run_output_file": self.get_or_upload_run_output_file,
+        }
 
     @staticmethod
     def _jsonify_firestore_response(fields: Dict) -> Dict:
@@ -128,13 +139,11 @@ class CloudFirestoreDatabase(Database):
             elif NoCredResponseTypes.dt in type_and_value:
                 if "." in type_and_value[NoCredResponseTypes.dt]:
                     formatted[k] = datetime.strptime(
-                        type_and_value[NoCredResponseTypes.dt],
-                        "%Y-%m-%dT%H:%M:%S.%fZ"
+                        type_and_value[NoCredResponseTypes.dt], "%Y-%m-%dT%H:%M:%S.%fZ"
                     )
                 else:
                     formatted[k] = datetime.strptime(
-                        type_and_value[NoCredResponseTypes.dt],
-                        "%Y-%m-%dT%H:%M:%SZ"
+                        type_and_value[NoCredResponseTypes.dt], "%Y-%m-%dT%H:%M:%SZ"
                     )
             else:
                 formatted[k] = type_and_value
@@ -168,7 +177,10 @@ class CloudFirestoreDatabase(Database):
         # Check for error
         if "fields" in response:
             # Format response
-            return {f"{table}_id": id, **self._jsonify_firestore_response(response["fields"])}
+            return {
+                f"{table}_id": id,
+                **self._jsonify_firestore_response(response["fields"]),
+            }
 
         raise KeyError(f"No row with id: {id} exists.")
 
@@ -184,7 +196,7 @@ class CloudFirestoreDatabase(Database):
         table: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
     ) -> List[Dict]:
         # Create base table ref
         ref = self._root.collection(table)
@@ -224,11 +236,16 @@ class CloudFirestoreDatabase(Database):
         if op == WhereOperators.lteq:
             return CloudFirestoreWhereOperators.lteq
 
-        raise ValueError(f"Unsure how to convert where operator: {op}. "
-                         f"No mapping exists between base operators and cloud firestore specific operators.")
+        raise ValueError(
+            f"Unsure how to convert where operator: {op}. "
+            f"No mapping exists between base operators and "
+            f"cloud firestore specific operators."
+        )
 
     @staticmethod
-    def _get_cloud_firestore_value_type(val: Union[bool, float, datetime, int, str, None]) -> str:
+    def _get_cloud_firestore_value_type(
+        val: Union[bool, float, datetime, int, str, None]
+    ) -> str:
         if isinstance(val, bool):
             return NoCredResponseTypes.boolean
         if isinstance(val, float):
@@ -242,24 +259,20 @@ class CloudFirestoreDatabase(Database):
         if val is None:
             return NoCredResponseTypes.null
 
-        raise ValueError(f"Unsure how to determine cloud firestore type from object: {val} (type: {type(val)})")
+        raise ValueError(
+            f"Unsure how to determine cloud firestore type from object: {val} "
+            f"(type: {type(val)})"
+        )
 
     def _select_rows_as_list_no_creds(
         self,
         table: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
-        limit: int = 1000
+        limit: int = 1000,
     ) -> List[Dict]:
         # https://cloud.google.com/firestore/docs/reference/rest/v1/projects.databases.documents/runQuery
-        structuredQuery = {
-            "from": [
-                {
-                    "collectionId": table,
-                    "allDescendants": False
-                }
-            ]
-        }
+        structuredQuery = {"from": [{"collectionId": table, "allDescendants": False}]}
 
         # Apply filters
         if filters:
@@ -275,24 +288,25 @@ class CloudFirestoreDatabase(Database):
                     filter_val = f"{filter_val.isoformat()}Z"
 
                 # Add filter to structuredQuery
-                constructed_filters.append({
-                    "fieldFilter": {
-                        "field": {
-                            "fieldPath": f.column_name
-                        },
-                        "op": self._convert_base_where_operator_to_cloud_firestore_where_operator(f.operator),
-                        "value": {
-                            self._get_cloud_firestore_value_type(f.value): filter_val
+                constructed_filters.append(
+                    {
+                        "fieldFilter": {
+                            "field": {"fieldPath": f.column_name},
+                            "op": self._convert_base_where_operator_to_cloud_firestore_where_operator(  # noqa: E501
+                                f.operator
+                            ),
+                            "value": {
+                                self._get_cloud_firestore_value_type(
+                                    f.value
+                                ): filter_val
+                            },
                         }
                     }
-                })
+                )
 
             # Add filters to the structuredQuery
             structuredQuery["where"] = {
-                "compositeFilter": {
-                    "op": "AND",
-                    "filters": constructed_filters
-                }
+                "compositeFilter": {"op": "AND", "filters": constructed_filters}
             }
 
         # Format order by
@@ -300,10 +314,8 @@ class CloudFirestoreDatabase(Database):
             order_condition = self._construct_orderby_condition(order_by)
             structuredQuery["orderBy"] = [
                 {
-                    "field": {
-                        "fieldPath": order_condition.column_name
-                    },
-                    "direction": order_condition.operator
+                    "field": {"fieldPath": order_condition.column_name},
+                    "direction": order_condition.operator,
                 }
             ]
 
@@ -317,9 +329,7 @@ class CloudFirestoreDatabase(Database):
         # Post
         response = requests.post(
             f"{self._db_uri}:runQuery",
-            data=json.dumps({
-                "structuredQuery": structuredQuery
-            })
+            data=json.dumps({"structuredQuery": structuredQuery}),
         )
 
         # Raise errors
@@ -335,9 +345,12 @@ class CloudFirestoreDatabase(Database):
         try:
             return [
                 {
-                    f"{table}_id": document["document"]["name"].split("/")[-1],  # Get last item in the uri
-                    **self._jsonify_firestore_response(document["document"]["fields"])
-                } for document in response
+                    f"{table}_id": document["document"]["name"].split("/")[
+                        -1
+                    ],  # Get last item in the uri
+                    **self._jsonify_firestore_response(document["document"]["fields"]),
+                }
+                for document in response
             ]
         except KeyError:
             return []
@@ -348,23 +361,28 @@ class CloudFirestoreDatabase(Database):
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[List, OrderCondition, str, Tuple]] = None,
         limit: Optional[int] = None,
-        **kwargs
+        **kwargs,
     ) -> List[Dict]:
         # With credentials
         if self._credentials_path:
-            return self._select_rows_as_list_with_creds(table=table, filters=filters, order_by=order_by, limit=limit)
+            return self._select_rows_as_list_with_creds(
+                table=table, filters=filters, order_by=order_by, limit=limit
+            )
 
-        return self._select_rows_as_list_no_creds(table=table, filters=filters, order_by=order_by, limit=limit)
+        return self._select_rows_as_list_no_creds(
+            table=table, filters=filters, order_by=order_by, limit=limit
+        )
 
     def select_rows_as_dictionary(
         self,
         table: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
     ) -> Dict[str, Dict[str, Any]]:
         """
-        Get a dictionary of rows from a table optionally using filters (a list of where conditions), ordering, and
+        Get a dictionary of rows from a table optionally using filters (a list of where
+        conditions), ordering, and
         limit.
 
         Parameters
@@ -376,18 +394,22 @@ class CloudFirestoreDatabase(Database):
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many rows should be returned that match the query provided.
-            Commonly, running queries without credentials will have a default limit value.
+            An integer limit to how many rows should be returned that match the query
+            provided. Commonly, running queries without credentials will have a default
+            limit value.
 
         Returns
         -------
         results: Dict[str, Dict[str, Any]]
-            The results of the query returned as a dictionary mapping unique id to a dictionary of that rows data from
-            the table queried. If no rows are found, returns an empty dictionary.
+            The results of the query returned as a dictionary mapping unique id to a
+            dictionary of that rows data from the table queried. If no rows are found,
+            returns an empty dictionary.
         """
         # Get, format, and return
         return self._reshape_list_of_rows_to_dict(
-            self.select_rows_as_list(table=table, filters=filters, order_by=order_by, limit=limit)
+            self.select_rows_as_list(
+                table=table, filters=filters, order_by=order_by, limit=limit
+            )
         )
 
     def select_rows_as_dataframe(
@@ -396,10 +418,11 @@ class CloudFirestoreDatabase(Database):
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
         limit: Optional[int] = None,
-        set_id_to_index: bool = False
+        set_id_to_index: bool = False,
     ) -> pd.DataFrame:
         """
-        Get a dataframe of rows from a table optionally using filters (a list of where conditions), ordering, and limit.
+        Get a dataframe of rows from a table optionally using filters (a list of where
+        conditions), ordering, and limit.
 
         Parameters
         ----------
@@ -410,20 +433,24 @@ class CloudFirestoreDatabase(Database):
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many rows should be returned that match the query provided.
-            Commonly, running queries without credentials will have a default limit value.
+            An integer limit to how many rows should be returned that match the query
+            provided. Commonly, running queries without credentials will have a default
+            limit value.
         set_id_to_index: bool
-            Boolean value to determine whether or not the unique id values for this data should be used as the index of
-            the dataframe.
+            Boolean value to determine whether or not the unique id values for this
+            data should be used as the index of the dataframe.
 
         Returns
         -------
         results: pandas.DataFrame
-            The results of the query returned as a pandas DataFrame, where each rwow is a unique row from the
-            table queried. If no rows are found, returns an empty DataFrame.
+            The results of the query returned as a pandas DataFrame, where each rwow is
+            a unique row from the table queried. If no rows are found, returns an empty
+            DataFrame.
         """
         # Get data
-        data = self.select_rows_as_list(table=table, filters=filters, order_by=order_by, limit=limit)
+        data = self.select_rows_as_list(
+            table=table, filters=filters, order_by=order_by, limit=limit
+        )
 
         # Format
         if set_id_to_index:
@@ -435,7 +462,7 @@ class CloudFirestoreDatabase(Database):
         self,
         table: str,
         pks: List[Union[WhereCondition, List, Tuple]],
-        expected_max_rows: int
+        expected_max_rows: int,
     ):
         # Find matching
         pks = [self._construct_where_condition(pk) for pk in pks]
@@ -443,22 +470,24 @@ class CloudFirestoreDatabase(Database):
 
         # Handle expectation
         if len(matching) > expected_max_rows:
-            raise exceptions.UniquenessError(table, [pk.column_name for pk in pks], matching)
+            raise exceptions.UniquenessError(
+                table, [pk.column_name for pk in pks], matching
+            )
         elif len(matching) == 0:
             return None
         else:
             return matching
 
-    def _get_or_upload_row(self, table: str, pks: List[Union[WhereCondition, List, Tuple]], values: Dict) -> Dict:
+    def _get_or_upload_row(
+        self, table: str, pks: List[Union[WhereCondition, List, Tuple]], values: Dict
+    ) -> Dict:
         # Reject any upload without credentials
         if self._credentials_path is None:
             raise exceptions.MissingCredentialsError()
 
         # Fast return for already stored
         found = self._select_rows_with_max_results_expectation(
-            table=table,
-            pks=pks,
-            expected_max_rows=1
+            table=table, pks=pks, expected_max_rows=1
         )
         # Return or upload
         if found:
@@ -469,9 +498,7 @@ class CloudFirestoreDatabase(Database):
             # Store the row
             self._root.collection(table).document(id).set(values)
             log.debug(
-                f"Uploaded values: {values} "
-                f"To id: {id} "
-                f"On table: {table}"
+                f"Uploaded values: {values} " f"To id: {id} " f"On table: {table}"
             )
 
             # Return row
@@ -484,8 +511,8 @@ class CloudFirestoreDatabase(Database):
             values={
                 "name": name,
                 "description": description,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_minutes_item(
@@ -493,7 +520,7 @@ class CloudFirestoreDatabase(Database):
         name: str,
         matter: Optional[str] = None,
         title: Optional[str] = None,
-        legistar_event_item_id: Optional[int] = None
+        legistar_event_item_id: Optional[int] = None,
     ) -> Dict:
         return self._get_or_upload_row(
             table="minutes_item",
@@ -503,8 +530,8 @@ class CloudFirestoreDatabase(Database):
                 "matter": matter,
                 "title": title,
                 "legistar_event_item_id": legistar_event_item_id,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_minutes_item_file(
@@ -512,7 +539,7 @@ class CloudFirestoreDatabase(Database):
         minutes_item_id: str,
         uri: str,
         name: Optional[str] = None,
-        legistar_matter_attachment_id: Optional[int] = None
+        legistar_matter_attachment_id: Optional[int] = None,
     ) -> Dict:
         return self._get_or_upload_row(
             table="minutes_item_file",
@@ -522,16 +549,14 @@ class CloudFirestoreDatabase(Database):
                 "name": name,
                 "uri": uri,
                 "legistar_matter_attachment_id": legistar_matter_attachment_id,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_event(self, video_uri: str) -> Dict:
         # Try find
         found = self._select_rows_with_max_results_expectation(
-            table="event",
-            pks=[("video_uri", video_uri)],
-            expected_max_rows=1
+            table="event", pks=[("video_uri", video_uri)], expected_max_rows=1
         )
         if found:
             return found[0]
@@ -547,7 +572,7 @@ class CloudFirestoreDatabase(Database):
         agenda_file_uri: Optional[str] = None,
         minutes_file_uri: Optional[str] = None,
         legistar_event_id: Optional[int] = None,
-        legistar_event_link: Optional[int] = None
+        legistar_event_link: Optional[int] = None,
     ) -> Dict:
         return self._get_or_upload_row(
             table="event",
@@ -561,8 +586,8 @@ class CloudFirestoreDatabase(Database):
                 "minutes_file_uri": minutes_file_uri,
                 "legistar_event_id": legistar_event_id,
                 "legistar_event_link": legistar_event_link,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_event_minutes_item(
@@ -570,7 +595,7 @@ class CloudFirestoreDatabase(Database):
         event_id: str,
         minutes_item_id: str,
         index: int,
-        decision: Optional[str] = None
+        decision: Optional[str] = None,
     ) -> Dict:
         return self._get_or_upload_row(
             table="event_minutes_item",
@@ -580,8 +605,8 @@ class CloudFirestoreDatabase(Database):
                 "minutes_item_id": minutes_item_id,
                 "index": index,
                 "decision": decision,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_person(
@@ -590,7 +615,7 @@ class CloudFirestoreDatabase(Database):
         email: str,
         phone: Optional[str] = None,
         website: Optional[str] = None,
-        legistar_person_id: Optional[int] = None
+        legistar_person_id: Optional[int] = None,
     ) -> Dict:
         return self._get_or_upload_row(
             table="person",
@@ -601,8 +626,8 @@ class CloudFirestoreDatabase(Database):
                 "phone": phone,
                 "website": website,
                 "legistar_person_id": legistar_person_id,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_vote(
@@ -610,18 +635,21 @@ class CloudFirestoreDatabase(Database):
         person_id: str,
         event_minutes_item_id: str,
         decision: str,
-        legistar_event_item_vote_id: Optional[int] = None
+        legistar_event_item_vote_id: Optional[int] = None,
     ) -> Dict:
         return self._get_or_upload_row(
             table="vote",
-            pks=[("person_id", person_id), ("event_minutes_item_id", event_minutes_item_id)],
+            pks=[
+                ("person_id", person_id),
+                ("event_minutes_item_id", event_minutes_item_id),
+            ],
             values={
                 "person_id": person_id,
                 "event_minutes_item_id": event_minutes_item_id,
                 "decision": decision,
                 "legistar_event_item_vote_id": legistar_event_item_vote_id,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_file(
@@ -629,7 +657,7 @@ class CloudFirestoreDatabase(Database):
         uri: str,
         filename: Optional[str] = None,
         description: Optional[str] = None,
-        content_type: Optional[str] = None
+        content_type: Optional[str] = None,
     ) -> Dict:
         if filename is None:
             filename = uri.split("/")[-1]
@@ -642,15 +670,12 @@ class CloudFirestoreDatabase(Database):
                 "filename": filename,
                 "description": description,
                 "content_type": content_type,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_transcript(
-        self,
-        event_id: str,
-        file_id: str,
-        confidence: Optional[float] = None
+        self, event_id: str, file_id: str, confidence: Optional[float] = None
     ) -> Dict:
         return self._get_or_upload_row(
             table="transcript",
@@ -659,8 +684,8 @@ class CloudFirestoreDatabase(Database):
                 "event_id": event_id,
                 "file_id": file_id,
                 "confidence": confidence,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_algorithm(
@@ -668,7 +693,7 @@ class CloudFirestoreDatabase(Database):
         name: str,
         version: str,
         description: Optional[str] = None,
-        source: Optional[str] = None
+        source: Optional[str] = None,
     ) -> Dict:
         return self._get_or_upload_row(
             table="algorithm",
@@ -678,20 +703,26 @@ class CloudFirestoreDatabase(Database):
                 "version": version,
                 "description": description,
                 "source": source,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
-    def get_or_upload_run(self, algorithm_id: str, begin: datetime, completed: datetime) -> Dict:
+    def get_or_upload_run(
+        self, algorithm_id: str, begin: datetime, completed: datetime
+    ) -> Dict:
         return self._get_or_upload_row(
             table="run",
-            pks=[("algorithm_id", algorithm_id), ("begin", begin), ("completed", completed)],
+            pks=[
+                ("algorithm_id", algorithm_id),
+                ("begin", begin),
+                ("completed", completed),
+            ],
             values={
                 "algorithm_id": algorithm_id,
                 "begin": begin,
                 "completed": completed,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_run_input(self, run_id: str, dtype: str, value: Any) -> Dict:
@@ -702,19 +733,15 @@ class CloudFirestoreDatabase(Database):
                 "run_id": run_id,
                 "dtype": dtype,
                 "value": value,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_run_input_file(self, run_id: str, file_id: str) -> Dict:
         return self._get_or_upload_row(
             table="run_input_file",
             pks=[("run_id", run_id), ("file_id", file_id)],
-            values={
-                "run_id": run_id,
-                "file_id": file_id,
-                "created": datetime.utcnow()
-            }
+            values={"run_id": run_id, "file_id": file_id, "created": datetime.utcnow()},
         )
 
     def get_or_upload_run_output(self, run_id: str, dtype: str, value: Any) -> Dict:
@@ -725,30 +752,22 @@ class CloudFirestoreDatabase(Database):
                 "run_id": run_id,
                 "dtype": dtype,
                 "value": value,
-                "created": datetime.utcnow()
-            }
+                "created": datetime.utcnow(),
+            },
         )
 
     def get_or_upload_run_output_file(self, run_id: str, file_id: str) -> Dict:
         return self._get_or_upload_row(
             table="run_output_file",
             pks=[("run_id", run_id), ("file_id", file_id)],
-            values={
-                "run_id": run_id,
-                "file_id": file_id,
-                "created": datetime.utcnow()
-            }
+            values={"run_id": run_id, "file_id": file_id, "created": datetime.utcnow()},
         )
 
     def get_or_upload_event_topic(self, event_id: str, topic: str) -> Dict:
         return self._get_or_upload_row(
             table="event_topic",
             pks=[("event_id", event_id), ("topic", topic)],
-            values={
-                "event_id": event_id,
-                "topic": topic,
-                "updated": datetime.utcnow()
-            }
+            values={"event_id": event_id, "topic": topic, "updated": datetime.utcnow()},
         )
 
     def get_or_upload_event_entity(self, event_id: str, label: str, value: Any) -> Dict:
@@ -760,8 +779,8 @@ class CloudFirestoreDatabase(Database):
                 "label": label,
                 "value": value,
                 "dtype": self._determine_event_entity_dtype(value),
-                "updated": datetime.utcnow()
-            }
+                "updated": datetime.utcnow(),
+            },
         )
 
     def get_indexed_event_term(self, term: str, event_id: str) -> Dict:
@@ -769,14 +788,16 @@ class CloudFirestoreDatabase(Database):
         found = self._select_rows_with_max_results_expectation(
             table="indexed_event_term",
             pks=[("term", term), ("event_id", event_id)],
-            expected_max_rows=1
+            expected_max_rows=1,
         )
         if found:
             return found[0]
 
         return None
 
-    def upload_or_update_indexed_event_term(self, term: str, event_id: str, value: float) -> Dict:
+    def upload_or_update_indexed_event_term(
+        self, term: str, event_id: str, value: float
+    ) -> Dict:
         # Reject any upload without credentials
         if self._credentials_path is None:
             raise exceptions.MissingCredentialsError()
@@ -796,7 +817,7 @@ class CloudFirestoreDatabase(Database):
             "term": term,
             "event_id": event_id,
             "value": value,
-            "updated": datetime.utcnow()
+            "updated": datetime.utcnow(),
         }
 
         # Store the row
@@ -805,13 +826,17 @@ class CloudFirestoreDatabase(Database):
         # Return the newly created row
         return {"indexed_event_term_id": id, **values}
 
-    def _search_for_term(self, term: str, table: str) -> List[Dict[str, Union[str, float, datetime]]]:
+    def _search_for_term(
+        self, term: str, table: str
+    ) -> List[Dict[str, Union[str, float, datetime]]]:
         """
         Helper function for multithreaded query of terms.
         """
         return self.select_rows_as_list(table, filters=[("term", term)])
 
-    def _search(self, query: str, table: str, match_on: str, data_table: str) -> List[Match]:
+    def _search(
+        self, query: str, table: str, match_on: str, data_table: str
+    ) -> List[Match]:
         # Clean and tokenize the query
         query = Indexer.clean_text_for_indexing(query)
         query_terms = set(query.split(" "))
@@ -824,7 +849,8 @@ class CloudFirestoreDatabase(Database):
         # Combine the term results into table results
         table_results = {}
         for term_result in term_results:
-            # Join the results into a main results dictionary where they top level key is the table row id
+            # Join the results into a main results dictionary where they top level key
+            # is the table row id
             for term_details in term_result:
                 if term_details[match_on] in table_results:
                     table_results[term_details[match_on]].append(term_details)
@@ -834,13 +860,16 @@ class CloudFirestoreDatabase(Database):
         # Clean and format the results
         table_matches = []
         for unique_id, term_results in table_results.items():
-            table_matches.append(Match(
-                unique_id=unique_id,
-                terms=[
-                    TermResult(term=t["term"], contribution=t["value"]) for t in term_results
-                ],
-                data=self.select_row_by_id(table=data_table, id=unique_id)
-            ))
+            table_matches.append(
+                Match(
+                    unique_id=unique_id,
+                    terms=[
+                        TermResult(term=t["term"], contribution=t["value"])
+                        for t in term_results
+                    ],
+                    data=self.select_row_by_id(table=data_table, id=unique_id),
+                )
+            )
 
         # Sort by relevance
         table_matches = sorted(table_matches, key=lambda m: m.relevance, reverse=True)
@@ -848,21 +877,25 @@ class CloudFirestoreDatabase(Database):
         return table_matches
 
     def search_events(self, query: str) -> List[Match]:
-        return self._search(query, table="indexed_event_term", match_on="event_id", data_table="event")
+        return self._search(
+            query, table="indexed_event_term", match_on="event_id", data_table="event"
+        )
 
     def get_indexed_minutes_item_term(self, term: str, minutes_item_id: str) -> Dict:
         # Try find
         found = self._select_rows_with_max_results_expectation(
             table="indexed_minutes_item_term",
             pks=[("term", term), ("minutes_item_id", minutes_item_id)],
-            expected_max_rows=1
+            expected_max_rows=1,
         )
         if found:
             return found[0]
 
         return None
 
-    def upload_or_update_indexed_minutes_item_term(self, term: str, minutes_item_id: str, value: float) -> Dict:
+    def upload_or_update_indexed_minutes_item_term(
+        self, term: str, minutes_item_id: str, value: float
+    ) -> Dict:
         # Reject any upload without credentials
         if self._credentials_path is None:
             raise exceptions.MissingCredentialsError()
@@ -882,7 +915,7 @@ class CloudFirestoreDatabase(Database):
             "term": term,
             "minutes_item_id": minutes_item_id,
             "value": value,
-            "updated": datetime.utcnow()
+            "updated": datetime.utcnow(),
         }
 
         # Store the row
@@ -896,7 +929,7 @@ class CloudFirestoreDatabase(Database):
             query,
             table="indexed_minutes_item_term",
             match_on="minutes_item_id",
-            data_table="minutes_item"
+            data_table="minutes_item",
         )
 
     def wipe_table(self, table, batch_size):
@@ -914,7 +947,11 @@ class CloudFirestoreDatabase(Database):
             if deleted_count >= batch_size:
                 docs = self._root.collection(table).list_documents(batch_size)
             else:
-                log.info("Deleted {} docs from {} table in batches of {} docs".format(total_del, table, batch_size))
+                log.info(
+                    "Deleted {} docs from {} table in batches of {} docs".format(
+                        total_del, table, batch_size
+                    )
+                )
                 return
 
     @property

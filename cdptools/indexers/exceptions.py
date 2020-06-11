@@ -13,5 +13,6 @@ class UnrecognizedTranscriptFormatError(Exception):
     def __str__(self):
         return (
             f"Unsure how to handle annotated JSON transcript provided: {self.path} "
-            f"Please refer to the 'Transcript Formats' section of project documentation for details."
+            f"Please refer to the 'Transcript Formats' section of project "
+            f"documentation for details."
         )

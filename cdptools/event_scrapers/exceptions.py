@@ -32,4 +32,7 @@ class EventOutOfTimeboundsError(Exception):
         self.end = end
 
     def __str__(self):
-        return f"Event is out of expected time bounds. Received: {self.current} Bounds: {self.begin} - {self.end}"
+        return (
+            f"Event is out of expected time bounds. "
+            f"Received: {self.current} Bounds: {self.begin} - {self.end}"
+        )

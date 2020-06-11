@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -264,6 +264,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
+
 <span class="kn">from</span> <span class="nn">tika</span> <span class="kn">import</span> <span class="n">parser</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">get_module_version</span>
@@ -278,7 +279,6 @@
 
 
 <div class="viewcode-block" id="MinutesItemIndexPipeline"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline">[docs]</a><span class="k">class</span> <span class="nc">MinutesItemIndexPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
         <span class="c1"># Resolve config path</span>
         <span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -294,17 +294,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})}</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})},</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="MinutesItemIndexPipeline.task_generate_corpus"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_corpus">[docs]</a>    <span class="k">def</span> <span class="nf">task_generate_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
@@ -315,26 +315,38 @@
             <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;MinutesItemIndexPipeline.task_generate_corpus&quot;</span><span class="p">,</span>
-            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
         <span class="p">):</span>
             <span class="c1"># Get only minutes items that had a decision</span>
-            <span class="c1"># This will generally reduce the minutes items to just bills, appointments, etc</span>
+            <span class="c1"># This will generally reduce the minutes items to just bills,</span>
+            <span class="c1"># appointments, etc</span>
             <span class="c1"># Read this stackoverflow for how we are selecting anything that isn&#39;t null</span>
             <span class="c1"># https://stackoverflow.com/questions/48479532/firestore-select-where-is-not-null</span>
-            <span class="n">decision_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span><span class="s2">&quot;event_minutes_item&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;decision&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)])</span>
+            <span class="n">decision_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span>
+                <span class="s2">&quot;event_minutes_item&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;decision&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)]</span>
+            <span class="p">)</span>
 
             <span class="c1"># Attach minutes item information to each decision item</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">di</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">decision_items</span><span class="p">):</span>
-                <span class="n">decision_items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">di</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span><span class="s2">&quot;minutes_item&quot;</span><span class="p">,</span> <span class="n">di</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">])}</span>
+                <span class="n">decision_items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="o">**</span><span class="n">di</span><span class="p">,</span>
+                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span>
+                        <span class="s2">&quot;minutes_item&quot;</span><span class="p">,</span> <span class="n">di</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">]</span>
+                    <span class="p">),</span>
+                <span class="p">}</span>
 
             <span class="c1"># Gather event info and reformat object structure to be a dictionary mapping</span>
             <span class="c1"># minutes item to list of events that minutes item was discussed in</span>
             <span class="n">di_to_events</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">di</span> <span class="ow">in</span> <span class="n">decision_items</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">di</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">di_to_events</span><span class="p">:</span>
-                    <span class="n">di_to_events</span><span class="p">[</span><span class="n">di</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="n">di</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">]))</span>
+                    <span class="n">di_to_events</span><span class="p">[</span><span class="n">di</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="n">di</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">])</span>
+                    <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">di_to_events</span><span class="p">[</span><span class="n">di</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="n">di</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">])]</span>
+                    <span class="n">di_to_events</span><span class="p">[</span><span class="n">di</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span><span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="n">di</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">])</span>
+                    <span class="p">]</span>
 
             <span class="c1"># Add list of most recent transcript filenames</span>
             <span class="n">di_to_transcripts</span> <span class="o">=</span> <span class="p">{}</span>
@@ -344,16 +356,19 @@
                         <span class="s2">&quot;transcript&quot;</span><span class="p">,</span>
                         <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">])],</span>
                         <span class="n">order_by</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;created&quot;</span><span class="p">,</span> <span class="s2">&quot;DESCENDING&quot;</span><span class="p">),</span>
-                        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span>
+                        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;file_id&quot;</span><span class="p">])</span>
+                    <span class="n">file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span>
+                        <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;file_id&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
 
                     <span class="k">if</span> <span class="n">di</span> <span class="ow">in</span> <span class="n">di_to_transcripts</span><span class="p">:</span>
                         <span class="n">di_to_transcripts</span><span class="p">[</span><span class="n">di</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_details</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">])</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">di_to_transcripts</span><span class="p">[</span><span class="n">di</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">file_details</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]]</span>
 
-            <span class="c1"># Download and merge transcripts to single file to act as the decision_item_corpus_map</span>
+            <span class="c1"># Download and merge transcripts to single file to act as the</span>
+            <span class="c1"># decision_item_corpus_map</span>
             <span class="n">di_corpus_map</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">di</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">di_to_transcripts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="c1"># Collect the transcript texts into a fake transcript document</span>
@@ -361,35 +376,44 @@
                     <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;timestamped-sentences&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[]</span>
+                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[],</span>
                 <span class="p">}</span>
 
                 <span class="c1"># Use the provided save directory to download each file, read,</span>
                 <span class="c1"># and add all data to the decision transcript document</span>
                 <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-                    <span class="n">saved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">saved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+                        <span class="n">filename</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">)</span>
                     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">saved</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">read_in</span><span class="p">:</span>
                         <span class="n">transcript</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">read_in</span><span class="p">)</span>
                         <span class="n">di_transcript_document</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
-                <span class="c1"># Use the provided save directory to download each minutes item file tied to the decision item</span>
-                <span class="c1"># (usually the bill text, a presentation about the project or bill, or document about the appointment)</span>
+                <span class="c1"># Use the provided save directory to download each minutes item file</span>
+                <span class="c1"># tied to the decision item (usually the bill text, a presentation</span>
+                <span class="c1"># about the project or bill, or document about the appointment)</span>
                 <span class="c1"># Parse each file and add each file&#39;s contents to the transcript data</span>
-                <span class="n">di_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span><span class="s2">&quot;minutes_item_file&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">,</span> <span class="n">di</span><span class="p">)])</span>
+                <span class="n">di_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span>
+                    <span class="s2">&quot;minutes_item_file&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">,</span> <span class="n">di</span><span class="p">)]</span>
+                <span class="p">)</span>
                 <span class="k">for</span> <span class="n">di_f</span> <span class="ow">in</span> <span class="n">di_files</span><span class="p">:</span>
                     <span class="c1"># In case the file no longer exists 😡</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="n">local_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">_external_resource_copy</span><span class="p">(</span><span class="n">di_f</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">],</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="n">local_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">_external_resource_copy</span><span class="p">(</span>
+                            <span class="n">di_f</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">],</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span>
+                        <span class="p">)</span>
                         <span class="n">parsed</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">local_path</span><span class="p">))</span>
                         <span class="c1"># Sometimes the content isn&#39;t a supported type by tika 🤷</span>
                         <span class="k">try</span><span class="p">:</span>
                             <span class="c1"># Sometimes the content can&#39;t be parsed 🤷</span>
                             <span class="k">if</span> <span class="n">parsed</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]:</span>
-                                <span class="n">di_transcript_document</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-                                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">parsed</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span>
-                                    <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                                    <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="mf">1.0</span>
-                                <span class="p">})</span>
+                                <span class="n">di_transcript_document</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                    <span class="p">{</span>
+                                        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">parsed</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span>
+                                        <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                                        <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                                    <span class="p">}</span>
+                                <span class="p">)</span>
                         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                             <span class="k">pass</span>
                     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span>
@@ -405,7 +429,9 @@
 
             <span class="k">return</span> <span class="n">di_corpus_map</span></div>
 
-<div class="viewcode-block" id="MinutesItemIndexPipeline.task_generate_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minutes_item_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<div class="viewcode-block" id="MinutesItemIndexPipeline.task_generate_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_generate_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_generate_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">minutes_item_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate word minutes item scores dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -413,11 +439,13 @@
             <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;MinutesItemIndexPipeline.task_generate_index&quot;</span><span class="p">,</span>
-            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
         <span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span><span class="o">.</span><span class="n">generate_index</span><span class="p">(</span><span class="n">minutes_item_corpus_map</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MinutesItemIndexPipeline.task_clean_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_clean_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_clean_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<div class="viewcode-block" id="MinutesItemIndexPipeline.task_clean_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_clean_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_clean_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clean the generated index prior to upload.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -425,48 +453,59 @@
             <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;MinutesItemIndexPipeline.task_clean_index&quot;</span><span class="p">,</span>
-            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
         <span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span><span class="o">.</span><span class="n">drop_terms_from_index_below_value</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_upload_indexed_minutes_item_term_minutes_item_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mivft</span><span class="p">:</span> <span class="n">ValuesForTerm</span><span class="p">):</span>
-        <span class="c1"># Loop through each minutes item and value tied to this term and upload to database</span>
+    <span class="k">def</span> <span class="nf">_upload_indexed_minutes_item_term_minutes_item_values</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mivft</span><span class="p">:</span> <span class="n">ValuesForTerm</span>
+    <span class="p">):</span>
+        <span class="c1"># Loop through each minutes item and value tied to this term and upload to</span>
+        <span class="c1"># database</span>
         <span class="k">for</span> <span class="n">minutes_item_id</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mivft</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">upload_or_update_indexed_minutes_item_term</span><span class="p">(</span>
-                <span class="n">term</span><span class="o">=</span><span class="n">mivft</span><span class="o">.</span><span class="n">term</span><span class="p">,</span>
-                <span class="n">minutes_item_id</span><span class="o">=</span><span class="n">minutes_item_id</span><span class="p">,</span>
-                <span class="n">value</span><span class="o">=</span><span class="n">value</span>
+                <span class="n">term</span><span class="o">=</span><span class="n">mivft</span><span class="o">.</span><span class="n">term</span><span class="p">,</span> <span class="n">minutes_item_id</span><span class="o">=</span><span class="n">minutes_item_id</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span>
             <span class="p">)</span>
 
 <div class="viewcode-block" id="MinutesItemIndexPipeline.task_upload_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.task_upload_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_upload_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Upload a word minutes item scores dictionary. This will completely replace a previous index.</span>
+<span class="sd">        Upload a word minutes item scores dictionary. This will completely replace a</span>
+<span class="sd">        previous index.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;MinutesItemIndexPipeline.task_upload_index&quot;</span><span class="p">,</span>
-            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
         <span class="p">):</span>
             <span class="c1"># Create upload items</span>
-            <span class="c1"># This list of objects is just useful for making it easier to multithread the upload</span>
+            <span class="c1"># This list of objects is just useful for making it easier to multithread</span>
+            <span class="c1"># the upload</span>
             <span class="n">indexed_minutes_item_term_minutes_item_values</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">minutes_item_values</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">indexed_minutes_item_term_minutes_item_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValuesForTerm</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">minutes_item_values</span><span class="p">))</span>
+                <span class="n">indexed_minutes_item_term_minutes_item_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">ValuesForTerm</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">minutes_item_values</span><span class="p">)</span>
+                <span class="p">)</span>
 
             <span class="c1"># Multithread the upload/ update of the index</span>
             <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
                 <span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_upload_indexed_minutes_item_term_minutes_item_values</span><span class="p">,</span>
-                    <span class="n">indexed_minutes_item_term_minutes_item_values</span>
+                    <span class="n">indexed_minutes_item_term_minutes_item_values</span><span class="p">,</span>
                 <span class="p">)</span></div>
 
 <div class="viewcode-block" id="MinutesItemIndexPipeline.run"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.minutes_item_index_pipeline.MinutesItemIndexPipeline.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting index creation.&quot;</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span> <span class="s2">&quot;MinutesItemIndexPipeline.run&quot;</span><span class="p">,</span> <span class="n">get_module_version</span><span class="p">()):</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="s2">&quot;MinutesItemIndexPipeline.run&quot;</span><span class="p">,</span>
+            <span class="n">get_module_version</span><span class="p">(),</span>
+        <span class="p">):</span>
             <span class="c1"># Store the transcripts locally in a temporary directory</span>
             <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
-                <span class="c1"># Get the minutes item corpus map and download most recent transcripts to local machine</span>
+                <span class="c1"># Get the minutes item corpus map and download most recent transcripts</span>
+                <span class="c1"># to local machine</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating the minutes item corpus (decision item corpus)&quot;</span><span class="p">)</span>
                 <span class="n">minutes_item_corpus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_generate_corpus</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
 
@@ -496,7 +535,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

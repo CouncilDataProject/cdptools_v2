@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -276,7 +276,6 @@
 
 
 <div class="viewcode-block" id="EventIndexPipeline"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline">[docs]</a><span class="k">class</span> <span class="nc">EventIndexPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
         <span class="c1"># Resolve config path</span>
         <span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -292,20 +291,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})}</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})},</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;indexer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="EventIndexPipeline.task_generate_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_generate_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<div class="viewcode-block" id="EventIndexPipeline.task_generate_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_generate_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_generate_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">event_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate word event scores dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -313,11 +314,13 @@
             <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventIndexPipeline.task_generate_index&quot;</span><span class="p">,</span>
-            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
         <span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span><span class="o">.</span><span class="n">generate_index</span><span class="p">(</span><span class="n">event_corpus_map</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EventIndexPipeline.task_clean_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_clean_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_clean_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<div class="viewcode-block" id="EventIndexPipeline.task_clean_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_clean_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_clean_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clean the generated index prior to upload.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -325,7 +328,7 @@
             <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventIndexPipeline.task_clean_index&quot;</span><span class="p">,</span>
-            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
         <span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span><span class="o">.</span><span class="n">drop_terms_from_index_below_value</span><span class="p">(</span><span class="n">index</span><span class="p">)</span></div>
 
@@ -333,42 +336,51 @@
         <span class="c1"># Loop through each event and value tied to this term and upload to database</span>
         <span class="k">for</span> <span class="n">event_id</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">evft</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">upload_or_update_indexed_event_term</span><span class="p">(</span>
-                <span class="n">term</span><span class="o">=</span><span class="n">evft</span><span class="o">.</span><span class="n">term</span><span class="p">,</span>
-                <span class="n">event_id</span><span class="o">=</span><span class="n">event_id</span><span class="p">,</span>
-                <span class="n">value</span><span class="o">=</span><span class="n">value</span>
+                <span class="n">term</span><span class="o">=</span><span class="n">evft</span><span class="o">.</span><span class="n">term</span><span class="p">,</span> <span class="n">event_id</span><span class="o">=</span><span class="n">event_id</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span>
             <span class="p">)</span>
 
 <div class="viewcode-block" id="EventIndexPipeline.task_upload_index"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.task_upload_index">[docs]</a>    <span class="k">def</span> <span class="nf">task_upload_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Upload a word event scores dictionary. This will completely replace a previous index.</span>
+<span class="sd">        Upload a word event scores dictionary. This will completely replace a previous</span>
+<span class="sd">        index.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventIndexPipeline.task_upload_index&quot;</span><span class="p">,</span>
-            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">()</span>
+            <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
         <span class="p">):</span>
             <span class="c1"># Create upload items</span>
-            <span class="c1"># This list of objects is just useful for making it easier to multithread the upload</span>
+            <span class="c1"># This list of objects is just useful for making it easier to multithread</span>
+            <span class="c1"># the upload</span>
             <span class="n">indexed_event_term_event_values</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">event_values</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">indexed_event_term_event_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValuesForTerm</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">event_values</span><span class="p">))</span>
+                <span class="n">indexed_event_term_event_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">ValuesForTerm</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">event_values</span><span class="p">)</span>
+                <span class="p">)</span>
 
             <span class="c1"># Multithread the upload/ update of the index</span>
             <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
-                <span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_upload_indexed_event_term_event_values</span><span class="p">,</span> <span class="n">indexed_event_term_event_values</span><span class="p">)</span></div>
+                <span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_upload_indexed_event_term_event_values</span><span class="p">,</span>
+                    <span class="n">indexed_event_term_event_values</span><span class="p">,</span>
+                <span class="p">)</span></div>
 
 <div class="viewcode-block" id="EventIndexPipeline.run"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_index_pipeline.EventIndexPipeline.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting index creation.&quot;</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span> <span class="s2">&quot;EventIndexPipeline.run&quot;</span><span class="p">,</span> <span class="n">get_module_version</span><span class="p">()):</span>
+        <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+            <span class="s2">&quot;EventIndexPipeline.run&quot;</span><span class="p">,</span>
+            <span class="n">get_module_version</span><span class="p">(),</span>
+        <span class="p">):</span>
             <span class="c1"># Store the transcripts locally in a temporary directory</span>
             <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
-                <span class="c1"># Get the event corpus map and download most recent transcripts to local machine</span>
+                <span class="c1"># Get the event corpus map and download most recent transcripts to</span>
+                <span class="c1"># local machine</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloading most recent transcripts&quot;</span><span class="p">)</span>
                 <span class="n">event_corpus_map</span> <span class="o">=</span> <span class="n">transcript_tools</span><span class="o">.</span><span class="n">download_transcripts</span><span class="p">(</span>
-                    <span class="n">db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
-                    <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
-                    <span class="n">save_dir</span><span class="o">=</span><span class="n">tmpdir</span>
+                    <span class="n">db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">tmpdir</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Compute word event scores</span>
@@ -397,7 +409,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

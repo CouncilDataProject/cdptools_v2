@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -279,15 +279,15 @@
 <em class="property">class </em><code class="sig-prename descclassname">cdptools.research_utils.transcripts.</code><code class="sig-name descname">TrancriptJoin</code><span class="sig-paren">(</span><em class="sig-param">event_id</em>, <em class="sig-param">transcript_details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/research_utils/transcripts.html#TrancriptJoin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.research_utils.transcripts.TrancriptJoin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <p>Create new instance of TrancriptJoin(event_id, transcript_details)</p>
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.research_utils.transcripts.TrancriptJoin.event_id">
-<em class="property">property </em><code class="sig-name descname">event_id</code><a class="headerlink" href="#cdptools.research_utils.transcripts.TrancriptJoin.event_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">event_id</code><a class="headerlink" href="#cdptools.research_utils.transcripts.TrancriptJoin.event_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.research_utils.transcripts.TrancriptJoin.transcript_details">
-<em class="property">property </em><code class="sig-name descname">transcript_details</code><a class="headerlink" href="#cdptools.research_utils.transcripts.TrancriptJoin.transcript_details" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transcript_details</code><a class="headerlink" href="#cdptools.research_utils.transcripts.TrancriptJoin.transcript_details" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
@@ -296,17 +296,21 @@
 <dl class="function">
 <dt id="cdptools.research_utils.transcripts.download_transcripts">
 <code class="sig-prename descclassname">cdptools.research_utils.transcripts.</code><code class="sig-name descname">download_transcripts</code><span class="sig-paren">(</span><em class="sig-param">db: cdptools.databases.database.Database</em>, <em class="sig-param">fs: cdptools.file_stores.file_store.FileStore</em>, <em class="sig-param">order_by_field: str = 'confidence'</em>, <em class="sig-param">save_dir: Union[str</em>, <em class="sig-param">pathlib.Path</em>, <em class="sig-param">None] = None</em><span class="sig-paren">)</span> &#x2192; Dict[str, pathlib.Path]<a class="reference internal" href="_modules/cdptools/research_utils/transcripts.html#download_transcripts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.research_utils.transcripts.download_transcripts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.</p>
+<dd><p>Download a transcript for each event found in a CDP instance. Additionally saves
+the manifest as a CSV.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>db</strong> (<em>Database</em>) – An already initialized database object connected to a CDP instance’s database.</p></li>
-<li><p><strong>fs</strong> (<em>FileStore</em>) – An already initialized file store object connected to a CDP instance’s file store.</p></li>
+<li><p><strong>fs</strong> (<em>FileStore</em>) – An already initialized file store object connected to a CDP instance’s file
+store.</p></li>
 <li><p><strong>order_by_field</strong> (<em>str</em>) – Which field to order the transcripts by to select the first (highest value) of.
 Default: “confidence”
 Choices: [“created”, “confidence”]</p></li>
-<li><p><strong>save_dir</strong> (<em>Optional[Union[str, Path]]</em>) – An optional path of where to save the transcripts and manifest CSV. If None provided, uses current directory.
-Always overwrites existing transcripts with the same name if they already exist in the provided directory.</p></li>
+<li><p><strong>save_dir</strong> (<em>Optional[Union[str, Path]]</em>) – An optional path of where to save the transcripts and manifest CSV. If None
+provided, uses current directory.
+Always overwrites existing transcripts with the same name if they already exist
+in the provided directory.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -321,8 +325,8 @@ Always overwrites existing transcripts with the same name if they already exist 
 <dl class="function">
 <dt id="cdptools.research_utils.transcripts.get_transcript_manifest">
 <code class="sig-prename descclassname">cdptools.research_utils.transcripts.</code><code class="sig-name descname">get_transcript_manifest</code><span class="sig-paren">(</span><em class="sig-param">db: cdptools.databases.database.Database</em>, <em class="sig-param">order_by_field: str = 'confidence'</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="_modules/cdptools/research_utils/transcripts.html#get_transcript_manifest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.research_utils.transcripts.get_transcript_manifest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
-instance’s database.</p>
+<dd><p>Get a pandas dataframe that can act as a manifest of a transcript available for
+each event stored in a CDP instance’s database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -333,7 +337,8 @@ Choices: [“created”, “confidence”]</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>manifest</strong> – A dataframe where each row has transcript, event, body, and file details for the event at that row.</p>
+<dd class="field-even"><p><strong>manifest</strong> – A dataframe where each row has transcript, event, body, and file details for
+the event at that row.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
@@ -359,7 +364,7 @@ Choices: [“created”, “confidence”]</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

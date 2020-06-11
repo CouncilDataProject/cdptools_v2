@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -267,14 +267,17 @@
 <span class="c1">###############################################################################</span>
 
 
-<div class="viewcode-block" id="load_custom_object"><a class="viewcode-back" href="../../../cdptools.dev_utils.html#cdptools.dev_utils.load_custom_object.load_custom_object">[docs]</a><span class="k">def</span> <span class="nf">load_custom_object</span><span class="p">(</span><span class="n">module_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">object_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">object_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+<div class="viewcode-block" id="load_custom_object"><a class="viewcode-back" href="../../../cdptools.dev_utils.html#cdptools.dev_utils.load_custom_object.load_custom_object">[docs]</a><span class="k">def</span> <span class="nf">load_custom_object</span><span class="p">(</span>
+    <span class="n">module_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">object_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">object_kwargs</span><span class="p">:</span> <span class="n">Dict</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load a custom object with kwargs.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    module_path: Union[str, List[str]]</span>
-<span class="sd">        Python module path or list of path parts to a custom module. Ex: &quot;cptools.pipeline&quot;</span>
+<span class="sd">        Python module path or list of path parts to a custom module.</span>
+<span class="sd">        Ex: &quot;cptools.pipeline&quot;</span>
 <span class="sd">    object_name: str</span>
 <span class="sd">        Name of the object to retrieve from the module. Ex: &quot;Pipeline&quot;</span>
 <span class="sd">    object_kwargs: Dict</span>
@@ -310,7 +313,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

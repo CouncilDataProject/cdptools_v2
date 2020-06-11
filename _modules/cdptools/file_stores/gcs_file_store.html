@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -281,15 +281,16 @@
     <span class="s2">&quot;.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
     <span class="s2">&quot;.err&quot;</span><span class="p">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
     <span class="s2">&quot;.out&quot;</span><span class="p">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;.mp4&quot;</span><span class="p">:</span> <span class="s2">&quot;video/mp4&quot;</span>
+    <span class="s2">&quot;.mp4&quot;</span><span class="p">:</span> <span class="s2">&quot;video/mp4&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1">###############################################################################</span>
 
 
 <div class="viewcode-block" id="GCSFileStore"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore">[docs]</a><span class="k">class</span> <span class="nc">GCSFileStore</span><span class="p">(</span><span class="n">FileStore</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">_initialize_creds_fs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">_initialize_creds_fs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credentials_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
+    <span class="p">):</span>
         <span class="c1"># Resolve credentials</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_credentials_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">credentials_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -301,7 +302,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">bucket_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">credentials_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="c1"># With credentials:</span>
         <span class="k">if</span> <span class="n">credentials_path</span><span class="p">:</span>
@@ -406,7 +407,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">save_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="c1"># Check for existance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -438,7 +439,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">save_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="c1"># Resolve path</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
@@ -452,7 +453,7 @@
         <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">save_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="c1"># With credentials</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_credentials_path</span><span class="p">:</span>
@@ -460,24 +461,16 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_download_file_no_creds</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GCSFileStore.delete_file"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.delete_file">[docs]</a>    <span class="k">def</span> <span class="nf">delete_file</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="GCSFileStore.delete_file"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.delete_file">[docs]</a>    <span class="k">def</span> <span class="nf">delete_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">delete_blob</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Deleted file: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
-<div class="viewcode-block" id="GCSFileStore.delete_page"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.delete_page">[docs]</a>    <span class="k">def</span> <span class="nf">delete_page</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">page</span><span class="p">:</span> <span class="n">Page</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="GCSFileStore.delete_page"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.delete_page">[docs]</a>    <span class="k">def</span> <span class="nf">delete_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">blob</span> <span class="ow">in</span> <span class="n">page</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">delete_file</span><span class="p">(</span><span class="n">blob</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Deleted page in bucket: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
-<div class="viewcode-block" id="GCSFileStore.clear_bucket"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.clear_bucket">[docs]</a>    <span class="k">def</span> <span class="nf">clear_bucket</span><span class="p">(</span>
-        <span class="bp">self</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="GCSFileStore.clear_bucket"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.clear_bucket">[docs]</a>    <span class="k">def</span> <span class="nf">clear_bucket</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="c1"># Gather the files by pages so we can delete in parallel</span>
         <span class="n">pages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">list_blobs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="p">)</span><span class="o">.</span><span class="n">pages</span>
 
@@ -487,19 +480,14 @@
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cleared bucket: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Cleared bucket: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
-<div class="viewcode-block" id="GCSFileStore.list_page"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.list_page">[docs]</a>    <span class="k">def</span> <span class="nf">list_page</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">page</span><span class="p">:</span> <span class="n">Page</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="GCSFileStore.list_page"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.list_page">[docs]</a>    <span class="k">def</span> <span class="nf">list_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="n">file_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">blob</span> <span class="ow">in</span> <span class="n">page</span><span class="p">:</span>
             <span class="n">file_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blob</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">file_list</span></div>
 
-<div class="viewcode-block" id="GCSFileStore.list_all_files"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.list_all_files">[docs]</a>    <span class="k">def</span> <span class="nf">list_all_files</span><span class="p">(</span>
-        <span class="bp">self</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="GCSFileStore.list_all_files"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.gcs_file_store.GCSFileStore.list_all_files">[docs]</a>    <span class="k">def</span> <span class="nf">list_all_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="c1"># Gather the files by pages</span>
         <span class="n">pages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">list_blobs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bucket</span><span class="p">)</span><span class="o">.</span><span class="n">pages</span>
 
@@ -534,7 +522,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

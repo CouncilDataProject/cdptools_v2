@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -279,10 +279,11 @@
 <em class="property">class </em><code class="sig-prename descclassname">cdptools.audio_splitters.audio_splitter.</code><code class="sig-name descname">AudioSplitter</code><a class="reference internal" href="_modules/cdptools/audio_splitters/audio_splitter.html#AudioSplitter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.audio_splitters.audio_splitter.AudioSplitter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>Why is this not just a single function?</p>
-<p>Making it available to the backend maintainers to pass arguments to the instance of the class and retain state may
-be useful. An example that I can think of: Instead of splitting the entire video into a single audio clip, a
-parameter could be passed to the instance that splits the audio into smaller portions and needs to track additional
-metadata.</p>
+<p>Making it available to the backend maintainers to pass arguments to the instance of
+the class and retain state may be useful. An example that I can think of: Instead
+of splitting the entire video into a single audio clip, a parameter could be passed
+to the instance that splits the audio into smaller portions and needs to track
+additional metadata.</p>
 <dl class="method">
 <dt id="cdptools.audio_splitters.audio_splitter.AudioSplitter.split">
 <em class="property">abstract </em><code class="sig-name descname">split</code><span class="sig-paren">(</span><em class="sig-param">video_read_path: Union[str, pathlib.Path], audio_save_path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/cdptools/audio_splitters/audio_splitter.html#AudioSplitter.split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.audio_splitters.audio_splitter.AudioSplitter.split" title="Permalink to this definition">¶</a></dt>
@@ -352,7 +353,7 @@ metadata.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

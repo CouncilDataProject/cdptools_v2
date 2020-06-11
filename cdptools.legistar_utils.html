@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -282,21 +282,24 @@
 
 <dl class="function">
 <dt id="cdptools.legistar_utils.events.get_legistar_events_for_timespan">
-<code class="sig-prename descclassname">cdptools.legistar_utils.events.</code><code class="sig-name descname">get_legistar_events_for_timespan</code><span class="sig-paren">(</span><em class="sig-param">client: str</em>, <em class="sig-param">begin: datetime.datetime = datetime.datetime(2020</em>, <em class="sig-param">6</em>, <em class="sig-param">10</em>, <em class="sig-param">20</em>, <em class="sig-param">25</em>, <em class="sig-param">42</em>, <em class="sig-param">240007)</em>, <em class="sig-param">end: datetime.datetime = datetime.datetime(2020</em>, <em class="sig-param">6</em>, <em class="sig-param">11</em>, <em class="sig-param">20</em>, <em class="sig-param">25</em>, <em class="sig-param">42</em>, <em class="sig-param">240010)</em>, <em class="sig-param">store_each_response: bool = False</em><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="reference internal" href="_modules/cdptools/legistar_utils/events.html#get_legistar_events_for_timespan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.legistar_utils.events.get_legistar_events_for_timespan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all legistar events and each events minutes items, people, and votes, for a client for a given timespan.</p>
+<code class="sig-prename descclassname">cdptools.legistar_utils.events.</code><code class="sig-name descname">get_legistar_events_for_timespan</code><span class="sig-paren">(</span><em class="sig-param">client: str</em>, <em class="sig-param">begin: datetime.datetime = datetime.datetime(2020</em>, <em class="sig-param">6</em>, <em class="sig-param">11</em>, <em class="sig-param">5</em>, <em class="sig-param">28</em>, <em class="sig-param">44</em>, <em class="sig-param">826033)</em>, <em class="sig-param">end: datetime.datetime = datetime.datetime(2020</em>, <em class="sig-param">6</em>, <em class="sig-param">12</em>, <em class="sig-param">5</em>, <em class="sig-param">28</em>, <em class="sig-param">44</em>, <em class="sig-param">826035)</em>, <em class="sig-param">store_each_response: bool = False</em><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="reference internal" href="_modules/cdptools/legistar_utils/events.html#get_legistar_events_for_timespan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.legistar_utils.events.get_legistar_events_for_timespan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all legistar events and each events minutes items, people, and votes, for a
+client for a given timespan.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>client</strong> (<em>str</em>) – Which legistar client to target. Ex: “seattle”</p></li>
 <li><p><strong>begin</strong> (<em>datetime</em>) – The timespan beginning datetime to query for events after.</p></li>
 <li><p><strong>end</strong> (<em>datetime</em>) – The timespan end datetime to query for events before.</p></li>
-<li><p><strong>store_each_response</strong> (<em>bool</em>) – Option to store each response as they come in. Used to store the data for testing the event gather pipeline.</p></li>
+<li><p><strong>store_each_response</strong> (<em>bool</em>) – Option to store each response as they come in. Used to store the data for
+testing the event gather pipeline.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>events</strong> – All legistar events that occur between the datetimes provided for the client provided. Additionally, requests
-and attaches agenda items, minutes items, any attachments, called “EventItems”, requests votes for any of these
-“EventItems”, and requests person information for any vote.</p>
+<dd class="field-even"><p><strong>events</strong> – All legistar events that occur between the datetimes provided for the client
+provided. Additionally, requests and attaches agenda items, minutes items, any
+attachments, called “EventItems”, requests votes for any of these “EventItems”,
+and requests person information for any vote.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>List[Dict]</p>
@@ -307,11 +310,13 @@ and attaches agenda items, minutes items, any attachments, called “EventItems�
 <dl class="function">
 <dt id="cdptools.legistar_utils.events.get_matching_legistar_event_by_minutes_match">
 <code class="sig-prename descclassname">cdptools.legistar_utils.events.</code><code class="sig-name descname">get_matching_legistar_event_by_minutes_match</code><span class="sig-paren">(</span><em class="sig-param">minutes_items_provided: List[str], legistar_events: List[Dict]</em><span class="sig-paren">)</span> &#x2192; cdptools.legistar_utils.events.AgendaMatchResults<a class="reference internal" href="_modules/cdptools/legistar_utils/events.html#get_matching_legistar_event_by_minutes_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.legistar_utils.events.get_matching_legistar_event_by_minutes_match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provided a list of strings that represent “display name” minutes items, find the closest matching legistar event
-for the list provided. An example of this function being used may be found in SeattleEventScraper, but as a general
-use case, this will be used when a city has two separate systems for storing video and storing legistar data and
-you need to match up the video data with the legistar data. Event matching is determined by minutes item text set
-difference. For details, on that algorithm, look at <cite>rapidfuzz.fuzz.token_set_ratio</cite>.</p>
+<dd><p>Provided a list of strings that represent “display name” minutes items, find the
+closest matching legistar event for the list provided. An example of this function
+being used may be found in SeattleEventScraper, but as a general use case, this
+will be used when a city has two separate systems for storing video and storing
+legistar data and you need to match up the video data with the legistar data. Event
+matching is determined by minutes item text set difference. For details, on that
+algorithm, look at <cite>rapidfuzz.fuzz.token_set_ratio</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -320,8 +325,8 @@ difference. For details, on that algorithm, look at <cite>rapidfuzz.fuzz.token_s
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>match_details</strong> – An object to store the match results. Which contains an attribute for the highest matching and then the scores
-for the rest of the checked event.</p>
+<dd class="field-even"><p><strong>match_details</strong> – An object to store the match results. Which contains an attribute for the
+highest matching and then the scores for the rest of the checked event.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#cdptools.legistar_utils.events.AgendaMatchResults" title="cdptools.legistar_utils.events.AgendaMatchResults">AgendaMatchResults</a></p>
@@ -332,13 +337,15 @@ for the rest of the checked event.</p>
 <dl class="function">
 <dt id="cdptools.legistar_utils.events.parse_legistar_event_details">
 <code class="sig-prename descclassname">cdptools.legistar_utils.events.</code><code class="sig-name descname">parse_legistar_event_details</code><span class="sig-paren">(</span><em class="sig-param">legistar_event_details: Dict</em>, <em class="sig-param">ignore_minutes_items: List[str] = []</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/legistar_utils/events.html#parse_legistar_event_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.legistar_utils.events.parse_legistar_event_details" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse the full legistar event details and format into the CDP ready JSON dictionary for upload.</p>
+<dd><p>Parse the full legistar event details and format into the CDP ready JSON dictionary
+for upload.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>legistar_event_details</strong> (<em>Dict</em>) – The full legistar event details with source and video URIs added.</p></li>
-<li><p><strong>ignore_minutes_items</strong> (<em>List[str]</em>) – It is fairly common to have minutes items that can be ignored. Any strings added to this list will be dropped
-during the formatting of the CDP ready JSON object.</p></li>
+<li><p><strong>ignore_minutes_items</strong> (<em>List[str]</em>) – It is fairly common to have minutes items that can be ignored. Any strings
+added to this list will be dropped during the formatting of the CDP ready JSON
+object.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -368,7 +375,7 @@ during the formatting of the CDP ready JSON object.</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

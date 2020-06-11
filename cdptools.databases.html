@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -284,7 +284,8 @@
 <dd><p>Find an event using the primary key for events, a video uri.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all downstream data for an event.</p>
+<dd class="field-odd"><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all
+downstream data for an event.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
@@ -387,12 +388,17 @@
 <li><p><strong>body_id</strong> (<em>str</em>) – The id for the body this event occured in.</p></li>
 <li><p><strong>event_datetime</strong> (<em>datetime</em>) – The datetime this event occured at.</p></li>
 <li><p><strong>source_uri</strong> (<em>str</em>) – The primary uri for where this event info or video was retrieved from.</p></li>
-<li><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all downstream data for an event.</p></li>
-<li><p><strong>agenda_file_uri</strong> (<em>Optional[str]</em>) – If an agenda file is available for the event, it is recommended to store a uri to the file.</p></li>
-<li><p><strong>minutes_file_uri</strong> (<em>Optional[str]</em>) – If a minutes file is available for the event, it is recommened to store a uri to the file.</p></li>
-<li><p><strong>legistar_event_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventId</cite>.</p></li>
-<li><p><strong>legistar_event_link</strong> (<em>Optional[str]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store a link to the
-event details for this event but in Legistar’s system.</p></li>
+<li><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all
+downstream data for an event.</p></li>
+<li><p><strong>agenda_file_uri</strong> (<em>Optional[str]</em>) – If an agenda file is available for the event, it is recommended to store a
+uri to the file.</p></li>
+<li><p><strong>minutes_file_uri</strong> (<em>Optional[str]</em>) – If a minutes file is available for the event, it is recommened to store a
+uri to the file.</p></li>
+<li><p><strong>legistar_event_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>EventId</cite>.</p></li>
+<li><p><strong>legistar_event_link</strong> (<em>Optional[str]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store a link to the event details for this event but in Legistar’s
+system.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -407,8 +413,9 @@ event details for this event but in Legistar’s system.</p></li>
 <dl class="method">
 <dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event_entity">
 <code class="sig-name descname">get_or_upload_event_entity</code><span class="sig-paren">(</span><em class="sig-param">event_id: str</em>, <em class="sig-param">label: str</em>, <em class="sig-param">value: Any</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_event_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_event_entity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get or upload an event entity. Because entities can be values that are other than strings, most databases,
-should cast this to a string prior to storage. This is also why will store the data type (dtype).</p>
+<dd><p>Get or upload an event entity. Because entities can be values that are other
+than strings, most databases, should cast this to a string prior to storage.
+This is also why will store the data type (dtype).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -435,8 +442,10 @@ should cast this to a string prior to storage. This is also why will store the d
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>event_id</strong> (<em>str</em>) – The id for the event this minutes item was referenced in.</p></li>
 <li><p><strong>minutes_item</strong> (<em>id: str</em>) – The id for the minutes item that was referenced.</p></li>
-<li><p><strong>index</strong> (<em>int</em>) – The integer index for when this minutes item should be placed in the minutes of an event.</p></li>
-<li><p><strong>decision</strong> (<em>Optional[str]</em>) – If the minutes item was a vote, what was the overall outcome for this minutes item.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – The integer index for when this minutes item should be placed in the
+minutes of an event.</p></li>
+<li><p><strong>decision</strong> (<em>Optional[str]</em>) – If the minutes item was a vote, what was the overall outcome for this
+minutes item.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -479,7 +488,8 @@ should cast this to a string prior to storage. This is also why will store the d
 <li><p><strong>filename</strong> (<em>Optional[str]</em>) – An optional filename to store with the file.</p></li>
 <li><p><strong>description</strong> (<em>Optional[str]</em>) – An optional description for the file.</p></li>
 <li><p><strong>content_type</strong> (<em>Optional[str]</em>) – An optional content type for the file.
-Preferred to use MIME types: <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></p></li>
+Preferred to use MIME types:
+<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -494,14 +504,17 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dl class="method">
 <dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_minutes_item">
 <code class="sig-name descname">get_or_upload_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">matter: Optional[str] = None</em>, <em class="sig-param">title: Optional[str] = None</em>, <em class="sig-param">legistar_event_item_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_minutes_item" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get or upload a minutes item. In Legistar this is commonly referred to as an event item.</p>
+<dd><p>Get or upload a minutes item. In Legistar this is commonly referred to as an
+event item.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – A name for the minutes item. Ex: “Appointment of Rene J. Peters, Jr.”</p></li>
 <li><p><strong>matter</strong> (<em>Optional[str]</em>) – A matter name for the minutes item. Ex: “Appt 01373”</p></li>
-<li><p><strong>title</strong> (<em>Optional[str]</em>) – A human readable name for the minutes item. Ex: “A resolution regarding adoption of a Green New Deal.”</p></li>
-<li><p><strong>legistar_event_item_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventItemId</cite>.</p></li>
+<li><p><strong>title</strong> (<em>Optional[str]</em>) – A human readable name for the minutes item. Ex: “A resolution regarding
+adoption of a Green New Deal.”</p></li>
+<li><p><strong>legistar_event_item_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>EventItemId</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -516,15 +529,16 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dl class="method">
 <dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_minutes_item_file">
 <code class="sig-name descname">get_or_upload_minutes_item_file</code><span class="sig-paren">(</span><em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">uri: str</em>, <em class="sig-param">name: Optional[str] = None</em>, <em class="sig-param">legistar_matter_attachment_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.get_or_upload_minutes_item_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.get_or_upload_minutes_item_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get or upload a minutes item file. Commonly, minutes items have an associated file such as a presentation.</p>
+<dd><p>Get or upload a minutes item file. Commonly, minutes items have an associated
+file such as a presentation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>minutes_item_id</strong> (<em>str</em>) – A minutes item id this file is associated with.</p></li>
 <li><p><strong>uri</strong> (<em>str</em>) – A uri that can be used to access this file.</p></li>
 <li><p><strong>name</strong> (<em>Optional[str]</em>) – A name for the file.</p></li>
-<li><p><strong>legistar_matter_attachment_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the
-<cite>MatterAttachmentId</cite>.</p></li>
+<li><p><strong>legistar_matter_attachment_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>MatterAttachmentId</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -547,7 +561,8 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <li><p><strong>email</strong> (<em>str</em>) – The email of the city council member.</p></li>
 <li><p><strong>phone</strong> (<em>Optional[str]</em>) – The phone number of the city council member.</p></li>
 <li><p><strong>website</strong> (<em>Optional[str]</em>) – The website url of the city council member.</p></li>
-<li><p><strong>legistar_person_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>PersonId</cite>.</p></li>
+<li><p><strong>legistar_person_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>PersonId</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -672,7 +687,8 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>event_id</strong> (<em>str</em>) – The id for the event that this transcript is for.</p></li>
 <li><p><strong>file_id</strong> (<em>str</em>) – The id for the file that contains the transcript data.</p></li>
-<li><p><strong>confidence</strong> (<em>Optional[float]</em>) – If available, a float / double value to store with the transcript for the confidence of the transcription.</p></li>
+<li><p><strong>confidence</strong> (<em>Optional[float]</em>) – If available, a float / double value to store with the transcript for the
+confidence of the transcription.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -691,10 +707,12 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>person_id</strong> (<em>str</em>) – The id of the person who voted on an minutes item already tied to an event. (event_minutes_item)</p></li>
+<li><p><strong>person_id</strong> (<em>str</em>) – The id of the person who voted on an minutes item already tied to an event.
+(event_minutes_item)</p></li>
 <li><p><strong>event_minutes_item_id</strong> (<em>str</em>) – The id of the minutes item and event join that was voted on.</p></li>
 <li><p><strong>decision</strong> (<em>str</em>) – This individual’s personal decision on the minutes item.</p></li>
-<li><p><strong>legistar_event_item_vote_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>PersonId</cite>.</p></li>
+<li><p><strong>legistar_event_item_vote_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>PersonId</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -712,7 +730,8 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dd><p>Use the stored indexed event terms to query for events given a query.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for events using the already stored indexed event term table.</p>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for events using the already stored
+indexed event term table.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>matches</strong> – An list of match objects sorted in most to least relevant order.</p>
@@ -729,8 +748,8 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dd><p>Use the stored indexed minutes item terms to query for events given a query.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for minutes items using the already stored indexed minutes items term
-table.</p>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for minutes items using the already
+stored indexed minutes items term table.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>matches</strong> – An list of match objects sorted in most to least relevant order.</p>
@@ -753,10 +772,11 @@ table.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>If the row was found, the data from that row is returned as a dictionary. If not found, None is returned.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>If the row was found, the data from that row is returned as a dictionary. If</em></p></li>
+<li><p><em>not found, None is returned.</em></p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -764,22 +784,25 @@ table.</p>
 <dl class="method">
 <dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_dataframe">
 <code class="sig-name descname">select_rows_as_dataframe</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">filters: Optional[List[Union[cdptools.databases.database.WhereCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple]]] = None</em>, <em class="sig-param">order_by: Union[cdptools.databases.database.OrderCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">str</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">limit: Optional[int] = None</em>, <em class="sig-param">set_id_to_index: bool = False</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.select_rows_as_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_dataframe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a dataframe of rows from a table optionally using filters (a list of where conditions), ordering, and limit.</p>
+<dd><p>Get a dataframe of rows from a table optionally using filters (a list of where
+conditions), ordering, and limit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data from.</p></li>
 <li><p><strong>filters</strong> (<em>Optional[List[Union[WhereCondition, List, Tuple]]]</em>) – A list of filters (where conditions) to add filter down the query.</p></li>
 <li><p><strong>order_by</strong> (<em>Optional[Union[OrderCondition, List, Tuple, str]]</em>) – An order by condition to order the results by before returning.</p></li>
-<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query provided.
-Commonly, running queries without credentials will have a default limit value.</p></li>
-<li><p><strong>set_id_to_index</strong> (<em>bool</em>) – Boolean value to determine whether or not the unique id values for this data should be used as the index of
-the dataframe.</p></li>
+<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query
+provided. Commonly, running queries without credentials will have a default
+limit value.</p></li>
+<li><p><strong>set_id_to_index</strong> (<em>bool</em>) – Boolean value to determine whether or not the unique id values for this
+data should be used as the index of the dataframe.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a pandas DataFrame, where each rwow is a unique row from the
-table queried. If no rows are found, returns an empty DataFrame.</p>
+<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a pandas DataFrame, where each rwow is
+a unique row from the table queried. If no rows are found, returns an empty
+DataFrame.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
@@ -790,7 +813,8 @@ table queried. If no rows are found, returns an empty DataFrame.</p>
 <dl class="method">
 <dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_dictionary">
 <code class="sig-name descname">select_rows_as_dictionary</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">filters: Optional[List[Union[cdptools.databases.database.WhereCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple]]] = None</em>, <em class="sig-param">order_by: Union[cdptools.databases.database.OrderCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">str</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">limit: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, Any]]<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.select_rows_as_dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a dictionary of rows from a table optionally using filters (a list of where conditions), ordering, and
+<dd><p>Get a dictionary of rows from a table optionally using filters (a list of where
+conditions), ordering, and
 limit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -798,13 +822,15 @@ limit.</p>
 <li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data from.</p></li>
 <li><p><strong>filters</strong> (<em>Optional[List[Union[WhereCondition, List, Tuple]]]</em>) – A list of filters (where conditions) to add filter down the query.</p></li>
 <li><p><strong>order_by</strong> (<em>Optional[Union[OrderCondition, List, Tuple, str]]</em>) – An order by condition to order the results by before returning.</p></li>
-<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query provided.
-Commonly, running queries without credentials will have a default limit value.</p></li>
+<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query
+provided. Commonly, running queries without credentials will have a default
+limit value.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a dictionary mapping unique id to a dictionary of that rows data from
-the table queried. If no rows are found, returns an empty dictionary.</p>
+<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a dictionary mapping unique id to a
+dictionary of that rows data from the table queried. If no rows are found,
+returns an empty dictionary.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Dict[str, Dict[str, Any]]</p>
@@ -815,20 +841,23 @@ the table queried. If no rows are found, returns an empty dictionary.</p>
 <dl class="method">
 <dt id="cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_list">
 <code class="sig-name descname">select_rows_as_list</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">filters: Optional[List[Union[cdptools.databases.database.WhereCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple]]] = None</em>, <em class="sig-param">order_by: Union[cdptools.databases.database.OrderCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">str</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">limit: Optional[int] = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="reference internal" href="_modules/cdptools/databases/cloud_firestore_database.html#CloudFirestoreDatabase.select_rows_as_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.cloud_firestore_database.CloudFirestoreDatabase.select_rows_as_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.</p>
+<dd><p>Get a list of rows from a table optionally using filters (a list of where
+conditions), ordering, and limit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data from.</p></li>
 <li><p><strong>filters</strong> (<em>Optional[List[Union[WhereCondition, List, Tuple]]]</em>) – A list of filters (where conditions) to add filter down the query.</p></li>
 <li><p><strong>order_by</strong> (<em>Optional[Union[OrderCondition, List, Tuple, str]]</em>) – An order by condition to order the results by before returning.</p></li>
-<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query provided.
-Commonly, running queries without credentials will have a default limit value.</p></li>
+<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query
+provided. Commonly, running queries without credentials will have a default
+limit value.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a List of Dictionaries, where each dictionary is a unique row from the
-table queried. If no rows are found, returns an empty list.</p>
+<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a List of Dictionaries, where each
+dictionary is a unique row from the table queried. If no rows are found,
+returns an empty list.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>List[Dict[str, Any]]</p>
@@ -859,7 +888,8 @@ table queried. If no rows are found, returns an empty list.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>term</strong> (<em>str</em>) – A term used during an event.</p></li>
 <li><p><strong>event_id</strong> (<em>str</em>) – The id for the event the term was used during.</p></li>
-<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that event that indicates that terms relevance to that event.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that event that indicates that
+terms relevance to that event.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -880,8 +910,8 @@ table queried. If no rows are found, returns an empty list.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>term</strong> (<em>str</em>) – A term used during an event.</p></li>
 <li><p><strong>minutes_item_id</strong> (<em>str</em>) – The id for the minutes item that term was used in or discussed about.</p></li>
-<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that minutes item that indicates that terms relevance to that
-minutes item.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that minutes item that indicates
+that terms relevance to that minutes item.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -997,7 +1027,8 @@ minutes item.</p></li>
 <dd><p>Find an event using the primary key for events, a video uri.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all downstream data for an event.</p>
+<dd class="field-odd"><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all
+downstream data for an event.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>details</strong> – A dictionary containing the data that was either uploaded or found.</p>
@@ -1100,12 +1131,17 @@ minutes item.</p></li>
 <li><p><strong>body_id</strong> (<em>str</em>) – The id for the body this event occured in.</p></li>
 <li><p><strong>event_datetime</strong> (<em>datetime</em>) – The datetime this event occured at.</p></li>
 <li><p><strong>source_uri</strong> (<em>str</em>) – The primary uri for where this event info or video was retrieved from.</p></li>
-<li><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all downstream data for an event.</p></li>
-<li><p><strong>agenda_file_uri</strong> (<em>Optional[str]</em>) – If an agenda file is available for the event, it is recommended to store a uri to the file.</p></li>
-<li><p><strong>minutes_file_uri</strong> (<em>Optional[str]</em>) – If a minutes file is available for the event, it is recommened to store a uri to the file.</p></li>
-<li><p><strong>legistar_event_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventId</cite>.</p></li>
-<li><p><strong>legistar_event_link</strong> (<em>Optional[str]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store a link to the
-event details for this event but in Legistar’s system.</p></li>
+<li><p><strong>video_uri</strong> (<em>str</em>) – A uri that can be used to access the video file used to generate all
+downstream data for an event.</p></li>
+<li><p><strong>agenda_file_uri</strong> (<em>Optional[str]</em>) – If an agenda file is available for the event, it is recommended to store a
+uri to the file.</p></li>
+<li><p><strong>minutes_file_uri</strong> (<em>Optional[str]</em>) – If a minutes file is available for the event, it is recommened to store a
+uri to the file.</p></li>
+<li><p><strong>legistar_event_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>EventId</cite>.</p></li>
+<li><p><strong>legistar_event_link</strong> (<em>Optional[str]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store a link to the event details for this event but in Legistar’s
+system.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1120,8 +1156,9 @@ event details for this event but in Legistar’s system.</p></li>
 <dl class="method">
 <dt id="cdptools.databases.database.Database.get_or_upload_event_entity">
 <em class="property">abstract </em><code class="sig-name descname">get_or_upload_event_entity</code><span class="sig-paren">(</span><em class="sig-param">event_id: str, label: str, value: Union[str, int, float, datetime.datetime]</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_event_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_event_entity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get or upload an event entity. Because entities can be values that are other than strings, most databases,
-should cast this to a string prior to storage. This is also why will store the data type (dtype).</p>
+<dd><p>Get or upload an event entity. Because entities can be values that are other
+than strings, most databases, should cast this to a string prior to storage.
+This is also why will store the data type (dtype).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1148,8 +1185,10 @@ should cast this to a string prior to storage. This is also why will store the d
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>event_id</strong> (<em>str</em>) – The id for the event this minutes item was referenced in.</p></li>
 <li><p><strong>minutes_item</strong> (<em>id: str</em>) – The id for the minutes item that was referenced.</p></li>
-<li><p><strong>index</strong> (<em>int</em>) – The integer index for when this minutes item should be placed in the minutes of an event.</p></li>
-<li><p><strong>decision</strong> (<em>Optional[str]</em>) – If the minutes item was a vote, what was the overall outcome for this minutes item.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – The integer index for when this minutes item should be placed in the
+minutes of an event.</p></li>
+<li><p><strong>decision</strong> (<em>Optional[str]</em>) – If the minutes item was a vote, what was the overall outcome for this
+minutes item.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1192,7 +1231,8 @@ should cast this to a string prior to storage. This is also why will store the d
 <li><p><strong>filename</strong> (<em>Optional[str]</em>) – An optional filename to store with the file.</p></li>
 <li><p><strong>description</strong> (<em>Optional[str]</em>) – An optional description for the file.</p></li>
 <li><p><strong>content_type</strong> (<em>Optional[str]</em>) – An optional content type for the file.
-Preferred to use MIME types: <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></p></li>
+Preferred to use MIME types:
+<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1207,14 +1247,17 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dl class="method">
 <dt id="cdptools.databases.database.Database.get_or_upload_minutes_item">
 <em class="property">abstract </em><code class="sig-name descname">get_or_upload_minutes_item</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">matter: Optional[str] = None</em>, <em class="sig-param">title: Optional[str] = None</em>, <em class="sig-param">legistar_event_item_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_minutes_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_minutes_item" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get or upload a minutes item. In Legistar this is commonly referred to as an event item.</p>
+<dd><p>Get or upload a minutes item. In Legistar this is commonly referred to as an
+event item.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – A name for the minutes item. Ex: “Appointment of Rene J. Peters, Jr.”</p></li>
 <li><p><strong>matter</strong> (<em>Optional[str]</em>) – A matter name for the minutes item. Ex: “Appt 01373”</p></li>
-<li><p><strong>title</strong> (<em>Optional[str]</em>) – A human readable name for the minutes item. Ex: “A resolution regarding adoption of a Green New Deal.”</p></li>
-<li><p><strong>legistar_event_item_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>EventItemId</cite>.</p></li>
+<li><p><strong>title</strong> (<em>Optional[str]</em>) – A human readable name for the minutes item. Ex: “A resolution regarding
+adoption of a Green New Deal.”</p></li>
+<li><p><strong>legistar_event_item_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>EventItemId</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1229,15 +1272,16 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dl class="method">
 <dt id="cdptools.databases.database.Database.get_or_upload_minutes_item_file">
 <em class="property">abstract </em><code class="sig-name descname">get_or_upload_minutes_item_file</code><span class="sig-paren">(</span><em class="sig-param">minutes_item_id: str</em>, <em class="sig-param">uri: str</em>, <em class="sig-param">name: Optional[str] = None</em>, <em class="sig-param">legistar_matter_attachment_id: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.get_or_upload_minutes_item_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.get_or_upload_minutes_item_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get or upload a minutes item file. Commonly, minutes items have an associated file such as a presentation.</p>
+<dd><p>Get or upload a minutes item file. Commonly, minutes items have an associated
+file such as a presentation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>minutes_item_id</strong> (<em>str</em>) – A minutes item id this file is associated with.</p></li>
 <li><p><strong>uri</strong> (<em>str</em>) – A uri that can be used to access this file.</p></li>
 <li><p><strong>name</strong> (<em>Optional[str]</em>) – A name for the file.</p></li>
-<li><p><strong>legistar_matter_attachment_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the
-<cite>MatterAttachmentId</cite>.</p></li>
+<li><p><strong>legistar_matter_attachment_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>MatterAttachmentId</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1260,7 +1304,8 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <li><p><strong>email</strong> (<em>str</em>) – The email of the city council member.</p></li>
 <li><p><strong>phone</strong> (<em>Optional[str]</em>) – The phone number of the city council member.</p></li>
 <li><p><strong>website</strong> (<em>Optional[str]</em>) – The website url of the city council member.</p></li>
-<li><p><strong>legistar_person_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>PersonId</cite>.</p></li>
+<li><p><strong>legistar_person_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>PersonId</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1385,7 +1430,8 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>event_id</strong> (<em>str</em>) – The id for the event that this transcript is for.</p></li>
 <li><p><strong>file_id</strong> (<em>str</em>) – The id for the file that contains the transcript data.</p></li>
-<li><p><strong>confidence</strong> (<em>Optional[float]</em>) – If available, a float / double value to store with the transcript for the confidence of the transcription.</p></li>
+<li><p><strong>confidence</strong> (<em>Optional[float]</em>) – If available, a float / double value to store with the transcript for the
+confidence of the transcription.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1404,10 +1450,12 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>person_id</strong> (<em>str</em>) – The id of the person who voted on an minutes item already tied to an event. (event_minutes_item)</p></li>
+<li><p><strong>person_id</strong> (<em>str</em>) – The id of the person who voted on an minutes item already tied to an event.
+(event_minutes_item)</p></li>
 <li><p><strong>event_minutes_item_id</strong> (<em>str</em>) – The id of the minutes item and event join that was voted on.</p></li>
 <li><p><strong>decision</strong> (<em>str</em>) – This individual’s personal decision on the minutes item.</p></li>
-<li><p><strong>legistar_event_item_vote_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended to also store the <cite>PersonId</cite>.</p></li>
+<li><p><strong>legistar_event_item_vote_id</strong> (<em>Optional[int]</em>) – If the CDP instance is deployed for a city with Legistar, it is recommended
+to also store the <cite>PersonId</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1425,7 +1473,8 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dd><p>Use the stored indexed event terms to query for events given a query.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for events using the already stored indexed event term table.</p>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for events using the already stored
+indexed event term table.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>matches</strong> – An list of match objects sorted in most to least relevant order.</p>
@@ -1442,8 +1491,8 @@ Preferred to use MIME types: <a class="reference external" href="https://develop
 <dd><p>Use the stored indexed minutes item terms to query for events given a query.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for minutes items using the already stored indexed minutes items term
-table.</p>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – A query string to be used to search for minutes items using the already
+stored indexed minutes items term table.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>matches</strong> – An list of match objects sorted in most to least relevant order.</p>
@@ -1466,10 +1515,11 @@ table.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>If the row was found, the data from that row is returned as a dictionary. If not found, None is returned.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>If the row was found, the data from that row is returned as a dictionary. If</em></p></li>
+<li><p><em>not found, None is returned.</em></p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1477,20 +1527,23 @@ table.</p>
 <dl class="method">
 <dt id="cdptools.databases.database.Database.select_rows_as_list">
 <em class="property">abstract </em><code class="sig-name descname">select_rows_as_list</code><span class="sig-paren">(</span><em class="sig-param">table: str</em>, <em class="sig-param">filters: Optional[List[Union[cdptools.databases.database.WhereCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple]]] = None</em>, <em class="sig-param">order_by: Union[cdptools.databases.database.OrderCondition</em>, <em class="sig-param">List</em>, <em class="sig-param">Tuple</em>, <em class="sig-param">str</em>, <em class="sig-param">None] = None</em>, <em class="sig-param">limit: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; List[Dict[str, Any]]<a class="reference internal" href="_modules/cdptools/databases/database.html#Database.select_rows_as_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.Database.select_rows_as_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.</p>
+<dd><p>Get a list of rows from a table optionally using filters (a list of where
+conditions), ordering, and limit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table</strong> (<em>str</em>) – The name of the table to retrieve data from.</p></li>
 <li><p><strong>filters</strong> (<em>Optional[List[Union[WhereCondition, List, Tuple]]]</em>) – A list of filters (where conditions) to add filter down the query.</p></li>
 <li><p><strong>order_by</strong> (<em>Optional[Union[OrderCondition, List, Tuple, str]]</em>) – An order by condition to order the results by before returning.</p></li>
-<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query provided.
-Commonly, running queries without credentials will have a default limit value.</p></li>
+<li><p><strong>limit</strong> (<em>Optional[int]</em>) – An integer limit to how many rows should be returned that match the query
+provided. Commonly, running queries without credentials will have a default
+limit value.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a List of Dictionaries, where each dictionary is a unique row from the
-table queried. If no rows are found, returns an empty list.</p>
+<dd class="field-even"><p><strong>results</strong> – The results of the query returned as a List of Dictionaries, where each
+dictionary is a unique row from the table queried. If no rows are found,
+returns an empty list.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>List[Dict[str, Any]]</p>
@@ -1521,7 +1574,8 @@ table queried. If no rows are found, returns an empty list.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>term</strong> (<em>str</em>) – A term used during an event.</p></li>
 <li><p><strong>event_id</strong> (<em>str</em>) – The id for the event the term was used during.</p></li>
-<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that event that indicates that terms relevance to that event.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that event that indicates that
+terms relevance to that event.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1542,8 +1596,8 @@ table queried. If no rows are found, returns an empty list.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>term</strong> (<em>str</em>) – A term used during an event.</p></li>
 <li><p><strong>minutes_item_id</strong> (<em>str</em>) – The id for the minutes item that term was used in or discussed about.</p></li>
-<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that minutes item that indicates that terms relevance to that
-minutes item.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value that term should be given for that minutes item that indicates
+that terms relevance to that minutes item.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1605,15 +1659,15 @@ minutes item.</p></li>
 <em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">OrderCondition</code><span class="sig-paren">(</span><em class="sig-param">column_name</em>, <em class="sig-param">operator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/database.html#OrderCondition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.OrderCondition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <p>Create new instance of OrderCondition(column_name, operator)</p>
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.databases.database.OrderCondition.column_name">
-<em class="property">property </em><code class="sig-name descname">column_name</code><a class="headerlink" href="#cdptools.databases.database.OrderCondition.column_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">column_name</code><a class="headerlink" href="#cdptools.databases.database.OrderCondition.column_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.databases.database.OrderCondition.operator">
-<em class="property">property </em><code class="sig-name descname">operator</code><a class="headerlink" href="#cdptools.databases.database.OrderCondition.operator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">operator</code><a class="headerlink" href="#cdptools.databases.database.OrderCondition.operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
@@ -1640,15 +1694,15 @@ minutes item.</p></li>
 <em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">TermResult</code><span class="sig-paren">(</span><em class="sig-param">term</em>, <em class="sig-param">contribution</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/database.html#TermResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.TermResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <p>Create new instance of TermResult(term, contribution)</p>
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.databases.database.TermResult.contribution">
-<em class="property">property </em><code class="sig-name descname">contribution</code><a class="headerlink" href="#cdptools.databases.database.TermResult.contribution" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">contribution</code><a class="headerlink" href="#cdptools.databases.database.TermResult.contribution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.databases.database.TermResult.term">
-<em class="property">property </em><code class="sig-name descname">term</code><a class="headerlink" href="#cdptools.databases.database.TermResult.term" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">term</code><a class="headerlink" href="#cdptools.databases.database.TermResult.term" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
@@ -1659,21 +1713,21 @@ minutes item.</p></li>
 <em class="property">class </em><code class="sig-prename descclassname">cdptools.databases.database.</code><code class="sig-name descname">WhereCondition</code><span class="sig-paren">(</span><em class="sig-param">column_name</em>, <em class="sig-param">operator</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/databases/database.html#WhereCondition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.databases.database.WhereCondition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <p>Create new instance of WhereCondition(column_name, operator, value)</p>
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.databases.database.WhereCondition.column_name">
-<em class="property">property </em><code class="sig-name descname">column_name</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.column_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">column_name</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.column_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.databases.database.WhereCondition.operator">
-<em class="property">property </em><code class="sig-name descname">operator</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.operator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">operator</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.databases.database.WhereCondition.value">
-<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value</code><a class="headerlink" href="#cdptools.databases.database.WhereCondition.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 2</p>
 </dd></dl>
 
@@ -1784,7 +1838,7 @@ minutes item.</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

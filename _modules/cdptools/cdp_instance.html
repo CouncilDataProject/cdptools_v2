@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -275,7 +275,7 @@
         <span class="n">database_object_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">file_store_module_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">file_store_object_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">file_store_object_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+        <span class="n">file_store_object_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="p">):</span>
         <span class="c1"># Store values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database_module_path</span> <span class="o">=</span> <span class="n">database_module_path</span>
@@ -301,7 +301,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_database</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">database_module_path</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">database_object_name</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">database_object_kwargs</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">database_object_kwargs</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database</span>
@@ -312,68 +312,75 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_file_store</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">file_store_module_path</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">file_store_object_name</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">file_store_object_kwargs</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">file_store_object_kwargs</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file_store</span>
 
-<div class="viewcode-block" id="CDPInstance.get_transcript_manifest"><a class="viewcode-back" href="../../cdptools.html#cdptools.cdp_instance.CDPInstance.get_transcript_manifest">[docs]</a>    <span class="k">def</span> <span class="nf">get_transcript_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="CDPInstance.get_transcript_manifest"><a class="viewcode-back" href="../../cdptools.html#cdptools.cdp_instance.CDPInstance.get_transcript_manifest">[docs]</a>    <span class="k">def</span> <span class="nf">get_transcript_manifest</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP</span>
-<span class="sd">        instance&#39;s database.</span>
+<span class="sd">        Get a pandas dataframe that can act as a manifest of a transcript available for</span>
+<span class="sd">        each event stored in a CDP instance&#39;s database.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        order_by_field: str</span>
-<span class="sd">            Which field to order the transcripts by to select the first (highest value) of.</span>
+<span class="sd">            Which field to order the transcripts by to select the</span>
+<span class="sd">            first (highest value) of.</span>
 <span class="sd">            Default: &quot;confidence&quot;</span>
 <span class="sd">            Choices: [&quot;created&quot;, &quot;confidence&quot;]</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        manifest: pandas.DataFrame</span>
-<span class="sd">            A dataframe where each row has transcript, event, body, and file details for the event at that row.</span>
+<span class="sd">            A dataframe where each row has transcript, event, body, and file details</span>
+<span class="sd">            for the event at that row.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">transcripts_utils</span><span class="o">.</span><span class="n">get_transcript_manifest</span><span class="p">(</span>
-            <span class="n">db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
-            <span class="n">order_by_field</span><span class="o">=</span><span class="n">order_by_field</span>
+            <span class="n">db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="n">order_by_field</span><span class="o">=</span><span class="n">order_by_field</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="CDPInstance.download_transcripts"><a class="viewcode-back" href="../../cdptools.html#cdptools.cdp_instance.CDPInstance.download_transcripts">[docs]</a>    <span class="k">def</span> <span class="nf">download_transcripts</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span>
-        <span class="n">save_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.</span>
+<span class="sd">        Download a transcript for each event found in a CDP instance. Additionally</span>
+<span class="sd">        saves the manifest as a CSV.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        order_by_field: str</span>
-<span class="sd">            Which field to order the transcripts by to select the first (highest value) of.</span>
+<span class="sd">            Which field to order the transcripts by to select the</span>
+<span class="sd">            first (highest value) of.</span>
 <span class="sd">            Default: &quot;confidence&quot;</span>
 <span class="sd">            Choices: [&quot;created&quot;, &quot;confidence&quot;]</span>
 <span class="sd">        save_dir: Optional[Union[str, Path]]</span>
 <span class="sd">            An optional path of where to save the transcripts and manifest CSV.</span>
 <span class="sd">            If None provided, uses current directory.</span>
-<span class="sd">            Always overwrites existing transcripts with the same name if they already exist in the provided directory.</span>
+<span class="sd">            Always overwrites existing transcripts with the same name if they already</span>
+<span class="sd">            exist in the provided directory.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        event_corpus_map: Dict[str, Path]</span>
-<span class="sd">            A dictionary mapping event id to a local Path for a transcript for that event.</span>
+<span class="sd">            A dictionary mapping event id to a local Path for a transcript for that</span>
+<span class="sd">            event.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">transcripts_utils</span><span class="o">.</span><span class="n">download_transcripts</span><span class="p">(</span>
             <span class="n">db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="n">order_by_field</span><span class="o">=</span><span class="n">order_by_field</span><span class="p">,</span>
-            <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span>
+            <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
         <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;CDPInstance [database: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="si">}</span><span class="s2">, file_store: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="si">}</span><span class="s2">]&gt;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;CDPInstance [database: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="si">}</span><span class="s2">, file_store: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="si">}</span><span class="s2">]&gt;&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
@@ -389,7 +396,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

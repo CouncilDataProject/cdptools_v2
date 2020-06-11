@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -275,17 +275,18 @@
 
 
 <div class="viewcode-block" id="SRModel"><a class="viewcode-back" href="../../../cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel">[docs]</a><span class="k">class</span> <span class="nc">SRModel</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-
 <div class="viewcode-block" id="SRModel.wrap_and_format_transcript_data"><a class="viewcode-back" href="../../../cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel.wrap_and_format_transcript_data">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">wrap_and_format_transcript_data</span><span class="p">(</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">TranscriptDataJSON</span><span class="p">,</span>
         <span class="n">transcript_format</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">constants</span><span class="o">.</span><span class="n">TranscriptDataJSON</span><span class="p">]]:</span>
+        <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span>
+        <span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">constants</span><span class="o">.</span><span class="n">TranscriptDataJSON</span><span class="p">]</span>
+    <span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        A very simple function to just make sure that a transcript has all the details neccessary prior to storing as a</span>
-<span class="sd">        JSON file.</span>
+<span class="sd">        A very simple function to just make sure that a transcript has all the details</span>
+<span class="sd">        neccessary prior to storing as a JSON file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -300,14 +301,15 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        storage_ready: Dict[str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]]</span>
+<span class="sd">        storage_ready: Dict[str, Union[str, float, List[Dict[str, Any]],</span>
+<span class="sd">        constants.TranscriptDataJSON]]</span>
 <span class="sd">            The in memory version of a transcript file about to be dumped to JSON.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="n">transcript_format</span><span class="p">,</span>
             <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="n">annotations</span><span class="p">,</span>
             <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">confidence</span><span class="p">,</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="SRModel.transcribe"><a class="viewcode-back" href="../../../cdptools.sr_models.html#cdptools.sr_models.sr_model.SRModel.transcribe">[docs]</a>    <span class="nd">@abstractmethod</span>
@@ -330,17 +332,21 @@
 <span class="sd">        raw_transcript_save_path: Union[str, Path]</span>
 <span class="sd">            Where the raw transcript should be saved to.</span>
 <span class="sd">        timestamped_words_save_path: Optional[Union[str, Path]]</span>
-<span class="sd">            If a timestamped words formatted transcript is produced, where it should be saved to.</span>
+<span class="sd">            If a timestamped words formatted transcript is produced, where it should be</span>
+<span class="sd">            saved to.</span>
 <span class="sd">        timestamped_sentences_save_path: Optional[Union[str, Path]]</span>
-<span class="sd">            If a timestamped sentences formatted transcript is produced, where it should be saved to.</span>
+<span class="sd">            If a timestamped sentences formatted transcript is produced, where it</span>
+<span class="sd">            should be saved to.</span>
 <span class="sd">        timestamped_speaker_turns_save_path: Optional[Union[str, Path]]</span>
-<span class="sd">            If a timestamped speaker turns formatted transcript is produced, where it should be saved to.</span>
+<span class="sd">            If a timestamped speaker turns formatted transcript is produced, where it</span>
+<span class="sd">            should be saved to.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        outputs: SRModelOutputs</span>
-<span class="sd">            The outputs of the transcribe operation. Stores all available transcript paths as attributes as well as the</span>
-<span class="sd">            overall confidence of the transciption accuracy.</span>
+<span class="sd">            The outputs of the transcribe operation. Stores all available transcript</span>
+<span class="sd">            paths as attributes as well as the overall confidence of the transciption</span>
+<span class="sd">            accuracy.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">SRModelOutputs</span><span class="p">(</span>
@@ -348,7 +354,7 @@
             <span class="mf">1.0</span><span class="p">,</span>
             <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_words_save_path</span><span class="p">),</span>
             <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_sentences_save_path</span><span class="p">),</span>
-            <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_speaker_turns_save_path</span><span class="p">)</span>
+            <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_speaker_turns_save_path</span><span class="p">),</span>
         <span class="p">)</span></div></div>
 </pre></div>
 
@@ -362,7 +368,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

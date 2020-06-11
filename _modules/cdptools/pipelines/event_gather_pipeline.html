@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -262,8 +262,9 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">RequestException</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">RequestException</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">get_module_version</span>
 <span class="kn">from</span> <span class="nn">..dev_utils</span> <span class="kn">import</span> <span class="n">RunManager</span><span class="p">,</span> <span class="n">load_custom_object</span>
@@ -277,7 +278,6 @@
 
 
 <div class="viewcode-block" id="EventGatherPipeline"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline">[docs]</a><span class="k">class</span> <span class="nc">EventGatherPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
         <span class="c1"># Resolve config path</span>
         <span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -293,22 +293,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">event_scraper</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;event_scraper&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;event_scraper&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;event_scraper&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;event_scraper&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})}</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})},</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;file_store&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">audio_splitter</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
             <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
             <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;audio_splitter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">try_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;try&quot;</span><span class="p">]</span>
@@ -316,19 +316,21 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">caption_sr_model</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
                 <span class="n">module_path</span><span class="o">=</span><span class="n">try_model</span><span class="p">[</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
                 <span class="n">object_name</span><span class="o">=</span><span class="n">try_model</span><span class="p">[</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-                <span class="n">object_kwargs</span><span class="o">=</span><span class="n">try_model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">object_kwargs</span><span class="o">=</span><span class="n">try_model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
             <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
                 <span class="n">module_path</span><span class="o">=</span><span class="n">catch_model</span><span class="p">[</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
                 <span class="n">object_name</span><span class="o">=</span><span class="n">catch_model</span><span class="p">[</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-                <span class="n">object_kwargs</span><span class="o">=</span><span class="n">catch_model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">object_kwargs</span><span class="o">=</span><span class="n">catch_model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}),</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sr_model</span> <span class="o">=</span> <span class="n">load_custom_object</span><span class="o">.</span><span class="n">load_custom_object</span><span class="p">(</span>
                 <span class="n">module_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;module_path&quot;</span><span class="p">],</span>
                 <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">][</span><span class="s2">&quot;object_name&quot;</span><span class="p">],</span>
-                <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">object_kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;speech_recognition_model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="s2">&quot;object_kwargs&quot;</span><span class="p">,</span> <span class="p">{}</span>
+                <span class="p">),</span>
             <span class="p">)</span>
 
 <div class="viewcode-block" id="EventGatherPipeline.task_audio_get_or_copy"><a class="viewcode-back" href="../../../cdptools.pipelines.html#cdptools.pipelines.event_gather_pipeline.EventGatherPipeline.task_audio_get_or_copy">[docs]</a>    <span class="k">def</span> <span class="nf">task_audio_get_or_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -341,7 +343,7 @@
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.task_audio_get_or_copy&quot;</span><span class="p">,</span>
             <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
             <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">],</span>
-            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
             <span class="c1"># Check if audio already exists in file store</span>
             <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_audio.wav&quot;</span>
@@ -356,14 +358,13 @@
                     <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                 <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;tmp_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_video.</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="n">tmp_video_filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">_external_resource_copy</span><span class="p">(</span>
-                    <span class="n">uri</span><span class="o">=</span><span class="n">video_uri</span><span class="p">,</span>
-                    <span class="n">dst</span><span class="o">=</span><span class="n">tmp_video_filepath</span>
+                    <span class="n">uri</span><span class="o">=</span><span class="n">video_uri</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">tmp_video_filepath</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Split and store the audio in temporary file prior to upload</span>
                 <span class="n">tmp_audio_filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio_splitter</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
                     <span class="n">video_read_path</span><span class="o">=</span><span class="n">tmp_video_filepath</span><span class="p">,</span>
-                    <span class="n">audio_save_path</span><span class="o">=</span><span class="n">tmp_audio_filepath</span>
+                    <span class="n">audio_save_path</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">tmp_audio_log_out_filepath</span> <span class="o">=</span> <span class="n">tmp_audio_filepath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.out&quot;</span><span class="p">)</span>
                 <span class="n">tmp_audio_log_err_filepath</span> <span class="o">=</span> <span class="n">tmp_audio_filepath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.err&quot;</span><span class="p">)</span>
@@ -373,8 +374,12 @@
 
                 <span class="c1"># Store audio and logs</span>
                 <span class="n">audio_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_filepath</span><span class="p">)</span>
-                <span class="n">audio_log_out_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_out_filepath</span><span class="p">)</span>
-                <span class="n">audio_log_err_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_err_filepath</span><span class="p">)</span>
+                <span class="n">audio_log_out_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+                    <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_out_filepath</span>
+                <span class="p">)</span>
+                <span class="n">audio_log_err_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+                    <span class="n">filepath</span><span class="o">=</span><span class="n">tmp_audio_log_err_filepath</span>
+                <span class="p">)</span>
                 <span class="c1"># Store database records</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">audio_uri</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">audio_log_out_uri</span><span class="p">)</span>
@@ -391,7 +396,7 @@
         <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">video_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">caption_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or create and return transcript resource uri provied key.</span>
@@ -402,14 +407,14 @@
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.task_transcript_get_or_create&quot;</span><span class="p">,</span>
             <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
             <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">video_uri</span><span class="p">,</span> <span class="n">caption_uri</span><span class="p">],</span>
-            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
             <span class="c1"># Setup temporary filenames, sorted by preference</span>
             <span class="n">tmp_filenames</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_ts_speaker_turns_transcript_0.json&quot;</span><span class="p">,</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_ts_sentences_transcript_0.json&quot;</span><span class="p">,</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_ts_words_transcript_0.json&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_raw_transcript_0.json&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_raw_transcript_0.json&quot;</span><span class="p">,</span>
             <span class="p">]</span>
 
             <span class="c1"># Iterate through tmp_filenames and check if any of them exists</span>
@@ -417,21 +422,26 @@
 
             <span class="k">for</span> <span class="n">tmp_filename</span> <span class="ow">in</span> <span class="n">tmp_filenames</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">tmp_filename</span><span class="p">)</span>
+                    <span class="n">main_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">get_file_uri</span><span class="p">(</span>
+                        <span class="n">filename</span><span class="o">=</span><span class="n">tmp_filename</span>
+                    <span class="p">)</span>
                     <span class="k">break</span>
                 <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
                     <span class="k">continue</span>
 
             <span class="c1"># Transcript already exist</span>
             <span class="k">if</span> <span class="n">main_transcript_uri</span><span class="p">:</span>
-                <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">main_transcript_uri</span><span class="p">)</span>
+                <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span>
+                    <span class="n">main_transcript_uri</span>
+                <span class="p">)</span>
                 <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span>
                     <span class="n">table</span><span class="o">=</span><span class="s2">&quot;transcript&quot;</span><span class="p">,</span>
                     <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;file_id&quot;</span><span class="p">,</span> <span class="n">main_transcript_details</span><span class="p">[</span><span class="s2">&quot;file_id&quot;</span><span class="p">])],</span>
-                    <span class="n">limit</span><span class="o">=</span><span class="mi">1</span>
+                    <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                 <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># List of tmp_filenames exhausted without break, so there must be no transcripts</span>
+                <span class="c1"># List of tmp_filenames exhausted without break, so there must be no</span>
+                <span class="c1"># transcripts</span>
                 <span class="c1"># Create entirely new transcripts</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="c1"># Create transcript from caption_uri</span>
@@ -439,11 +449,12 @@
                         <span class="n">file_uri</span><span class="o">=</span><span class="n">caption_uri</span><span class="p">,</span>
                         <span class="n">raw_transcript_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
                         <span class="n">timestamped_sentences_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                        <span class="n">timestamped_speaker_turns_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">timestamped_speaker_turns_save_path</span><span class="o">=</span><span class="n">tmp_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                     <span class="p">)</span>
                 <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="n">RequestException</span><span class="p">):</span>
                     <span class="c1"># Either there is no caption_sr_model for this pipeline or</span>
-                    <span class="c1"># caption_sr_model was unable to create transcripts, due to invalid caption_uri</span>
+                    <span class="c1"># caption_sr_model was unable to create transcripts, due to invalid</span>
+                    <span class="c1"># caption_uri</span>
                     <span class="c1"># Create transcripts from video_uri</span>
 
                     <span class="c1"># Run audio task</span>
@@ -459,8 +470,12 @@
                     <span class="p">)</span>
 
                 <span class="c1"># Store and register transcript files</span>
-                <span class="n">raw_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">raw_path</span><span class="p">)</span>
-                <span class="n">raw_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">raw_transcript_uri</span><span class="p">)</span>
+                <span class="n">raw_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+                    <span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">raw_path</span>
+                <span class="p">)</span>
+                <span class="n">raw_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span>
+                    <span class="n">raw_transcript_uri</span>
+                <span class="p">)</span>
                 <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">raw_path</span><span class="p">)</span>
 
                 <span class="c1"># Default to using the raw output as main transcript</span>
@@ -470,8 +485,12 @@
                 <span class="c1"># Timestamped transcripts are optional</span>
                 <span class="c1"># If available store them but also set as main transcript</span>
                 <span class="k">if</span> <span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_words_path</span><span class="p">:</span>
-                    <span class="n">ts_words_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_words_path</span><span class="p">)</span>
-                    <span class="n">ts_words_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">ts_words_transcript_uri</span><span class="p">)</span>
+                    <span class="n">ts_words_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+                        <span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_words_path</span>
+                    <span class="p">)</span>
+                    <span class="n">ts_words_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span>
+                        <span class="n">ts_words_transcript_uri</span>
+                    <span class="p">)</span>
                     <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_words_path</span><span class="p">)</span>
                     <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_words_transcript_file_details</span>
 
@@ -481,9 +500,11 @@
                     <span class="n">ts_sentences_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
                         <span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_sentences_path</span>
                     <span class="p">)</span>
-                    <span class="n">ts_sentences_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span><span class="n">ts_sentences_transcript_uri</span><span class="p">)</span>
+                    <span class="n">ts_sentences_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span>
+                        <span class="n">ts_sentences_transcript_uri</span>
+                    <span class="p">)</span>
                     <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_sentences_path</span><span class="p">)</span>
-                    <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_sentences_transcript_file_details</span>
+                    <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_sentences_file_details</span>
 
                 <span class="c1"># Store and register speaker turns transcript file</span>
                 <span class="c1"># Set as main transcript</span>
@@ -491,11 +512,11 @@
                     <span class="n">ts_speaker_turns_transcript_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
                         <span class="n">filepath</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_speaker_turns_path</span>
                     <span class="p">)</span>
-                    <span class="n">ts_speaker_turns_transcript_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span>
+                    <span class="n">ts_spearker_turns_file_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_file</span><span class="p">(</span>
                         <span class="n">ts_speaker_turns_transcript_uri</span>
                     <span class="p">)</span>
                     <span class="n">run</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">timestamped_speaker_turns_path</span><span class="p">)</span>
-                    <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_speaker_turns_transcript_file_details</span>
+                    <span class="n">main_transcript_details</span> <span class="o">=</span> <span class="n">ts_spearker_turns_file_details</span>
 
             <span class="k">return</span> <span class="n">main_transcript_details</span><span class="p">,</span> <span class="n">confidence</span></div>
 
@@ -503,9 +524,11 @@
         <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">file_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
-            <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.task_parse_and_upload_constructed_event&quot;</span><span class="p">,</span>
+            <span class="n">algorithm_name</span><span class="o">=</span><span class="p">(</span>
+                <span class="s2">&quot;EventGatherPipeline.task_parse_and_upload_constructed_event&quot;</span>
+            <span class="p">),</span>
             <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;source_uri&quot;</span><span class="p">]]</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;source_uri&quot;</span><span class="p">]],</span>
         <span class="p">):</span>
             <span class="c1"># Store or get body details</span>
             <span class="n">body_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_body</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">])</span>
@@ -519,7 +542,7 @@
                 <span class="n">agenda_file_uri</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;agenda_file_uri&quot;</span><span class="p">],</span>
                 <span class="n">minutes_file_uri</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;minutes_file_uri&quot;</span><span class="p">],</span>
                 <span class="n">legistar_event_id</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;legistar_event_id&quot;</span><span class="p">],</span>
-                <span class="n">legistar_event_link</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;legistar_event_link&quot;</span><span class="p">]</span>
+                <span class="n">legistar_event_link</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;legistar_event_link&quot;</span><span class="p">],</span>
             <span class="p">)</span>
 
             <span class="c1"># Store or get all minute_items</span>
@@ -528,7 +551,7 @@
                 <span class="n">minutes_item_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_minutes_item</span><span class="p">(</span>
                     <span class="n">name</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
                     <span class="n">matter</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;matter&quot;</span><span class="p">],</span>
-                    <span class="n">legistar_event_item_id</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;legistar_event_item_id&quot;</span><span class="p">]</span>
+                    <span class="n">legistar_event_item_id</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;legistar_event_item_id&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Store any attachments</span>
@@ -537,15 +560,17 @@
                         <span class="n">minutes_item_id</span><span class="o">=</span><span class="n">minutes_item_details</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">],</span>
                         <span class="n">uri</span><span class="o">=</span><span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">],</span>
                         <span class="n">name</span><span class="o">=</span><span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                        <span class="n">legistar_matter_attachment_id</span><span class="o">=</span><span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;legistar_matter_attachment_id&quot;</span><span class="p">]</span>
+                        <span class="n">legistar_matter_attachment_id</span><span class="o">=</span><span class="n">attachment</span><span class="p">[</span>
+                            <span class="s2">&quot;legistar_matter_attachment_id&quot;</span>
+                        <span class="p">],</span>
                     <span class="p">)</span>
 
                 <span class="c1"># Attach minutes item to event</span>
-                <span class="n">event_minutes_item_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_event_minutes_item</span><span class="p">(</span>
+                <span class="n">emi_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_event_minutes_item</span><span class="p">(</span>
                     <span class="n">event_id</span><span class="o">=</span><span class="n">event_details</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">],</span>
                     <span class="n">minutes_item_id</span><span class="o">=</span><span class="n">minutes_item_details</span><span class="p">[</span><span class="s2">&quot;minutes_item_id&quot;</span><span class="p">],</span>
                     <span class="n">index</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">],</span>
-                    <span class="n">decision</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;decision&quot;</span><span class="p">]</span>
+                    <span class="n">decision</span><span class="o">=</span><span class="n">m_item</span><span class="p">[</span><span class="s2">&quot;decision&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Store any votes and persons</span>
@@ -555,21 +580,23 @@
                         <span class="n">email</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
                         <span class="n">phone</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;phone&quot;</span><span class="p">],</span>
                         <span class="n">website</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;website&quot;</span><span class="p">],</span>
-                        <span class="n">legistar_person_id</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;legistar_person_id&quot;</span><span class="p">]</span>
+                        <span class="n">legistar_person_id</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">][</span><span class="s2">&quot;legistar_person_id&quot;</span><span class="p">],</span>
                     <span class="p">)</span>
 
                     <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_vote</span><span class="p">(</span>
                         <span class="n">person_id</span><span class="o">=</span><span class="n">person_details</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">],</span>
-                        <span class="n">event_minutes_item_id</span><span class="o">=</span><span class="n">event_minutes_item_details</span><span class="p">[</span><span class="s2">&quot;event_minutes_item_id&quot;</span><span class="p">],</span>
+                        <span class="n">event_minutes_item_id</span><span class="o">=</span><span class="n">emi_details</span><span class="p">[</span><span class="s2">&quot;event_minutes_item_id&quot;</span><span class="p">],</span>
                         <span class="n">decision</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;decision&quot;</span><span class="p">],</span>
-                        <span class="n">legistar_event_item_vote_id</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;legistar_event_item_vote_id&quot;</span><span class="p">]</span>
+                        <span class="n">legistar_event_item_vote_id</span><span class="o">=</span><span class="n">vote</span><span class="p">[</span><span class="s2">&quot;legistar_event_item_vote_id&quot;</span><span class="p">],</span>
                     <span class="p">)</span>
 
             <span class="c1"># Link event to transcript</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_or_upload_transcript</span><span class="p">(</span>
                 <span class="n">event_id</span><span class="o">=</span><span class="n">event_details</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">],</span>
-                <span class="n">file_id</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">][</span><span class="s2">&quot;transcript_file_details&quot;</span><span class="p">][</span><span class="s2">&quot;file_id&quot;</span><span class="p">],</span>
-                <span class="n">confidence</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">][</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span>
+                <span class="n">file_id</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">][</span><span class="s2">&quot;transcript_file_details&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;file_id&quot;</span>
+                <span class="p">],</span>
+                <span class="n">confidence</span><span class="o">=</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">][</span><span class="s2">&quot;confidence&quot;</span><span class="p">],</span>
             <span class="p">)</span>
 
             <span class="k">return</span> <span class="n">event_details</span></div>
@@ -585,7 +612,7 @@
             <span class="n">algorithm_name</span><span class="o">=</span><span class="s2">&quot;EventGatherPipeline.process_event&quot;</span><span class="p">,</span>
             <span class="n">algorithm_version</span><span class="o">=</span><span class="n">get_module_version</span><span class="p">(),</span>
             <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;source_uri&quot;</span><span class="p">]],</span>
-            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="c1"># Check event already exists in database</span>
             <span class="n">found_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">get_event</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">])</span>
@@ -598,22 +625,26 @@
                 <span class="n">phrases</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;minutes_items&quot;</span><span class="p">]]</span>
 
                 <span class="c1"># Run transcript task</span>
-                <span class="n">transcript_file_details</span><span class="p">,</span> <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_transcript_get_or_create</span><span class="p">(</span>
-                    <span class="n">key</span><span class="p">,</span>
-                    <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">],</span>
-                    <span class="n">event</span><span class="p">[</span><span class="s2">&quot;caption_uri&quot;</span><span class="p">],</span>
-                    <span class="n">phrases</span>
+                <span class="p">(</span>
+                    <span class="n">transcript_file_details</span><span class="p">,</span>
+                    <span class="n">confidence</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_transcript_get_or_create</span><span class="p">(</span>
+                    <span class="n">key</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">],</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;caption_uri&quot;</span><span class="p">],</span> <span class="n">phrases</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Attach transcript details to event</span>
                 <span class="n">event</span><span class="p">[</span><span class="s2">&quot;transcript_details&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                     <span class="s2">&quot;transcript_file_details&quot;</span><span class="p">:</span> <span class="n">transcript_file_details</span><span class="p">,</span>
-                    <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">confidence</span>
+                    <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">confidence</span><span class="p">,</span>
                 <span class="p">}</span>
 
                 <span class="c1"># Event details</span>
                 <span class="n">event_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_parse_and_upload_constructed_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Uploaded event details: </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event_details</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">],</span> <span class="n">key</span><span class="p">))</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Uploaded event details: </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">event_details</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">],</span> <span class="n">key</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
 
             <span class="c1"># Update progress</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Completed event: </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;video_uri&quot;</span><span class="p">]))</span></div>
@@ -625,10 +656,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
             <span class="s2">&quot;EventGatherPipeline.run&quot;</span><span class="p">,</span>
             <span class="n">get_module_version</span><span class="p">(),</span>
-            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">remove_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="c1"># Get events</span>
-            <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span> <span class="s2">&quot;EventScraper.get_events&quot;</span><span class="p">,</span> <span class="n">get_module_version</span><span class="p">()):</span>
+            <span class="k">with</span> <span class="n">RunManager</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">file_store</span><span class="p">,</span>
+                <span class="s2">&quot;EventScraper.get_events&quot;</span><span class="p">,</span>
+                <span class="n">get_module_version</span><span class="p">(),</span>
+            <span class="p">):</span>
                 <span class="n">events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_scraper</span><span class="o">.</span><span class="n">get_events</span><span class="p">()</span>
 
             <span class="c1"># Multiprocess each event found</span>
@@ -649,7 +685,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

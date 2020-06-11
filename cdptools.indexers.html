@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -288,10 +288,11 @@
 <em class="property">class </em><code class="sig-prename descclassname">cdptools.indexers.indexer.</code><code class="sig-name descname">Indexer</code><a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>Why is this not just a single function?</p>
-<p>Like audio splitters, to pass arguments to the instance of the class and retain state may be useful. In this case,
-while computing the scores for every meeting memory may be a constrant, or in the case where a developer wants to
-artifically inflate the scores for certain events or words to highlight something that can be done on an object
-instance rather than just a function instance.</p>
+<p>Like audio splitters, to pass arguments to the instance of the class and retain
+state may be useful. In this case, while computing the scores for every meeting
+memory may be a constrant, or in the case where a developer wants to artifically
+inflate the scores for certain events or words to highlight something that can be
+done on an object instance rather than just a function instance.</p>
 <dl class="method">
 <dt id="cdptools.indexers.indexer.Indexer.clean_text_for_indexing">
 <em class="property">static </em><code class="sig-name descname">clean_text_for_indexing</code><span class="sig-paren">(</span><em class="sig-param">raw_transcript: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.clean_text_for_indexing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.clean_text_for_indexing" title="Permalink to this definition">¶</a></dt>
@@ -312,17 +313,20 @@ instance rather than just a function instance.</p>
 <dl class="method">
 <dt id="cdptools.indexers.indexer.Indexer.drop_terms_from_index_below_value">
 <em class="property">static </em><code class="sig-name descname">drop_terms_from_index_below_value</code><span class="sig-paren">(</span><em class="sig-param">index: Dict[str, Dict[str, float]], minimum_value_allowed: float = 0.0</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, float]]<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.drop_terms_from_index_below_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.drop_terms_from_index_below_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Drop any terms from an index that have a value less than or equal to the provided.</p>
+<dd><p>Drop any terms from an index that have a value less than or equal to the
+provided.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>index</strong> (<em>Dict[str, Dict[str, float]]</em>) – An index dictionary, the output of an <cite>Indexer.generate_index</cite> run.</p></li>
-<li><p><strong>minimum_value_allowed</strong> (<em>float</em>) – The float value that all term event values should be compared against. Any term event value less than or
-equal to the received value will be dropped from the index.</p></li>
+<li><p><strong>minimum_value_allowed</strong> (<em>float</em>) – The float value that all term event values should be compared against. Any
+term event value less than or equal to the received value will be dropped
+from the index.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>cleaned_index</strong> – The cleaned index that has had values removed based off the received minimum value allowed.</p>
+<dd class="field-even"><p><strong>cleaned_index</strong> – The cleaned index that has had values removed based off the received
+minimum value allowed.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Dict[str, Dict[str, float]]</p>
@@ -333,14 +337,16 @@ equal to the received value will be dropped from the index.</p></li>
 <dl class="method">
 <dt id="cdptools.indexers.indexer.Indexer.generate_index">
 <em class="property">abstract </em><code class="sig-name descname">generate_index</code><span class="sig-paren">(</span><em class="sig-param">event_corpus_map: Dict[str, pathlib.Path], **kwargs</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, float]]<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.generate_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.generate_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given an event corpus map, compute word event values that will act as a search index.</p>
+<dd><p>Given an event corpus map, compute word event values that will act as a search
+index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event_corpus_map</strong> (<em>Dict[str, str]</em>) – A dictionary that maps event id to a local path with transcript to use for indexing.</p>
+<dd class="field-odd"><p><strong>event_corpus_map</strong> (<em>Dict[str, str]</em>) – A dictionary that maps event id to a local path with transcript to use for
+indexing.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>word_event_scores</strong> – A dictionary of values per event per word that will be stored in the CDP instance’s database and used as a
-method for searching for events.</p>
+<dd class="field-even"><p><p><strong>word_event_scores</strong> – A dictionary of values per event per word that will be stored in the CDP
+instance’s database and used as a method for searching for events.</p>
 <p>Example:
 <a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>json
 {</p>
@@ -369,12 +375,14 @@ method for searching for events.</p>
 <dl class="method">
 <dt id="cdptools.indexers.indexer.Indexer.get_context_span_for_index">
 <em class="property">static </em><code class="sig-name descname">get_context_span_for_index</code><span class="sig-paren">(</span><em class="sig-param">terms: List[str], index: int, max_span_size: int = 10</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.get_context_span_for_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.get_context_span_for_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the contextual sentence information for an index given an ordered list of terms.</p>
+<dd><p>Get the contextual sentence information for an index given an ordered list of
+terms.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>terms</strong> (<em>List[str]</em>) – The ordered list of terms to use for contextual information.</p></li>
-<li><p><strong>index</strong> (<em>int</em>) – The index to use as the starting point for exploration for contextual sentence terms.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – The index to use as the starting point for exploration for contextual
+sentence terms.</p></li>
 <li><p><strong>max_span_size</strong> (<em>int</em>) – The max contextual span size.
 Default: 10</p></li>
 </ul>
@@ -464,9 +472,10 @@ index=6</p>
 <dl class="method">
 <dt id="cdptools.indexers.indexer.Indexer.get_raw_transcript">
 <em class="property">static </em><code class="sig-name descname">get_raw_transcript</code><span class="sig-paren">(</span><em class="sig-param">transcript_path: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/cdptools/indexers/indexer.html#Indexer.get_raw_transcript"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.indexer.Indexer.get_raw_transcript" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.
-If the file format is not supported or if the data contained in the transcript does not follow the specification
-a TypeError is raised.</p>
+<dd><p>Attempts to open either a raw or annotated json transcript format and return
+the raw transcript as a string. If the file format is not supported or if the
+data contained in the transcript does not follow the specification a TypeError
+is raised.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>transcript_path</strong> (<em>Union[str, Path]</em>) – Path to the transcript</p>
@@ -487,10 +496,12 @@ a TypeError is raised.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>term</strong> (<em>str</em>) – The term to check for end of sentence punctuation characters (“.”, “!”, and “?”).</p></li>
+<li><p><strong>term</strong> (<em>str</em>) – The term to check for end of sentence punctuation characters
+(“.”, “!”, and “?”).</p></li>
 <li><p><strong>Returns</strong></p></li>
 <li><p><strong>——–</strong></p></li>
-<li><p><strong>is_end_of_sentence</strong> (<em>bool</em>) – The boolean value indicating whether or not an end of sentence punctuation character was found in the term.</p></li>
+<li><p><strong>is_end_of_sentence</strong> (<em>bool</em>) – The boolean value indicating whether or not an end of sentence punctuation
+character was found in the term.</p></li>
 </ul>
 </dd>
 </dl>
@@ -506,15 +517,15 @@ a TypeError is raised.</p>
 <em class="property">class </em><code class="sig-prename descclassname">cdptools.indexers.tfidf_indexer.</code><code class="sig-name descname">DocumentDetails</code><span class="sig-paren">(</span><em class="sig-param">unique_id</em>, <em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cdptools/indexers/tfidf_indexer.html#DocumentDetails"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.tfidf_indexer.DocumentDetails" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <p>Create new instance of DocumentDetails(unique_id, path)</p>
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.indexers.tfidf_indexer.DocumentDetails.path">
-<em class="property">property </em><code class="sig-name descname">path</code><a class="headerlink" href="#cdptools.indexers.tfidf_indexer.DocumentDetails.path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">path</code><a class="headerlink" href="#cdptools.indexers.tfidf_indexer.DocumentDetails.path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="cdptools.indexers.tfidf_indexer.DocumentDetails.unique_id">
-<em class="property">property </em><code class="sig-name descname">unique_id</code><a class="headerlink" href="#cdptools.indexers.tfidf_indexer.DocumentDetails.unique_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unique_id</code><a class="headerlink" href="#cdptools.indexers.tfidf_indexer.DocumentDetails.unique_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
@@ -527,14 +538,16 @@ a TypeError is raised.</p>
 <dl class="method">
 <dt id="cdptools.indexers.tfidf_indexer.TFIDFIndexer.generate_index">
 <code class="sig-name descname">generate_index</code><span class="sig-paren">(</span><em class="sig-param">document_corpus_map: Dict[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[str, float]]<a class="reference internal" href="_modules/cdptools/indexers/tfidf_indexer.html#TFIDFIndexer.generate_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.indexers.tfidf_indexer.TFIDFIndexer.generate_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given an event corpus map, compute word event values that will act as a search index.</p>
+<dd><p>Given an event corpus map, compute word event values that will act as a search
+index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event_corpus_map</strong> (<em>Dict[str, str]</em>) – A dictionary that maps event id to a local path with transcript to use for indexing.</p>
+<dd class="field-odd"><p><strong>event_corpus_map</strong> (<em>Dict[str, str]</em>) – A dictionary that maps event id to a local path with transcript to use for
+indexing.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>word_event_scores</strong> – A dictionary of values per event per word that will be stored in the CDP instance’s database and used as a
-method for searching for events.</p>
+<dd class="field-even"><p><p><strong>word_event_scores</strong> – A dictionary of values per event per word that will be stored in the CDP
+instance’s database and used as a method for searching for events.</p>
 <p>Example:
 <a href="#id23"><span class="problematic" id="id24">``</span></a><a href="#id25"><span class="problematic" id="id26">`</span></a>json
 {</p>
@@ -580,7 +593,7 @@ method for searching for events.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -278,12 +278,13 @@
 
 
 <div class="viewcode-block" id="TFIDFIndexer"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.tfidf_indexer.TFIDFIndexer">[docs]</a><span class="k">class</span> <span class="nc">TFIDFIndexer</span><span class="p">(</span><span class="n">Indexer</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_synchronous_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Set state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span> <span class="o">=</span> <span class="n">max_synchronous_jobs</span>
 
-    <span class="k">def</span> <span class="nf">_generate_term_counts_for_document</span><span class="p">(</span><span class="n">transcript_details</span><span class="p">:</span> <span class="n">DocumentDetails</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">_generate_term_counts_for_document</span><span class="p">(</span>
+        <span class="n">transcript_details</span><span class="p">:</span> <span class="n">DocumentDetails</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="c1"># Open the transcript and get raw</span>
         <span class="n">raw</span> <span class="o">=</span> <span class="n">Indexer</span><span class="o">.</span><span class="n">get_raw_transcript</span><span class="p">(</span><span class="n">transcript_details</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
 
@@ -293,7 +294,10 @@
         <span class="c1"># Count terms</span>
         <span class="c1"># Thanks python core modules :^)</span>
         <span class="n">terms</span> <span class="o">=</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;unique_id&quot;</span><span class="p">:</span> <span class="n">transcript_details</span><span class="o">.</span><span class="n">unique_id</span><span class="p">,</span> <span class="s2">&quot;term_counts&quot;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(</span><span class="n">terms</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;unique_id&quot;</span><span class="p">:</span> <span class="n">transcript_details</span><span class="o">.</span><span class="n">unique_id</span><span class="p">,</span>
+            <span class="s2">&quot;term_counts&quot;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(</span><span class="n">terms</span><span class="p">),</span>
+        <span class="p">}</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_combine_term_counts_for_corpus</span><span class="p">(</span>
@@ -304,19 +308,24 @@
         <span class="k">for</span> <span class="n">id_term_counts</span> <span class="ow">in</span> <span class="n">corpus_results</span><span class="p">:</span>
             <span class="c1"># For each term count Counter returned get each term and it&#39;s count</span>
             <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">id_term_counts</span><span class="p">[</span><span class="s2">&quot;term_counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="c1"># If the term has been seen before, simply add a new entry for the term count for that unique id</span>
+                <span class="c1"># If the term has been seen before, simply add a new entry for the term</span>
+                <span class="c1"># count for that unique id</span>
                 <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">combined</span><span class="p">:</span>
                     <span class="n">combined</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="n">id_term_counts</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">count</span>
-                <span class="c1"># If the term hasn&#39;t been seen, create a new dictionary to store term count by unique id</span>
+                <span class="c1"># If the term hasn&#39;t been seen, create a new dictionary to store term</span>
+                <span class="c1"># count by unique id</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">combined</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">id_term_counts</span><span class="p">[</span><span class="s2">&quot;unique_id&quot;</span><span class="p">]:</span> <span class="n">count</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="n">combined</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_calculate_tfidf_for_corpus</span><span class="p">(</span><span class="n">term_counts_corpus</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">_calculate_tfidf_for_corpus</span><span class="p">(</span>
+        <span class="n">term_counts_corpus</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="c1"># N: total number of documents in the corpus</span>
-        <span class="c1"># Let&#39;s use sets to create a list of all unique documents in the term counts corpus</span>
+        <span class="c1"># Let&#39;s use sets to create a list of all unique documents in the term counts</span>
+        <span class="c1"># corpus</span>
         <span class="n">corpus</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">term_counts_corpus</span><span class="p">:</span>
             <span class="c1"># Do set union to continue to add unique items to the corpus map</span>
@@ -332,8 +341,8 @@
             <span class="k">for</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">tf</span> <span class="ow">in</span> <span class="n">term_counts_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="c1"># Compute idf</span>
                 <span class="c1"># d_t: documents containing term</span>
-                <span class="c1"># The number of documents containing a term is just the length of the available keys for that term</span>
-                <span class="c1"># in the term counts corpus</span>
+                <span class="c1"># The number of documents containing a term is just the length of the</span>
+                <span class="c1"># available keys for that term in the term counts corpus</span>
                 <span class="c1"># Ex:</span>
                 <span class="c1"># &quot;hello&quot;: {</span>
                 <span class="c1">#   &quot;0000...&quot;: 3,</span>
@@ -344,25 +353,38 @@
                 <span class="n">d_t</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">term_counts_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">])</span>
                 <span class="n">idf</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="n">d_t</span><span class="p">)</span>
 
-                <span class="c1"># If term already seen, simply add a new entry for the term tfidf value for that unique id</span>
+                <span class="c1"># If term already seen, simply add a new entry for the term tfidf value</span>
+                <span class="c1"># for that unique id</span>
                 <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">tfidf_corpus</span><span class="p">:</span>
                     <span class="n">tfidf_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="n">unique_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span> <span class="o">*</span> <span class="n">idf</span>
-                <span class="c1"># If the term hasn&#39;t been seen, create a new dictionary to store term tfidf value by unique id</span>
+                <span class="c1"># If the term hasn&#39;t been seen, create a new dictionary to store term</span>
+                <span class="c1"># tfidf value by unique id</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">tfidf_corpus</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">unique_id</span><span class="p">:</span> <span class="n">tf</span> <span class="o">*</span> <span class="n">idf</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="n">tfidf_corpus</span>
 
-<div class="viewcode-block" id="TFIDFIndexer.generate_index"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.tfidf_indexer.TFIDFIndexer.generate_index">[docs]</a>    <span class="k">def</span> <span class="nf">generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
-        <span class="c1"># Convert the document corpus map to a list of TranscriptDetails for easier passing to multiprocessing</span>
-        <span class="n">document_corpus_map</span> <span class="o">=</span> <span class="p">[</span><span class="n">DocumentDetails</span><span class="p">(</span><span class="n">unique_id</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">document_corpus_map</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+<div class="viewcode-block" id="TFIDFIndexer.generate_index"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.tfidf_indexer.TFIDFIndexer.generate_index">[docs]</a>    <span class="k">def</span> <span class="nf">generate_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">document_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="c1"># Convert the document corpus map to a list of TranscriptDetails for easier</span>
+        <span class="c1"># passing to multiprocessing</span>
+        <span class="n">document_corpus_map</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">DocumentDetails</span><span class="p">(</span><span class="n">unique_id</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">unique_id</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">document_corpus_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">]</span>
 
         <span class="c1"># We could use sklearn CountVectorizer/ TfidfVectorizer, but meh 🤷</span>
-        <span class="c1"># I don&#39;t think loading all the files into memory and stuffing them into a single list is that great</span>
+        <span class="c1"># I don&#39;t think loading all the files into memory and stuffing them into a</span>
+        <span class="c1"># single list is that great</span>
         <span class="c1"># These transcripts can get long....</span>
         <span class="c1"># Memory shouldn&#39;t be an issue now, but maybe at like ~4000 documents?</span>
         <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">TFIDFIndexer</span><span class="o">.</span><span class="n">_generate_term_counts_for_document</span><span class="p">,</span> <span class="n">document_corpus_map</span><span class="p">))</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                    <span class="n">TFIDFIndexer</span><span class="o">.</span><span class="n">_generate_term_counts_for_document</span><span class="p">,</span> <span class="n">document_corpus_map</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="c1"># Combine the single unique id results</span>
         <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_combine_term_counts_for_corpus</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
@@ -383,7 +405,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

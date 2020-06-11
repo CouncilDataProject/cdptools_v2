@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -268,10 +268,24 @@
 
 
 <span class="n">cdp_tables</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;minutes_item_file&#39;</span><span class="p">,</span> <span class="s1">&#39;vote&#39;</span><span class="p">,</span> <span class="s1">&#39;person&#39;</span><span class="p">,</span> <span class="s1">&#39;run_input&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;indexed_minutes_item_term&#39;</span><span class="p">,</span> <span class="s1">&#39;minutes_item&#39;</span><span class="p">,</span> <span class="s1">&#39;event_minutes_item&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;run_output&#39;</span><span class="p">,</span> <span class="s1">&#39;transcript&#39;</span><span class="p">,</span> <span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;run_input_file&#39;</span><span class="p">,</span> <span class="s1">&#39;algorithm&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;indexed_event_term&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="s1">&#39;run_output_file&#39;</span><span class="p">]</span>
+    <span class="s2">&quot;minutes_item_file&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;vote&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;person&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run_input&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;indexed_minutes_item_term&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;minutes_item&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;event_minutes_item&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run_output&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;transcript&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;file&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run_input_file&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;algorithm&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;indexed_event_term&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;event&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;body&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run_output_file&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="WhereCondition"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.WhereCondition">[docs]</a><span class="k">class</span> <span class="nc">WhereCondition</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -337,7 +351,7 @@
     <span class="nb">str</span><span class="p">:</span> <span class="s2">&quot;STRING&quot;</span><span class="p">,</span>
     <span class="nb">int</span><span class="p">:</span> <span class="s2">&quot;INTEGER&quot;</span><span class="p">,</span>
     <span class="nb">float</span><span class="p">:</span> <span class="s2">&quot;DOUBLE&quot;</span><span class="p">,</span>
-    <span class="n">datetime</span><span class="p">:</span> <span class="s2">&quot;TIMESTAMP&quot;</span>
+    <span class="n">datetime</span><span class="p">:</span> <span class="s2">&quot;TIMESTAMP&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
 
@@ -345,13 +359,13 @@
 
 
 <div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_construct_where_condition</span><span class="p">(</span><span class="n">filt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WhereCondition</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a where condition from the passed filter object.</span>
 
-<span class="sd">        For available where condition operators, please view the WhereOperators class attributes.</span>
+<span class="sd">        For available where condition operators, please view the WhereOperators class</span>
+<span class="sd">        attributes.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -361,12 +375,16 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        filt: WhereCondition</span>
-<span class="sd">            If provided an already constructed WhereCondition, simply returns the provided object.</span>
-<span class="sd">            If provided a List or Tuple of length two, constructs a WhereCondition with an equal operator.</span>
-<span class="sd">            If provided a List or Tuple of length three, constructs a WhereCondition with the contents of the provided.</span>
+<span class="sd">            If provided an already constructed WhereCondition, simply returns the</span>
+<span class="sd">            provided object.</span>
+<span class="sd">            If provided a List or Tuple of length two, constructs a WhereCondition with</span>
+<span class="sd">            an equal operator.</span>
+<span class="sd">            If provided a List or Tuple of length three, constructs a WhereCondition</span>
+<span class="sd">            with the contents of the provided.</span>
 <span class="sd">            Provided List or Tuple objects should follow the format:</span>
 <span class="sd">                {target_to_filter}, {operator}, {target_value}</span>
-<span class="sd">            Unless provided a List or Tuple of length two, in which case, should follow the format:</span>
+<span class="sd">            Unless provided a List or Tuple of length two, in which case, should follow</span>
+<span class="sd">            the format:</span>
 <span class="sd">                {target_to_filter}, {target_value}</span>
 
 <span class="sd">        Examples</span>
@@ -379,11 +397,14 @@
 <span class="sd">        ))</span>
 <span class="sd">        # Returns the same WhereCondition that was passed in</span>
 
-<span class="sd">        condition = Database._construct_where_condition([&quot;event_id&quot;, WhereOperators.gteq, value=&quot;abcd&quot;])</span>
+<span class="sd">        condition = Database._construct_where_condition(</span>
+<span class="sd">            [&quot;event_id&quot;, WhereOperators.gteq, value=&quot;abcd&quot;]</span>
+<span class="sd">        )</span>
 <span class="sd">        # Returns the same WhereCondition as above</span>
 
 <span class="sd">        condition = Database._construct_where_condition((&quot;event_id&quot;, &quot;abcd&quot;))</span>
-<span class="sd">        # Returns a WhereCondition similar to above but the operator is set to equal rather than greater than or equal.</span>
+<span class="sd">        # Returns a WhereCondition similar to above but the operator is set to equal</span>
+<span class="sd">        rather than greater than or equal.</span>
 <span class="sd">        ```</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filt</span><span class="p">,</span> <span class="n">WhereCondition</span><span class="p">):</span>
@@ -404,7 +425,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct an orderby condition from the passed by object.</span>
 
-<span class="sd">        For available order condition operators, please view the OrderOperators class attributes.</span>
+<span class="sd">        For available order condition operators, please view the OrderOperators class</span>
+<span class="sd">        attributes.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -414,10 +436,12 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        by: OrderCondition</span>
-<span class="sd">            If provided an already constructed OrderCondition, simply returns the provided object.</span>
-<span class="sd">            If provided a string, returns and OrderCondition with the provided string being used as the column name</span>
-<span class="sd">                and defaults to descending as the operator.</span>
-<span class="sd">            If provided a List or Tuple of length two, constructs an OrderCondition with the provided data.</span>
+<span class="sd">            If provided an already constructed OrderCondition, simply returns the</span>
+<span class="sd">            provided object.</span>
+<span class="sd">            If provided a string, returns and OrderCondition with the provided string</span>
+<span class="sd">            being used as the column name and defaults to descending as the operator.</span>
+<span class="sd">            If provided a List or Tuple of length two, constructs an OrderCondition</span>
+<span class="sd">            with the provided data.</span>
 <span class="sd">            Provided List or Tuple objects should follow the format:</span>
 <span class="sd">                {target_to_order}, {operator}</span>
 
@@ -433,11 +457,14 @@
 <span class="sd">        condition = Database._construct_orderby_condition(&quot;event_id&quot;)</span>
 <span class="sd">        # Returns the same OrderCondition as above</span>
 
-<span class="sd">        condition = Database._construct_orderby_condition([&quot;event_id&quot;, OrderOperators.desc])</span>
+<span class="sd">        condition = Database._construct_orderby_condition(</span>
+<span class="sd">            [&quot;event_id&quot;, OrderOperators.desc]</span>
+<span class="sd">        )</span>
 <span class="sd">        # Returns the same OrderCondition as above</span>
 
 <span class="sd">        condition = Database._construct_where_condition((&quot;event_id&quot;, &quot;ASCENDING&quot;)</span>
-<span class="sd">        # Returns an OrderCondition similar to above but the operator is set to ascending rather than descending.</span>
+<span class="sd">        # Returns an OrderCondition similar to above but the operator is set to</span>
+<span class="sd">        ascending rather than descending.</span>
 <span class="sd">        ```</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="n">OrderCondition</span><span class="p">):</span>
@@ -470,7 +497,8 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        If the row was found, the data from that row is returned as a dictionary. If not found, None is returned.</span>
+<span class="sd">        If the row was found, the data from that row is returned as a dictionary. If</span>
+<span class="sd">        not found, None is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{}</span></div>
 
@@ -480,10 +508,11 @@
         <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">WhereCondition</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">order_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">OrderCondition</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get a list of rows from a table optionally using filters (a list of where conditions), ordering, and limit.</span>
+<span class="sd">        Get a list of rows from a table optionally using filters (a list of where</span>
+<span class="sd">        conditions), ordering, and limit.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -494,21 +523,22 @@
 <span class="sd">        order_by: Optional[Union[OrderCondition, List, Tuple, str]]</span>
 <span class="sd">            An order by condition to order the results by before returning.</span>
 <span class="sd">        limit: Optional[int]</span>
-<span class="sd">            An integer limit to how many rows should be returned that match the query provided.</span>
-<span class="sd">            Commonly, running queries without credentials will have a default limit value.</span>
+<span class="sd">            An integer limit to how many rows should be returned that match the query</span>
+<span class="sd">            provided. Commonly, running queries without credentials will have a default</span>
+<span class="sd">            limit value.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        results: List[Dict[str, Any]]</span>
-<span class="sd">            The results of the query returned as a List of Dictionaries, where each dictionary is a unique row from the</span>
-<span class="sd">            table queried. If no rows are found, returns an empty list.</span>
+<span class="sd">            The results of the query returned as a List of Dictionaries, where each</span>
+<span class="sd">            dictionary is a unique row from the table queried. If no rows are found,</span>
+<span class="sd">            returns an empty list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_reshape_list_of_rows_to_dict</span><span class="p">(</span>
-        <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
-        <span class="n">table</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reshape a list of rows to a dictionary of rows.</span>
@@ -523,8 +553,9 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        formatted: Dict[str, Dict[str, Any]]</span>
-<span class="sd">            The rows returned as a dictionary mapping unique id to a dictionary of that rows data from</span>
-<span class="sd">            the table queried. If no rows are provided, returns an empty dictionary.</span>
+<span class="sd">            The rows returned as a dictionary mapping unique id to a dictionary of that</span>
+<span class="sd">            rows data from the table queried. If no rows are provided, returns an empty</span>
+<span class="sd">            dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Format</span>
         <span class="n">formatted</span> <span class="o">=</span> <span class="p">{}</span>
@@ -536,8 +567,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_reshape_list_of_rows_to_dataframe</span><span class="p">(</span>
-        <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
-        <span class="n">table</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">table</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Simply cast a list of rows to a dataframe.</span>
@@ -552,8 +582,8 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        formatted: pandas.DataFrame</span>
-<span class="sd">            The rows returned as a pandas DataFrame object. If table was provided the index of the dataframe will be</span>
-<span class="sd">            the unique id&#39;s for that table.</span>
+<span class="sd">            The rows returned as a pandas DataFrame object. If table was provided the</span>
+<span class="sd">            index of the dataframe will be the unique id&#39;s for that table.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Cast to dataframe</span>
         <span class="n">formatted</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
@@ -565,7 +595,9 @@
         <span class="k">return</span> <span class="n">formatted</span>
 
 <div class="viewcode-block" id="Database.get_or_upload_body"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_body">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_or_upload_body</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_body</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload a body.</span>
 
@@ -589,10 +621,11 @@
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">matter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">legistar_event_item_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">legistar_event_item_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get or upload a minutes item. In Legistar this is commonly referred to as an event item.</span>
+<span class="sd">        Get or upload a minutes item. In Legistar this is commonly referred to as an</span>
+<span class="sd">        event item.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ---------</span>
@@ -601,9 +634,11 @@
 <span class="sd">        matter: Optional[str]</span>
 <span class="sd">            A matter name for the minutes item. Ex: &quot;Appt 01373&quot;</span>
 <span class="sd">        title: Optional[str]</span>
-<span class="sd">            A human readable name for the minutes item. Ex: &quot;A resolution regarding adoption of a Green New Deal.&quot;</span>
+<span class="sd">            A human readable name for the minutes item. Ex: &quot;A resolution regarding</span>
+<span class="sd">            adoption of a Green New Deal.&quot;</span>
 <span class="sd">        legistar_event_item_id: Optional[int]</span>
-<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventItemId`.</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended</span>
+<span class="sd">            to also store the `EventItemId`.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -618,10 +653,11 @@
         <span class="n">minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">legistar_matter_attachment_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">legistar_matter_attachment_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get or upload a minutes item file. Commonly, minutes items have an associated file such as a presentation.</span>
+<span class="sd">        Get or upload a minutes item file. Commonly, minutes items have an associated</span>
+<span class="sd">        file such as a presentation.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -632,8 +668,8 @@
 <span class="sd">        name: Optional[str]</span>
 <span class="sd">            A name for the file.</span>
 <span class="sd">        legistar_matter_attachment_id: Optional[int]</span>
-<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the</span>
-<span class="sd">            `MatterAttachmentId`.</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended</span>
+<span class="sd">            to also store the `MatterAttachmentId`.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -650,7 +686,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        video_uri: str</span>
-<span class="sd">            A uri that can be used to access the video file used to generate all downstream data for an event.</span>
+<span class="sd">            A uri that can be used to access the video file used to generate all</span>
+<span class="sd">            downstream data for an event.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -669,7 +706,7 @@
         <span class="n">agenda_file_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">minutes_file_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">legistar_event_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">legistar_event_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">legistar_event_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload an event.</span>
@@ -683,16 +720,21 @@
 <span class="sd">        source_uri: str</span>
 <span class="sd">            The primary uri for where this event info or video was retrieved from.</span>
 <span class="sd">        video_uri: str</span>
-<span class="sd">            A uri that can be used to access the video file used to generate all downstream data for an event.</span>
+<span class="sd">            A uri that can be used to access the video file used to generate all</span>
+<span class="sd">            downstream data for an event.</span>
 <span class="sd">        agenda_file_uri: Optional[str]</span>
-<span class="sd">            If an agenda file is available for the event, it is recommended to store a uri to the file.</span>
+<span class="sd">            If an agenda file is available for the event, it is recommended to store a</span>
+<span class="sd">            uri to the file.</span>
 <span class="sd">        minutes_file_uri: Optional[str]</span>
-<span class="sd">            If a minutes file is available for the event, it is recommened to store a uri to the file.</span>
+<span class="sd">            If a minutes file is available for the event, it is recommened to store a</span>
+<span class="sd">            uri to the file.</span>
 <span class="sd">        legistar_event_id: Optional[int]</span>
-<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `EventId`.</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended</span>
+<span class="sd">            to also store the `EventId`.</span>
 <span class="sd">        legistar_event_link: Optional[str]</span>
-<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store a link to the</span>
-<span class="sd">            event details for this event but in Legistar&#39;s system.</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended</span>
+<span class="sd">            to also store a link to the event details for this event but in Legistar&#39;s</span>
+<span class="sd">            system.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -707,7 +749,7 @@
         <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">decision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">decision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload the join of an event and a minutes item.</span>
@@ -719,9 +761,11 @@
 <span class="sd">        minutes_item:id: str</span>
 <span class="sd">            The id for the minutes item that was referenced.</span>
 <span class="sd">        index: int</span>
-<span class="sd">            The integer index for when this minutes item should be placed in the minutes of an event.</span>
+<span class="sd">            The integer index for when this minutes item should be placed in the</span>
+<span class="sd">            minutes of an event.</span>
 <span class="sd">        decision: Optional[str]</span>
-<span class="sd">            If the minutes item was a vote, what was the overall outcome for this minutes item.</span>
+<span class="sd">            If the minutes item was a vote, what was the overall outcome for this</span>
+<span class="sd">            minutes item.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -737,7 +781,7 @@
         <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">phone</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">website</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">legistar_person_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">legistar_person_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload a city council member (person).</span>
@@ -753,7 +797,8 @@
 <span class="sd">        website: Optional[str]</span>
 <span class="sd">            The website url of the city council member.</span>
 <span class="sd">        legistar_person_id: Optional[int]</span>
-<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `PersonId`.</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended</span>
+<span class="sd">            to also store the `PersonId`.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -768,7 +813,7 @@
         <span class="n">person_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">event_minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">decision</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">legistar_event_item_vote_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">legistar_event_item_vote_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload a person&#39;s vote on a minutes item.</span>
@@ -776,13 +821,15 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        person_id: str</span>
-<span class="sd">            The id of the person who voted on an minutes item already tied to an event. (event_minutes_item)</span>
+<span class="sd">            The id of the person who voted on an minutes item already tied to an event.</span>
+<span class="sd">            (event_minutes_item)</span>
 <span class="sd">        event_minutes_item_id: str</span>
 <span class="sd">            The id of the minutes item and event join that was voted on.</span>
 <span class="sd">        decision: str</span>
 <span class="sd">            This individual&#39;s personal decision on the minutes item.</span>
 <span class="sd">        legistar_event_item_vote_id: Optional[int]</span>
-<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended to also store the `PersonId`.</span>
+<span class="sd">            If the CDP instance is deployed for a city with Legistar, it is recommended</span>
+<span class="sd">            to also store the `PersonId`.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -797,7 +844,7 @@
         <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">content_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">content_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload a file (to the database table, not a file store).</span>
@@ -812,7 +859,8 @@
 <span class="sd">            An optional description for the file.</span>
 <span class="sd">        content_type: Optional[str]</span>
 <span class="sd">            An optional content type for the file.</span>
-<span class="sd">            Preferred to use MIME types: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</span>
+<span class="sd">            Preferred to use MIME types:</span>
+<span class="sd">            https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -822,7 +870,9 @@
         <span class="k">return</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="Database.get_or_upload_transcript"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_transcript">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_or_upload_transcript</span><span class="p">(</span><span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_transcript</span><span class="p">(</span>
+        <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload a transcript (to the database, a file store).</span>
 
@@ -833,7 +883,8 @@
 <span class="sd">        file_id: str</span>
 <span class="sd">            The id for the file that contains the transcript data.</span>
 <span class="sd">        confidence: Optional[float]</span>
-<span class="sd">            If available, a float / double value to store with the transcript for the confidence of the transcription.</span>
+<span class="sd">            If available, a float / double value to store with the transcript for the</span>
+<span class="sd">            confidence of the transcription.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -848,7 +899,7 @@
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload an algorithm.</span>
@@ -872,7 +923,9 @@
         <span class="k">return</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="Database.get_or_upload_run"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_run">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_or_upload_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithm_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">begin</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">completed</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">algorithm_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">begin</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">completed</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get or upload a run.</span>
 
@@ -996,8 +1049,8 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_determine_event_entity_dtype</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">datetime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        To simplify the storage value of the dtype, instead of using specifically Python types, this simply returns a</span>
-<span class="sd">        string value for each of the allowed dtypes.</span>
+<span class="sd">        To simplify the storage value of the dtype, instead of using specifically</span>
+<span class="sd">        Python types, this simply returns a string value for each of the allowed dtypes.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1015,10 +1068,13 @@
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
 <div class="viewcode-block" id="Database.get_or_upload_event_entity"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.get_or_upload_event_entity">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_or_upload_event_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">datetime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_or_upload_event_entity</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get or upload an event entity. Because entities can be values that are other than strings, most databases,</span>
-<span class="sd">        should cast this to a string prior to storage. This is also why will store the data type (dtype).</span>
+<span class="sd">        Get or upload an event entity. Because entities can be values that are other</span>
+<span class="sd">        than strings, most databases, should cast this to a string prior to storage.</span>
+<span class="sd">        This is also why will store the data type (dtype).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1056,7 +1112,9 @@
         <span class="k">return</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="Database.upload_or_update_indexed_event_term"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.upload_or_update_indexed_event_term">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">upload_or_update_indexed_event_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">upload_or_update_indexed_event_term</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Upload or update a single indexed event term.</span>
 
@@ -1067,7 +1125,8 @@
 <span class="sd">        event_id: str</span>
 <span class="sd">            The id for the event the term was used during.</span>
 <span class="sd">        value: float</span>
-<span class="sd">            The value that term should be given for that event that indicates that terms relevance to that event.</span>
+<span class="sd">            The value that term should be given for that event that indicates that</span>
+<span class="sd">            terms relevance to that event.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1084,7 +1143,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        query: str</span>
-<span class="sd">            A query string to be used to search for events using the already stored indexed event term table.</span>
+<span class="sd">            A query string to be used to search for events using the already stored</span>
+<span class="sd">            indexed event term table.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1113,7 +1173,9 @@
         <span class="k">return</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="Database.upload_or_update_indexed_minutes_item_term"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.database.Database.upload_or_update_indexed_minutes_item_term">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">upload_or_update_indexed_minutes_item_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">upload_or_update_indexed_minutes_item_term</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">minutes_item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Upload or update a single indexed minutes_item item term.</span>
 
@@ -1124,8 +1186,8 @@
 <span class="sd">        minutes_item_id: str</span>
 <span class="sd">            The id for the minutes item that term was used in or discussed about.</span>
 <span class="sd">        value: float</span>
-<span class="sd">            The value that term should be given for that minutes item that indicates that terms relevance to that</span>
-<span class="sd">            minutes item.</span>
+<span class="sd">            The value that term should be given for that minutes item that indicates</span>
+<span class="sd">            that terms relevance to that minutes item.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1142,8 +1204,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        query: str</span>
-<span class="sd">            A query string to be used to search for minutes items using the already stored indexed minutes items term</span>
-<span class="sd">            table.</span>
+<span class="sd">            A query string to be used to search for minutes items using the already</span>
+<span class="sd">            stored indexed minutes items term table.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1192,7 +1254,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

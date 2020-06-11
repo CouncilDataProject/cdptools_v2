@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -274,7 +274,6 @@
 
 
 <div class="viewcode-block" id="GoogleCloudSRModel"><a class="viewcode-back" href="../../../cdptools.sr_models.html#cdptools.sr_models.google_cloud_sr_model.GoogleCloudSRModel">[docs]</a><span class="k">class</span> <span class="nc">GoogleCloudSRModel</span><span class="p">(</span><span class="n">SRModel</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">credentials_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Resolve credentials</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">credentials_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">credentials_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -291,7 +290,7 @@
 
                     <span class="c1"># Make the phrase a bit nicer by chunking to nearest complete word</span>
                     <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">cleaned_phrase</span><span class="p">:</span>
-                        <span class="n">cleaned_phrase</span> <span class="o">=</span> <span class="n">cleaned_phrase</span><span class="p">[:</span><span class="n">cleaned_phrase</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)]</span>
+                        <span class="n">cleaned_phrase</span> <span class="o">=</span> <span class="n">cleaned_phrase</span><span class="p">[:</span> <span class="n">cleaned_phrase</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)]</span>
 
                     <span class="c1"># Append cleaned phrase and increase character count</span>
                     <span class="n">cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cleaned_phrase</span><span class="p">)</span>
@@ -308,22 +307,28 @@
         <span class="n">timestamped_words_save_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
         <span class="n">timestamped_sentences_save_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
         <span class="n">phrases</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SRModelOutputs</span><span class="p">:</span>
         <span class="c1"># Check paths</span>
         <span class="n">raw_transcript_save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">raw_transcript_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
         <span class="n">timestamped_words_save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_words_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-        <span class="n">timestamped_sentences_save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">timestamped_sentences_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="n">timestamped_sentences_save_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+            <span class="n">timestamped_sentences_save_path</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
         <span class="c1"># Create client</span>
         <span class="n">client</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">SpeechClient</span><span class="o">.</span><span class="n">from_service_account_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">credentials_path</span><span class="p">)</span>
 
         <span class="c1"># Create basic metadata</span>
         <span class="n">metadata</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="p">()</span>
-        <span class="n">metadata</span><span class="o">.</span><span class="n">interaction_type</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="o">.</span><span class="n">InteractionType</span><span class="o">.</span><span class="n">DISCUSSION</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">interaction_type</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">speech</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">RecognitionMetadata</span><span class="o">.</span><span class="n">InteractionType</span><span class="o">.</span><span class="n">DISCUSSION</span>
+        <span class="p">)</span>
 
         <span class="c1"># Add phrases</span>
-        <span class="n">speech_context</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">SpeechContext</span><span class="p">(</span><span class="n">phrases</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">))</span>
+        <span class="n">speech_context</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">SpeechContext</span><span class="p">(</span>
+            <span class="n">phrases</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_phrases</span><span class="p">(</span><span class="n">phrases</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Prepare for transcription</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionConfig</span><span class="p">(</span>
@@ -333,7 +338,7 @@
             <span class="n">enable_automatic_punctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">enable_word_time_offsets</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">speech_contexts</span><span class="o">=</span><span class="p">[</span><span class="n">speech_context</span><span class="p">],</span>
-            <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span>
+            <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">audio</span> <span class="o">=</span> <span class="n">speech</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">RecognitionAudio</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">file_uri</span><span class="p">)</span>
 
@@ -355,9 +360,17 @@
                 <span class="n">word_list</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">words</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">word_list</span><span class="p">:</span>
-                        <span class="n">start_time</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
+                        <span class="n">start_time</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
+                        <span class="p">)</span>
                         <span class="n">end_time</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">word</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">nanos</span> <span class="o">*</span> <span class="mf">1e-9</span>
-                        <span class="n">timestamped_words</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span> <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">})</span>
+                        <span class="n">timestamped_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">word</span><span class="o">.</span><span class="n">word</span><span class="p">,</span>
+                                <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span>
+                                <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">,</span>
+                            <span class="p">}</span>
+                        <span class="p">)</span>
 
                     <span class="c1"># Update confidence stats</span>
                     <span class="n">confidence_sum</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">confidence</span>
@@ -369,7 +382,10 @@
         <span class="k">for</span> <span class="n">word_details</span> <span class="ow">in</span> <span class="n">timestamped_words</span><span class="p">:</span>
             <span class="c1"># Create new sentence</span>
             <span class="k">if</span> <span class="n">current_sentence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">current_sentence</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">word_details</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span> <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">word_details</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">]}</span>
+                <span class="n">current_sentence</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">word_details</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">word_details</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
             <span class="c1"># Update current sentence</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">current_sentence</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">word_details</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">])</span>
@@ -381,8 +397,16 @@
                 <span class="n">current_sentence</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Create raw transcript</span>
-        <span class="n">raw_transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">sentence_details</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">sentence_details</span> <span class="ow">in</span> <span class="n">timestamped_sentences</span><span class="p">])</span>
-        <span class="n">raw_transcript</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">raw_transcript</span><span class="p">,</span> <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">timestamped_words</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;end_time&quot;</span><span class="p">]}]</span>
+        <span class="n">raw_transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">sentence_details</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">sentence_details</span> <span class="ow">in</span> <span class="n">timestamped_sentences</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">raw_transcript</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">raw_transcript</span><span class="p">,</span>
+                <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">timestamped_words</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;end_time&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
 
         <span class="c1"># Compute mean confidence</span>
         <span class="k">if</span> <span class="n">segments</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -395,17 +419,17 @@
         <span class="n">raw_transcript</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_and_format_transcript_data</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">raw_transcript</span><span class="p">,</span>
             <span class="n">transcript_format</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span>
-            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">timestamped_words</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_and_format_transcript_data</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">timestamped_words</span><span class="p">,</span>
             <span class="n">transcript_format</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_words</span><span class="p">,</span>
-            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">timestamped_sentences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_and_format_transcript_data</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">timestamped_sentences</span><span class="p">,</span>
             <span class="n">transcript_format</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_sentences</span><span class="p">,</span>
-            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Write files</span>
@@ -423,7 +447,7 @@
             <span class="n">raw_transcript_save_path</span><span class="p">,</span>
             <span class="n">confidence</span><span class="p">,</span>
             <span class="n">timestamped_words_save_path</span><span class="p">,</span>
-            <span class="n">timestamped_sentences_save_path</span>
+            <span class="n">timestamped_sentences_save_path</span><span class="p">,</span>
         <span class="p">)</span></div></div>
 </pre></div>
 
@@ -437,7 +461,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

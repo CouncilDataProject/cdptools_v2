@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -273,9 +273,10 @@
 
 
 <div class="viewcode-block" id="FileStore"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore">[docs]</a><span class="k">class</span> <span class="nc">FileStore</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-
 <div class="viewcode-block" id="FileStore.compute_sha256_for_file"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.compute_sha256_for_file">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">compute_sha256_for_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">compute_sha256_for_file</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute a SHA256 hexdigest for a file. Works for large files.</span>
 
@@ -315,7 +316,8 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_path_is_local</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check to make sure that a path provided is on the local machine. Simply checks for common external uri headers.</span>
+<span class="sd">        Check to make sure that a path provided is on the local machine. Simply checks</span>
+<span class="sd">        for common external uri headers.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -325,7 +327,8 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        is_local: bool</span>
-<span class="sd">            A boolean value informing whether or not the provided path is a local resource or not.</span>
+<span class="sd">            A boolean value informing whether or not the provided path is a local</span>
+<span class="sd">            resource or not.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Convert path</span>
         <span class="n">path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -335,7 +338,9 @@
         <span class="k">return</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">external_headers</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_external_resource_copy</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_external_resource_copy</span><span class="p">(</span>
+        <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Copy an external resource to a local destination on the machine.</span>
 
@@ -344,11 +349,11 @@
 <span class="sd">        uri: str</span>
 <span class="sd">            The uri for the external resource to copy.</span>
 <span class="sd">        dst: Optional[Union[str, Path]]</span>
-<span class="sd">            A specific destination to where the copy should be placed. If None provided stores the resource in the</span>
-<span class="sd">            current working directory.</span>
+<span class="sd">            A specific destination to where the copy should be placed. If None provided</span>
+<span class="sd">            stores the resource in the current working directory.</span>
 <span class="sd">        overwrite: bool</span>
-<span class="sd">            Boolean value indicating whether or not to overwrite a local resource with the same name if it already</span>
-<span class="sd">            exists.</span>
+<span class="sd">            Boolean value indicating whether or not to overwrite a local resource with</span>
+<span class="sd">            the same name if it already exists.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -389,7 +394,8 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        uri: str</span>
-<span class="sd">            If the file is found, the file uri is returned as a string. If it isn&#39;t a FileNotFoundError is raised.</span>
+<span class="sd">            If the file is found, the file uri is returned as a string. If it isn&#39;t a</span>
+<span class="sd">            FileNotFoundError is raised.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
@@ -400,7 +406,7 @@
         <span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
         <span class="n">save_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">remove</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Store a file.</span>
@@ -412,7 +418,8 @@
 <span class="sd">        save_name: Optional[str]</span>
 <span class="sd">            An optional save name to store the file as instead of it&#39;s current name.</span>
 <span class="sd">        remove: bool</span>
-<span class="sd">            Boolean value indicating whether or not to remove the local file after storage in the file store.</span>
+<span class="sd">            Boolean value indicating whether or not to remove the local file after</span>
+<span class="sd">            storage in the file store.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -428,7 +435,7 @@
         <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">save_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Download the file if neccessary and return the Path.</span>
@@ -440,7 +447,8 @@
 <span class="sd">        save_path: Optional[Union[str, Path]] = None</span>
 <span class="sd">            An optional save path / destination to store the file locally.</span>
 <span class="sd">        overwrite: bool</span>
-<span class="sd">            Boolean value indicating whether or not to overwrite a file that already exists in the destination.</span>
+<span class="sd">            Boolean value indicating whether or not to overwrite a file that already</span>
+<span class="sd">            exists in the destination.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -451,10 +459,7 @@
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/tmp/file.tmp&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FileStore.delete_file"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.delete_file">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">delete_file</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">delete_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Delete the file.</span>
 
@@ -471,9 +476,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="FileStore.clear_bucket"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.clear_bucket">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">clear_bucket</span><span class="p">(</span>
-        <span class="bp">self</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">clear_bucket</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clear the bucket of all files.</span>
 
@@ -485,9 +488,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="FileStore.list_all_files"><a class="viewcode-back" href="../../../cdptools.file_stores.html#cdptools.file_stores.file_store.FileStore.list_all_files">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">list_all_files</span><span class="p">(</span>
-        <span class="bp">self</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">list_all_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a list of all filepaths in the file store bucket.</span>
 
@@ -509,7 +510,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

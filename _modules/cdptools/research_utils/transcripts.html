@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -262,16 +262,12 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
 <span class="kn">from</span> <span class="nn">cdptools.databases</span> <span class="kn">import</span> <span class="n">Database</span><span class="p">,</span> <span class="n">OrderOperators</span>
 <span class="kn">from</span> <span class="nn">cdptools.file_stores</span> <span class="kn">import</span> <span class="n">FileStore</span>
 
 <span class="c1">###############################################################################</span>
 
-<span class="n">ALLOWED_ORDER_BY_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;created&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;confidence&quot;</span>
-<span class="p">]</span>
+<span class="n">ALLOWED_ORDER_BY_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;created&quot;</span><span class="p">,</span> <span class="s2">&quot;confidence&quot;</span><span class="p">]</span>
 
 <span class="c1">###############################################################################</span>
 
@@ -281,15 +277,15 @@
     <span class="n">transcript_details</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_transcript_for_event</span><span class="p">(</span><span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_get_transcript_for_event</span><span class="p">(</span>
+    <span class="n">event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="c1"># Get the most recent or highest confidence transcript for the event</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span>
         <span class="n">table</span><span class="o">=</span><span class="s2">&quot;transcript&quot;</span><span class="p">,</span>
-        <span class="n">filters</span><span class="o">=</span><span class="p">[</span>
-            <span class="p">(</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="n">event_id</span><span class="p">)</span>
-        <span class="p">],</span>
+        <span class="n">filters</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="n">event_id</span><span class="p">)],</span>
         <span class="n">order_by</span><span class="o">=</span><span class="p">(</span><span class="n">order_by_field</span><span class="p">,</span> <span class="n">OrderOperators</span><span class="o">.</span><span class="n">desc</span><span class="p">),</span>
-        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span>
+        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Return result if found</span>
@@ -304,10 +300,12 @@
     <span class="k">return</span> <span class="n">db</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">file_id</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="get_transcript_manifest"><a class="viewcode-back" href="../../../cdptools.research_utils.html#cdptools.research_utils.transcripts.get_transcript_manifest">[docs]</a><span class="k">def</span> <span class="nf">get_transcript_manifest</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<div class="viewcode-block" id="get_transcript_manifest"><a class="viewcode-back" href="../../../cdptools.research_utils.html#cdptools.research_utils.transcripts.get_transcript_manifest">[docs]</a><span class="k">def</span> <span class="nf">get_transcript_manifest</span><span class="p">(</span>
+    <span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP</span>
-<span class="sd">    instance&#39;s database.</span>
+<span class="sd">    Get a pandas dataframe that can act as a manifest of a transcript available for</span>
+<span class="sd">    each event stored in a CDP instance&#39;s database.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -321,7 +319,8 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    manifest: pandas.DataFrame</span>
-<span class="sd">        A dataframe where each row has transcript, event, body, and file details for the event at that row.</span>
+<span class="sd">        A dataframe where each row has transcript, event, body, and file details for</span>
+<span class="sd">        the event at that row.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Get transcript dataset</span>
@@ -331,12 +330,15 @@
     <span class="n">order_by_field</span> <span class="o">=</span> <span class="n">order_by_field</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">order_by_field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ALLOWED_ORDER_BY_FIELDS</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Provided `order_by_field` value is not a valid selection for transcript ordering / selection. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Received: </span><span class="si">{</span><span class="n">order_by_field</span><span class="si">}</span><span class="s2">. Possible choices: </span><span class="si">{</span><span class="n">ALLOWED_ORDER_BY_FIELDS</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Provided `order_by_field` value is not a valid selection for transcript &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;ordering / selection. Received: </span><span class="si">{</span><span class="n">order_by_field</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Possible choices: </span><span class="si">{</span><span class="n">ALLOWED_ORDER_BY_FIELDS</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="c1"># Create transcript get partial</span>
-    <span class="n">transcript_get</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_get_transcript_for_event</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">order_by_field</span><span class="o">=</span><span class="n">order_by_field</span><span class="p">)</span>
+    <span class="n">transcript_get</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+        <span class="n">_get_transcript_for_event</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">order_by_field</span><span class="o">=</span><span class="n">order_by_field</span>
+    <span class="p">)</span>
 
     <span class="c1"># Threaded request all transcripts</span>
     <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>
@@ -344,16 +346,26 @@
 
     <span class="c1"># Filter down to only valid events</span>
     <span class="c1"># (Events that have transcripts)</span>
-    <span class="n">events_with_transcripts</span> <span class="o">=</span> <span class="p">[</span><span class="n">join</span><span class="o">.</span><span class="n">event_id</span> <span class="k">for</span> <span class="n">join</span> <span class="ow">in</span> <span class="n">transcript_joins</span> <span class="k">if</span> <span class="n">join</span><span class="o">.</span><span class="n">transcript_details</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">events_with_transcripts</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">join</span><span class="o">.</span><span class="n">event_id</span>
+        <span class="k">for</span> <span class="n">join</span> <span class="ow">in</span> <span class="n">transcript_joins</span>
+        <span class="k">if</span> <span class="n">join</span><span class="o">.</span><span class="n">transcript_details</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">]</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">events</span><span class="o">.</span><span class="n">event_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">events_with_transcripts</span><span class="p">)]</span>
 
     <span class="c1"># Create a dataframe of the valid transcripts</span>
     <span class="n">transcripts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">join</span><span class="o">.</span><span class="n">transcript_details</span> <span class="k">for</span> <span class="n">join</span> <span class="ow">in</span> <span class="n">transcript_joins</span> <span class="k">if</span> <span class="n">join</span><span class="o">.</span><span class="n">transcript_details</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="p">[</span>
+            <span class="n">join</span><span class="o">.</span><span class="n">transcript_details</span>
+            <span class="k">for</span> <span class="n">join</span> <span class="ow">in</span> <span class="n">transcript_joins</span>
+            <span class="k">if</span> <span class="n">join</span><span class="o">.</span><span class="n">transcript_details</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">]</span>
     <span class="p">)</span>
 
     <span class="c1"># Merge transcript data with event data</span>
-    <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">transcripts</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_event&quot;</span><span class="p">,</span> <span class="s2">&quot;_transcript&quot;</span><span class="p">))</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">transcripts</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;event_id&quot;</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_event&quot;</span><span class="p">,</span> <span class="s2">&quot;_transcript&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># Create file get partial</span>
     <span class="n">file_get</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_get_file</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
@@ -363,22 +375,28 @@
         <span class="n">transcript_file_details</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">exe</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">file_get</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">file_id</span><span class="p">)))</span>
 
     <span class="c1"># Merge transcript file data with event transcript data</span>
-    <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">transcript_file_details</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;file_id&quot;</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_transcript&quot;</span><span class="p">,</span> <span class="s2">&quot;_file&quot;</span><span class="p">))</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">transcript_file_details</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;file_id&quot;</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_transcript&quot;</span><span class="p">,</span> <span class="s2">&quot;_file&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># Get body details and merge</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
         <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">select_rows_as_list</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e4</span><span class="p">))),</span>
         <span class="n">on</span><span class="o">=</span><span class="s2">&quot;body_id&quot;</span><span class="p">,</span>
-        <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_event&quot;</span><span class="p">,</span> <span class="s2">&quot;_body&quot;</span><span class="p">)</span>
+        <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_event&quot;</span><span class="p">,</span> <span class="s2">&quot;_body&quot;</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">events</span></div>
 
 
-<span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fs</span><span class="p">:</span> <span class="n">FileStore</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]:</span>
+<span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fs</span><span class="p">:</span> <span class="n">FileStore</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="n">Path</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]:</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="n">filename</span><span class="p">,</span>
-        <span class="s2">&quot;local_path&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="s2">&quot;local_path&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">fs</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">),</span>
     <span class="p">}</span>
 
 
@@ -386,24 +404,28 @@
     <span class="n">db</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span>
     <span class="n">fs</span><span class="p">:</span> <span class="n">FileStore</span><span class="p">,</span>
     <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span>
-    <span class="n">save_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">save_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.</span>
+<span class="sd">    Download a transcript for each event found in a CDP instance. Additionally saves</span>
+<span class="sd">    the manifest as a CSV.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    db: Database</span>
 <span class="sd">        An already initialized database object connected to a CDP instance&#39;s database.</span>
 <span class="sd">    fs: FileStore</span>
-<span class="sd">        An already initialized file store object connected to a CDP instance&#39;s file store.</span>
+<span class="sd">        An already initialized file store object connected to a CDP instance&#39;s file</span>
+<span class="sd">        store.</span>
 <span class="sd">    order_by_field: str</span>
 <span class="sd">        Which field to order the transcripts by to select the first (highest value) of.</span>
 <span class="sd">        Default: &quot;confidence&quot;</span>
 <span class="sd">        Choices: [&quot;created&quot;, &quot;confidence&quot;]</span>
 <span class="sd">    save_dir: Optional[Union[str, Path]]</span>
-<span class="sd">        An optional path of where to save the transcripts and manifest CSV. If None provided, uses current directory.</span>
-<span class="sd">        Always overwrites existing transcripts with the same name if they already exist in the provided directory.</span>
+<span class="sd">        An optional path of where to save the transcripts and manifest CSV. If None</span>
+<span class="sd">        provided, uses current directory.</span>
+<span class="sd">        Always overwrites existing transcripts with the same name if they already exist</span>
+<span class="sd">        in the provided directory.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -433,7 +455,9 @@
 
     <span class="c1"># Add column in transcript manifest for the path to the local file</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
-    <span class="n">selected_transcripts</span> <span class="o">=</span> <span class="n">selected_transcripts</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_event&quot;</span><span class="p">,</span> <span class="s2">&quot;_transcript&quot;</span><span class="p">))</span>
+    <span class="n">selected_transcripts</span> <span class="o">=</span> <span class="n">selected_transcripts</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">results</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;_event&quot;</span><span class="p">,</span> <span class="s2">&quot;_transcript&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># Write manifest</span>
     <span class="n">selected_transcripts</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_dir</span> <span class="o">/</span> <span class="s2">&quot;transcript_manifest.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -458,7 +482,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -263,40 +263,38 @@
 
 
 <div class="viewcode-block" id="EventScraper"><a class="viewcode-back" href="../../../cdptools.event_scrapers.html#cdptools.event_scrapers.event_scraper.EventScraper">[docs]</a><span class="k">class</span> <span class="nc">EventScraper</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-
 <div class="viewcode-block" id="EventScraper.get_events"><a class="viewcode-back" href="../../../cdptools.event_scrapers.html#cdptools.event_scrapers.event_scraper.EventScraper.get_events">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">get_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a list of event details required to run the rest of an event pipeline.</span>
 
-<span class="sd">        Many get events functions are meant to be run on a schedule so it may be best to consider implementing an</span>
-<span class="sd">        OutOfTimeBoundsError somewhere during the processing to ignore events you believe should have already been</span>
-<span class="sd">        retrieved during a prior run.</span>
+<span class="sd">        Many get events functions are meant to be run on a schedule so it may be best</span>
+<span class="sd">        to consider implementing an OutOfTimeBoundsError somewhere during the</span>
+<span class="sd">        processing to ignore events you believe should have already been retrieved</span>
+<span class="sd">        during a prior run.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        events: List[Dict[str, Any]]</span>
-<span class="sd">            A list of dictionaries with each dictionary containing event details for the rest of an event pipeline to</span>
-<span class="sd">            use for processing and storage information.</span>
+<span class="sd">            A list of dictionaries with each dictionary containing event details for</span>
+<span class="sd">            the rest of an event pipeline to use for processing and storage information.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="EventScraper.get_single_event"><a class="viewcode-back" href="../../../cdptools.event_scrapers.html#cdptools.event_scrapers.event_scraper.EventScraper.get_single_event">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_single_event</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">backfill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_single_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">backfill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get event details for a single event required to run the rest of an event pipeline.</span>
+<span class="sd">        Get event details for a single event required to run the rest of an event</span>
+<span class="sd">        pipeline.</span>
 
-<span class="sd">        This can be used for processing single events that might not have been properly processed with the above</span>
-<span class="sd">        get_events method when running a EventGatherPipeline.</span>
+<span class="sd">        This can be used for processing single events that might not have been properly</span>
+<span class="sd">        processed with the above get_events method when running a EventGatherPipeline.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        event: Dict[str, Any]</span>
-<span class="sd">            A dicitonary containing event details for the rest of an event pipeline to use for processing and storage info.</span>
+<span class="sd">            A dicitonary containing event details for the rest of an event pipeline to</span>
+<span class="sd">            use for processing and storage info.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{}</span></div></div>
 </pre></div>
@@ -311,7 +309,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

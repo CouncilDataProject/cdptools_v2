@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -282,7 +282,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filt</span> <span class="o">=</span> <span class="n">filt</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;WhereCondition&#39;s accept at least 2 and at most 3 parameters. Received: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filt</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;WhereCondition&#39;s accept at least 2 and at most 3 parameters. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Received: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filt</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="UnknownTypeWhereConditionError"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.exceptions.UnknownTypeWhereConditionError">[docs]</a><span class="k">class</span> <span class="nc">UnknownTypeWhereConditionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -291,7 +294,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filt</span> <span class="o">=</span> <span class="n">filt</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;WhereCondition&#39;s can be created using list or tuple. Received: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filt</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filt</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;WhereCondition&#39;s can be created using list or tuple. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Received: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filt</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filt</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="UnstructuredOrderConditionError"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.exceptions.UnstructuredOrderConditionError">[docs]</a><span class="k">class</span> <span class="nc">UnstructuredOrderConditionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -300,7 +306,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">by</span> <span class="o">=</span> <span class="n">by</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;OrderCondition&#39;s accept at least 1 and at most 2 parameters. Received: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">by</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;OrderCondition&#39;s accept at least 1 and at most 2 parameters. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Received: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">by</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="UnknownTypeOrderConditionError"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.exceptions.UnknownTypeOrderConditionError">[docs]</a><span class="k">class</span> <span class="nc">UnknownTypeOrderConditionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -309,7 +318,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">by</span> <span class="o">=</span> <span class="n">by</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;OrderCondition&#39;s can be created using list, string, or tuple. Received: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">by</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">by</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;OrderCondition&#39;s can be created using list, string, or tuple. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Received: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">by</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">by</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FailedRequestError"><a class="viewcode-back" href="../../../cdptools.databases.html#cdptools.databases.exceptions.FailedRequestError">[docs]</a><span class="k">class</span> <span class="nc">FailedRequestError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -329,7 +341,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">results</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Table: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="si">}</span><span class="s2">, primary keys: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pks</span><span class="si">}</span><span class="s2"> not upheld. Query returned: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Table: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="si">}</span><span class="s2">, primary keys: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pks</span><span class="si">}</span><span class="s2"> not upheld. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Query returned: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 </pre></div>
 
            </div>
@@ -342,7 +357,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -377,20 +377,24 @@
 <dl class="method">
 <dt id="cdptools.cdp_instance.CDPInstance.download_transcripts">
 <code class="sig-name descname">download_transcripts</code><span class="sig-paren">(</span><em class="sig-param">order_by_field: str = 'confidence'</em>, <em class="sig-param">save_dir: Optional[pathlib.Path] = None</em><span class="sig-paren">)</span> &#x2192; Dict[str, pathlib.Path]<a class="reference internal" href="_modules/cdptools/cdp_instance.html#CDPInstance.download_transcripts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.cdp_instance.CDPInstance.download_transcripts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download a transcript for each event found in a CDP instance. Additionally saves the manifest as a CSV.</p>
+<dd><p>Download a transcript for each event found in a CDP instance. Additionally
+saves the manifest as a CSV.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>order_by_field</strong> (<em>str</em>) – Which field to order the transcripts by to select the first (highest value) of.
+<li><p><strong>order_by_field</strong> (<em>str</em>) – Which field to order the transcripts by to select the
+first (highest value) of.
 Default: “confidence”
 Choices: [“created”, “confidence”]</p></li>
 <li><p><strong>save_dir</strong> (<em>Optional[Union[str, Path]]</em>) – An optional path of where to save the transcripts and manifest CSV.
 If None provided, uses current directory.
-Always overwrites existing transcripts with the same name if they already exist in the provided directory.</p></li>
+Always overwrites existing transcripts with the same name if they already
+exist in the provided directory.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>event_corpus_map</strong> – A dictionary mapping event id to a local Path for a transcript for that event.</p>
+<dd class="field-even"><p><strong>event_corpus_map</strong> – A dictionary mapping event id to a local Path for a transcript for that
+event.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Dict[str, Path]</p>
@@ -406,16 +410,18 @@ Always overwrites existing transcripts with the same name if they already exist 
 <dl class="method">
 <dt id="cdptools.cdp_instance.CDPInstance.get_transcript_manifest">
 <code class="sig-name descname">get_transcript_manifest</code><span class="sig-paren">(</span><em class="sig-param">order_by_field: str = 'confidence'</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="_modules/cdptools/cdp_instance.html#CDPInstance.get_transcript_manifest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.cdp_instance.CDPInstance.get_transcript_manifest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a pandas dataframe that can act as a manifest of a transcript available for each event stored in a CDP
-instance’s database.</p>
+<dd><p>Get a pandas dataframe that can act as a manifest of a transcript available for
+each event stored in a CDP instance’s database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>order_by_field</strong> (<em>str</em>) – Which field to order the transcripts by to select the first (highest value) of.
+<dd class="field-odd"><p><strong>order_by_field</strong> (<em>str</em>) – Which field to order the transcripts by to select the
+first (highest value) of.
 Default: “confidence”
 Choices: [“created”, “confidence”]</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>manifest</strong> – A dataframe where each row has transcript, event, body, and file details for the event at that row.</p>
+<dd class="field-even"><p><strong>manifest</strong> – A dataframe where each row has transcript, event, body, and file details
+for the event at that row.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
@@ -457,7 +463,7 @@ Choices: [“created”, “confidence”]</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

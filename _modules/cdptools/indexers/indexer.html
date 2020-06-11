@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -277,12 +277,15 @@
 <span class="c1"># Ensure stopwords are downloaded</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+
     <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">nltk</span>
+
     <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;stopwords&quot;</span><span class="p">)</span>
     <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Downloaded nltk stopwords&quot;</span><span class="p">)</span>
     <span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+
     <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
 
 <span class="c1">###############################################################################</span>
@@ -292,18 +295,20 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Why is this not just a single function?</span>
 
-<span class="sd">    Like audio splitters, to pass arguments to the instance of the class and retain state may be useful. In this case,</span>
-<span class="sd">    while computing the scores for every meeting memory may be a constrant, or in the case where a developer wants to</span>
-<span class="sd">    artifically inflate the scores for certain events or words to highlight something that can be done on an object</span>
-<span class="sd">    instance rather than just a function instance.</span>
+<span class="sd">    Like audio splitters, to pass arguments to the instance of the class and retain</span>
+<span class="sd">    state may be useful. In this case, while computing the scores for every meeting</span>
+<span class="sd">    memory may be a constrant, or in the case where a developer wants to artifically</span>
+<span class="sd">    inflate the scores for certain events or words to highlight something that can be</span>
+<span class="sd">    done on an object instance rather than just a function instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Indexer.get_raw_transcript"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.get_raw_transcript">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_raw_transcript</span><span class="p">(</span><span class="n">transcript_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Attempts to open either a raw or annotated json transcript format and return the raw transcript as a string.</span>
-<span class="sd">        If the file format is not supported or if the data contained in the transcript does not follow the specification</span>
-<span class="sd">        a TypeError is raised.</span>
+<span class="sd">        Attempts to open either a raw or annotated json transcript format and return</span>
+<span class="sd">        the raw transcript as a string. If the file format is not supported or if the</span>
+<span class="sd">        data contained in the transcript does not follow the specification a TypeError</span>
+<span class="sd">        is raised.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -329,11 +334,15 @@
                 <span class="k">if</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span>
                     <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span>
                     <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_words</span><span class="p">,</span>
-                    <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_sentences</span>
+                    <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_sentences</span><span class="p">,</span>
                 <span class="p">]:</span>
-                    <span class="n">transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">portion</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">portion</span> <span class="ow">in</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]])</span>
+                    <span class="n">transcript</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">portion</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">portion</span> <span class="ow">in</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]]</span>
+                    <span class="p">)</span>
                 <span class="c1"># Handle speaker turns transcripts</span>
-                <span class="k">elif</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_speaker_turns</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="p">(</span>
+                    <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TranscriptFormats</span><span class="o">.</span><span class="n">timestamped_speaker_turns</span>
+                <span class="p">):</span>
                     <span class="n">text_blocks</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="k">for</span> <span class="n">speaker_turn</span> <span class="ow">in</span> <span class="n">transcript</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
                         <span class="k">for</span> <span class="n">portion</span> <span class="ow">in</span> <span class="n">speaker_turn</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
@@ -360,26 +369,32 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        term: str</span>
-<span class="sd">            The term to check for end of sentence punctuation characters (&quot;.&quot;, &quot;!&quot;, and &quot;?&quot;).</span>
+<span class="sd">            The term to check for end of sentence punctuation characters</span>
+<span class="sd">            (&quot;.&quot;, &quot;!&quot;, and &quot;?&quot;).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">        --------</span>
 <span class="sd">        is_end_of_sentence: bool</span>
-<span class="sd">            The boolean value indicating whether or not an end of sentence punctuation character was found in the term.</span>
+<span class="sd">            The boolean value indicating whether or not an end of sentence punctuation</span>
+<span class="sd">            character was found in the term.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">punc</span> <span class="ow">in</span> <span class="n">term</span> <span class="k">for</span> <span class="n">punc</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;!&quot;</span><span class="p">,</span> <span class="s2">&quot;?&quot;</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Indexer.get_context_span_for_index"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.get_context_span_for_index">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_context_span_for_index</span><span class="p">(</span><span class="n">terms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_span_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_context_span_for_index</span><span class="p">(</span>
+        <span class="n">terms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_span_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the contextual sentence information for an index given an ordered list of terms.</span>
+<span class="sd">        Get the contextual sentence information for an index given an ordered list of</span>
+<span class="sd">        terms.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        terms: List[str]</span>
 <span class="sd">            The ordered list of terms to use for contextual information.</span>
 <span class="sd">        index: int</span>
-<span class="sd">            The index to use as the starting point for exploration for contextual sentence terms.</span>
+<span class="sd">            The index to use as the starting point for exploration for contextual</span>
+<span class="sd">            sentence terms.</span>
 <span class="sd">        max_span_size: int</span>
 <span class="sd">            The max contextual span size.</span>
 <span class="sd">            Default: 10</span>
@@ -460,7 +475,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check index provided</span>
         <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;For simplicity&#39;s sake, we don&#39;t support negative index context span retrieval. Sorry.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+                <span class="s2">&quot;For simplicity&#39;s sake, we don&#39;t support negative index context span &quot;</span>
+                <span class="s2">&quot;retrieval. Sorry.&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Window to store valid terms in</span>
         <span class="n">window</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
@@ -478,39 +496,53 @@
         <span class="n">left_side_index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">current_exploration_direction</span> <span class="o">=</span> <span class="s2">&quot;left&quot;</span>
 
-        <span class="c1"># Keep appending items to the window until it his max_span_size and both sides are still valid</span>
+        <span class="c1"># Keep appending items to the window until it his max_span_size and both sides</span>
+        <span class="c1"># are still valid</span>
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">window</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_span_size</span> <span class="ow">and</span> <span class="p">(</span><span class="n">left_side_valid</span> <span class="ow">or</span> <span class="n">right_side_valid</span><span class="p">):</span>
-            <span class="c1"># If the current exploration direction is leftwards and the left side is still valid, check the left term</span>
+            <span class="c1"># If the current exploration direction is leftwards and the left side is</span>
+            <span class="c1"># still valid, check the left term</span>
             <span class="k">if</span> <span class="n">current_exploration_direction</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span> <span class="ow">and</span> <span class="n">left_side_valid</span><span class="p">:</span>
-                <span class="c1"># If the term is the end of the prior sentence, mark the current position as no longer valid to explore</span>
+                <span class="c1"># If the term is the end of the prior sentence, mark the current</span>
+                <span class="c1"># position as no longer valid to explore</span>
                 <span class="c1"># Also catch if we have hit the beginning of the terms</span>
-                <span class="k">if</span> <span class="n">Indexer</span><span class="o">.</span><span class="n">term_is_end_of_sentence</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">left_side_index</span><span class="p">])</span> <span class="ow">or</span> <span class="n">left_side_index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">Indexer</span><span class="o">.</span><span class="n">term_is_end_of_sentence</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">left_side_index</span><span class="p">])</span>
+                    <span class="ow">or</span> <span class="n">left_side_index</span> <span class="o">&lt;</span> <span class="mi">0</span>
+                <span class="p">):</span>
                     <span class="n">left_side_valid</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="c1"># It wasn&#39;t the end of the prior sentence so we can append the term to the window</span>
+                <span class="c1"># It wasn&#39;t the end of the prior sentence so we can append the term to</span>
+                <span class="c1"># the window</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">window</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">left_side_index</span><span class="p">])</span>
                     <span class="n">left_side_index</span> <span class="o">-=</span> <span class="mi">1</span>
 
-            <span class="c1"># If the current exploration direction wasn&#39;t leftwards, we must be going right</span>
+            <span class="c1"># If the current exploration direction wasn&#39;t leftwards, we must be going</span>
+            <span class="c1"># right</span>
             <span class="c1"># Check if right side is still valid</span>
             <span class="k">elif</span> <span class="n">right_side_valid</span><span class="p">:</span>
-                <span class="c1"># Check if the right_side_index is greater than or equal to the len of the term list</span>
+                <span class="c1"># Check if the right_side_index is greater than or equal to the len of</span>
+                <span class="c1"># the term list</span>
                 <span class="k">if</span> <span class="n">right_side_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">terms</span><span class="p">):</span>
                     <span class="n">right_side_valid</span> <span class="o">=</span> <span class="kc">False</span>
 
-                <span class="c1"># If the term is the end of the sentence, append it and mark right side as no longer valid</span>
-                <span class="k">elif</span> <span class="n">Indexer</span><span class="o">.</span><span class="n">term_is_end_of_sentence</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">right_side_index</span><span class="p">])</span> <span class="ow">or</span> <span class="n">right_side_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># If the term is the end of the sentence, append it and mark right side</span>
+                <span class="c1"># as no longer valid</span>
+                <span class="k">elif</span> <span class="p">(</span>
+                    <span class="n">Indexer</span><span class="o">.</span><span class="n">term_is_end_of_sentence</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">right_side_index</span><span class="p">])</span>
+                    <span class="ow">or</span> <span class="n">right_side_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="p">):</span>
                     <span class="n">window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">right_side_index</span><span class="p">])</span>
                     <span class="n">right_side_valid</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="c1"># If the term wasn&#39;t the end of the sentence, append it and move the index</span>
+                <span class="c1"># If the term wasn&#39;t the end of the sentence, append it and move the</span>
+                <span class="c1"># index</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">terms</span><span class="p">[</span><span class="n">right_side_index</span><span class="p">])</span>
                     <span class="n">right_side_index</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="c1"># Rotate which direction we were exploring</span>
             <span class="c1"># If we were heading left and the right side is valid, explore right</span>
-            <span class="c1"># We do this because if we were provided an index that is completely in the center of a long sentence</span>
-            <span class="c1"># we want a balanced context string</span>
+            <span class="c1"># We do this because if we were provided an index that is completely in the</span>
+            <span class="c1"># center of a long sentence we want a balanced context string</span>
             <span class="k">if</span> <span class="n">current_exploration_direction</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span> <span class="ow">and</span> <span class="n">right_side_valid</span><span class="p">:</span>
                 <span class="n">current_exploration_direction</span> <span class="o">=</span> <span class="s2">&quot;right&quot;</span>
             <span class="c1"># Otherwise we were heading right, set to explore left</span>
@@ -547,11 +579,15 @@
         <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">cleaned_transcript</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
         <span class="c1"># Remove punctuation</span>
-        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_transcript</span><span class="p">)</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_transcript</span>
+        <span class="p">)</span>
 
         <span class="c1"># Remove stopwords</span>
         <span class="n">joined_stopwords</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">STOPWORDS</span><span class="p">)</span>
-        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b(&quot;</span> <span class="o">+</span> <span class="n">joined_stopwords</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;)\b&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_transcript</span><span class="p">)</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;\b(&quot;</span> <span class="o">+</span> <span class="n">joined_stopwords</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;)\b&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cleaned_transcript</span>
+        <span class="p">)</span>
 
         <span class="c1"># Remove gaps in string</span>
         <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">cleaned_transcript</span><span class="p">)</span>
@@ -574,11 +610,11 @@
 
 <div class="viewcode-block" id="Indexer.drop_terms_from_index_below_value"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.drop_terms_from_index_below_value">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">drop_terms_from_index_below_value</span><span class="p">(</span>
-        <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
-        <span class="n">minimum_value_allowed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span> <span class="n">minimum_value_allowed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Drop any terms from an index that have a value less than or equal to the provided.</span>
+<span class="sd">        Drop any terms from an index that have a value less than or equal to the</span>
+<span class="sd">        provided.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -586,13 +622,15 @@
 <span class="sd">            An index dictionary, the output of an `Indexer.generate_index` run.</span>
 
 <span class="sd">        minimum_value_allowed: float</span>
-<span class="sd">            The float value that all term event values should be compared against. Any term event value less than or</span>
-<span class="sd">            equal to the received value will be dropped from the index.</span>
+<span class="sd">            The float value that all term event values should be compared against. Any</span>
+<span class="sd">            term event value less than or equal to the received value will be dropped</span>
+<span class="sd">            from the index.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        cleaned_index: Dict[str, Dict[str, float]]</span>
-<span class="sd">            The cleaned index that has had values removed based off the received minimum value allowed.</span>
+<span class="sd">            The cleaned index that has had values removed based off the received</span>
+<span class="sd">            minimum value allowed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cleaned</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">dropped_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -602,10 +640,12 @@
             <span class="k">for</span> <span class="n">event_id</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">index</span><span class="p">[</span><span class="n">term</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="c1"># If the value is strictly greater than the minimum value allowed</span>
                 <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">minimum_value_allowed</span><span class="p">:</span>
-                    <span class="c1"># If the term is already in the cleaned index, add the event and value as a new pair</span>
+                    <span class="c1"># If the term is already in the cleaned index, add the event and</span>
+                    <span class="c1"># value as a new pair</span>
                     <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="p">:</span>
                         <span class="n">cleaned</span><span class="p">[</span><span class="n">term</span><span class="p">][</span><span class="n">event_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-                    <span class="c1"># If the term is not already in the cleaned index, add a new dictionary to store the pair</span>
+                    <span class="c1"># If the term is not already in the cleaned index, add a new</span>
+                    <span class="c1"># dictionary to store the pair</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">cleaned</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">event_id</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -615,20 +655,24 @@
         <span class="k">return</span> <span class="n">cleaned</span></div>
 
 <div class="viewcode-block" id="Indexer.generate_index"><a class="viewcode-back" href="../../../cdptools.indexers.html#cdptools.indexers.indexer.Indexer.generate_index">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">generate_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">event_corpus_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Given an event corpus map, compute word event values that will act as a search index.</span>
+<span class="sd">        Given an event corpus map, compute word event values that will act as a search</span>
+<span class="sd">        index.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        event_corpus_map: Dict[str, str]</span>
-<span class="sd">            A dictionary that maps event id to a local path with transcript to use for indexing.</span>
+<span class="sd">            A dictionary that maps event id to a local path with transcript to use for</span>
+<span class="sd">            indexing.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        word_event_scores: Dict[str, Dict[str, float]]</span>
-<span class="sd">            A dictionary of values per event per word that will be stored in the CDP instance&#39;s database and used as a</span>
-<span class="sd">            method for searching for events.</span>
+<span class="sd">            A dictionary of values per event per word that will be stored in the CDP</span>
+<span class="sd">            instance&#39;s database and used as a method for searching for events.</span>
 
 <span class="sd">            Example:</span>
 <span class="sd">            ```json</span>
@@ -658,7 +702,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

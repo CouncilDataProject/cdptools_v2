@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -278,14 +278,16 @@
     <span class="n">value</span><span class="p">:</span> <span class="n">Any</span></div>
 
 
-<div class="viewcode-block" id="RunManager"><a class="viewcode-back" href="../../../cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunManager">[docs]</a><span class="k">class</span> <span class="nc">RunManager</span><span class="p">():</span>
+<div class="viewcode-block" id="RunManager"><a class="viewcode-back" href="../../../cdptools.dev_utils.html#cdptools.dev_utils.run_manager.RunManager">[docs]</a><span class="k">class</span> <span class="nc">RunManager</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A RunManager can be used to track the IO of an algorithm and log begin and completed times. Additionally, will</span>
-<span class="sd">    gracefully handle when an algorithm errors. Depending on IO type, if any IO is a pathlib.Path, the full file will be</span>
-<span class="sd">    linked to the run.</span>
+<span class="sd">    A RunManager can be used to track the IO of an algorithm and log begin and</span>
+<span class="sd">    completed times. Additionally, will gracefully handle when an algorithm errors.</span>
+<span class="sd">    Depending on IO type, if any IO is a pathlib.Path, the full file will be linked to</span>
+<span class="sd">    the run.</span>
 
-<span class="sd">    A context manager of this class is available and the preffered method of interaction with this object. In the case</span>
-<span class="sd">    an error occurs during the run, the context manager will catch the error and store it as an output.</span>
+<span class="sd">    A context manager of this class is available and the preffered method of</span>
+<span class="sd">    interaction with this object. In the case an error occurs during the run, the</span>
+<span class="sd">    context manager will catch the error and store it as an output.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -297,7 +299,7 @@
         <span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">RunIO</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[],</span>
         <span class="n">algorithm_description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">algorithm_source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">remove_files</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">remove_files</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a RunManager object to track algorithm IO.</span>
@@ -305,23 +307,27 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        database: Database</span>
-<span class="sd">            A cdptools.database.Database connection that has full credentials to upload new data.</span>
+<span class="sd">            A cdptools.database.Database connection that has full credentials to upload</span>
+<span class="sd">            new data.</span>
 <span class="sd">        file_store: FileStore</span>
-<span class="sd">            A cdptools.file_store.FileStore connection that has full credentials to upload new data.</span>
+<span class="sd">            A cdptools.file_store.FileStore connection that has full credentials to</span>
+<span class="sd">            upload new data.</span>
 <span class="sd">        algorithm_name: str</span>
 <span class="sd">            The name of the algorithm about to run. Preffered: the full module path.</span>
 <span class="sd">        algorithm_version: str</span>
 <span class="sd">            The version string of the algorithm about to run.</span>
 <span class="sd">        inputs: Optional[Union[List, Tuple, RunIO]]</span>
-<span class="sd">            Inputs that are already known prior to the start of the algorithm run. If provided a List of List or a List</span>
-<span class="sd">            of Tuple, each object in the outer List will be converted to RunIO objects.</span>
+<span class="sd">            Inputs that are already known prior to the start of the algorithm run. If</span>
+<span class="sd">            provided a List of List or a List of Tuple, each object in the outer List</span>
+<span class="sd">            will be converted to RunIO objects.</span>
 <span class="sd">        algorithm_description: Optional[str]</span>
 <span class="sd">            Optionally, a description for the algorithm about to run.</span>
 <span class="sd">        algorithm_source: Optional[str]</span>
 <span class="sd">            Optionally, a uri to view the source of the algorithm about to run.</span>
 <span class="sd">        remove_files: bool</span>
-<span class="sd">            Boolean representing whether or not generated output files should be cleaned up after the algorithm</span>
-<span class="sd">            completes. Default: False (Do not remove files)</span>
+<span class="sd">            Boolean representing whether or not generated output files should be</span>
+<span class="sd">            cleaned up after the algorithm completes. Default: False (Do not remove</span>
+<span class="sd">            files)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -350,7 +356,9 @@
         <span class="c1"># Create empty outputs list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">_make_serializable_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">io_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_make_serializable_type</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">io_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make an IO value serializable.</span>
 
@@ -359,15 +367,17 @@
 <span class="sd">        value: Any</span>
 <span class="sd">            The value that needs to be made serializable.</span>
 <span class="sd">        io_type: str</span>
-<span class="sd">            A string (either &quot;input&quot; or &quot;output&quot;) to dictate where to send this IO in the case that the value is a Path.</span>
+<span class="sd">            A string (either &quot;input&quot; or &quot;output&quot;) to dictate where to send this IO in</span>
+<span class="sd">            the case that the value is a Path.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        value: Optional[Any]</span>
-<span class="sd">            If the value is already a boolean, None, string, float, integer, or datetime, simply returns the value.</span>
-<span class="sd">            If the value is a Path, ensure that the Path isn&#39;t a directory, and then send the value to the input or</span>
-<span class="sd">            output files list based off the passed io_type and return None.</span>
-<span class="sd">            If neither of the above occured, return the to string of the value provided.</span>
+<span class="sd">            If the value is already a boolean, None, string, float, integer, or</span>
+<span class="sd">            datetime, simply returns the value. If the value is a Path, ensure that the</span>
+<span class="sd">            Path isn&#39;t a directory, and then send the value to the input or output</span>
+<span class="sd">            files list based off the passed io_type and return None. If neither of the</span>
+<span class="sd">            above occured, return the to string of the value provided.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Standard acceptable types</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)):</span>
@@ -378,7 +388,9 @@
             <span class="c1"># Resolve</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RunIO must be single files or values. Received </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">IsADirectoryError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;RunIO must be single files or values. Received </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
             <span class="k">if</span> <span class="n">io_type</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_input_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RunIO</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">value</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">io_type</span> <span class="o">==</span> <span class="s2">&quot;output&quot;</span><span class="p">:</span>
@@ -387,7 +399,9 @@
 
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_create_io</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">RunIO</span><span class="p">],</span> <span class="n">io_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunIO</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_create_io</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">RunIO</span><span class="p">],</span> <span class="n">io_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunIO</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a RunIO object from the provided value.</span>
 
@@ -396,17 +410,20 @@
 <span class="sd">        value: Union[Any, List, Tuple, RunIO]</span>
 <span class="sd">            The value to convert to a RunIo object.</span>
 <span class="sd">        io_type: str</span>
-<span class="sd">            A string (either &quot;input&quot; or &quot;output&quot;) to dictate where to send this IO in the case that the value is a Path.</span>
+<span class="sd">            A string (either &quot;input&quot; or &quot;output&quot;) to dictate where to send this IO in</span>
+<span class="sd">            the case that the value is a Path.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        io: Optional[RunIO]</span>
 <span class="sd">            The constructed RunIO object.</span>
-<span class="sd">            If received an already constructed RunIO object, simply returns the provided object.</span>
-<span class="sd">            If received a single value, returns a RunIO object with the value and stores the value&#39;s type.</span>
-<span class="sd">            If received a List or Tuple of length one, returns a RunIO object with the single value in the list.</span>
-<span class="sd">            If received a List or Tuple of length two, returns a RunIO object with the values provided. The format of</span>
-<span class="sd">                the List or Tuple must follow, [{value_type}, {value_to_store}].</span>
+<span class="sd">            If received an already constructed RunIO object, simply returns the</span>
+<span class="sd">            provided object. If received a single value, returns a RunIO object with</span>
+<span class="sd">            the value and stores the value&#39;s type. If received a List or Tuple of</span>
+<span class="sd">            length one, returns a RunIO object with the single value in the list. If</span>
+<span class="sd">            received a List or Tuple of length two, returns a RunIO object with the</span>
+<span class="sd">            values provided. The format of the List or Tuple must follow,</span>
+<span class="sd">            [{value_type}, {value_to_store}].</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -434,7 +451,10 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_io</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">io_type</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RunIO objects may only be initialized with a type and value. Received: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;RunIO objects may only be initialized with a type and value. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; Received: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
             <span class="c1"># Make serializable</span>
             <span class="n">serializable_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_serializable_type</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">io_type</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">serializable_value</span><span class="p">:</span>
@@ -455,7 +475,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        input: Union[Any, List, Tuple, RunIO]</span>
-<span class="sd">            The input value that will use `RunManager._create_io` prior to adding the value to the inputs list.</span>
+<span class="sd">            The input value that will use `RunManager._create_io` prior to adding the</span>
+<span class="sd">            value to the inputs list.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -477,7 +498,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        output: Union[Any, List, Tuple, RunIO]</span>
-<span class="sd">            The output value that will use `RunManager._create_io` prior to adding the value to the outputs list.</span>
+<span class="sd">            The output value that will use `RunManager._create_io` prior to adding the</span>
+<span class="sd">            value to the outputs list.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -494,9 +516,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Uploads the information stored in the RunManager&#39;s instance state.</span>
 
-<span class="sd">        Creates a row in the Run table of the database, and uploads and links all run inputs (and run input files) and</span>
-<span class="sd">        all run outputs (an run output files). Additionally, links the run to the algorithm id created or found from</span>
-<span class="sd">        the details provided on RunManager instance creation.</span>
+<span class="sd">        Creates a row in the Run table of the database, and uploads and links all run</span>
+<span class="sd">        inputs (and run input files) and all run outputs (an run output files).</span>
+<span class="sd">        Additionally, links the run to the algorithm id created or found from the</span>
+<span class="sd">        details provided on RunManager instance creation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Store files before database</span>
         <span class="n">input_files</span> <span class="o">=</span> <span class="p">[]</span>
@@ -515,11 +538,13 @@
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_algorithm_name</span><span class="p">,</span>
             <span class="n">version</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_algorithm_version</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_algorithm_description</span><span class="p">,</span>
-            <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_algorithm_source</span>
+            <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_algorithm_source</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Create run</span>
-        <span class="n">run_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">get_or_upload_run</span><span class="p">(</span><span class="n">algorithm_details</span><span class="p">[</span><span class="s2">&quot;algorithm_id&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_began</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_completed</span><span class="p">)</span>
+        <span class="n">run_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">get_or_upload_run</span><span class="p">(</span>
+            <span class="n">algorithm_details</span><span class="p">[</span><span class="s2">&quot;algorithm_id&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_began</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_completed</span>
+        <span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created run: </span><span class="si">{</span><span class="n">run_details</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># Create file inputs and outputs in db</span>
@@ -567,7 +592,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

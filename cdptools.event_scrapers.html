@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -282,13 +282,14 @@
 <dt id="cdptools.event_scrapers.event_scraper.EventScraper.get_events">
 <em class="property">abstract </em><code class="sig-name descname">get_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[Dict[str, Any]]<a class="reference internal" href="_modules/cdptools/event_scrapers/event_scraper.html#EventScraper.get_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.event_scraper.EventScraper.get_events" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of event details required to run the rest of an event pipeline.</p>
-<p>Many get events functions are meant to be run on a schedule so it may be best to consider implementing an
-OutOfTimeBoundsError somewhere during the processing to ignore events you believe should have already been
-retrieved during a prior run.</p>
+<p>Many get events functions are meant to be run on a schedule so it may be best
+to consider implementing an OutOfTimeBoundsError somewhere during the
+processing to ignore events you believe should have already been retrieved
+during a prior run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>events</strong> – A list of dictionaries with each dictionary containing event details for the rest of an event pipeline to
-use for processing and storage information.</p>
+<dd class="field-odd"><p><strong>events</strong> – A list of dictionaries with each dictionary containing event details for
+the rest of an event pipeline to use for processing and storage information.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>List[Dict[str, Any]]</p>
@@ -299,12 +300,14 @@ use for processing and storage information.</p>
 <dl class="method">
 <dt id="cdptools.event_scrapers.event_scraper.EventScraper.get_single_event">
 <em class="property">abstract </em><code class="sig-name descname">get_single_event</code><span class="sig-paren">(</span><em class="sig-param">uri: str</em>, <em class="sig-param">backfill: bool = False</em><span class="sig-paren">)</span> &#x2192; Dict[str, Any]<a class="reference internal" href="_modules/cdptools/event_scrapers/event_scraper.html#EventScraper.get_single_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.event_scraper.EventScraper.get_single_event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get event details for a single event required to run the rest of an event pipeline.</p>
-<p>This can be used for processing single events that might not have been properly processed with the above
-get_events method when running a EventGatherPipeline.</p>
+<dd><p>Get event details for a single event required to run the rest of an event
+pipeline.</p>
+<p>This can be used for processing single events that might not have been properly
+processed with the above get_events method when running a EventGatherPipeline.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>event</strong> – A dicitonary containing event details for the rest of an event pipeline to use for processing and storage info.</p>
+<dd class="field-odd"><p><strong>event</strong> – A dicitonary containing event details for the rest of an event pipeline to
+use for processing and storage info.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>Dict[str, Any]</p>
@@ -352,13 +355,14 @@ get_events method when running a EventGatherPipeline.</p>
 <dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_events">
 <code class="sig-name descname">get_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#SeattleEventScraper.get_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_events" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of event details required to run the rest of an event pipeline.</p>
-<p>Many get events functions are meant to be run on a schedule so it may be best to consider implementing an
-OutOfTimeBoundsError somewhere during the processing to ignore events you believe should have already been
-retrieved during a prior run.</p>
+<p>Many get events functions are meant to be run on a schedule so it may be best
+to consider implementing an OutOfTimeBoundsError somewhere during the
+processing to ignore events you believe should have already been retrieved
+during a prior run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>events</strong> – A list of dictionaries with each dictionary containing event details for the rest of an event pipeline to
-use for processing and storage information.</p>
+<dd class="field-odd"><p><strong>events</strong> – A list of dictionaries with each dictionary containing event details for
+the rest of an event pipeline to use for processing and storage information.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>List[Dict[str, Any]]</p>
@@ -374,12 +378,14 @@ use for processing and storage information.</p>
 <dl class="method">
 <dt id="cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_single_event">
 <code class="sig-name descname">get_single_event</code><span class="sig-paren">(</span><em class="sig-param">uri: str</em>, <em class="sig-param">backfill: bool = False</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/cdptools/event_scrapers/seattle_event_scraper.html#SeattleEventScraper.get_single_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cdptools.event_scrapers.seattle_event_scraper.SeattleEventScraper.get_single_event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get event details for a single event required to run the rest of an event pipeline.</p>
-<p>This can be used for processing single events that might not have been properly processed with the above
-get_events method when running a EventGatherPipeline.</p>
+<dd><p>Get event details for a single event required to run the rest of an event
+pipeline.</p>
+<p>This can be used for processing single events that might not have been properly
+processed with the above get_events method when running a EventGatherPipeline.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>event</strong> – A dicitonary containing event details for the rest of an event pipeline to use for processing and storage info.</p>
+<dd class="field-odd"><p><strong>event</strong> – A dicitonary containing event details for the rest of an event pipeline to
+use for processing and storage info.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>Dict[str, Any]</p>
@@ -412,7 +418,7 @@ get_events method when running a EventGatherPipeline.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

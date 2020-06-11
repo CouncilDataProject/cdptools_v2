@@ -175,15 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id5">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id16">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id9">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id17">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id24">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id28">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id29">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -272,7 +272,6 @@
 
 
 <div class="viewcode-block" id="FFmpegAudioSplitter"><a class="viewcode-back" href="../../../cdptools.audio_splitters.html#cdptools.audio_splitters.ffmpeg_audio_splitter.FFmpegAudioSplitter">[docs]</a><span class="k">class</span> <span class="nc">FFmpegAudioSplitter</span><span class="p">(</span><span class="n">AudioSplitter</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">pass</span>
 
@@ -280,7 +279,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">video_read_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
         <span class="n">audio_save_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
-        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="c1"># Check paths</span>
         <span class="n">video_read_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">video_read_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -292,7 +291,14 @@
 
         <span class="c1"># Construct ffmpeg dag</span>
         <span class="n">stream</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">video_read_path</span><span class="p">)</span>
-        <span class="n">stream</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">audio_save_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;wav&quot;</span><span class="p">,</span> <span class="n">acodec</span><span class="o">=</span><span class="s2">&quot;pcm_s16le&quot;</span><span class="p">,</span> <span class="n">ac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ar</span><span class="o">=</span><span class="s2">&quot;16k&quot;</span><span class="p">)</span>
+        <span class="n">stream</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
+            <span class="n">stream</span><span class="p">,</span>
+            <span class="n">filename</span><span class="o">=</span><span class="n">audio_save_path</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;wav&quot;</span><span class="p">,</span>
+            <span class="n">acodec</span><span class="o">=</span><span class="s2">&quot;pcm_s16le&quot;</span><span class="p">,</span>
+            <span class="n">ac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">ar</span><span class="o">=</span><span class="s2">&quot;16k&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># Run dag</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning audio separation for: </span><span class="si">{</span><span class="n">video_read_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -319,7 +325,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Jackson Maxfield Brown
+        &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>

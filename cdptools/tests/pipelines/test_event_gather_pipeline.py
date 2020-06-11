@@ -159,10 +159,11 @@ def example_seattle_route(data_dir):
 class RequestReturn:
     def __init__(self, content: Union[str, Path]):
         if isinstance(content, Path):
-            with open(content, "r") as read_in:
-                if content.suffix == ".json":
+            if content.suffix == ".json":
+                with open(content, "r") as read_in:
                     content = json.load(read_in)
-                else:
+            else:
+                with open(content, "r", encoding="utf-8") as read_in:
                     content = read_in.read()
 
         self.content = content

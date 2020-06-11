@@ -17,6 +17,7 @@ jobs:
     - name: Install Dependencies
       run: |
         pip install --upgrade pip
+        pip install Cython>=0.29.20
         pip install .[all]
     - name: Generate Docs
       run: |

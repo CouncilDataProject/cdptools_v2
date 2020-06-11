@@ -1,5 +1,5 @@
 ---
-title: 'CDP-Tools: Automated Municipal Data Archival and Indexing'
+title: 'CDP-Tools: Automated Municipal Government Data Archival and Indexing'
 tags:
   - Social Science
   - Local Governance

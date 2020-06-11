@@ -39,17 +39,17 @@ dev_requirements = [
 ]
 
 requirements = [
-    "beautifulsoup4==4.8.0",
-    "ffmpeg-python==0.2.0",
-    "rapidfuzz==0.2.1",
-    "nltk==3.4.5",
-    "pandas==0.25.0",
-    "requests[security]==2.22.0",
-    "schedule==0.6.0",
+    "beautifulsoup4>=4.9.1",
+    "ffmpeg-python>=0.2.0",
+    "rapidfuzz>=0.9.1",
+    "nltk>=3.5",
+    "pandas>=1.0.4",
+    "requests[security]>=2.23.0",
+    "schedule>=0.6.0",
     "setuptools>=44.0.0",
-    "tika==1.19",
-    "webvtt-py==0.4.3",
-    "truecase==0.0.5"
+    "tika>=1.24",
+    "webvtt-py>=0.4.5",
+    "truecase>=0.0.9"
 ]
 
 extra_requirements = [
@@ -57,10 +57,10 @@ extra_requirements = [
 ]
 
 seattle_requirements = [
-    "cryptography>=2.8",
-    "firebase-admin==2.17.0",
-    "google-cloud-speech==1.2.0",
-    "google-cloud-storage==1.17.0"
+    "cryptography>=2.9.2",
+    "firebase-admin>=4.3.0",
+    "google-cloud-speech>=1.3.2",
+    "google-cloud-storage>=1.28.1"
 ]
 
 extra_requirements = {

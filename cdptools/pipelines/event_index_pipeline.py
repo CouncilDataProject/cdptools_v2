@@ -3,19 +3,119 @@
 
 import json
 import logging
-import tempfile
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, List, Union
 
-from .. import get_module_version
-from ..dev_utils import RunManager, load_custom_object
-from ..research_utils import transcripts as transcript_tools
-from .pipeline import Pipeline, ValuesForTerm
+import pandas as pd
+import requests
+from dask_ml.feature_extraction.text import HashingVectorizer
+from distributed import Client
+from prefect import Flow, task, unmapped
+from prefect.engine.executors import DaskExecutor
+from tika import parser
+
+from ..databases import Database, OrderOperators
+from ..dev_utils import load_custom_object
+from .pipeline import Pipeline
 
 ###############################################################################
 
 log = logging.getLogger(__name__)
+
+###############################################################################
+# Workflow tasks
+
+
+@task
+def get_events(db: Database) -> pd.DataFrame:
+    # Get transcript dataset
+    return pd.DataFrame(db.select_rows_as_list("event", limit=int(1e6)))
+
+
+@task
+def get_event_ids(events: pd.DataFrame) -> List[str]:
+    return list(events.event_id)
+
+
+@task
+def get_bodies(db: Database) -> List[Dict]:
+    return db.select_rows_as_list("body")
+
+
+@task
+def get_transcript_details(event_id: str, db: Database) -> Dict:
+    # Get the highest confidence transcript for the event
+    results = db.select_rows_as_list(
+        table="transcript",
+        filters=[("event_id", event_id)],
+        order_by=("confidence", OrderOperators.desc),
+        limit=1,
+    )
+
+    # Return result if found
+    if len(results) == 1:
+        return results[0]
+
+
+@task
+def construct_transcript_df(transcripts: List[Union[Dict, None]]) -> pd.DataFrame:
+    # Create transcripts dataframe
+    return pd.DataFrame([
+        transcript_details for transcript_details in transcripts
+        if transcript_details is not None
+    ])
+
+
+@task
+def get_file_ids(transcripts: pd.DataFrame) -> List[str]:
+    return list(transcripts.file_id)
+
+
+@task
+def get_file_details(file_id: str, db: Database) -> Dict:
+    return db.select_row_by_id("file", file_id)
+
+
+@task
+def merge_event_and_body_details(
+    events: pd.DataFrame, bodies: List[Dict]
+) -> pd.DataFrame:
+    # Create bodies dataframe
+    bodies = pd.DataFrame(bodies)
+
+    return events.merge(
+        bodies,
+        on="body_id",
+        suffixes=("_event", "_body"),
+    )
+
+
+@task
+def merge_transcript_and_file_details(
+    transcripts: pd.DataFrame, files: List[Dict]
+) -> pd.DataFrame:
+    # Create files dataframe
+    files = pd.DataFrame(files)
+
+    return transcripts.merge(
+        files,
+        on="file_id",
+        suffixes=("_transcript", "_file"),
+    )
+
+
+@task
+def merge_event_and_transcript_details(
+    events: pd.DataFrame, transcripts: pd.DataFrame,
+) -> pd.DataFrame:
+    # Merge dataframes
+    merged = transcripts.merge(
+        events, on="event_id", suffixes=("_event", "_transcript")
+    )
+    merged.to_csv("transcript_manifest.csv", index=False)
+
+    return merged
+
 
 ###############################################################################
 
@@ -49,96 +149,30 @@ class EventIndexPipeline(Pipeline):
             object_kwargs=self.config["indexer"].get("object_kwargs", {}),
         )
 
-    def task_generate_index(
-        self, event_corpus_map: Dict[str, Path]
-    ) -> Dict[str, Dict[str, float]]:
-        """
-        Generate word event scores dictionary.
-        """
-        with RunManager(
-            database=self.database,
-            file_store=self.file_store,
-            algorithm_name="EventIndexPipeline.task_generate_index",
-            algorithm_version=get_module_version(),
-        ):
-            return self.indexer.generate_index(event_corpus_map)
-
-    def task_clean_index(
-        self, index: Dict[str, Dict[str, float]]
-    ) -> Dict[str, Dict[str, float]]:
-        """
-        Clean the generated index prior to upload.
-        """
-        with RunManager(
-            database=self.database,
-            file_store=self.file_store,
-            algorithm_name="EventIndexPipeline.task_clean_index",
-            algorithm_version=get_module_version(),
-        ):
-            return self.indexer.drop_terms_from_index_below_value(index)
-
-    def _upload_indexed_event_term_event_values(self, evft: ValuesForTerm):
-        # Loop through each event and value tied to this term and upload to database
-        for event_id, value in evft.values.items():
-            self.database.upload_or_update_indexed_event_term(
-                term=evft.term, event_id=event_id, value=value
-            )
-
-    def task_upload_index(self, index: Dict[str, Dict[str, float]]):
-        """
-        Upload a word event scores dictionary. This will completely replace a previous
-        index.
-        """
-        with RunManager(
-            database=self.database,
-            file_store=self.file_store,
-            algorithm_name="EventIndexPipeline.task_upload_index",
-            algorithm_version=get_module_version(),
-        ):
-            # Create upload items
-            # This list of objects is just useful for making it easier to multithread
-            # the upload
-            indexed_event_term_event_values = []
-            for term, event_values in index.items():
-                indexed_event_term_event_values.append(
-                    ValuesForTerm(term, event_values)
-                )
-
-            # Multithread the upload/ update of the index
-            with ThreadPoolExecutor(self.n_workers) as exe:
-                exe.map(
-                    self._upload_indexed_event_term_event_values,
-                    indexed_event_term_event_values,
-                )
-
     def run(self):
-        log.info("Starting index creation.")
-        with RunManager(
-            self.database,
-            self.file_store,
-            "EventIndexPipeline.run",
-            get_module_version(),
-        ):
-            # Store the transcripts locally in a temporary directory
-            with tempfile.TemporaryDirectory() as tmpdir:
-                # Get the event corpus map and download most recent transcripts to
-                # local machine
-                log.info("Downloading most recent transcripts")
-                event_corpus_map = transcript_tools.download_transcripts(
-                    db=self.database, fs=self.file_store, save_dir=tmpdir
-                )
+        # Construct workflow
+        with Flow("Event Index Pipeline") as flow:
+            events = get_events(self.database)
+            event_ids = get_event_ids(events)
+            bodies = get_bodies(self.database)
+            transcripts = get_transcript_details.map(
+                event_ids, db=unmapped(self.database),
+            )
+            transcripts = construct_transcript_df(transcripts)
+            file_ids = get_file_ids(transcripts)
+            files = get_file_details.map(
+                file_ids, db=unmapped(self.database)
+            )
+            events = merge_event_and_body_details(events, bodies)
+            transcripts = merge_transcript_and_file_details(transcripts, files)
+            merged = merge_event_and_transcript_details(events, transcripts)
 
-                # Compute word event scores
-                log.info("Generating index")
-                index = self.task_generate_index(event_corpus_map)
+        # Construct LocalCluster
+        client = Client()
+        log.info(f"Dashboard available at: {client.dashboard_link}")
 
-                # Clean the index
-                log.info("Dropping event terms with limited value")
-                index = self.task_clean_index(index)
+        # Run
+        flow.run(executor=DaskExecutor(address=client.cluster.scheduler_address))
 
-            # Upload word event scores
-            log.info("Uploading index")
-            self.task_upload_index(index)
-
-        log.info("Completed index creation.")
-        log.info("=" * 80)
+        # Visualize
+        flow.visualize(filename="event-index-pipeline", format="png")

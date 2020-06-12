@@ -4,14 +4,13 @@
         "module_path": "cdptools.databases.cloud_firestore_database",
         "object_name": "CloudFirestoreDatabase",
         "object_kwargs": {
-            "credentials_path": "/home/cdptools/credentials/cdp-seattle.json"
+            "project_id": "cdp-seattle"
         }
     },
     "file_store": {
         "module_path": "cdptools.file_stores.gcs_file_store",
         "object_name": "GCSFileStore",
         "object_kwargs": {
-            "credentials_path": "/home/cdptools/credentials/cdp-seattle.json",
             "bucket_name": "cdp-seattle.appspot.com"
         }
     },

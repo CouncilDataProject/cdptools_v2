@@ -1,0 +1,13 @@
+1a. get_transcripts
+1b. get_event_minutes_items
+
+2.  construct corpus
+
+3.  construct index
+
+4a. find keywords per event
+4b. find most unique context spans
+
+5.  attach context spans to index
+
+6.  upload index

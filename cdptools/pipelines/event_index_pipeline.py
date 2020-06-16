@@ -6,10 +6,10 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Union
 
+import dask.config
 import pandas as pd
-import requests
 from dask_ml.feature_extraction.text import HashingVectorizer
-from distributed import Client
+from distributed import Client, LocalCluster
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
 from tika import parser
@@ -77,6 +77,63 @@ def get_file_details(file_id: str, db: Database) -> Dict:
 
 
 @task
+def get_event_minutes_items(event_id: str, db: Database) -> List[Dict]:
+    return db.select_rows_as_list(
+        "event_minutes_item", filters=[("event_id", event_id)]
+    )
+
+
+@task
+def flatten_event_minutes_items(event_minutes_items: List[List[Dict]]) -> List[Dict]:
+    # Drop all None values
+    # Pull out the key info
+    minutes_items = []
+    for event_minutes_item in event_minutes_items:
+        if event_minutes_item is not None:
+            for minutes_item in event_minutes_item:
+                minutes_items.append({
+                    "event_id": minutes_item["event_id"],
+                    "minutes_item_id": minutes_item["minutes_item_id"],
+                })
+
+    return minutes_items
+
+
+@task
+def get_minutes_item_file_details(
+    minutes_item: Dict, db: Database
+) -> Union[List[Dict], None]:
+    # Get minutes item file
+    mifs = db.select_rows_as_list(
+        "minutes_item_file",
+        filters=[("minutes_item_id", minutes_item["minutes_item_id"])],
+    )
+
+    # Return just the URI if mif exists
+    if mifs is not None:
+        mifs = [{
+            "event_id": minutes_item["event_id"],
+            "uri": mif["uri"]
+        } for mif in mifs]
+
+    return mifs
+
+
+@task
+def construct_minutes_item_files_df(
+    minutes_item_files: List[List[Dict]]
+) -> pd.DataFrame:
+    # Drop all None values
+    # Flatten
+    flat_mifs = []
+    for event_mifs in minutes_item_files:
+        if event_mifs is not None:
+            flat_mifs += event_mifs
+
+    return pd.DataFrame(flat_mifs)
+
+
+@task
 def merge_event_and_body_details(
     events: pd.DataFrame, bodies: List[Dict]
 ) -> pd.DataFrame:
@@ -117,6 +174,20 @@ def merge_event_and_transcript_details(
     return merged
 
 
+@task
+def construct_expanded_corpus_df(
+    transcripts: pd.DataFrame, minutes_item_files: pd.DataFrame
+) -> pd.DataFrame:
+    # Drop columns from transcripts df
+    transcripts = transcripts[["event_id", "uri"]]
+
+    # Append minutes item files df
+    merged = pd.concat([transcripts, minutes_item_files], ignore_index=True)
+    merged.to_csv("expanded_corpus.csv", index=False)
+
+    return merged
+
+
 ###############################################################################
 
 
@@ -152,9 +223,12 @@ class EventIndexPipeline(Pipeline):
     def run(self):
         # Construct workflow
         with Flow("Event Index Pipeline") as flow:
+            # Get events and body information
             events = get_events(self.database)
             event_ids = get_event_ids(events)
             bodies = get_bodies(self.database)
+
+            # Get each event's transcript information
             transcripts = get_transcript_details.map(
                 event_ids, db=unmapped(self.database),
             )
@@ -163,16 +237,39 @@ class EventIndexPipeline(Pipeline):
             files = get_file_details.map(
                 file_ids, db=unmapped(self.database)
             )
+
+            # Get each event's minutes items
+            all_events_emis = get_event_minutes_items.map(
+                event_ids, db=unmapped(self.database)
+            )
+            flattened_emis = flatten_event_minutes_items(all_events_emis)
+            all_events_mifs = get_minutes_item_file_details.map(
+                flattened_emis, db=unmapped(self.database)
+            )
+            minutes_item_files = construct_minutes_item_files_df(all_events_mifs)
+
             events = merge_event_and_body_details(events, bodies)
             transcripts = merge_transcript_and_file_details(transcripts, files)
-            merged = merge_event_and_transcript_details(events, transcripts)
+            transcripts = merge_event_and_transcript_details(events, transcripts)
+            expanded_corpus = construct_expanded_corpus_df(
+                transcripts, minutes_item_files
+            )
+
+        # Configure dask config
+        dask.config.set(
+            {
+                "scheduler.work-stealing": False,
+            }
+        )
 
         # Construct LocalCluster
-        client = Client()
+        cluster = LocalCluster()
+        client = Client(cluster)
+
         log.info(f"Dashboard available at: {client.dashboard_link}")
 
         # Run
-        flow.run(executor=DaskExecutor(address=client.cluster.scheduler_address))
+        flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
 
         # Visualize
         flow.visualize(filename="event-index-pipeline", format="png")

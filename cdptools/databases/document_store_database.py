@@ -13,8 +13,19 @@ from . import exceptions
 
 
 cdp_tables = [
-    'event', 'person', 'body', 'file', 'trasncript', 'seat',
-    'role', 'minutes_item', 'event_minutes_item', 'vote', 'matter', 'matter_type']
+    "event",
+    "person",
+    "body",
+    "file",
+    "trasncript",
+    "seat",
+    "role",
+    "minutes_item",
+    "event_minutes_item",
+    "vote",
+    "matter",
+    "matter_type",
+]
 
 
 class WhereCondition(NamedTuple):
@@ -75,11 +86,11 @@ class Match:
     def __repr__(self):
         return str(self)
 
+
 ###############################################################################
 
 
 class DocumentStoreDatabase(ABC):
-
     @staticmethod
     def _construct_where_condition(filt: Union[WhereCondition, List, Tuple]):
         """
@@ -225,11 +236,11 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def select_rows_as_list(
-            self,
-            table: str,
-            filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
-            order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
-            limit: Optional[int] = None
+        self,
+        table: str,
+        filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
+        order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
+        limit: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """
         Get a list of rows from a table optionally using 
@@ -260,8 +271,7 @@ class DocumentStoreDatabase(ABC):
 
     @staticmethod
     def _reshape_list_of_rows_to_dict(
-            rows: List[Dict[str, Any]],
-            table: str
+        rows: List[Dict[str, Any]], table: str
     ) -> Dict[str, Dict[str, Any]]:
         """
         Reshape a list of rows to a dictionary of rows.
@@ -290,8 +300,8 @@ class DocumentStoreDatabase(ABC):
 
     @staticmethod
     def _reshape_list_of_rows_to_dataframe(
-            rows: List[Dict[str, Any]],
-            table: Optional[str] = None):
+        rows: List[Dict[str, Any]], table: Optional[str] = None
+    ):
         """
         Simply cast a list of rows to a dataframe.
 
@@ -320,14 +330,14 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_body(
-            self,
-            name: str,
-            description: Optional[str],
-            start_date: datetime,
-            end_date: Optional[datetime],
-            is_active: bool,
-            chair_person_id: str,
-            external_source_id: Optional[Any]
+        self,
+        name: str,
+        description: Optional[str],
+        start_date: datetime,
+        end_date: Optional[datetime],
+        is_active: bool,
+        chair_person_id: str,
+        external_source_id: Optional[Any],
     ) -> Dict[str, Any]:
         """
         Get or upload a body.
@@ -358,11 +368,11 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_minutes_item(
-            self,
-            name: str,
-            description: Optional[str],
-            matter: Dict[str, str],
-            external_source_id: Optional[Any]
+        self,
+        name: str,
+        description: Optional[str],
+        matter: Dict[str, str],
+        external_source_id: Optional[Any],
     ) -> Dict[str, Any]:
         """
         Get or upload a minutes item. In Legistar this is commonly referred to 
@@ -388,19 +398,19 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_event(
-            self,
-            body: Dict[str, str],
-            event_datetime: datetime,
-            thumbnail_static_file: Dict[str, str],
-            thumbnail_hover_file: Optional[str],
-            video_uri: Optional[str],
-            keywords: Dict[str, str],
-            matters: Dict[str, str],
-            minutes_items: Dict[str, str],
-            people: Dict[str, str],
-            external_source_id: Optional[str],
-            agenda_uri: str,
-            minutes_uri: Optional[str]
+        self,
+        body: Dict[str, str],
+        event_datetime: datetime,
+        thumbnail_static_file: Dict[str, str],
+        thumbnail_hover_file: Optional[str],
+        video_uri: Optional[str],
+        keywords: Dict[str, str],
+        matters: Dict[str, str],
+        minutes_items: Dict[str, str],
+        people: Dict[str, str],
+        external_source_id: Optional[str],
+        agenda_uri: str,
+        minutes_uri: Optional[str],
     ) -> Dict[str, Any]:
         """
         Find an event using the primary key for events, a video uri.
@@ -444,20 +454,20 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_person(
-            self,
-            router_id: Optional[str],
-            name: str,
-            email: Optional[str],
-            phone: Optional[str],
-            website: Optional[str],
-            picture_file: Dict[str, str],
-            is_active: bool,
-            is_council_president: bool,
-            most_recent_seat: Dict[str, str],
-            most_recent_chair_body: Dict[str, str],
-            terms_serving_in_current_seat_role: int,
-            terms_serving_in_current_committee_chair_role: int,
-            external_source_id: Optional[Any]
+        self,
+        router_id: Optional[str],
+        name: str,
+        email: Optional[str],
+        phone: Optional[str],
+        website: Optional[str],
+        picture_file: Dict[str, str],
+        is_active: bool,
+        is_council_president: bool,
+        most_recent_seat: Dict[str, str],
+        most_recent_chair_body: Dict[str, str],
+        terms_serving_in_current_seat_role: int,
+        terms_serving_in_current_committee_chair_role: int,
+        external_source_id: Optional[Any],
     ) -> Dict[str, Any]:
         """
         Get or upload a city council member (person).
@@ -502,14 +512,14 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_vote(
-            self,
-            matter: Dict[str, str],
-            event: Dict[str, Any],
-            event_minutes_item: Dict[str, str],
-            person: Dict[str, str],
-            vote_decision: str,
-            is_majority: bool,
-            external_vote_item_id: Optional[any],
+        self,
+        matter: Dict[str, str],
+        event: Dict[str, Any],
+        event_minutes_item: Dict[str, str],
+        person: Dict[str, str],
+        vote_decision: str,
+        is_majority: bool,
+        external_vote_item_id: Optional[any],
     ) -> Dict[str, Any]:
         """
         Get or upload a person's vote on a minutes item.
@@ -540,11 +550,11 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_file(
-            self,
-            uri: str,
-            filename: Optional[str] = None,
-            description: Optional[str] = None,
-            content_type: Optional[str] = None
+        self,
+        uri: str,
+        filename: Optional[str] = None,
+        description: Optional[str] = None,
+        content_type: Optional[str] = None,
     ) -> Dict:
         """
         Get or upload a file (to the database table, not a file store).
@@ -571,12 +581,12 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_seat(
-            self,
-            electoral_area: str,
-            electoral_type: str,
-            map_file_id: str,
-            map_uri: str,
-            created: datetime
+        self,
+        electoral_area: str,
+        electoral_type: str,
+        map_file_id: str,
+        map_uri: str,
+        created: datetime,
     ) -> Dict[str, Any]:
         """
         Get or upload a seat (to the database, a file store).
@@ -601,10 +611,7 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_transcript(
-            self,
-            event_id: str,
-            file_id: str,
-            confidence: Optional[float] = None
+        self, event_id: str, file_id: str, confidence: Optional[float] = None
     ) -> Dict:
         """
         Get or upload a transcript (to the database, a file store).
@@ -628,15 +635,15 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_role(
-            self,
-            person: Dict[str, str],
-            title: str,
-            body: Dict[str, str],
-            start_date: datetime,
-            end_date: Optional[datetime],
-            seat_id: str,
-            external_source_id: Optional[any],
-            created: datetime
+        self,
+        person: Dict[str, str],
+        title: str,
+        body: Dict[str, str],
+        start_date: datetime,
+        end_date: Optional[datetime],
+        seat_id: str,
+        external_source_id: Optional[any],
+        created: datetime,
     ) -> Dict[str, Any]:
         """
         Get or upload a role (to the database, a file store).
@@ -667,14 +674,14 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_event_minutes_item(
-            self,
-            event_id: str,
-            minutes_item: Dict[str, str],
-            index: int,
-            decision: Optional[str],
-            matter: Dict[str, str],
-            votes: Dict[str, str],
-            files: Dict[str, str]
+        self,
+        event_id: str,
+        minutes_item: Dict[str, str],
+        index: int,
+        decision: Optional[str],
+        matter: Dict[str, str],
+        votes: Dict[str, str],
+        files: Dict[str, str],
     ) -> Dict[str, Any]:
         """
         Get or upload a event minute item (to the database, a file store).
@@ -705,17 +712,17 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_matter(
-            self,
-            name: str,
-            matter_type: Dict[str, str],
-            title: str,
-            status: str,
-            most_recent_event: Dict[str, Any],
-            next_event: Dict[str, Any],
-            keywords: Dict[str, str],
-            external_source_id: Optional[Any],
-            updated: datetime,
-            created: datetime
+        self,
+        name: str,
+        matter_type: Dict[str, str],
+        title: str,
+        status: str,
+        most_recent_event: Dict[str, Any],
+        next_event: Dict[str, Any],
+        keywords: Dict[str, str],
+        external_source_id: Optional[Any],
+        updated: datetime,
+        created: datetime,
     ) -> Dict[str, Any]:
         """
         Get or upload a matter (to the database, a file store).
@@ -748,10 +755,7 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def get_or_upload_matter_type(
-            self,
-            name: str,
-            external_source_id: Optional[Any],
-            created: datetime
+        self, name: str, external_source_id: Optional[Any], created: datetime
     ) -> Dict[str, Any]:
         """
         Get or upload a matter (to the database, a file store).

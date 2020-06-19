@@ -8,6 +8,7 @@ Welcome to cdptools's documentation!
 
    Overview <self>
    system_design
+   document_store_schema
    transcript_formats
    deployment_instructions
    installation

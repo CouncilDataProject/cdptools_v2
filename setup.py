@@ -80,7 +80,7 @@ extra_requirements = {
 }
 
 setup(
-    author="Jackson Maxfield Brown, Nicholas Weber",
+    author="Jackson Maxfield Brown, To Huynh, Isaac Na, Nicholas Weber",
     author_email="jmaxfieldbrown@gmail.com, nmweber@uw.edu",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -88,8 +88,8 @@ setup(
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: BSD License",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Utilities"
     ],
     description="Tools to interact with and deploy CouncilDataProject instances",
@@ -108,6 +108,7 @@ setup(
     include_package_data=True,
     name="cdptools",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*"]),
+    python_requires=">=3.7",
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,

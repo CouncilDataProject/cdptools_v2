@@ -4,10 +4,11 @@
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, Iterable, List, Tuple, Union
 
 import dask.config
 import pandas as pd
+from dask import delayed
 from dask_ml.feature_extraction.text import HashingVectorizer
 from distributed import Client, LocalCluster
 from prefect import Flow, task, unmapped
@@ -16,6 +17,8 @@ from tika import parser
 
 from ..databases import Database, OrderOperators
 from ..dev_utils import load_custom_object
+from ..file_stores import FileStore
+from ..indexers import Indexer
 from .pipeline import Pipeline
 
 ###############################################################################
@@ -96,7 +99,7 @@ def flatten_event_minutes_items(event_minutes_items: List[List[Dict]]) -> List[D
                     "minutes_item_id": minutes_item["minutes_item_id"],
                 })
 
-    return minutes_items
+    return minutes_items[:100]
 
 
 @task
@@ -183,10 +186,35 @@ def construct_expanded_corpus_df(
 
     # Append minutes item files df
     merged = pd.concat([transcripts, minutes_item_files], ignore_index=True)
-    merged.to_csv("expanded_corpus.csv", index=False)
+    merged.to_csv("remote_corpus.csv", index=False)
 
     return merged
 
+
+@task
+def df_to_records(df: pd.DataFrame) -> List[Dict]:
+    return df.to_dict("records")
+
+
+@task
+def construct_delayed_raw_text_read(row: Dict, fs: FileStore) -> Dict:
+    # Route to correct delayed downloader
+    # Assumes that if the URI does not start with https
+    # the file is a transcript from the file store
+    if row["uri"].startswith("https://"):
+        path = delayed(FileStore._external_resource_copy)(row["uri"], overwrite=True)
+        text = Indexer.get_text_from_file(path)
+
+    else:
+        # Download file only accepts the filename, not the full URI
+        path = delayed(fs.download_file)(row["uri"].split("/")[-1], overwrite=True)
+        text = delayed(Indexer.get_raw_transcript)(path)
+
+    return {
+        "event_id": row["event_id"],
+        "path": path,
+        "text": text,
+    }
 
 ###############################################################################
 
@@ -248,11 +276,18 @@ class EventIndexPipeline(Pipeline):
             )
             minutes_item_files = construct_minutes_item_files_df(all_events_mifs)
 
+            # Merge dataframes
             events = merge_event_and_body_details(events, bodies)
             transcripts = merge_transcript_and_file_details(transcripts, files)
             transcripts = merge_event_and_transcript_details(events, transcripts)
-            expanded_corpus = construct_expanded_corpus_df(
+            remote_corpus = construct_expanded_corpus_df(
                 transcripts, minutes_item_files
+            )
+
+            # Construct delayed text get
+            rows = df_to_records(remote_corpus)
+            read_corpus = construct_delayed_raw_text_read.map(
+                rows, fs=unmapped(self.file_store)
             )
 
         # Configure dask config
@@ -269,7 +304,14 @@ class EventIndexPipeline(Pipeline):
         log.info(f"Dashboard available at: {client.dashboard_link}")
 
         # Run
-        flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
+        state = flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
 
         # Visualize
         flow.visualize(filename="event-index-pipeline", format="png")
+
+        items = state.result[
+            flow.get_tasks("construct_delayed_raw_text_read")[0]
+        ].result
+        print(items[0])
+        items[0]["text"] = items[0]["text"].compute()
+        print(items[0])

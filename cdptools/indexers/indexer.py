@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from nltk.stem import PorterStemmer
+from tika import parser
 
 from ..sr_models.constants import TranscriptFormats
 from . import exceptions
@@ -105,6 +106,17 @@ class Indexer(ABC):
             raise exceptions.UnrecognizedTranscriptFormatError(transcript_path)
 
         return transcript
+
+    @staticmethod
+    def get_text_from_file(path: Union[str, Path]) -> str:
+        # Ensure path exists
+        path = Path(path).resolve(strict=True)
+
+        # Parse
+        parsed = parser.from_file(str(path))
+
+        # Sometimes the content isn't a supported type by tika 🤷
+        return parsed.get("content", None)
 
     @staticmethod
     def term_is_end_of_sentence(term: str) -> bool:

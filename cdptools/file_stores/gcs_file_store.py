@@ -3,14 +3,13 @@
 
 import logging
 import os
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import List, Optional, Union
 
 import requests
-from google.cloud import storage
 from google.api_core.page_iterator import Page
-
-from concurrent.futures import ThreadPoolExecutor
+from google.cloud import storage
 
 from . import exceptions
 from .file_store import FileStore

@@ -19,6 +19,7 @@ Fix
 
 Other
 ~~~~~
+- Update paper.md [Nic]
 - admin/reorg-paper-files  (`#146
   <https://github.com/CouncilDataProject/cdptools/pull/146>`_)
   [JacksonMaxfield]

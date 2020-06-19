@@ -3,6 +3,7 @@
 
 from abc import ABC, abstractmethod
 from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
 
 import pandas as pd
@@ -12,20 +13,19 @@ from . import exceptions
 ###############################################################################
 
 
-cdp_tables = [
-    "event",
-    "person",
-    "body",
-    "file",
-    "trasncript",
-    "seat",
-    "role",
-    "minutes_item",
-    "event_minutes_item",
-    "vote",
-    "matter",
-    "matter_type",
-]
+class CDPCollections(Enum):
+    EVENT = "event"
+    PERSON = "person"
+    BODY = "body"
+    FILE = "file"
+    TRANSCRIPT = "transcript"
+    SEAT = "seat"
+    ROLE = "role"
+    MINUTES_ITEM = "minutes_item"
+    EVENT_MINUTES_ITEM = "event_minutes_item"
+    VOTE = "vote"
+    MATTER = "matter"
+    MATTER_TYPE = "matter_type"
 
 
 class WhereCondition(NamedTuple):
@@ -121,23 +121,32 @@ class DocumentStoreDatabase(ABC):
 
         Examples
         --------
-        ```
-        condition = Database._construct_where_condition(WhereCondition(
-            column_name="event_id",
-            operator=">=",
-            value="abcd"
-        ))
+        >>> condition = Database._construct_where_condition(WhereCondition(
+        ...    column_name="event_id",
+        ...    operator=">=",
+        ...    value="abcd"
+        ... ))
+        WhereCondition("event_id", ">=", "abcd")
+
+
         # Returns the same WhereCondition that was passed in
 
-        condition = Database._construct_where_condition(["event_id", 
-                                                        WhereOperators.gteq, 
-                                                        value="abcd"])
+
+        >>> condition = Database._construct_where_condition(["event_id", 
+        ...                                                 WhereOperators.gteq, 
+        ...                                                 value="abcd"])
+        WhereCondition("event_id", ">=", "abcd")
+
+
         # Returns the same WhereCondition as above
 
-        condition = Database._construct_where_condition(("event_id", "abcd"))
+
+        >>> condition = Database._construct_where_condition(("event_id", "abcd"))
+        WhereCondition("event_id", "==", "abcd")
+
         # Returns a WhereCondition similar to above but the operator is set to equal 
         rather than greater than or equal.
-        ```
+
         """
         if isinstance(filt, WhereCondition):
             return filt
@@ -180,24 +189,38 @@ class DocumentStoreDatabase(ABC):
 
         Examples
         --------
-        ```
-        condition = Database._construct_orderby_condition(OrderCondition(
-            column_name="event_id",
-            operator="DESCENDING",
-        ))
+        >>> condition = Database._construct_orderby_condition(OrderCondition(
+        ...     column_name="event_id",
+        ...     operator="DESCENDING",
+        ... ))
+        OrderCondition("event_id", "DESCENDING")
+
+
         # Returns the same OrderCondition that was passed in
 
-        condition = Database._construct_orderby_condition("event_id")
+
+        >>> condition = Database._construct_orderby_condition("event_id")
+        OrderCondition("event_id", "DESCENDING")
+
+
         # Returns the same OrderCondition as above
 
-        condition = Database._construct_orderby_condition(["event_id", 
-                                                          OrderOperators.desc])
+
+        >>> condition = Database._construct_orderby_condition(["event_id", 
+        ...                                                   OrderOperators.desc])
+        OrderCondition("event_id", "DESCENDING")
+
+
         # Returns the same OrderCondition as above
 
-        condition = Database._construct_where_condition(("event_id", "ASCENDING")
+
+        >>> condition = Database._construct_where_condition(("event_id", "ASCENDING")
+        OrderCondition("event_id", "ASCENDING")
+
+
         # Returns an OrderCondition similar to above but the operator is set to 
         ascending rather than descending.
-        ```
+
         """
         if isinstance(by, OrderCondition):
             return by
@@ -216,47 +239,50 @@ class DocumentStoreDatabase(ABC):
             raise exceptions.UnknownTypeOrderConditionError(by)
 
     @abstractmethod
-    def select_row_by_id(self, table: str, id: str) -> Optional[Dict[str, Any]]:
+    def select_document_by_id(
+        self, collection: str, id: str
+    ) -> Optional[Dict[str, Any]]:
         """
-        Get row from a table by looking up the value by id.
+        Get document from a collection by looking up the value by id.
 
         Parameters
         ----------
-        table: str
-            The name of the table to retrieve data by id from.
+        collection: str
+            The name of the collection to retrieve data by id from.
         id: str
             The id of the data to retrieve data for.
 
         Returns
         -------
-        If the row was found, the data from that row is returned as a dictionary. 
+        If the document was found, the data from that document is returned as a 
+        dictionary. 
         If not found, None is returned.
         """
         return {}
 
     @abstractmethod
-    def select_rows_as_list(
+    def select_documents_as_list(
         self,
-        table: str,
+        collection: str,
         filters: Optional[List[Union[WhereCondition, List, Tuple]]] = None,
         order_by: Optional[Union[OrderCondition, List, Tuple, str]] = None,
         limit: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """
-        Get a list of rows from a table optionally using 
+        Get a list of documents from a collection optionally using 
         filters (a list of where conditions), ordering, and limit.
 
         Parameters
         ----------
-        table: str
-            The name of the table to retrieve data from.
+        collection: str
+            The name of the collection to retrieve data from.
         filters: Optional[List[Union[WhereCondition, List, Tuple]]]
             A list of filters (where conditions) to add filter down the query.
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many rows should be returned that match the query 
-            provided.
+            An integer limit to how many documents should be returned that match the 
+            query provided.
             Commonly, running queries without credentials will have a default limit 
             value.
 
@@ -264,67 +290,68 @@ class DocumentStoreDatabase(ABC):
         -------
         results: List[Dict[str, Any]]
             The results of the query returned as a List of Dictionaries, where each 
-            dictionary is a unique row from the table queried. 
-            If no rows are found, returns an empty list.
+            dictionary is a unique document from the collection queried. 
+            If no documents are found, returns an empty list.
         """
         return []
 
     @staticmethod
-    def _reshape_list_of_rows_to_dict(
-        rows: List[Dict[str, Any]], table: str
+    def _reshape_list_of_documents_to_dict(
+        documents: List[Dict[str, Any]], collection: str
     ) -> Dict[str, Dict[str, Any]]:
         """
-        Reshape a list of rows to a dictionary of rows.
+        Reshape a list of documents to a dictionary of documents.
 
         Parameters
         ----------
-        rows: List[Dict[str, Any]]
-            The rows returned from a `select_rows_as_list call`.
-        table: str
-            The name of the table to retrieve data from.
+        documents: List[Dict[str, Any]]
+            The documents returned from a `select_documents_as_list call`.
+        collection: str
+            The name of the collection to retrieve data from.
 
         Returns
         -------
         formatted: Dict[str, Dict[str, Any]]
-            The rows returned as a dictionary mapping unique id to a dictionary of that 
-            rows data from the table queried. If no rows are provided, returns 
-            an empty dictionary.
+            The documents returned as a dictionary mapping unique id to a dictionary 
+            of that documents data from the collection queried. If no documents are 
+            provided, returns an empty dictionary.
         """
         # Format
         formatted = {}
-        for row in rows:
-            unique_id = row[f"{table}_id"]
-            formatted[unique_id] = row
+        for document in documents:
+            unique_id = document[f"{collection}_id"]
+            formatted[unique_id] = document
 
         return formatted
 
     @staticmethod
-    def _reshape_list_of_rows_to_dataframe(
-        rows: List[Dict[str, Any]], table: Optional[str] = None
+    def _reshape_list_of_documents_to_dataframe(
+        documents: List[Dict[str, Any]], collection: Optional[str] = None
     ):
         """
-        Simply cast a list of rows to a dataframe.
+        Simply cast a list of documents to a dataframe.
 
         Parameters
         ----------
-        rows: List[Dict[str, Any]]
-            The rows returned from a `select_rows_as_list_call`.
-        table: Optional[str]
-            If provided, the unique id for each row will be used as the index value.
+        documents: List[Dict[str, Any]]
+            The documents returned from a `select_documents_as_list_call`.
+        collection: Optional[str]
+            If provided, the unique id for each document will be used as the index 
+            value.
 
         Returns
         -------
         formatted: pandas.DataFrame
-            The rows returned as a pandas DataFrame object. If table was 
+            The documents returned as a pandas DataFrame object. If collection was 
             provided the index of the dataframe will be the unique id's 
-            for that table.
+            for that collection.
         """
         # Cast to dataframe
-        formatted = pd.DataFrame(rows)
+        formatted = pd.DataFrame(documents)
 
-        # Optionally set the index based on the table name
-        if table:
-            formatted = formatted.set_index(f"{table}_id")
+        # Optionally set the index based on the collection name
+        if collection:
+            formatted = formatted.set_index(f"{collection}_id")
 
         return formatted
 
@@ -332,6 +359,7 @@ class DocumentStoreDatabase(ABC):
     def get_or_upload_body(
         self,
         name: str,
+        tag: str,
         description: Optional[str],
         start_date: datetime,
         end_date: Optional[datetime],
@@ -346,6 +374,8 @@ class DocumentStoreDatabase(ABC):
         ----------
         name: str
             The name of the body (council, subcommittee, etc).
+        tag: str
+            The tag of the body.
         description: Optional[str]:
             An optional description of the body.
         start_date: datetime
@@ -355,7 +385,7 @@ class DocumentStoreDatabase(ABC):
         is_active: bool
             A bool describing whether a body is active or not.
         chair_person_id: str
-            The id of the body chair's person row.
+            The id of the body chair's person document.
         external_source_id: Optional[Any]
             An id in the external source this data comes from.
 
@@ -402,12 +432,12 @@ class DocumentStoreDatabase(ABC):
         body: Dict[str, str],
         event_datetime: datetime,
         thumbnail_static_file: Dict[str, str],
-        thumbnail_hover_file: Optional[str],
+        thumbnail_hover_file: Dict[str, str],
         video_uri: Optional[str],
-        keywords: Dict[str, str],
-        matters: Dict[str, str],
-        minutes_items: Dict[str, str],
-        people: Dict[str, str],
+        keywords: List[Dict[str, str]],
+        matters: List[Dict[str, str]],
+        minutes_items: List[Dict[str, str]],
+        people: List[Dict[str, str]],
         external_source_id: Optional[str],
         agenda_uri: str,
         minutes_uri: Optional[str],
@@ -426,7 +456,7 @@ class DocumentStoreDatabase(ABC):
             Date of the event.
         thumbnail_static_file: Dict[str, str]
             A dictionary containing thumbnail static file information.
-        thumbnail_hover_file: Optional[str]
+        thumbnail_hover_file: Dict[str, str]
             A dictionary containing thumbnail hover file information.
         video_uri: Optional[str]
             An optional video uri for the event.
@@ -557,7 +587,7 @@ class DocumentStoreDatabase(ABC):
         content_type: Optional[str] = None,
     ) -> Dict:
         """
-        Get or upload a file (to the database table, not a file store).
+        Get or upload a file (to the database collection, not a file store).
 
         Parameters
         ----------
@@ -680,8 +710,8 @@ class DocumentStoreDatabase(ABC):
         index: int,
         decision: Optional[str],
         matter: Dict[str, str],
-        votes: Dict[str, str],
-        files: Dict[str, str],
+        votes: List[Dict[str, str]],
+        files: List[Dict[str, str]],
     ) -> Dict[str, Any]:
         """
         Get or upload a event minute item (to the database, a file store).
@@ -698,9 +728,9 @@ class DocumentStoreDatabase(ABC):
             The decision of this event minutes item if there was one.
         matter: Dict[str, str]
             Information on the matter of this event_minutes_item.
-        votes: Dict[str, str]
+        votes: List[Dict[str, str]]
             Information on the votes of this event_minutes_item.
-        files: Dict[str, str]
+        files: List[Dict[str, str]]
             Information on the files of this event_minutes_item.
 
         Returns
@@ -719,7 +749,7 @@ class DocumentStoreDatabase(ABC):
         status: str,
         most_recent_event: Dict[str, Any],
         next_event: Dict[str, Any],
-        keywords: Dict[str, str],
+        keywords: List[Dict[str, str]],
         external_source_id: Optional[Any],
         updated: datetime,
         created: datetime,
@@ -741,7 +771,7 @@ class DocumentStoreDatabase(ABC):
             Information on the most recent event regarding this matter.
         next_event: Dict[str, Any]
             Information on the next event regarding this matter.
-        keywords: Dict[str, str]
+        keywords: List[Dict[str, str]]
             Information on the keywords of this matter.
         external_source_id: Optional[Any]
             An id in the external source this data comes from.
@@ -783,7 +813,7 @@ class DocumentStoreDatabase(ABC):
         ----------
         query: str
             A query string to be used to search for events using the already 
-            stored indexed event term table.
+            stored indexed event term collection.
 
         Returns
         -------
@@ -801,7 +831,7 @@ class DocumentStoreDatabase(ABC):
         ----------
         query: str
             A query string to be used to search for minutes items using the 
-            already stored indexed minutes items term table.
+            already stored indexed minutes items term collection.
 
         Returns
         -------
@@ -811,14 +841,14 @@ class DocumentStoreDatabase(ABC):
         return []
 
     @abstractmethod
-    def wipe_table(self, table: str):
+    def drop_collection(self, collection: str):
         """
-        Wipe the input table.
+        Wipe the input collection.
 
         Parameters
         ----------
-        table: str
-            A string tablename in the database to be deleted.
+        collection: str
+            A string collectionname in the database to be deleted.
 
         Returns
         -------
@@ -828,13 +858,13 @@ class DocumentStoreDatabase(ABC):
 
     @property
     @abstractmethod
-    def tables(self) -> List[str]:
+    def collections(self) -> List[str]:
         """
-        A generic database tables property.
+        A generic database collections property.
 
         Returns
         -------
-        _tables: List[str]
-            A list of table names.
+        _collections: List[str]
+            A list of collection names.
         """
         return []

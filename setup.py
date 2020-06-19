@@ -8,54 +8,48 @@ from setuptools import find_packages, setup
 with open("README.md") as readme_file:
     readme = readme_file.read()
 
-test_requirements = [
-    "codecov",
-    "flake8",
-    "pytest",
-    "pytest-cov",
-    "pytest-raises",
+setup_requirements = [
+    "pytest-runner>=5.2",
 ]
 
-setup_requirements = [
-    "pytest-runner",
+test_requirements = [
+    "black>=19.10b0",
+    "codecov>=2.1.4",
+    "flake8>=3.8.3",
+    "flake8-debugger>=3.2.1",
+    "pytest>=5.4.3",
+    "pytest-cov>=2.9.0",
+    "pytest-raises>=0.11",
 ]
 
 dev_requirements = [
-    "bumpversion>=0.5.3",
-    "coverage>=5.0a4",
-    "flake8>=3.7.7",
-    "ipython>=7.5.0",
+    *setup_requirements,
+    *test_requirements,
+    "bumpversion>=0.6.0",
+    "coverage>=5.1",
+    "gitchangelog>=3.0.4",
+    "ipython>=7.15.0",
     "m2r>=0.2.1",
-    "pytest>=4.3.0",
-    "pytest-cov==2.6.1",
-    "pytest-raises>=0.10",
-    "pytest-runner>=4.4",
-    "Sphinx>=2.0.0b1",
-    "sphinx_rtd_theme>=0.1.2",
-    "tox>=3.5.2",
-    "twine>=1.13.0",
-    "wheel>=0.33.1",
-]
-
-interactive_requirements = [
-    "altair",
-    "jupyterlab",
-    "matplotlib",
+    "pytest-runner>=5.2",
+    "Sphinx>=2.0.0b1,<3",
+    "sphinx_rtd_theme>=0.4.3",
+    "tox>=3.15.2",
+    "twine>=3.1.1",
+    "wheel>=0.34.2",
 ]
 
 requirements = [
-    "beautifulsoup4==4.8.0",
-    "ffmpeg-python==0.2.0",
-    "fuzzywuzzy==0.17.0",
-    "nltk==3.4.5",
-    "pandas==0.25.0",
-    "python-Levenshtein==0.12.0",
-    "requests[security]==2.22.0",
-    "schedule==0.6.0",
+    "beautifulsoup4>=4.9.1",
+    "ffmpeg-python>=0.2.0",
+    "rapidfuzz>=0.9.1",
+    "nltk>=3.5",
+    "pandas>=1.0.4",
+    "requests[security]>=2.23.0",
+    "schedule>=0.6.0",
     "setuptools>=44.0.0",
-    "tika==1.19",
-    "webvtt-py==0.4.3",
-    "truecase==0.0.5"
+    "tika>=1.24",
+    "webvtt-py>=0.4.5",
+    "truecase>=0.0.9"
 ]
 
 extra_requirements = [
@@ -63,17 +57,16 @@ extra_requirements = [
 ]
 
 seattle_requirements = [
-    "cryptography>=2.8",
-    "firebase-admin==2.17.0",
-    "google-cloud-speech==1.2.0",
-    "google-cloud-storage==1.17.0"
+    "cryptography>=2.9.2",
+    "firebase-admin>=4.3.0",
+    "google-cloud-speech>=1.3.2",
+    "google-cloud-storage>=1.28.1"
 ]
 
 extra_requirements = {
     "test": test_requirements,
     "setup": setup_requirements,
     "dev": dev_requirements,
-    "interactive": interactive_requirements,
     "extras": extra_requirements,
     "seattle": seattle_requirements,
     "all": [
@@ -83,7 +76,6 @@ extra_requirements = {
         *test_requirements,
         *setup_requirements,
         *dev_requirements,
-        *interactive_requirements
     ]
 }
 
@@ -105,7 +97,8 @@ setup(
         "console_scripts": [
             "run_cdp_pipeline=cdptools.bin.run_cdp_pipeline:main",
             "clone_db=cdptools.bin.clone_db:main",
-            "process_single_event=cdptools.bin.process_single_event:main"
+            "process_single_event=cdptools.bin.process_single_event:main",
+            "clone_file_store=cdptools.bin.clone_file_store:main"
         ],
     },
     install_requires=requirements,
@@ -120,6 +113,6 @@ setup(
     tests_require=test_requirements,
     extras_require=extra_requirements,
     url="https://github.com/CouncilDataProject/cdptools",
-    version="2.0.4",
+    version="2.0.5",
     zip_safe=False,
 )

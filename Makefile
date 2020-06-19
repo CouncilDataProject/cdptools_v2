@@ -57,3 +57,12 @@ gen-docs: ## generate Sphinx HTML documentation, including API docs
 docs: ## generate Sphinx HTML documentation, including API docs, and serve to browser
 	make gen-docs
 	$(BROWSER) docs/_build/html/index.html
+
+
+prepare-release: ## Checkout master, generate new section of changelog
+	bumpversion patch
+	gitchangelog
+	git add docs/changelog.rst
+	git commit -m "Update changelog"
+	git reset --soft HEAD~1
+	git commit --amend  # This and the line above squash the "Update changelog" and bumpversion commits together

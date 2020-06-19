@@ -20,17 +20,18 @@ class SRModelOutputs(NamedTuple):
 
 
 class SRModel(ABC):
-
     @staticmethod
     def wrap_and_format_transcript_data(
         data: constants.TranscriptDataJSON,
         transcript_format: str,
         confidence: float,
-        annotations: List[Dict[str, Any]] = []
-    ) -> Dict[str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]]:
+        annotations: List[Dict[str, Any]] = [],
+    ) -> Dict[
+        str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]
+    ]:
         """
-        A very simple function to just make sure that a transcript has all the details neccessary prior to storing as a
-        JSON file.
+        A very simple function to just make sure that a transcript has all the details
+        neccessary prior to storing as a JSON file.
 
         Parameters
         ----------
@@ -45,14 +46,15 @@ class SRModel(ABC):
 
         Returns
         -------
-        storage_ready: Dict[str, Union[str, float, List[Dict[str, Any]], constants.TranscriptDataJSON]]
+        storage_ready: Dict[str, Union[str, float, List[Dict[str, Any]],
+        constants.TranscriptDataJSON]]
             The in memory version of a transcript file about to be dumped to JSON.
         """
         return {
             "format": transcript_format,
             "annotations": annotations,
             "confidence": confidence,
-            "data": data
+            "data": data,
         }
 
     @abstractmethod
@@ -75,17 +77,21 @@ class SRModel(ABC):
         raw_transcript_save_path: Union[str, Path]
             Where the raw transcript should be saved to.
         timestamped_words_save_path: Optional[Union[str, Path]]
-            If a timestamped words formatted transcript is produced, where it should be saved to.
+            If a timestamped words formatted transcript is produced, where it should be
+            saved to.
         timestamped_sentences_save_path: Optional[Union[str, Path]]
-            If a timestamped sentences formatted transcript is produced, where it should be saved to.
+            If a timestamped sentences formatted transcript is produced, where it
+            should be saved to.
         timestamped_speaker_turns_save_path: Optional[Union[str, Path]]
-            If a timestamped speaker turns formatted transcript is produced, where it should be saved to.
+            If a timestamped speaker turns formatted transcript is produced, where it
+            should be saved to.
 
         Returns
         -------
         outputs: SRModelOutputs
-            The outputs of the transcribe operation. Stores all available transcript paths as attributes as well as the
-            overall confidence of the transciption accuracy.
+            The outputs of the transcribe operation. Stores all available transcript
+            paths as attributes as well as the overall confidence of the transciption
+            accuracy.
         """
 
         return SRModelOutputs(
@@ -93,5 +99,5 @@ class SRModel(ABC):
             1.0,
             Path(timestamped_words_save_path),
             Path(timestamped_sentences_save_path),
-            Path(timestamped_speaker_turns_save_path)
+            Path(timestamped_speaker_turns_save_path),
         )

@@ -1,5 +1,5 @@
 Welcome to cdptools's documentation!
-======================================
+====================================
 
 .. toctree::
    :hidden:
@@ -14,6 +14,7 @@ Welcome to cdptools's documentation!
    installation
    Package modules <modules>
    contributing
+   changelog
 
 .. mdinclude:: ../README.md
 

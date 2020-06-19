@@ -21,7 +21,6 @@ log = logging.getLogger(__name__)
 
 
 class EventIndexPipeline(Pipeline):
-
     def __init__(self, config_path: Union[str, Path]):
         # Resolve config path
         config_path = config_path.resolve(strict=True)
@@ -37,20 +36,22 @@ class EventIndexPipeline(Pipeline):
         self.database = load_custom_object.load_custom_object(
             module_path=self.config["database"]["module_path"],
             object_name=self.config["database"]["object_name"],
-            object_kwargs={**self.config["database"].get("object_kwargs", {})}
+            object_kwargs={**self.config["database"].get("object_kwargs", {})},
         )
         self.file_store = load_custom_object.load_custom_object(
             module_path=self.config["file_store"]["module_path"],
             object_name=self.config["file_store"]["object_name"],
-            object_kwargs=self.config["file_store"].get("object_kwargs", {})
+            object_kwargs=self.config["file_store"].get("object_kwargs", {}),
         )
         self.indexer = load_custom_object.load_custom_object(
             module_path=self.config["indexer"]["module_path"],
             object_name=self.config["indexer"]["object_name"],
-            object_kwargs=self.config["indexer"].get("object_kwargs", {})
+            object_kwargs=self.config["indexer"].get("object_kwargs", {}),
         )
 
-    def task_generate_index(self, event_corpus_map: Dict[str, Path]) -> Dict[str, Dict[str, float]]:
+    def task_generate_index(
+        self, event_corpus_map: Dict[str, Path]
+    ) -> Dict[str, Dict[str, float]]:
         """
         Generate word event scores dictionary.
         """
@@ -58,11 +59,13 @@ class EventIndexPipeline(Pipeline):
             database=self.database,
             file_store=self.file_store,
             algorithm_name="EventIndexPipeline.task_generate_index",
-            algorithm_version=get_module_version()
+            algorithm_version=get_module_version(),
         ):
             return self.indexer.generate_index(event_corpus_map)
 
-    def task_clean_index(self, index: Dict[str, Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+    def task_clean_index(
+        self, index: Dict[str, Dict[str, float]]
+    ) -> Dict[str, Dict[str, float]]:
         """
         Clean the generated index prior to upload.
         """
@@ -70,7 +73,7 @@ class EventIndexPipeline(Pipeline):
             database=self.database,
             file_store=self.file_store,
             algorithm_name="EventIndexPipeline.task_clean_index",
-            algorithm_version=get_module_version()
+            algorithm_version=get_module_version(),
         ):
             return self.indexer.drop_terms_from_index_below_value(index)
 
@@ -78,42 +81,51 @@ class EventIndexPipeline(Pipeline):
         # Loop through each event and value tied to this term and upload to database
         for event_id, value in evft.values.items():
             self.database.upload_or_update_indexed_event_term(
-                term=evft.term,
-                event_id=event_id,
-                value=value
+                term=evft.term, event_id=event_id, value=value
             )
 
     def task_upload_index(self, index: Dict[str, Dict[str, float]]):
         """
-        Upload a word event scores dictionary. This will completely replace a previous index.
+        Upload a word event scores dictionary. This will completely replace a previous
+        index.
         """
         with RunManager(
             database=self.database,
             file_store=self.file_store,
             algorithm_name="EventIndexPipeline.task_upload_index",
-            algorithm_version=get_module_version()
+            algorithm_version=get_module_version(),
         ):
             # Create upload items
-            # This list of objects is just useful for making it easier to multithread the upload
+            # This list of objects is just useful for making it easier to multithread
+            # the upload
             indexed_event_term_event_values = []
             for term, event_values in index.items():
-                indexed_event_term_event_values.append(ValuesForTerm(term, event_values))
+                indexed_event_term_event_values.append(
+                    ValuesForTerm(term, event_values)
+                )
 
             # Multithread the upload/ update of the index
             with ThreadPoolExecutor(self.n_workers) as exe:
-                exe.map(self._upload_indexed_event_term_event_values, indexed_event_term_event_values)
+                exe.map(
+                    self._upload_indexed_event_term_event_values,
+                    indexed_event_term_event_values,
+                )
 
     def run(self):
         log.info("Starting index creation.")
-        with RunManager(self.database, self.file_store, "EventIndexPipeline.run", get_module_version()):
+        with RunManager(
+            self.database,
+            self.file_store,
+            "EventIndexPipeline.run",
+            get_module_version(),
+        ):
             # Store the transcripts locally in a temporary directory
             with tempfile.TemporaryDirectory() as tmpdir:
-                # Get the event corpus map and download most recent transcripts to local machine
+                # Get the event corpus map and download most recent transcripts to
+                # local machine
                 log.info("Downloading most recent transcripts")
                 event_corpus_map = transcript_tools.download_transcripts(
-                    db=self.database,
-                    fs=self.file_store,
-                    save_dir=tmpdir
+                    db=self.database, fs=self.file_store, save_dir=tmpdir
                 )
 
                 # Compute word event scores

@@ -6,7 +6,7 @@ import logging
 import shutil
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import requests
 
@@ -18,9 +18,10 @@ log = logging.getLogger(__name__)
 
 
 class FileStore(ABC):
-
     @staticmethod
-    def compute_sha256_for_file(filepath: Union[str, Path], block_size: int = 1024 * 1024) -> Path:
+    def compute_sha256_for_file(
+        filepath: Union[str, Path], block_size: int = 1024 * 1024
+    ) -> Path:
         """
         Compute a SHA256 hexdigest for a file. Works for large files.
 
@@ -60,7 +61,8 @@ class FileStore(ABC):
     @staticmethod
     def _path_is_local(path: Union[str, Path]) -> bool:
         """
-        Check to make sure that a path provided is on the local machine. Simply checks for common external uri headers.
+        Check to make sure that a path provided is on the local machine. Simply checks
+        for common external uri headers.
 
         Parameters
         ----------
@@ -70,7 +72,8 @@ class FileStore(ABC):
         Returns
         -------
         is_local: bool
-            A boolean value informing whether or not the provided path is a local resource or not.
+            A boolean value informing whether or not the provided path is a local
+            resource or not.
         """
         # Convert path
         path = str(path)
@@ -80,7 +83,9 @@ class FileStore(ABC):
         return not any(path.startswith(h) for h in external_headers)
 
     @staticmethod
-    def _external_resource_copy(uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False) -> Path:
+    def _external_resource_copy(
+        uri: str, dst: Optional[Union[str, Path]] = None, overwrite: bool = False
+    ) -> Path:
         """
         Copy an external resource to a local destination on the machine.
 
@@ -89,11 +94,11 @@ class FileStore(ABC):
         uri: str
             The uri for the external resource to copy.
         dst: Optional[Union[str, Path]]
-            A specific destination to where the copy should be placed. If None provided stores the resource in the
-            current working directory.
+            A specific destination to where the copy should be placed. If None provided
+            stores the resource in the current working directory.
         overwrite: bool
-            Boolean value indicating whether or not to overwrite a local resource with the same name if it already
-            exists.
+            Boolean value indicating whether or not to overwrite a local resource with
+            the same name if it already exists.
 
         Returns
         -------
@@ -134,7 +139,8 @@ class FileStore(ABC):
         Returns
         -------
         uri: str
-            If the file is found, the file uri is returned as a string. If it isn't a FileNotFoundError is raised.
+            If the file is found, the file uri is returned as a string. If it isn't a
+            FileNotFoundError is raised.
         """
 
         return ""
@@ -145,7 +151,7 @@ class FileStore(ABC):
         filepath: Union[str, Path],
         save_name: Optional[str] = None,
         remove: bool = False,
-        **kwargs
+        **kwargs,
     ) -> str:
         """
         Store a file.
@@ -157,7 +163,8 @@ class FileStore(ABC):
         save_name: Optional[str]
             An optional save name to store the file as instead of it's current name.
         remove: bool
-            Boolean value indicating whether or not to remove the local file after storage in the file store.
+            Boolean value indicating whether or not to remove the local file after
+            storage in the file store.
 
         Returns
         -------
@@ -173,7 +180,7 @@ class FileStore(ABC):
         filename: str,
         save_path: Optional[Union[str, Path]] = None,
         overwrite: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Path:
         """
         Download the file if neccessary and return the Path.
@@ -185,7 +192,8 @@ class FileStore(ABC):
         save_path: Optional[Union[str, Path]] = None
             An optional save path / destination to store the file locally.
         overwrite: bool
-            Boolean value indicating whether or not to overwrite a file that already exists in the destination.
+            Boolean value indicating whether or not to overwrite a file that already
+            exists in the destination.
 
         Returns
         -------
@@ -194,3 +202,44 @@ class FileStore(ABC):
         """
 
         return Path("/tmp/file.tmp")
+
+    @abstractmethod
+    def delete_file(self, filename: str) -> str:
+        """
+        Delete the file.
+
+        Parameters
+        ----------
+        filename: str
+            The name of the file in the file store to delete.
+
+        Returns
+        -------
+        deleted_file_name: str
+            Message containing the name of the file deleted.
+        """
+        return ""
+
+    @abstractmethod
+    def clear_bucket(self) -> str:
+        """
+        Clear the bucket of all files.
+
+        Returns
+        -------
+        clear_bucket_message: str
+            Message notifying that the bucket has been cleared.
+        """
+        return ""
+
+    @abstractmethod
+    def list_all_files(self) -> List[str]:
+        """
+        Returns a list of all filepaths in the file store bucket.
+
+        Returns
+        -------
+        file_path_list: List[str]
+            List of all the filepaths in the bucket.
+        """
+        return []

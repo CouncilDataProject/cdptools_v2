@@ -8,7 +8,7 @@ import cdptools.databases.cloud_firestore_database as c_db
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s"
+    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
 )
 log = logging.getLogger(__name__)
 
@@ -16,29 +16,39 @@ log = logging.getLogger(__name__)
 
 
 class Args(argparse.Namespace):
-
     def __init__(self):
         self.__parse()
 
     def __parse(self):
         p = argparse.ArgumentParser(
-            prog="clone_prod",
-            description="Clone prod database to target database."
+            prog="clone_prod", description="Clone prod database to target database."
         )
 
-        p.add_argument("--target_credentials", type=Path, help="Credentials of target database.", required=True)
-        p.add_argument("--debug", action="store_true", dest="debug", help="Show traceback if the script were to fail.")
+        p.add_argument(
+            "--target_credentials",
+            type=Path,
+            help="Credentials of target database.",
+            required=True,
+        )
+        p.add_argument(
+            "--debug",
+            action="store_true",
+            dest="debug",
+            help="Show traceback if the script were to fail.",
+        )
         group = p.add_mutually_exclusive_group(required=True)
-        group.add_argument('--source_project_id', help="Project id of source database.")
-        group.add_argument('--source_credentials', type=Path, help="Credentials of source database.")
+        group.add_argument("--source_project_id", help="Project id of source database.")
+        group.add_argument(
+            "--source_credentials", type=Path, help="Credentials of source database."
+        )
 
         p.parse_args(namespace=self)
 
 
 def pass_through(row, target_db, table):
-    row.pop('updated', None)
-    row.pop('created', None)
-    row.pop(str(table)+'_id', None)
+    row.pop("updated", None)
+    row.pop("created", None)
+    row.pop(f"{table}_id", None)
     target_db._cdp_table_to_function_dict[table](**row)
 
 
@@ -54,7 +64,9 @@ def main():
         source_db = c_db.CloudFirestoreDatabase(project_id=args.source_project_id)
         log.info("Cloning database with project_id={}".format(args.source_project_id))
     else:
-        source_db = c_db.CloudFirestoreDatabase(credentials_path=args.source_credentials)
+        source_db = c_db.CloudFirestoreDatabase(
+            credentials_path=args.source_credentials
+        )
         log.info("Cloning database with credentials={}".format(args.source_credentials))
 
     target_db = c_db.CloudFirestoreDatabase(credentials_path=args.target_credentials)

@@ -46,7 +46,8 @@ def get_bodies(db: Database) -> List[Dict]:
     return db.select_rows_as_list("body")
 
 
-@task
+# Add retries and retry delay as the worker may struggle with so many request opens
+@task(max_retries=3, retry_delay=timedelta(seconds=3))
 def get_transcript_details(event_id: str, db: Database) -> Dict:
     # Get the highest confidence transcript for the event
     results = db.select_rows_as_list(
@@ -75,12 +76,14 @@ def get_file_ids(transcripts: pd.DataFrame) -> List[str]:
     return list(transcripts.file_id)
 
 
-@task
+# Add retries and retry delay as the worker may struggle with so many request opens
+@task(max_retries=3, retry_delay=timedelta(seconds=3))
 def get_file_details(file_id: str, db: Database) -> Dict:
     return db.select_row_by_id("file", file_id)
 
 
-@task
+# Add retries and retry delay as the worker may struggle with so many request opens
+@task(max_retries=3, retry_delay=timedelta(seconds=3))
 def get_event_minutes_items(event_id: str, db: Database) -> List[Dict]:
     return db.select_rows_as_list(
         "event_minutes_item", filters=[("event_id", event_id)]
@@ -100,7 +103,7 @@ def flatten_event_minutes_items(event_minutes_items: List[List[Dict]]) -> List[D
                     "minutes_item_id": minutes_item["minutes_item_id"],
                 })
 
-    return minutes_items
+    return minutes_items[:3000]
 
 
 # Add retries and retry delay as the worker may struggle with so many request opens

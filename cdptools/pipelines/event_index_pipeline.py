@@ -103,7 +103,7 @@ def flatten_event_minutes_items(event_minutes_items: List[List[Dict]]) -> List[D
                     "minutes_item_id": minutes_item["minutes_item_id"],
                 })
 
-    return minutes_items[:3000]
+    return minutes_items
 
 
 # Add retries and retry delay as the worker may struggle with so many request opens

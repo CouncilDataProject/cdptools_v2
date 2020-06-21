@@ -201,7 +201,7 @@ def df_to_records(df: pd.DataFrame) -> List[Dict]:
     return df.to_dict("records")
 
 
-@task
+@task(max_retries=3, retry_delay=timedelta(seconds=3))
 def construct_delayed_raw_text_read(row: Dict, fs: FileStore) -> Dict:
     # Route to correct delayed downloader
     # Assumes that if the URI does not start with https

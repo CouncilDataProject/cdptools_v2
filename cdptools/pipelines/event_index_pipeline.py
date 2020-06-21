@@ -3,6 +3,7 @@
 
 import json
 import logging
+from datetime import timedelta
 from pathlib import Path
 from typing import Dict, Iterable, List, Tuple, Union
 
@@ -99,10 +100,11 @@ def flatten_event_minutes_items(event_minutes_items: List[List[Dict]]) -> List[D
                     "minutes_item_id": minutes_item["minutes_item_id"],
                 })
 
-    return minutes_items[:100]
+    return minutes_items
 
 
-@task
+# Add retries and retry delay as the worker may struggle with so many request opens
+@task(max_retries=3, retry_delay=timedelta(seconds=3))
 def get_minutes_item_file_details(
     minutes_item: Dict, db: Database
 ) -> Union[List[Dict], None]:
@@ -298,7 +300,7 @@ class EventIndexPipeline(Pipeline):
         )
 
         # Construct LocalCluster
-        cluster = LocalCluster()
+        cluster = LocalCluster(processes=False)
         client = Client(cluster)
 
         log.info(f"Dashboard available at: {client.dashboard_link}")

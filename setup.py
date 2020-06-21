@@ -40,10 +40,10 @@ dev_requirements = [
 
 requirements = [
     "beautifulsoup4>=4.9.1",
-    "bokeh>=2.0.2",
-    "dask[bag]>=2.18.1",
+    "bokeh>=2.1.0",
+    "dask[bag]>=2.19.0",
     "dask_ml>=1.5.0",
-    "distributed>=2.18.0",
+    "distributed>=2.19.0",
     "graphviz>=0.14",
     "ffmpeg-python>=0.2.0",
     "rapidfuzz>=0.9.1",

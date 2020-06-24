@@ -306,7 +306,7 @@ class EventIndexPipeline(Pipeline):
         # Construct FargateCluster
         cluster = FargateCluster(
             image="councildataproject/cdptools-beta",
-            worker_cpu=512,
+            worker_cpu=1024,
             worker_mem=8192,
         )
         cluster.adapt(2, 100)

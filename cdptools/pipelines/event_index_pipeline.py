@@ -10,8 +10,9 @@ from typing import Dict, Iterable, List, Tuple, Union
 import dask.config
 import pandas as pd
 from dask import delayed
+from dask_cloudprovider import FargateCluster
 from dask_ml.feature_extraction.text import HashingVectorizer
-from distributed import Client, LocalCluster
+from distributed import Client
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
 from tika import parser
@@ -302,8 +303,13 @@ class EventIndexPipeline(Pipeline):
             }
         )
 
-        # Construct LocalCluster
-        cluster = LocalCluster(processes=False)
+        # Construct FargateCluster
+        cluster = FargateCluster(
+            image="councildataproject/cdptools-beta",
+            worker_cpu=512,
+            worker_mem=8192,
+        )
+        cluster.adapt(2, 100)
         client = Client(cluster)
 
         log.info(f"Dashboard available at: {client.dashboard_link}")

@@ -309,7 +309,7 @@ class EventIndexPipeline(Pipeline):
             worker_cpu=1024,
             worker_mem=8192,
         )
-        cluster.adapt(2, 100)
+        cluster.adapt(minimum=2, maximum=100)
         client = Client(cluster)
 
         log.info(f"Dashboard available at: {client.dashboard_link}")

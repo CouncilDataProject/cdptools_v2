@@ -19,15 +19,21 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     git
 
-# Upgrade pip and force it to use python3.7
-RUN python3.7 -m pip install --upgrade pip
-
 # Set python3.7 to default python
 RUN ln -sf /usr/bin/python3.7 /usr/bin/python
 RUN ln -sf /usr/bin/python3.7 /usr/bin/python3
 
+# Upgrade pip and force it to use python3.7
+RUN pip install --upgrade pip
+
 # Set java home
 ENV JAVA_HOME="/usr/bin/java"
+
+# Clone CDP and checkout new branch
+RUN git clone https://github.com/CouncilDataProject/cdptools.git
+WORKDIR cdptools/
+RUN git checkout feature/update-index-pipeline
+RUN pip install .[seattle]
 
 # Set working directory
 WORKDIR /home/

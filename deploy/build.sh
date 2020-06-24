@@ -1,1 +1,1 @@
-docker build -t cdptools .
+docker build -t cdptools-beta .

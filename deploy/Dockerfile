@@ -36,8 +36,5 @@ WORKDIR cdptools/
 RUN git checkout feature/update-index-pipeline
 RUN pip install .[seattle]
 
-# Install latest prefect
-RUN pip install git+https://github.com/prefecthq/prefect
-
 # Set working directory
 WORKDIR /home/

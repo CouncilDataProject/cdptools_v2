@@ -1,1 +1,1 @@
-docker build -t cdptools-beta .
+docker build -t councildataproject/cdptools-beta .

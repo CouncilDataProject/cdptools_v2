@@ -80,64 +80,6 @@ def get_file_details(file_id: str, db: Database) -> Dict:
 
 
 @task
-def get_event_minutes_items(event_id: str, db: Database) -> List[Dict]:
-    return db.select_rows_as_list(
-        "event_minutes_item", filters=[("event_id", event_id)]
-    )
-
-
-@task
-def flatten_event_minutes_items(event_minutes_items: List[List[Dict]]) -> List[Dict]:
-    # Drop all None values
-    # Pull out the key info
-    minutes_items = []
-    for event_minutes_item in event_minutes_items:
-        if event_minutes_item is not None:
-            for minutes_item in event_minutes_item:
-                minutes_items.append({
-                    "event_id": minutes_item["event_id"],
-                    "minutes_item_id": minutes_item["minutes_item_id"],
-                })
-
-    return minutes_items[:200]
-
-
-# Add retries and retry delay as the worker may struggle with so many request opens
-@task
-def get_minutes_item_file_details(
-    minutes_item: Dict, db: Database
-) -> Union[List[Dict], None]:
-    # Get minutes item file
-    mifs = db.select_rows_as_list(
-        "minutes_item_file",
-        filters=[("minutes_item_id", minutes_item["minutes_item_id"])],
-    )
-
-    # Return just the URI if mif exists
-    if mifs is not None:
-        mifs = [{
-            "event_id": minutes_item["event_id"],
-            "uri": mif["uri"]
-        } for mif in mifs]
-
-    return mifs
-
-
-@task
-def construct_minutes_item_files_df(
-    minutes_item_files: List[List[Dict]]
-) -> pd.DataFrame:
-    # Drop all None values
-    # Flatten
-    flat_mifs = []
-    for event_mifs in minutes_item_files:
-        if event_mifs is not None:
-            flat_mifs += event_mifs
-
-    return pd.DataFrame(flat_mifs)
-
-
-@task
 def merge_event_and_body_details(
     events: pd.DataFrame, bodies: List[Dict]
 ) -> pd.DataFrame:
@@ -179,31 +121,12 @@ def merge_event_and_transcript_details(
 
 
 @task
-def construct_expanded_corpus_df(
-    transcripts: pd.DataFrame, minutes_item_files: pd.DataFrame
-) -> pd.DataFrame:
-    # Drop columns from transcripts df
-    transcripts = transcripts[["event_id", "uri"]]
-
-    # Append minutes item files df
-    merged = pd.concat([transcripts, minutes_item_files], ignore_index=True)
-    merged.to_csv("remote_corpus.csv", index=False)
-
-    return merged
-
-
-@task
 def df_to_records(df: pd.DataFrame) -> List[Dict]:
     return df.to_dict("records")
 
 
 @task
-def prep_tika_server():
-    checkTikaServer()
-
-
-@task
-def read_corpus(row: Dict, fs: FileStore) -> Dict:
+def download_and_read_transcript(row: Dict, fs: FileStore) -> Dict:
     # Create corpus dir if not already existing
     corpus_dir = Path("corpus")
     corpus_dir.mkdir(exist_ok=True)
@@ -211,33 +134,21 @@ def read_corpus(row: Dict, fs: FileStore) -> Dict:
     # Get remote file name for local storage
     filename = row["uri"].split("/")[-1]
 
-    # Route to correct delayed downloader
-    # Assumes that if the URI does not start with https
-    # the file is a transcript from the file store
-    if row["uri"].startswith("https://") or row["uri"].startswith("http://"):
-        path = FileStore._external_resource_copy(
-            row["uri"],
-            corpus_dir / filename,
-            overwrite=True,
-        )
-        text = Indexer.get_text_from_file(path)
-
-    else:
-        # Download file only accepts the filename, not the full URI
-        path = fs.download_file(filename, corpus_dir / filename, overwrite=True)
-        text = Indexer.get_raw_transcript(path)
+    # Download transcript and read
+    path = fs.download_file(filename, corpus_dir / filename, overwrite=True)
+    text = Indexer.get_raw_transcript(path)
 
     # Add text to row
     return {
-        "event_id": row["event_id"],
-        "path": path,
+        **row,
+        "local_path": path,
         "text": text,
     }
 
 
 @task
 def store_corpus(rows: List[Dict]):
-    pd.DataFrame(rows).to_csv("local_corpus.csv")
+    pd.DataFrame(rows).to_csv("local_corpus.csv", index=False)
 
 ###############################################################################
 
@@ -289,29 +200,16 @@ class EventIndexPipeline(Pipeline):
                 file_ids, db=unmapped(self.database)
             )
 
-            # Get each event's minutes items
-            all_events_emis = get_event_minutes_items.map(
-                event_ids, db=unmapped(self.database)
-            )
-            flattened_emis = flatten_event_minutes_items(all_events_emis)
-            all_events_mifs = get_minutes_item_file_details.map(
-                flattened_emis, db=unmapped(self.database)
-            )
-            minutes_item_files = construct_minutes_item_files_df(all_events_mifs)
-
             # Merge dataframes
             events = merge_event_and_body_details(events, bodies)
             transcripts = merge_transcript_and_file_details(transcripts, files)
             transcripts = merge_event_and_transcript_details(events, transcripts)
-            remote_corpus = construct_expanded_corpus_df(
-                transcripts, minutes_item_files
-            )
 
             # Construct delayed text get
-            rows = df_to_records(remote_corpus)
-            prep_tika_server()
-            local_corpus = read_corpus.map(
-                rows, fs=unmapped(self.file_store), upstream_tasks=[prep_tika_server]
+            rows = df_to_records(transcripts)
+            local_corpus = download_and_read_transcript.map(
+                rows,
+                fs=unmapped(self.file_store),
             )
             store_corpus(local_corpus)
 

@@ -42,8 +42,6 @@ requirements = [
     "beautifulsoup4>=4.9.1",
     "bokeh>=2.1.0",
     "dask[bag]>=2.19.0",
-    "dask_ml>=1.5.0",
-    "dask_cloudprovider==0.2.0",
     "distributed>=2.19.0",
     "graphviz>=0.14",
     "ffmpeg-python>=0.2.0",
@@ -56,18 +54,18 @@ requirements = [
     "setuptools>=44.0.0",
     "tika>=1.24",
     "webvtt-py>=0.4.5",
-    "truecase>=0.0.9"
+    "truecase>=0.0.9",
 ]
 
 extra_requirements = [
-    "appdirs>=1.4.3"
+    "appdirs>=1.4.3",
 ]
 
 seattle_requirements = [
     "cryptography>=2.9.2",
     "firebase-admin>=4.3.0",
     "google-cloud-speech>=1.3.2",
-    "google-cloud-storage>=1.28.1"
+    "google-cloud-storage>=1.28.1",
 ]
 
 extra_requirements = {

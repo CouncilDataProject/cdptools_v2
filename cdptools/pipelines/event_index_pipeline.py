@@ -9,13 +9,11 @@ from typing import Dict, Iterable, List, Tuple, Union
 
 import dask.config
 import pandas as pd
-from dask import delayed
-from dask_cloudprovider import FargateCluster
-from dask_ml.feature_extraction.text import HashingVectorizer
-from distributed import Client
+from distributed import Client, LocalCluster
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
 from tika import parser
+from tika.tika import checkTikaServer
 
 from ..databases import Database, OrderOperators
 from ..dev_utils import load_custom_object
@@ -47,8 +45,7 @@ def get_bodies(db: Database) -> List[Dict]:
     return db.select_rows_as_list("body")
 
 
-# Add retries and retry delay as the worker may struggle with so many request opens
-@task(max_retries=3, retry_delay=timedelta(seconds=3))
+@task
 def get_transcript_details(event_id: str, db: Database) -> Dict:
     # Get the highest confidence transcript for the event
     results = db.select_rows_as_list(
@@ -77,14 +74,12 @@ def get_file_ids(transcripts: pd.DataFrame) -> List[str]:
     return list(transcripts.file_id)
 
 
-# Add retries and retry delay as the worker may struggle with so many request opens
-@task(max_retries=3, retry_delay=timedelta(seconds=3))
+@task
 def get_file_details(file_id: str, db: Database) -> Dict:
     return db.select_row_by_id("file", file_id)
 
 
-# Add retries and retry delay as the worker may struggle with so many request opens
-@task(max_retries=3, retry_delay=timedelta(seconds=3))
+@task
 def get_event_minutes_items(event_id: str, db: Database) -> List[Dict]:
     return db.select_rows_as_list(
         "event_minutes_item", filters=[("event_id", event_id)]
@@ -104,11 +99,11 @@ def flatten_event_minutes_items(event_minutes_items: List[List[Dict]]) -> List[D
                     "minutes_item_id": minutes_item["minutes_item_id"],
                 })
 
-    return minutes_items
+    return minutes_items[:200]
 
 
 # Add retries and retry delay as the worker may struggle with so many request opens
-@task(max_retries=3, retry_delay=timedelta(seconds=3))
+@task
 def get_minutes_item_file_details(
     minutes_item: Dict, db: Database
 ) -> Union[List[Dict], None]:
@@ -202,25 +197,47 @@ def df_to_records(df: pd.DataFrame) -> List[Dict]:
     return df.to_dict("records")
 
 
-@task(max_retries=3, retry_delay=timedelta(seconds=3))
-def construct_delayed_raw_text_read(row: Dict, fs: FileStore) -> Dict:
+@task
+def prep_tika_server():
+    checkTikaServer()
+
+
+@task
+def read_corpus(row: Dict, fs: FileStore) -> Dict:
+    # Create corpus dir if not already existing
+    corpus_dir = Path("corpus")
+    corpus_dir.mkdir(exist_ok=True)
+
+    # Get remote file name for local storage
+    filename = row["uri"].split("/")[-1]
+
     # Route to correct delayed downloader
     # Assumes that if the URI does not start with https
     # the file is a transcript from the file store
-    if row["uri"].startswith("https://"):
-        path = delayed(FileStore._external_resource_copy)(row["uri"], overwrite=True)
+    if row["uri"].startswith("https://") or row["uri"].startswith("http://"):
+        path = FileStore._external_resource_copy(
+            row["uri"],
+            corpus_dir / filename,
+            overwrite=True,
+        )
         text = Indexer.get_text_from_file(path)
 
     else:
         # Download file only accepts the filename, not the full URI
-        path = delayed(fs.download_file)(row["uri"].split("/")[-1], overwrite=True)
-        text = delayed(Indexer.get_raw_transcript)(path)
+        path = fs.download_file(filename, corpus_dir / filename, overwrite=True)
+        text = Indexer.get_raw_transcript(path)
 
+    # Add text to row
     return {
         "event_id": row["event_id"],
         "path": path,
         "text": text,
     }
+
+
+@task
+def store_corpus(rows: List[Dict]):
+    pd.DataFrame(rows).to_csv("local_corpus.csv")
 
 ###############################################################################
 
@@ -292,9 +309,11 @@ class EventIndexPipeline(Pipeline):
 
             # Construct delayed text get
             rows = df_to_records(remote_corpus)
-            read_corpus = construct_delayed_raw_text_read.map(
-                rows, fs=unmapped(self.file_store)
+            prep_tika_server()
+            local_corpus = read_corpus.map(
+                rows, fs=unmapped(self.file_store), upstream_tasks=[prep_tika_server]
             )
+            store_corpus(local_corpus)
 
         # Configure dask config
         dask.config.set(
@@ -303,13 +322,8 @@ class EventIndexPipeline(Pipeline):
             }
         )
 
-        # Construct FargateCluster
-        cluster = FargateCluster(
-            image="councildataproject/cdptools-beta",
-            worker_cpu=1024,
-            worker_mem=8192,
-        )
-        cluster.adapt(minimum=2, maximum=100)
+        # Construct Dask Cluster
+        cluster = LocalCluster()
         client = Client(cluster)
 
         log.info(f"Dashboard available at: {client.dashboard_link}")
@@ -319,10 +333,3 @@ class EventIndexPipeline(Pipeline):
 
         # Visualize
         flow.visualize(filename="event-index-pipeline", format="png")
-
-        items = state.result[
-            flow.get_tasks("construct_delayed_raw_text_read")[0]
-        ].result
-        print(items[0])
-        items[0]["text"] = items[0]["text"].compute()
-        print(items[0])

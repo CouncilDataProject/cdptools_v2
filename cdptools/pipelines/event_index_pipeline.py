@@ -15,6 +15,7 @@ from nltk import ngrams
 from nltk.stem import PorterStemmer
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
+from boto3.session import Session
 
 from ..databases import Database, OrderOperators
 from ..dev_utils import load_custom_object
@@ -279,12 +280,15 @@ class EventIndexPipeline(Pipeline):
             {"scheduler.work-stealing": False}
         )
 
+        # Configure boto3
+        cdp_session = Session(profile_name="cdp")
+
         # Construct Dask Cluster
         # cluster = LocalCluster()
         cluster = FargateCluster(
-            "councildataproject/cdptools-beta",
-            worker_cpu=1024,
-            worker_mem=8192,
+            image="councildataproject/cdptools-beta",
+            worker_cpu=512,
+            worker_mem=4096,
         )
         cluster.adapt(minimum=10, maximum=100)
         client = Client(cluster)

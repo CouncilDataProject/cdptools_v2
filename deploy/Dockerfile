@@ -14,7 +14,7 @@ RUN add-apt-repository universe
 # Get python3.8 and pip
 RUN apt-get update && apt-get install -y \
     python3.8 \
-    python3.8dev \
+    python3.8-dev \
     python3-pip \
     ffmpeg \
     git

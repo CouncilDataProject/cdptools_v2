@@ -9,6 +9,7 @@ from typing import Dict, Iterable, List, Union
 import dask.config
 import dask.dataframe as dd
 import pandas as pd
+from dask_cloudprovider import FargateCluster
 from distributed import Client, LocalCluster
 from nltk import ngrams
 from nltk.stem import PorterStemmer
@@ -279,7 +280,13 @@ class EventIndexPipeline(Pipeline):
         )
 
         # Construct Dask Cluster
-        cluster = LocalCluster()
+        # cluster = LocalCluster()
+        cluster = FargateCluster(
+            "councildataproject/cdptools-beta",
+            worker_cpu=1024,
+            worker_mem=8192,
+        )
+        cluster.adapt(minimum=10, maximum=100)
         client = Client(cluster)
 
         log.info(f"Dashboard available at: {client.dashboard_link}")

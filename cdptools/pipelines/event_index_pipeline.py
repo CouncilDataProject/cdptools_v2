@@ -4,11 +4,14 @@
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, Iterable, List, Union
 
 import dask.config
+import dask.dataframe as dd
 import pandas as pd
 from distributed import Client, LocalCluster
+from nltk import ngrams
+from nltk.stem import PorterStemmer
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
 
@@ -113,34 +116,84 @@ def merge_event_and_transcript_details(
 
 
 @task
-def df_to_records(df: pd.DataFrame) -> List[Dict]:
-    return df.to_dict("records")
+def corpus_to_dict(corpus: pd.DataFrame) -> List[Dict]:
+    return corpus[["event_id", "uri"]].to_dict("records")
 
 
 @task
-def download_and_read_transcript(row: Dict, fs: FileStore) -> Dict:
+def read_transcript_and_generate_grams(
+    document_details: Dict,
+    n_gram_size: int,
+    fs: FileStore,
+) -> List[Dict]:
     # Create corpus dir if not already existing
     corpus_dir = Path("corpus")
     corpus_dir.mkdir(exist_ok=True)
 
     # Get remote file name for local storage
-    filename = row["uri"].split("/")[-1]
+    filename = document_details["uri"].split("/")[-1]
+    doc_path = corpus_dir / filename
 
     # Download transcript and read
-    path = fs.download_file(filename, corpus_dir / filename, overwrite=True)
-    text = Indexer.get_raw_transcript(path)
+    if not doc_path.exists():
+        doc_path = fs.download_file(filename, doc_path)
 
-    # Add text to row
-    return {
-        **row,
-        "local_path": path,
-        "text": text,
-    }
+    # Get raw text
+    raw_doc = Indexer.get_raw_transcript(doc_path)
+
+    # Get list of cleaned sentences
+    sentences = [s for s in raw_doc.split(". ") if len(s) > 0]
+    cleaned_sentences = [Indexer.clean_doc(s) for s in sentences]
+    cleaned_sentences = [s for s in cleaned_sentences if s is not None]
+
+    # Get ngrams
+    grams = []
+    for cleaned_sentence in cleaned_sentences:
+        grams += [*ngrams(cleaned_sentence.split(), n_gram_size)]
+
+    # Spawn stemmer
+    ps = PorterStemmer()
+
+    # Create list of grams
+    ngram_results = []
+    for gram in grams:
+        # Join ngram to single string
+        unstemmed_gram = " ".join(gram)
+
+        # Get context span
+        for cleaned_sentence in cleaned_sentences:
+            if unstemmed_gram in cleaned_sentence:
+                context_span = cleaned_sentence
+
+        # Join, lower, and stem the gram
+        stemmed_gram = " ".join([ps.stem(term.lower()) for term in gram])
+
+        ngram_results.append({
+            "event_id": document_details["event_id"],
+            "unstemmed_gram": unstemmed_gram,
+            "stemmed_gram": stemmed_gram,
+            "context_span": context_span,
+        })
+
+    return ngram_results
 
 
 @task
-def store_corpus(rows: List[Dict]):
-    pd.DataFrame(rows).to_csv("local_corpus.csv", index=False)
+def flatten(items: Iterable[Iterable]) -> List:
+    return [item for iterable in items for item in iterable]
+
+
+@task
+def reduce_grams_to_term_frequencies(grams: dd.DataFrame) -> dd.DataFrame:
+    pass
+
+
+@task
+def store_dd_df(rows: List[Dict], filename: str) -> dd.DataFrame:
+    df = dd.from_pandas(pd.DataFrame(rows), chunksize=10000)
+    df.to_csv(filename, index=False)
+
+    return df
 
 
 ###############################################################################
@@ -197,11 +250,28 @@ class EventIndexPipeline(Pipeline):
             transcripts = merge_event_and_transcript_details(events, transcripts)
 
             # Construct delayed text get
-            rows = df_to_records(transcripts)
-            local_corpus = download_and_read_transcript.map(
-                rows, fs=unmapped(self.file_store),
+            corpus = corpus_to_dict(transcripts)
+
+            # Get uni, bi, and tri grams
+            unigrams = read_transcript_and_generate_grams.map(
+                corpus, n_gram_size=unmapped(1), fs=unmapped(self.file_store)
             )
-            store_corpus(local_corpus)
+            bigrams = read_transcript_and_generate_grams.map(
+                corpus, n_gram_size=unmapped(2), fs=unmapped(self.file_store)
+            )
+            trigrams = read_transcript_and_generate_grams.map(
+                corpus, n_gram_size=unmapped(3), fs=unmapped(self.file_store)
+            )
+
+            # Flatten uni, bi, and tri grams
+            unigrams = flatten(unigrams)
+            bigrams = flatten(bigrams)
+            trigrams = flatten(trigrams)
+
+            # Store ngram results
+            store_dd_df(unigrams, "unigrams-*.csv")
+            store_dd_df(bigrams, "bigrams-*.csv")
+            store_dd_df(trigrams, "trigrams-*.csv")
 
         # Configure dask config
         dask.config.set(

@@ -3,17 +3,14 @@
 
 import json
 import logging
-from datetime import timedelta
 from pathlib import Path
-from typing import Dict, Iterable, List, Tuple, Union
+from typing import Dict, List, Union
 
 import dask.config
 import pandas as pd
 from distributed import Client, LocalCluster
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
-from tika import parser
-from tika.tika import checkTikaServer
 
 from ..databases import Database, OrderOperators
 from ..dev_utils import load_custom_object
@@ -63,10 +60,13 @@ def get_transcript_details(event_id: str, db: Database) -> Dict:
 @task
 def construct_transcript_df(transcripts: List[Union[Dict, None]]) -> pd.DataFrame:
     # Create transcripts dataframe
-    return pd.DataFrame([
-        transcript_details for transcript_details in transcripts
-        if transcript_details is not None
-    ])
+    return pd.DataFrame(
+        [
+            transcript_details
+            for transcript_details in transcripts
+            if transcript_details is not None
+        ]
+    )
 
 
 @task
@@ -86,11 +86,7 @@ def merge_event_and_body_details(
     # Create bodies dataframe
     bodies = pd.DataFrame(bodies)
 
-    return events.merge(
-        bodies,
-        on="body_id",
-        suffixes=("_event", "_body"),
-    )
+    return events.merge(bodies, on="body_id", suffixes=("_event", "_body"),)
 
 
 @task
@@ -100,11 +96,7 @@ def merge_transcript_and_file_details(
     # Create files dataframe
     files = pd.DataFrame(files)
 
-    return transcripts.merge(
-        files,
-        on="file_id",
-        suffixes=("_transcript", "_file"),
-    )
+    return transcripts.merge(files, on="file_id", suffixes=("_transcript", "_file"),)
 
 
 @task
@@ -149,6 +141,7 @@ def download_and_read_transcript(row: Dict, fs: FileStore) -> Dict:
 @task
 def store_corpus(rows: List[Dict]):
     pd.DataFrame(rows).to_csv("local_corpus.csv", index=False)
+
 
 ###############################################################################
 
@@ -196,9 +189,7 @@ class EventIndexPipeline(Pipeline):
             )
             transcripts = construct_transcript_df(transcripts)
             file_ids = get_file_ids(transcripts)
-            files = get_file_details.map(
-                file_ids, db=unmapped(self.database)
-            )
+            files = get_file_details.map(file_ids, db=unmapped(self.database))
 
             # Merge dataframes
             events = merge_event_and_body_details(events, bodies)
@@ -208,16 +199,13 @@ class EventIndexPipeline(Pipeline):
             # Construct delayed text get
             rows = df_to_records(transcripts)
             local_corpus = download_and_read_transcript.map(
-                rows,
-                fs=unmapped(self.file_store),
+                rows, fs=unmapped(self.file_store),
             )
             store_corpus(local_corpus)
 
         # Configure dask config
         dask.config.set(
-            {
-                "scheduler.work-stealing": False,
-            }
+            {"scheduler.work-stealing": False}
         )
 
         # Construct Dask Cluster

@@ -9,13 +9,13 @@ from typing import Dict, Iterable, List, Union
 import dask.config
 import dask.dataframe as dd
 import pandas as pd
+from boto3.session import Session
 from dask_cloudprovider import FargateCluster
 from distributed import Client, LocalCluster
 from nltk import ngrams
 from nltk.stem import PorterStemmer
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
-from boto3.session import Session
 
 from ..databases import Database, OrderOperators
 from ..dev_utils import load_custom_object
@@ -287,10 +287,10 @@ class EventIndexPipeline(Pipeline):
         # cluster = LocalCluster()
         cluster = FargateCluster(
             image="councildataproject/cdptools-beta",
-            worker_cpu=512,
-            worker_mem=4096,
+            worker_cpu=256,
+            worker_mem=2048,
         )
-        cluster.adapt(minimum=10, maximum=100)
+        cluster.adapt(minimum=2, maximum=40)
         client = Client(cluster)
 
         log.info(f"Dashboard available at: {client.dashboard_link}")

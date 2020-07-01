@@ -166,6 +166,7 @@ def read_transcript_and_generate_grams(
         for cleaned_sentence in cleaned_sentences:
             if unstemmed_gram in cleaned_sentence:
                 context_span = cleaned_sentence
+                break
 
         # Join, lower, and stem the gram
         stemmed_gram = " ".join([ps.stem(term.lower()) for term in gram])
@@ -181,18 +182,28 @@ def read_transcript_and_generate_grams(
 
 
 @task
-def flatten(items: Iterable[Iterable]) -> List:
-    return [item for iterable in items for item in iterable]
+def flatten(l: List):
+    if l == []:
+        return l
+    if isinstance(l[0], list):
+        return flatten(l[0]) + flatten(l[1:])
+    return l[:1] + flatten(l[1:])
 
 
 @task
-def reduce_grams_to_term_frequencies(grams: dd.DataFrame) -> dd.DataFrame:
-    pass
+def to_dd_df(rows: List[Dict]) -> dd.DataFrame:
+    return dd.from_pandas(pd.DataFrame(rows), chunksize=10000)
 
 
 @task
-def store_dd_df(rows: List[Dict], filename: str) -> dd.DataFrame:
-    df = dd.from_pandas(pd.DataFrame(rows), chunksize=10000)
+def reduce_and_get_term_frequencies(grams: dd.DataFrame) -> dd.DataFrame:
+    grams["tf"] = grams.stemmed_gram.groupby(grams.stemmed_gram).transform("count")
+    grams = grams.drop_duplicates("stemmed_gram")
+    return grams
+
+
+@task
+def store_dd_df(df: dd.DataFrame, filename: str) -> dd.DataFrame:
     df.to_csv(filename, index=False)
 
     return df
@@ -265,15 +276,17 @@ class EventIndexPipeline(Pipeline):
                 corpus, n_gram_size=unmapped(3), fs=unmapped(self.file_store)
             )
 
-            # Flatten uni, bi, and tri grams
-            unigrams = flatten(unigrams)
-            bigrams = flatten(bigrams)
-            trigrams = flatten(trigrams)
+            # Merge together
+            ngrams = flatten([unigrams, bigrams, trigrams])
 
-            # Store ngram results
-            store_dd_df(unigrams, "unigrams-*.csv")
-            store_dd_df(bigrams, "bigrams-*.csv")
-            store_dd_df(trigrams, "trigrams-*.csv")
+            # To dask dataframe
+            ngrams = to_dd_df(ngrams)
+
+            # Get term frequencies
+            ngrams = reduce_and_get_term_frequencies(ngrams)
+
+            # Store term frequencies results
+            ngrams = store_dd_df(ngrams, "ngrams-*.csv")
 
         # Configure dask config
         dask.config.set(
@@ -284,13 +297,13 @@ class EventIndexPipeline(Pipeline):
         cdp_session = Session(profile_name="cdp")
 
         # Construct Dask Cluster
-        # cluster = LocalCluster()
-        cluster = FargateCluster(
-            image="councildataproject/cdptools-beta",
-            worker_cpu=256,
-            worker_mem=2048,
-        )
-        cluster.adapt(minimum=2, maximum=40)
+        cluster = LocalCluster()
+        # cluster = FargateCluster(
+        #     image="councildataproject/cdptools-beta",
+        #     worker_cpu=1024,
+        #     worker_mem=2048,
+        # )
+        # cluster.adapt(minimum=1, maximum=40)
         client = Client(cluster)
 
         log.info(f"Dashboard available at: {client.dashboard_link}")

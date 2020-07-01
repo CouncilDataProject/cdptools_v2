@@ -3,19 +3,21 @@
 
 import json
 import logging
+import math
 from pathlib import Path
 from typing import Dict, Iterable, List, Union
 
-import dask.config
-import dask.dataframe as dd
 import pandas as pd
 from boto3.session import Session
 from dask_cloudprovider import FargateCluster
 from distributed import Client, LocalCluster
 from nltk import ngrams
-from nltk.stem import PorterStemmer
+from nltk.stem import SnowballStemmer
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
+
+import dask.config
+import dask.dataframe as dd
 
 from ..databases import Database, OrderOperators
 from ..dev_utils import load_custom_object
@@ -34,7 +36,11 @@ log = logging.getLogger(__name__)
 @task
 def get_events(db: Database) -> pd.DataFrame:
     # Get transcript dataset
-    return pd.DataFrame(db.select_rows_as_list("event", limit=int(100)))
+    return pd.DataFrame(
+        db.select_rows_as_list(
+            "event", limit=int(100), order_by=("event_datetime", OrderOperators.desc)
+        )
+    )
 
 
 @task
@@ -122,6 +128,13 @@ def corpus_to_dict(corpus: pd.DataFrame) -> List[Dict]:
     return corpus[["event_id", "uri"]].to_dict("records")
 
 
+class SentenceManager:
+
+    def __init__(self, raw: str, cleaned: str):
+        self.raw = raw
+        self.cleaned = cleaned
+        self.grams = None
+
 @task
 def read_transcript_and_generate_grams(
     document_details: Dict,
@@ -145,65 +158,79 @@ def read_transcript_and_generate_grams(
 
     # Get list of cleaned sentences
     sentences = [s for s in raw_doc.split(". ") if len(s) > 0]
-    cleaned_sentences = [Indexer.clean_doc(s) for s in sentences]
-    cleaned_sentences = [s for s in cleaned_sentences if s is not None]
+    sms = [SentenceManager(s, Indexer.clean_doc(s)) for s in sentences]
+    sms = [sm for sm in sms if sm.cleaned is not None]
 
     # Get ngrams
-    grams = []
-    for cleaned_sentence in cleaned_sentences:
-        grams += [*ngrams(cleaned_sentence.split(), n_gram_size)]
+    for sm in sms:
+        sm.grams = [*ngrams(sm.cleaned.split(), n_gram_size)]
 
     # Spawn stemmer
-    ps = PorterStemmer()
+    stemmer = SnowballStemmer("english")
 
     # Create list of grams
     ngram_results = []
-    for gram in grams:
-        # Join ngram to single string
-        unstemmed_gram = " ".join(gram)
+    for sm in sms:
+        for gram in sm.grams:
+            # Join ngram to single string
+            unstemmed_gram = " ".join(gram)
 
-        # Get context span
-        for cleaned_sentence in cleaned_sentences:
-            if unstemmed_gram in cleaned_sentence:
-                context_span = cleaned_sentence
-                break
+            # Join, lower, and stem the gram
+            stemmed_gram = " ".join([stemmer.stem(term.lower()) for term in gram])
 
-        # Join, lower, and stem the gram
-        stemmed_gram = " ".join([ps.stem(term.lower()) for term in gram])
-
-        ngram_results.append({
-            "event_id": document_details["event_id"],
-            "unstemmed_gram": unstemmed_gram,
-            "stemmed_gram": stemmed_gram,
-            "context_span": context_span,
-        })
+            ngram_results.append({
+                "event_id": document_details["event_id"],
+                "unstemmed_gram": unstemmed_gram,
+                "stemmed_gram": stemmed_gram,
+                "context_span": sm.raw,
+            })
 
     return ngram_results
 
 
-@task
-def flatten(l: List):
-    if l == []:
-        return l
-    if isinstance(l[0], list):
-        return flatten(l[0]) + flatten(l[1:])
-    return l[:1] + flatten(l[1:])
+def flatten(items: Iterable[Iterable]) -> List:
+    return [item for iterable in items for item in iterable]
 
 
 @task
-def to_dd_df(rows: List[Dict]) -> dd.DataFrame:
-    return dd.from_pandas(pd.DataFrame(rows), chunksize=10000)
+def merge_n_grams(
+    unigrams: List[Dict], bigrams: List[Dict], trigrams: List[Dict]
+) -> dd.DataFrame:
+    df = dd.from_pandas(
+        pd.DataFrame([*flatten(unigrams), *flatten(bigrams), *flatten(trigrams)]),
+        chunksize=100000,
+        sort=False,
+    )
+
+    return df.reset_index()
 
 
 @task
-def reduce_and_get_term_frequencies(grams: dd.DataFrame) -> dd.DataFrame:
-    grams["tf"] = grams.stemmed_gram.groupby(grams.stemmed_gram).transform("count")
-    grams = grams.drop_duplicates("stemmed_gram")
+def get_tfidf(grams: dd.DataFrame) -> dd.DataFrame:
+    # Create value counts, drop duplicates, return
+    grams = grams.assign(
+        tf=grams\
+            .groupby(["event_id", "stemmed_gram"])\
+            .stemmed_gram\
+            .transform("count", meta=("int")),
+    )
+    grams = grams.drop_duplicates(["event_id", "stemmed_gram"])
+    grams = grams.assign(
+        df=grams.groupby("stemmed_gram").event_id.transform("count", meta=("int")),
+    )
+    grams = grams.assign(
+        df_updated=grams.apply(
+                lambda row: len([grams.stemmed_gram == row.stemmed_gram]),
+                axis=1,
+                meta=("int"),
+            ),
+    )
+
     return grams
 
 
 @task
-def store_dd_df(df: dd.DataFrame, filename: str) -> dd.DataFrame:
+def store_df(df: dd.DataFrame, filename: str) -> dd.DataFrame:
     df.to_csv(filename, index=False)
 
     return df
@@ -277,21 +304,18 @@ class EventIndexPipeline(Pipeline):
             )
 
             # Merge together
-            ngrams = flatten([unigrams, bigrams, trigrams])
+            ngrams = merge_n_grams(unigrams, bigrams, trigrams)
 
-            # To dask dataframe
-            ngrams = to_dd_df(ngrams)
-
-            # Get term frequencies
-            ngrams = reduce_and_get_term_frequencies(ngrams)
+            # Get tfidf
+            tf = get_tfidf(ngrams)
 
             # Store term frequencies results
-            ngrams = store_dd_df(ngrams, "ngrams-*.csv")
+            tf = store_df(tf, "tfidf-*.csv")
 
         # Configure dask config
-        dask.config.set(
-            {"scheduler.work-stealing": False}
-        )
+        # dask.config.set(
+        #     {"scheduler.work-stealing": False}
+        # )
 
         # Configure boto3
         cdp_session = Session(profile_name="cdp")
@@ -309,7 +333,7 @@ class EventIndexPipeline(Pipeline):
         log.info(f"Dashboard available at: {client.dashboard_link}")
 
         # Run
-        state = flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
+        flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
 
         # Visualize
         flow.visualize(filename="event-index-pipeline", format="png")

@@ -195,40 +195,45 @@ def flatten(items: Iterable[Iterable]) -> List:
 @task
 def merge_n_grams(
     unigrams: List[Dict], bigrams: List[Dict], trigrams: List[Dict]
-) -> pd.DataFrame:
-    return pd.DataFrame([*flatten(unigrams), *flatten(bigrams), *flatten(trigrams)])
-
+) -> dd.DataFrame:
+    return dd.concat([
+        pd.DataFrame(unigrams),
+        pd.DataFrame(bigrams),
+        pd.DataFrame(trigrams),
+    ]).persist()
 
 @task
-def get_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
+def get_tfidf(grams: dd.DataFrame) -> dd.DataFrame:
     # Get term frequencies
-    grams["tf"] = grams\
+    grams = grams.assign(tf=grams\
         .groupby(["event_id", "stemmed_gram"])\
         .stemmed_gram\
         .transform("count")
+    ).persist()
 
     # Drop duplicates for inverse-document-frequencies
-    grams = grams.drop_duplicates(["event_id", "stemmed_gram"])
+    grams = grams.drop_duplicates(["event_id", "stemmed_gram"]).persist()
 
     # Get idf
-    N = len(grams.event_id.unique())
-    grams["idf"] = grams\
+    N = len(grams.event_id.unique().compute())
+    grams = grams.assign(idf=grams\
         .groupby("stemmed_gram")\
         .event_id\
         .transform("count")\
         .apply(lambda df: math.log(N / df))
+    ).persist()
 
     # Store tfidf
-    grams["tfidf"] = grams.tf * grams.idf
+    grams = grams.assign(tfidf=grams.tf * grams.idf).persist()
 
     # Drop terms worth nothing
-    grams = grams[grams.tfidf != 0]
+    grams = grams[grams.tfidf != 0].persist()
 
     return grams
 
 
 @task
-def store_df(df: pd.DataFrame, filename: str) -> pd.DataFrame:
+def store_df(df: dd.DataFrame, filename: str) -> dd.DataFrame:
     df.to_csv(filename, index=False)
 
     return df
@@ -306,7 +311,7 @@ class EventIndexPipeline(Pipeline):
 
             # Get tfidf
             tfidf = get_tfidf(ngrams)
-            tfidf = store_df(tfidf, "tfidf.csv")
+            tfidf = store_df(tfidf, "tfidf/*.csv")
 
         # Configure dask config
         # dask.config.set(

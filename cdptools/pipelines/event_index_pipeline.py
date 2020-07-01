@@ -195,42 +195,40 @@ def flatten(items: Iterable[Iterable]) -> List:
 @task
 def merge_n_grams(
     unigrams: List[Dict], bigrams: List[Dict], trigrams: List[Dict]
-) -> dd.DataFrame:
-    df = dd.from_pandas(
-        pd.DataFrame([*flatten(unigrams), *flatten(bigrams), *flatten(trigrams)]),
-        chunksize=100000,
-        sort=False,
-    )
-
-    return df.reset_index()
+) -> pd.DataFrame:
+    return pd.DataFrame([*flatten(unigrams), *flatten(bigrams), *flatten(trigrams)])
 
 
 @task
-def get_tfidf(grams: dd.DataFrame) -> dd.DataFrame:
-    # Create value counts, drop duplicates, return
-    grams = grams.assign(
-        tf=grams\
-            .groupby(["event_id", "stemmed_gram"])\
-            .stemmed_gram\
-            .transform("count", meta=("int")),
-    )
+def get_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
+    # Get term frequencies
+    grams["tf"] = grams\
+        .groupby(["event_id", "stemmed_gram"])\
+        .stemmed_gram\
+        .transform("count")
+
+    # Drop duplicates for inverse-document-frequencies
     grams = grams.drop_duplicates(["event_id", "stemmed_gram"])
-    grams = grams.assign(
-        df=grams.groupby("stemmed_gram").event_id.transform("count", meta=("int")),
-    )
-    grams = grams.assign(
-        df_updated=grams.apply(
-                lambda row: len([grams.stemmed_gram == row.stemmed_gram]),
-                axis=1,
-                meta=("int"),
-            ),
-    )
+
+    # Get idf
+    N = len(grams.event_id.unique())
+    grams["idf"] = grams\
+        .groupby("stemmed_gram")\
+        .event_id\
+        .transform("count")\
+        .apply(lambda df: math.log(N / df))
+
+    # Store tfidf
+    grams["tfidf"] = grams.tf * grams.idf
+
+    # Drop terms worth nothing
+    grams = grams[grams.tfidf != 0]
 
     return grams
 
 
 @task
-def store_df(df: dd.DataFrame, filename: str) -> dd.DataFrame:
+def store_df(df: pd.DataFrame, filename: str) -> pd.DataFrame:
     df.to_csv(filename, index=False)
 
     return df
@@ -307,10 +305,8 @@ class EventIndexPipeline(Pipeline):
             ngrams = merge_n_grams(unigrams, bigrams, trigrams)
 
             # Get tfidf
-            tf = get_tfidf(ngrams)
-
-            # Store term frequencies results
-            tf = store_df(tf, "tfidf-*.csv")
+            tfidf = get_tfidf(ngrams)
+            tfidf = store_df(tfidf, "tfidf.csv")
 
         # Configure dask config
         # dask.config.set(

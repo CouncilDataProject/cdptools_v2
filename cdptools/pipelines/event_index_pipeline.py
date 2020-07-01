@@ -36,11 +36,7 @@ log = logging.getLogger(__name__)
 @task
 def get_events(db: Database) -> pd.DataFrame:
     # Get transcript dataset
-    return pd.DataFrame(
-        db.select_rows_as_list(
-            "event", limit=int(50), order_by=("event_datetime", OrderOperators.desc)
-        )
-    )
+    return pd.DataFrame(db.select_rows_as_list("event", limit=int(1e6)))
 
 
 @task

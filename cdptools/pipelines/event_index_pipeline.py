@@ -38,7 +38,7 @@ def get_events(db: Database) -> pd.DataFrame:
     # Get transcript dataset
     return pd.DataFrame(
         db.select_rows_as_list(
-            "event", limit=int(100), order_by=("event_datetime", OrderOperators.desc)
+            "event", limit=int(50), order_by=("event_datetime", OrderOperators.desc)
         )
     )
 
@@ -193,47 +193,40 @@ def flatten(items: Iterable[Iterable]) -> List:
 
 
 @task
-def merge_n_grams(
-    unigrams: List[Dict], bigrams: List[Dict], trigrams: List[Dict]
-) -> dd.DataFrame:
-    return dd.concat([
-        pd.DataFrame(unigrams),
-        pd.DataFrame(bigrams),
-        pd.DataFrame(trigrams),
-    ]).persist()
+def grams_to_df(grams: Iterable[Iterable]) -> pd.DataFrame:
+    return pd.DataFrame(flatten(grams))
+
 
 @task
-def get_tfidf(grams: dd.DataFrame) -> dd.DataFrame:
+def get_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
     # Get term frequencies
-    grams = grams.assign(tf=grams\
+    grams["tf"] = grams\
         .groupby(["event_id", "stemmed_gram"])\
         .stemmed_gram\
         .transform("count")
-    ).persist()
 
     # Drop duplicates for inverse-document-frequencies
-    grams = grams.drop_duplicates(["event_id", "stemmed_gram"]).persist()
+    grams = grams.drop_duplicates(["event_id", "stemmed_gram"])
 
     # Get idf
-    N = len(grams.event_id.unique().compute())
-    grams = grams.assign(idf=grams\
+    N = len(grams.event_id.unique())
+    grams["idf"] = grams\
         .groupby("stemmed_gram")\
         .event_id\
         .transform("count")\
         .apply(lambda df: math.log(N / df))
-    ).persist()
 
     # Store tfidf
-    grams = grams.assign(tfidf=grams.tf * grams.idf).persist()
+    grams["tfidf"] = grams.tf * grams.idf
 
     # Drop terms worth nothing
-    grams = grams[grams.tfidf != 0].persist()
+    grams = grams[grams.tfidf != 0]
 
     return grams
 
 
 @task
-def store_df(df: dd.DataFrame, filename: str) -> dd.DataFrame:
+def store_df(df: pd.DataFrame, filename: str) -> pd.DataFrame:
     df.to_csv(filename, index=False)
 
     return df
@@ -306,12 +299,20 @@ class EventIndexPipeline(Pipeline):
                 corpus, n_gram_size=unmapped(3), fs=unmapped(self.file_store)
             )
 
-            # Merge together
-            ngrams = merge_n_grams(unigrams, bigrams, trigrams)
+            # Send to dataframe for tfidf processing
+            unigrams = grams_to_df(unigrams)
+            bigrams = grams_to_df(bigrams)
+            trigrams = grams_to_df(trigrams)
 
             # Get tfidf
-            tfidf = get_tfidf(ngrams)
-            tfidf = store_df(tfidf, "tfidf/*.csv")
+            unigrams_tfidf = get_tfidf(unigrams)
+            bigrams_tfidf = get_tfidf(bigrams)
+            trigrams_tfidf = get_tfidf(trigrams)
+
+            # Store
+            store_df(unigrams_tfidf, "unigrams_tfidf.csv")
+            store_df(bigrams_tfidf, "bigrams_tfidf.csv")
+            store_df(trigrams_tfidf, "trigrams_tfidf.csv")
 
         # Configure dask config
         # dask.config.set(

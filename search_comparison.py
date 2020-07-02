@@ -10,6 +10,7 @@ from nltk.stem import SnowballStemmer
 
 import dask.dataframe as dd
 from cdptools import CDPInstance, configs
+from cdptools.databases.database import OrderOperators
 from cdptools.indexers import Indexer
 from cdptools.pipelines.event_index_pipeline import flatten
 
@@ -69,9 +70,20 @@ def run_current_search(query: str):
     log.info("Current index search results (most strictly relevant first):")
     log.info("=" * 80)
     for i, match in enumerate(results[:5]):
+        # Get keywords for event
+        match_keywords = seattle.database.select_rows_as_list(
+            "indexed_event_term",
+            filters=[("event_id", match.unique_id)],
+            order_by=("value", OrderOperators.desc),
+            limit=5
+        )
+        match_keywords = [kw["term"] for kw in match_keywords]
+
+        # Log results
         log.info(f"Match {i + 1}: {_get_cdp_link(match.unique_id)}")
         log.info(f"Match relevance: {match.relevance}")
         log.info(f"Match contained grams: {[t.term for t in match.terms]}")
+        log.info(f"Match keywords: {match_keywords}")
         log.info(f"Match context: None")
         log.info("-" * 80)
 
@@ -123,14 +135,21 @@ def run_local_search(query: str, local_index: str):
 
         # Get most important context span by contribution to sum
         most_important_context_span = group\
-            [group.idf == group.idf.min()]\
+            [group.tfidf_stemmed_gram == group.tfidf_stemmed_gram.max()]\
             .iloc[0]\
             .context_span
+
+        # Get keywords for event
+        event_df = index_df\
+            [index_df.event_id == event_id]\
+            .sort_values("tfidf", ascending=False)
+        match_keywords = list(event_df.unstemmed_gram)[:5]
 
         # Log results
         log.info(f"Match {i + 1}: {_get_cdp_link(event_id)}")
         log.info(f"Match relevance: {group.iloc[0].tfidf_summed}")
         log.info(f"Match contained grams: {list(group.unstemmed_gram)}")
+        log.info(f"Match keywords: {match_keywords}")
         log.info(f"Match context: {most_important_context_span}")
         log.info("-" * 80)
 

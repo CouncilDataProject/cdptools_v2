@@ -33,9 +33,9 @@ class Args(argparse.Namespace):
         )
 
         p.add_argument(
-            "query",
+            "--query",
             type=str,
-            default="bike infrastructure",
+            default="bike infrastructure and neighborhood greenways",
             help="Query to search with.",
         )
         p.add_argument(
@@ -147,6 +147,7 @@ if __name__ == "__main__":
     args = Args()
 
     try:
+        log.info(f"Running search comparison against query: '{args.query}'")
         run_current_search(args.query)
         run_local_search(args.query, args.local_index)
     except Exception as e:

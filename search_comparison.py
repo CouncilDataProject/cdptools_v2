@@ -130,7 +130,7 @@ def run_local_search(query: str, local_index: str):
         # Log results
         log.info(f"Match {i + 1}: {_get_cdp_link(event_id)}")
         log.info(f"Match relevance: {group.iloc[0].tfidf_summed}")
-        log.info(f"Match contained grams: {list(group.stemmed_gram)}")
+        log.info(f"Match contained grams: {list(group.unstemmed_gram)}")
         log.info(f"Match context: {most_important_context_span}")
         log.info("-" * 80)
 

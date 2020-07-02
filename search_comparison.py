@@ -115,13 +115,13 @@ def run_local_search(query: str, local_index: str):
     # Group by event id, sum by tfidf, and sort
     summed_tfidf = matching_events\
         .groupby("event_id")\
-        .agg({"tfidf": sum})\
+        .agg({"weighted_tfidf": sum})\
         .reset_index()
 
     # Merge results with original
     matching_events = matching_events\
         .merge(summed_tfidf, on="event_id", suffixes=("_stemmed_gram", "_summed"))\
-        .sort_values(by="tfidf_summed", ascending=False)
+        .sort_values(by="weighted_tfidf_summed", ascending=False)
 
     # Group events and sort
     matching_events = matching_events.groupby("event_id", sort=False)
@@ -135,7 +135,7 @@ def run_local_search(query: str, local_index: str):
 
         # Get most important context span by contribution to sum
         most_important_context_span = group\
-            [group.tfidf_stemmed_gram == group.tfidf_stemmed_gram.max()]\
+            [group.tfidf == group.tfidf.max()]\
             .iloc[0]\
             .context_span
 
@@ -147,7 +147,7 @@ def run_local_search(query: str, local_index: str):
 
         # Log results
         log.info(f"Match {i + 1}: {_get_cdp_link(event_id)}")
-        log.info(f"Match relevance: {group.iloc[0].tfidf_summed}")
+        log.info(f"Match relevance: {group.iloc[0].weighted_tfidf_summed}")
         log.info(f"Match contained grams: {list(group.unstemmed_gram)}")
         log.info(f"Match keywords: {match_keywords}")
         log.info(f"Match context: {most_important_context_span}")

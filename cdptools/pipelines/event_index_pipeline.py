@@ -4,6 +4,7 @@
 import json
 import logging
 import math
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, Iterable, List, Union
 
@@ -26,11 +27,18 @@ from ..indexers import Indexer
 from .pipeline import Pipeline
 
 ###############################################################################
+# logger
 
 log = logging.getLogger(__name__)
 
 ###############################################################################
-# Workflow tasks
+# globals
+
+DATETIME_BEGIN = datetime(1970, 1, 1)
+TIMEDELTA_NOW = (datetime.now() - DATETIME_BEGIN).total_seconds()
+
+###############################################################################
+# workflow tasks
 
 
 @task
@@ -121,7 +129,7 @@ def merge_event_and_transcript_details(
 
 @task
 def corpus_to_dict(corpus: pd.DataFrame) -> List[Dict]:
-    return corpus[["event_id", "uri"]].to_dict("records")
+    return corpus[["event_id", "event_datetime", "uri"]].to_dict("records")
 
 
 class SentenceManager:
@@ -176,9 +184,10 @@ def read_transcript_and_generate_grams(
 
             ngram_results.append({
                 "event_id": document_details["event_id"],
+                "event_datetime": document_details["event_datetime"],
                 "unstemmed_gram": unstemmed_gram,
                 "stemmed_gram": stemmed_gram,
-                "context_span": sm.raw,
+                "context_span": sm.raw[:40],
             })
 
     return ngram_results
@@ -217,6 +226,14 @@ def get_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
 
     # Drop terms worth nothing
     grams = grams[grams.tfidf != 0]
+
+    # Add datetime weighted tfidf
+    grams["weighted_tfidf"] = grams.apply(
+        lambda row: row.tfidf * math.log(
+            TIMEDELTA_NOW - (row.event_datetime - DATETIME_BEGIN).total_seconds()
+        ),
+        axis=1,
+    )
 
     return grams
 
@@ -323,7 +340,7 @@ class EventIndexPipeline(Pipeline):
         # cluster = FargateCluster(
         #     image="councildataproject/cdptools-beta",
         #     worker_cpu=1024,
-        #     worker_mem=2048,
+        #     worker_mem=4096,
         # )
         # cluster.adapt(minimum=1, maximum=40)
         client = Client(cluster)

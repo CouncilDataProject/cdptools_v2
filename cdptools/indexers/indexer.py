@@ -10,6 +10,7 @@ from collections import deque
 from pathlib import Path
 from typing import Dict, List, Union
 
+from nltk.stem import PorterStemmer
 from tika import parser
 
 from ..sr_models.constants import TranscriptFormats
@@ -312,6 +313,57 @@ class Indexer(ABC):
             window.append("...")
 
         return " ".join(window)
+
+    @staticmethod
+    def clean_text_for_indexing(raw_transcript: str) -> str:
+        """
+        Run basic cleaning operations against the raw text of the transcript.
+
+        Parameters
+        ----------
+        raw_transcript: str
+            The raw text of a transcript as a single string.
+
+        Returns
+        -------
+        cleaned_transcript: str
+            The cleaned version of the transcript text.
+        """
+        # Send to lowercase
+        cleaned_transcript = raw_transcript.lower()
+
+        # Remove new line and tab characters
+        cleaned_transcript = cleaned_transcript.replace("\n", " ").replace("\t", " ")
+
+        # Remove punctuation
+        cleaned_transcript = re.sub(
+            f"[{re.escape(string.punctuation)}]", "", cleaned_transcript
+        )
+
+        # Remove stopwords
+        joined_stopwords = "|".join(STOPWORDS)
+        cleaned_transcript = re.sub(
+            r"\b(" + joined_stopwords + r")\b", "", cleaned_transcript
+        )
+
+        # Remove gaps in string
+        cleaned_transcript = re.sub(r" {2,}", " ", cleaned_transcript)
+        if cleaned_transcript[0] == " ":
+            cleaned_transcript = cleaned_transcript[1:]
+        if cleaned_transcript[-1] == " ":
+            cleaned_transcript = cleaned_transcript[:-1]
+
+        # Clean words by stems
+        words = cleaned_transcript.split(" ")
+        stemmed = []
+        ps = PorterStemmer()
+        for word in words:
+            stemmed.append(ps.stem(word))
+
+        # Rejoin transcript
+        cleaned_transcript = " ".join(stemmed)
+
+        return cleaned_transcript
 
     @staticmethod
     def clean_doc(raw_doc: str) -> str:

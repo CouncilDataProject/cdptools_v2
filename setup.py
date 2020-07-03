@@ -44,7 +44,7 @@ requirements = [
     "botocore==1.15.32",
     "boto3==1.12.32",
     "dask[bag]>=2.19.0",
-    "dask_cloudprovider==0.2.0",
+    "dask_cloudprovider==0.3.0",
     "distributed>=2.19.0",
     "graphviz>=0.14",
     "ffmpeg-python>=0.2.0",

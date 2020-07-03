@@ -4,11 +4,11 @@
 import argparse
 import logging
 
+import dask.dataframe as dd
 import pandas as pd
 from nltk import ngrams
 from nltk.stem import SnowballStemmer
 
-import dask.dataframe as dd
 from cdptools import CDPInstance, configs
 from cdptools.databases.database import OrderOperators
 from cdptools.indexers import Indexer

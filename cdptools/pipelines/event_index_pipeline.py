@@ -8,6 +8,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Iterable, List, Union
 
+import dask.config
+import dask.dataframe as dd
 import pandas as pd
 from boto3.session import Session
 from dask_cloudprovider import FargateCluster
@@ -16,9 +18,6 @@ from nltk import ngrams
 from nltk.stem import SnowballStemmer
 from prefect import Flow, task, unmapped
 from prefect.engine.executors import DaskExecutor
-
-import dask.config
-import dask.dataframe as dd
 
 from ..databases import Database, OrderOperators
 from ..dev_utils import load_custom_object
@@ -203,7 +202,7 @@ def grams_to_df(grams: Iterable[Iterable]) -> pd.DataFrame:
 
 
 @task
-def get_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
+def compute_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
     # Get term frequencies
     grams["tf"] = grams\
         .groupby(["event_id", "stemmed_gram"])\
@@ -229,16 +228,16 @@ def get_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
 
     # Add datetime weighted tfidf
     grams["weighted_tfidf"] = grams.apply(
-        lambda row: row.tfidf * math.log(
+        lambda row: row.tfidf * (0.5 * math.log(
             TIMEDELTA_NOW - (row.event_datetime - DATETIME_BEGIN).total_seconds()
-        ),
+        )),
         axis=1,
     )
 
     return grams
 
 
-@task
+# @task
 def store_df(df: pd.DataFrame, filename: str) -> pd.DataFrame:
     df.to_csv(filename, index=False)
 
@@ -318,37 +317,38 @@ class EventIndexPipeline(Pipeline):
             trigrams = grams_to_df(trigrams)
 
             # Get tfidf
-            unigrams_tfidf = get_tfidf(unigrams)
-            bigrams_tfidf = get_tfidf(bigrams)
-            trigrams_tfidf = get_tfidf(trigrams)
-
-            # Store
-            store_df(unigrams_tfidf, "unigrams_tfidf.csv")
-            store_df(bigrams_tfidf, "bigrams_tfidf.csv")
-            store_df(trigrams_tfidf, "trigrams_tfidf.csv")
+            unigrams_tfidf = compute_tfidf(unigrams)
+            bigrams_tfidf = compute_tfidf(bigrams)
+            trigrams_tfidf = compute_tfidf(trigrams)
 
         # Configure dask config
         # dask.config.set(
         #     {"scheduler.work-stealing": False}
         # )
 
-        # Configure boto3
-        cdp_session = Session(profile_name="cdp")
-
         # Construct Dask Cluster
-        cluster = LocalCluster()
-        # cluster = FargateCluster(
-        #     image="councildataproject/cdptools-beta",
-        #     worker_cpu=1024,
-        #     worker_mem=4096,
-        # )
-        # cluster.adapt(minimum=1, maximum=40)
+        # cluster = LocalCluster()
+        cluster = FargateCluster(
+            image="councildataproject/cdptools-beta",
+            worker_cpu=1024,
+            worker_mem=4096,
+        )
+        cluster.adapt(minimum=1, maximum=40)
         client = Client(cluster)
 
         log.info(f"Dashboard available at: {client.dashboard_link}")
 
         # Run
-        flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
+        state = flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
+
+        # Get pandas dataframes from flow state
+        tfidf_returns = [
+            r.result for r in state.result[flow.get_tasks(name="compute_tfidf")]
+        ]
+
+        # Store
+        for i, result in enumerate(tfidf_returns):
+            store_df(result, f"tfidf_{i}.csv")
 
         # Visualize
         flow.visualize(filename="event-index-pipeline", format="png")

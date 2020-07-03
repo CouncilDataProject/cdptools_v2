@@ -43,6 +43,7 @@ requirements = [
     "bokeh>=2.1.0",
     "botocore==1.15.32",
     "boto3==1.12.32",
+    "cloudpickle==1.4.0",
     "dask[bag]>=2.19.0",
     "dask_cloudprovider==0.3.0",
     "distributed>=2.19.0",

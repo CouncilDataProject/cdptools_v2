@@ -53,6 +53,7 @@ requirements = [
     "nltk>=3.5",
     "pandas>=1.0.4",
     "prefect[viz]>=0.12.1",
+    "pyarrow>=0.17.1",
     "requests[security]>=2.23.0",
     "schedule>=0.6.0",
     "setuptools>=44.0.0",

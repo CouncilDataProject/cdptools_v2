@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pathlib import Path
-from typing import Any, Dict, Optional
-
-import pandas as pd
+from typing import Any, Dict
 
 from .databases import Database
 from .dev_utils import load_custom_object
 from .file_stores import FileStore
-from .research_utils import transcripts as transcripts_utils
 
 
 class CDPInstanceConfig:
@@ -61,66 +57,6 @@ class CDPInstance:
             )
 
         return self._file_store
-
-    def get_transcript_manifest(
-        self, order_by_field: str = "confidence"
-    ) -> pd.DataFrame:
-        """
-        Get a pandas dataframe that can act as a manifest of a transcript available for
-        each event stored in a CDP instance's database.
-
-        Parameters
-        ----------
-        order_by_field: str
-            Which field to order the transcripts by to select the
-            first (highest value) of.
-            Default: "confidence"
-            Choices: ["created", "confidence"]
-
-        Returns
-        -------
-        manifest: pandas.DataFrame
-            A dataframe where each row has transcript, event, body, and file details
-            for the event at that row.
-        """
-
-        return transcripts_utils.get_transcript_manifest(
-            db=self.database, order_by_field=order_by_field
-        )
-
-    def download_transcripts(
-        self, order_by_field: str = "confidence", save_dir: Optional[Path] = None,
-    ) -> Dict[str, Path]:
-        """
-        Download a transcript for each event found in a CDP instance. Additionally
-        saves the manifest as a CSV.
-
-        Parameters
-        ----------
-        order_by_field: str
-            Which field to order the transcripts by to select the
-            first (highest value) of.
-            Default: "confidence"
-            Choices: ["created", "confidence"]
-        save_dir: Optional[Union[str, Path]]
-            An optional path of where to save the transcripts and manifest CSV.
-            If None provided, uses current directory.
-            Always overwrites existing transcripts with the same name if they already
-            exist in the provided directory.
-
-        Returns
-        -------
-        event_corpus_map: Dict[str, Path]
-            A dictionary mapping event id to a local Path for a transcript for that
-            event.
-        """
-
-        return transcripts_utils.download_transcripts(
-            db=self.database,
-            fs=self.file_store,
-            order_by_field=order_by_field,
-            save_dir=save_dir,
-        )
 
     def __str__(self):
         return (

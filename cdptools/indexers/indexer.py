@@ -388,9 +388,7 @@ class Indexer(ABC):
 
         # Remove stopwords
         joined_stopwords = "|".join(STOPWORDS)
-        cleaned_doc = re.sub(
-            r"\b(" + joined_stopwords + r")\b", "", cleaned_doc
-        )
+        cleaned_doc = re.sub(r"\b(" + joined_stopwords + r")\b", "", cleaned_doc)
 
         # Remove gaps in string
         try:

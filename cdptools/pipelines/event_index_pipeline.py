@@ -8,12 +8,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Iterable, List, Union
 
-import dask.config
-import dask.dataframe as dd
 import pandas as pd
-from boto3.session import Session
 from dask_cloudprovider import FargateCluster
-from distributed import Client, LocalCluster
+from distributed import Client
 from nltk import ngrams
 from nltk.stem import SnowballStemmer
 from prefect import Flow, task, unmapped
@@ -132,17 +129,15 @@ def corpus_to_dict(corpus: pd.DataFrame) -> List[Dict]:
 
 
 class SentenceManager:
-
     def __init__(self, raw: str, cleaned: str):
         self.raw = raw
         self.cleaned = cleaned
         self.grams = None
 
+
 @task
 def read_transcript_and_generate_grams(
-    document_details: Dict,
-    n_gram_size: int,
-    fs: FileStore,
+    document_details: Dict, n_gram_size: int, fs: FileStore,
 ) -> List[Dict]:
     # Create corpus dir if not already existing
     corpus_dir = Path("corpus")
@@ -181,13 +176,15 @@ def read_transcript_and_generate_grams(
             # Join, lower, and stem the gram
             stemmed_gram = " ".join([stemmer.stem(term.lower()) for term in gram])
 
-            ngram_results.append({
-                "event_id": document_details["event_id"],
-                "event_datetime": document_details["event_datetime"],
-                "unstemmed_gram": unstemmed_gram,
-                "stemmed_gram": stemmed_gram,
-                "context_span": sm.raw[:40],
-            })
+            ngram_results.append(
+                {
+                    "event_id": document_details["event_id"],
+                    "event_datetime": document_details["event_datetime"],
+                    "unstemmed_gram": unstemmed_gram,
+                    "stemmed_gram": stemmed_gram,
+                    "context_span": sm.raw[:40],
+                }
+            )
 
     return ngram_results
 
@@ -204,21 +201,20 @@ def grams_to_df(grams: Iterable[Iterable]) -> pd.DataFrame:
 @task
 def compute_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
     # Get term frequencies
-    grams["tf"] = grams\
-        .groupby(["event_id", "stemmed_gram"])\
-        .stemmed_gram\
-        .transform("count")
+    grams["tf"] = grams.groupby(["event_id", "stemmed_gram"]).stemmed_gram.transform(
+        "count"
+    )
 
     # Drop duplicates for inverse-document-frequencies
     grams = grams.drop_duplicates(["event_id", "stemmed_gram"])
 
     # Get idf
     N = len(grams.event_id.unique())
-    grams["idf"] = grams\
-        .groupby("stemmed_gram")\
-        .event_id\
-        .transform("count")\
+    grams["idf"] = (
+        grams.groupby("stemmed_gram")
+        .event_id.transform("count")
         .apply(lambda df: math.log(N / df))
+    )
 
     # Store tfidf
     grams["tfidf"] = grams.tf * grams.idf
@@ -228,9 +224,13 @@ def compute_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
 
     # Add datetime weighted tfidf
     grams["weighted_tfidf"] = grams.apply(
-        lambda row: row.tfidf * (0.5 * math.log(
-            TIMEDELTA_NOW - (row.event_datetime - DATETIME_BEGIN).total_seconds()
-        )),
+        lambda row: row.tfidf
+        * (
+            0.5
+            * math.log(
+                TIMEDELTA_NOW - (row.event_datetime - DATETIME_BEGIN).total_seconds()
+            )
+        ),
         axis=1,
     )
 
@@ -317,21 +317,13 @@ class EventIndexPipeline(Pipeline):
             trigrams = grams_to_df(trigrams)
 
             # Get tfidf
-            unigrams_tfidf = compute_tfidf(unigrams)
-            bigrams_tfidf = compute_tfidf(bigrams)
-            trigrams_tfidf = compute_tfidf(trigrams)
-
-        # Configure dask config
-        # dask.config.set(
-        #     {"scheduler.work-stealing": False}
-        # )
+            compute_tfidf(unigrams)
+            compute_tfidf(bigrams)
+            compute_tfidf(trigrams)
 
         # Construct Dask Cluster
-        # cluster = LocalCluster()
         cluster = FargateCluster(
-            image="councildataproject/cdptools-beta",
-            worker_cpu=1024,
-            worker_mem=4096,
+            image="councildataproject/cdptools-beta", worker_cpu=1024, worker_mem=4096,
         )
         cluster.adapt(minimum=1, maximum=40)
         client = Client(cluster)

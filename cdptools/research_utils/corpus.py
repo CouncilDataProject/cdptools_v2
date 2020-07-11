@@ -204,7 +204,46 @@ def finalize_dataset(dataset: pd.DataFrame) -> pd.DataFrame:
 
 def generate_dataset(instance: CDPInstance = CDPInstance(SEATTLE)) -> pd.DataFrame:
     """
-    Generate
+    Generate a dataset with most of the important information needed for analysis.
+
+    Parameters
+    ----------
+    instance: CDPInstance
+        Which CDPInstance to target for dataset generation.
+        Default: SEATTLE
+
+    Returns
+    -------
+    manifest: pd.DataFrame
+        Dataframe with columns:
+
+        * event_id: str - A UUID for each event
+        * event_datetime: datetime - The datetime the event occurred
+        * body_id: str - A UUID for the body the event occurred in
+        * body_name: str - The name for the body the event occurred in
+        * remote_video_uri: str - The URI for where to retrieve the video from
+        * transcript_id: str - A UUID for the transcript for the event
+        * transcript_filename: str - The filename of the transcript
+        * remote_transcript_uri: str - The URI for where to retrieve the transcript from
+        * transcript_confidence: float - Rough confidence in the accuracy
+        * event_minutes_items: List[Dict] - A sorted list of minutes items for the event
+
+    Notes
+    -----
+    This function does not download the referenced remote files.
+
+    To download the videos it is recommended to use:
+    `cdptools.CDPInstance.file_store._external_resource_copy`
+
+    To download the transcripts it is recommened to use:
+    `cdptools.CDPInstance.file_store.download_file`
+
+    Additionally, please see our documentation on transcript format.
+
+    Unfortunately, it is not recommended to serialize this dataset to disk as either
+    parquet or csv as the `event_minutes_items` column becomes a total mess or can't be
+    reread at all. If you want to serialize this dataset to disk, drop the
+    `event_minutes_items` column first.
     """
 
     # Construct workflow

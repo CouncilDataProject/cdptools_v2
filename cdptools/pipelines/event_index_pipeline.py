@@ -10,11 +10,12 @@ from typing import Dict, Iterable, List, Union
 
 import pandas as pd
 from dask_cloudprovider import FargateCluster
-from distributed import Client
+from distributed import Client, LocalCluster
 from nltk import ngrams
 from nltk.stem import SnowballStemmer
-from prefect import Flow, task, unmapped
+from prefect import Flow, Parameter, task, unmapped
 from prefect.engine.executors import DaskExecutor
+from prefect.environments import LocalEnvironment
 
 from ..databases import Database, OrderOperators
 from ..dev_utils import load_custom_object
@@ -137,7 +138,7 @@ class SentenceManager:
 
 @task
 def read_transcript_and_generate_grams(
-    document_details: Dict, n_gram_size: int, fs: FileStore,
+    document_details: Dict, gram_size: int, fs: FileStore,
 ) -> List[Dict]:
     # Create corpus dir if not already existing
     corpus_dir = Path("corpus")
@@ -161,7 +162,7 @@ def read_transcript_and_generate_grams(
 
     # Get ngrams
     for sm in sms:
-        sm.grams = [*ngrams(sm.cleaned.split(), n_gram_size)]
+        sm.grams = [*ngrams(sm.cleaned.split(), gram_size)]
 
     # Spawn stemmer
     stemmer = SnowballStemmer("english")
@@ -237,11 +238,9 @@ def compute_tfidf(grams: pd.DataFrame) -> pd.DataFrame:
     return grams
 
 
-# @task
-def store_df(df: pd.DataFrame, filename: str) -> pd.DataFrame:
-    df.to_csv(filename, index=False)
-
-    return df
+@task
+def store_tfidf(df: pd.DataFrame, gram_size: int):
+    df.to_parquet(f"tfidf-{gram_size}.parquet")
 
 
 ###############################################################################
@@ -277,8 +276,23 @@ class EventIndexPipeline(Pipeline):
         )
 
     def run(self):
+        # Construct Dask Cluster
+        cluster = FargateCluster(
+            image="councildataproject/cdptools-beta", worker_cpu=1024, worker_mem=4096,
+        )
+        cluster.adapt(minimum=1, maximum=40)
+        # cluster = LocalCluster()
+        client = Client(cluster)
+        exe = DaskExecutor(address=cluster.scheduler_address)
+
+        log.info(f"Dashboard available at: {client.dashboard_link}")
+
         # Construct workflow
-        with Flow("Event Index Pipeline") as flow:
+        with Flow(
+            "Event Index Pipeline", environment=LocalEnvironment(executor=exe)
+        ) as flow:
+            gram_size = Parameter("gram_size", default=1)
+
             # Get events and body information
             events = get_events(self.database)
             event_ids = get_event_ids(events)
@@ -301,46 +315,18 @@ class EventIndexPipeline(Pipeline):
             corpus = corpus_to_dict(transcripts)
 
             # Get uni, bi, and tri grams
-            unigrams = read_transcript_and_generate_grams.map(
-                corpus, n_gram_size=unmapped(1), fs=unmapped(self.file_store)
-            )
-            bigrams = read_transcript_and_generate_grams.map(
-                corpus, n_gram_size=unmapped(2), fs=unmapped(self.file_store)
-            )
-            trigrams = read_transcript_and_generate_grams.map(
-                corpus, n_gram_size=unmapped(3), fs=unmapped(self.file_store)
+            ngrams = read_transcript_and_generate_grams.map(
+                corpus, gram_size=unmapped(gram_size), fs=unmapped(self.file_store)
             )
 
             # Send to dataframe for tfidf processing
-            unigrams = grams_to_df(unigrams)
-            bigrams = grams_to_df(bigrams)
-            trigrams = grams_to_df(trigrams)
+            ngrams = grams_to_df(ngrams)
 
             # Get tfidf
-            compute_tfidf(unigrams)
-            compute_tfidf(bigrams)
-            compute_tfidf(trigrams)
-
-        # Construct Dask Cluster
-        cluster = FargateCluster(
-            image="councildataproject/cdptools-beta", worker_cpu=1024, worker_mem=4096,
-        )
-        cluster.adapt(minimum=1, maximum=40)
-        client = Client(cluster)
-
-        log.info(f"Dashboard available at: {client.dashboard_link}")
+            tfidf = compute_tfidf(ngrams)
+            store_tfidf(tfidf, gram_size)
 
         # Run
-        state = flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
-
-        # Get pandas dataframes from flow state
-        tfidf_returns = [
-            r.result for r in state.result[flow.get_tasks(name="compute_tfidf")]
-        ]
-
-        # Store
-        for i, result in enumerate(tfidf_returns):
-            store_df(result, f"tfidf_{i}.csv")
-
-        # Visualize
-        flow.visualize(filename="event-index-pipeline", format="png")
+        # flow.run(executor=DaskExecutor(address=cluster.scheduler_address))
+        flow.register("CDP Pipelines")
+        flow.run_agent()

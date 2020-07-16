@@ -1,12 +1,14 @@
-FROM ubuntu
-
-# General upgrades and requirements
-RUN apt-get update && apt-get upgrade -y
+FROM ubuntu:18.04
 
 # Get software props
-RUN apt-get install -y \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     software-properties-common \
-    default-jdk
+    default-jdk \
+    ffmpeg \
+    git
+
+# Set timezone to UTC
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
 
 # Add additional apt repository
 RUN add-apt-repository universe
@@ -15,9 +17,7 @@ RUN add-apt-repository universe
 RUN apt-get update && apt-get install -y \
     python3.8 \
     python3.8-dev \
-    python3-pip \
-    ffmpeg \
-    git
+    python3-pip
 
 # Upgrade pip and force it to use python3.8
 RUN python3.8 -m pip install --upgrade pip

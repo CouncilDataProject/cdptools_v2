@@ -27,7 +27,7 @@ class MinutesItem(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> MinutesItem:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return MinutesItem(
             name = source.get("name"),
             description = source.get("description"),

@@ -26,7 +26,7 @@ class File(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> File:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return File(
             uri = source.get("uri"),
             filename = source.get("filename"),

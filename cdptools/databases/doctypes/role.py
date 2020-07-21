@@ -34,7 +34,7 @@ class Role(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Role:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return Role(
             person = Person.from_dict(source.get("person", {})),
             title = source.get("title"),

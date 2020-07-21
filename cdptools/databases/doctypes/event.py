@@ -4,7 +4,7 @@
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 from .body import Body
-from .doctype import DocType
+from .doctype import Doctype
 from .file import File
 from .matter import Matter
 from .minute_item import MinuteItem
@@ -49,7 +49,7 @@ class Event(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Event:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return Event(
             body = Body.from_dict(source.get("body", {})),
             event_datetime = source.get("event_datetime"),
@@ -70,7 +70,7 @@ class Event(Doctype):
     def to_dict(self) -> Dict[str, Any]:
         return {
             "body": self.body.to_dict(),
-            "event_datetime": self.event_datetime
+            "event_datetime": self.event_datetime,
             "thumbnail_static_file": self.thumbnail_static_file.to_dict(),
             "thumbnail_hover_file": self.thumbnail_hover_file.to_dict(),
             "video_uri": self.video_uri,

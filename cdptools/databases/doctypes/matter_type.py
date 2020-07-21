@@ -22,7 +22,7 @@ class MatterType(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> MatterType:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return MatterType(
             name = source.get("name"),
             external_source_id = source.get("external_source_id"),

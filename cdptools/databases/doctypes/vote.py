@@ -36,7 +36,7 @@ class Vote(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Vote:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return Vote(
             matter = Vote.from_dict(source.get("matter", {})),
             event = Event.from_dict(source.get("event", {})),

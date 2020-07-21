@@ -24,7 +24,7 @@ class Transcript(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Transcript:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return Transcript(
             event_id = source.get("event_id"),
             file_id = source.get("file_id"),

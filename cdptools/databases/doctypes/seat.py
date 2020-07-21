@@ -28,7 +28,7 @@ class Seat(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Seat:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return Seat(
             name = source.get("name"),
             electoral_area = source.get("electoral_area"),

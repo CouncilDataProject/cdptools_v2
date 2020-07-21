@@ -38,7 +38,7 @@ class Matter(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Matter:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return Matter(
             name = source.get("name"),
             matter_type = MatterType.from_dict(source.get("matter_type")),
@@ -48,7 +48,7 @@ class Matter(Doctype):
             next_event = Event.from_dict(source.get("next_event", {})),
             keywords = source.get("keywords"),
             external_source_id = source.get("external_source_id"),
-            updated = source.get("updated")
+            updated = source.get("updated"),
             created = source.get("created")
         )
 

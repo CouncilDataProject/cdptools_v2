@@ -48,7 +48,7 @@ class Person(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Person:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return Person(
             router_id = source.get("router_id"),
             name = source.get("name"),

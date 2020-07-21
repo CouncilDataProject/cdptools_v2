@@ -36,7 +36,7 @@ class Body(Doctype):
         self.created = created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Body:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return Body(
             name = source.get("name"),
             tag = source.get("tag"),

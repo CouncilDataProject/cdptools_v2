@@ -33,7 +33,7 @@ class EventMinutesItem(Doctype):
         self.files = files
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> EventMinutesItem:
+    def from_dict(source: Dict[str, Any]) -> Doctype:
         return EventMinutesItem(
             event_id = source.get("event_id"),
             minutes_item = MinutesItem.from_dict(source.get("minutes_item", {})),

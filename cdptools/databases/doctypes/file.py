@@ -19,11 +19,31 @@ class File(Doctype):
         content_type: Optional[str],
         created: datetime
     ):
-        self.uri = uri
-        self.filename = filename
-        self.description = description
-        self.content_type = content_type
-        self.created = created
+        self._uri = uri
+        self._filename = filename
+        self._description = description
+        self._content_type = content_type
+        self._created = created
+
+    @property
+    def uri(self):
+        return self._uri
+
+    @property
+    def filename(self):
+        return self._filename
+
+    @property
+    def description(self):
+        return self._description
+
+    @property
+    def content_type(self):
+        return self._content_type
+
+    @property
+    def created(self):
+        return self._created
 
     @staticmethod
     def from_dict(source: Dict[str, Any]) -> Doctype:
@@ -42,4 +62,38 @@ class File(Doctype):
             "description": self.description,
             "content_type": self.content_type,
             "created": self.created
+        }
+
+
+class FileAbbr(File):
+    """
+    Abbreviated File for nested instances in documents.
+    """
+
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        uri: str
+    ):
+        super().__init__(uri = uri, filename = name)
+        self._id = id
+
+    @property
+    def id(self):
+        return self._id
+
+    @staticmethod
+    def from_dict(source: Dict[str, Any]) -> File:
+        return FileAbbr(
+            id = source.get("id"),
+            name = source.get("name"),
+            uri = source.get("uri")
+        )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "uri": self.uri
         }

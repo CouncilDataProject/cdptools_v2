@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Any, Dict, Optional
 from .body import Body
 from .doctype import Doctype
-from .person import Person
+from .person import PersonAbbr
 
 
 class Role(Doctype):
@@ -24,19 +24,51 @@ class Role(Doctype):
         external_source_id: Optional[Any],
         created: datetime
     ):
-        self.person = person
-        self.title = title
-        self.body = body
-        self.start_date = start_date
-        self.end_date = end_date
-        self.seat_id = seat_id
-        self.external_source_id = external_source_id
-        self.created = created
+        self._person = person
+        self._title = title
+        self._body = body
+        self._start_date = start_date
+        self._end_date = end_date
+        self._seat_id = seat_id
+        self._external_source_id = external_source_id
+        self._created = created
+
+    @property
+    def person(self):
+        return self._person
+
+    @property
+    def title(self):
+        return self._title
+
+    @property
+    def body(self):
+        return self._body
+
+    @property
+    def start_date(self):
+        return self._start_date
+
+    @property
+    def end_date(self):
+        return self._end_date
+
+    @property
+    def seat_id(self):
+        return self._seat_id
+
+    @property
+    def external_source_id(self):
+        return self._external_source_id
+
+    @property
+    def created(self):
+        return self._created
 
     @staticmethod
     def from_dict(source: Dict[str, Any]) -> Doctype:
         return Role(
-            person = Person.from_dict(source.get("person", {})),
+            person = PersonAbbr.from_dict(source.get("person", {})),
             title = source.get("title"),
             body = source.get("body", {}),
             start_date = source.get("start_date"),

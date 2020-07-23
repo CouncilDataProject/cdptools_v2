@@ -18,10 +18,26 @@ class Transcript(Doctype):
         confidence: float,
         created: datetime
     ):
-        self.event_id = event_id
-        self.file_id = file_id
-        self.confidence = confidence
-        self.created = created
+        self._event_id = event_id
+        self._file_id = file_id
+        self._confidence = confidence
+        self._created = created
+
+    @property
+    def event_id(self):
+        return self._event_id
+
+    @property
+    def file_id(self):
+        return self._file_id
+
+    @property
+    def confidence(self):
+        return self._confidence
+
+    @property
+    def created(self):
+        return self._created
 
     @staticmethod
     def from_dict(source: Dict[str, Any]) -> Doctype:

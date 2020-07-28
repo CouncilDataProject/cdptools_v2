@@ -3,11 +3,11 @@
 
 from datetime import datetime
 from typing import Any, Dict, Optional
-from .doctype import Doctype
-from .matter import MatterAbbr
+from .matter_base import MatterBase
+from .minutes_item_base import MinutesItemBase
 
 
-class MinutesItem(Doctype):
+class MinutesItem(MinutesItemBase):
     """
     Source: /docs/document_store_schema.md Minutes Item.
     """
@@ -16,19 +16,15 @@ class MinutesItem(Doctype):
         self,
         name: str,
         description: Optional[str],
-        matter: Matter,
+        matter: MatterBase,
         external_source_id: Optional[Any],
         created: datetime
     ):
-        self._name = name
+        super().__init__(name = name)
         self._description = description
         self._matter = matter
         self._external_source_id = external_source_id
         self._created = created
-
-    @property
-    def name(self):
-        return self._name
 
     @property
     def description(self):
@@ -47,11 +43,11 @@ class MinutesItem(Doctype):
         return self._created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Doctype:
+    def from_dict(source: Dict[str, Any]) -> MinutesItemBase:
         return MinutesItem(
             name = source.get("name"),
             description = source.get("description"),
-            matter = MatterAbbr.from_dict(source.get("matter", {})),
+            matter = MatterBase.from_dict(source.get("matter", {})),
             external_source_id = source.get("external_source_id"),
             created = source.get("created")
         )
@@ -63,35 +59,4 @@ class MinutesItem(Doctype):
             "matter": self.matter.to_dict(),
             "external_source_id": self.external_source_id,
             "created": self.created
-        }
-
-
-class MinutesItemAbbr(MinutesItem):
-    """
-    Abbreviated MinutesItem for nested instances in documents.
-    """
-
-    def __init__(
-        self,
-        id: str,
-        name: str
-    ):
-        super().__init__(name = name)
-        self._id = id
-
-    @property
-    def id(self):
-        return self._id
-
-    @staticmethod
-    def from_dict(source: Dict[str, Any]) -> MinutesItem:
-        return MinutesItemAbbr(
-            id = source.get("id"),
-            name = source.get("name")
-        )
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "id": self.id,
-            "name": self.name
         }

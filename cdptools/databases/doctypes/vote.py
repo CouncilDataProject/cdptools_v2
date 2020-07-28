@@ -3,34 +3,34 @@
 
 from datetime import datetime
 from typing import Any, Dict, Optional
-from .doctype import Doctype
-from .event import EventAbbr
-from .event_minutes_item import EventMinutesItemAbbr
-from .matter import MatterAbbr
-from .person import PersonAbbr
+from .event_base import EventBase
+from .event_minutes_item_base import EventMinutesItemBase
+from .matter_base import MatterBase
+from .person_base import PersonBase
+from .vote_base import VoteBase
 
 
-class Vote(Doctype):
+class Vote(VoteBase):
     """
     Source: docs/document_store_schema.md Vote.
     """
 
     def __init__(
         self,
-        matter: Matter,
-        event: Event,
-        event_minutes_item: EventMinutesItem,
-        person: Person,
+        matter: MatterBase,
+        event: EventBase,
+        event_minutes_item: EventMinutesItemBase,
+        person: PersonBase,
         vote_decision: str,
         is_majority: bool,
         external_vote_item_id: Optional[Any],
         created: datetime
     ):
+        super().__init__(vote_decision = vote_decision)
         self._matter = matter
         self._event = event
         self._event_minutes_item = event_minutes_item
         self._person = person
-        self._vote_decision = vote_decision
         self._is_majority = is_majority
         self._external_vote_item_id = external_vote_item_id
         self._created = created
@@ -52,10 +52,6 @@ class Vote(Doctype):
         return self._person
 
     @property
-    def vote_decision(self):
-        return self._vote_decision
-
-    @property
     def is_majority(self):
         return self._is_majority
 
@@ -68,12 +64,12 @@ class Vote(Doctype):
         return self._created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Doctype:
+    def from_dict(source: Dict[str, Any]) -> VoteBase:
         return Vote(
-            matter = VoteAbbr.from_dict(source.get("matter", {})),
-            event = EventAbbr.from_dict(source.get("event", {})),
-            event_minutes_item = EventMinutesItemAbbr.from_dict(source.get("event_minutes_item", {})),
-            person = PersonAbbr.from_dict(source.get("person", {})),
+            matter = MatterBase.from_dict(source.get("matter", {})),
+            event = EventBase.from_dict(source.get("event", {})),
+            event_minutes_item = EventMinutesItemBase.from_dict(source.get("event_minutes_item", {})),
+            person = PersonBase.from_dict(source.get("person", {})),
             vote_decision = source.get("vote_decision"),
             is_majority = source.get("is_majority"),
             external_vote_item_id = source.get("external_vote_item_id"),
@@ -90,51 +86,4 @@ class Vote(Doctype):
             "is_majority": self.is_majority,
             "external_vote_item_id": self.external_vote_item_id,
             "created": self.created
-        }
-
-
-class VoteAbbr(Vote):
-    """
-    Abbreviated Vote for nested instances in documents.
-    """
-
-    def __init__(
-        self,
-        vote_id: str,
-        person_id: str,
-        person_name: str,
-        vote_decision: str
-    ):
-        super().__init__(vote_decision = vote_decision)
-        self._vote_id = vote_id
-        self._person_id = person_id
-        self._person_name = person_name
-
-    @property
-    def vote_id(self):
-        return self._vote_id
-
-    @property
-    def person_id(self):
-        return self._person_id
-
-    @property
-    def person_name(self):
-        return self._person_name
-
-    @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Vote:
-        return VoteAbbr(
-            vote_id = source.get("vote_id"),
-            person_id = source.get("person_id"),
-            person_name = source.get("person_name"),
-            vote_decision = source.get("vote_decision")
-        )
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "vote_id": self.vote_id,
-            "person_id": self.person_id,
-            "person_name": self.person_name,
-            "vote_decision": self.vote_decision
         }

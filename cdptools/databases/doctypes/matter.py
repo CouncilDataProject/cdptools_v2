@@ -3,12 +3,12 @@
 
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-from .doctype import Doctype
-from .event import EventAbbr
-from .matter_type import MatterTypeAbbr
+from .event_base import EventBase
+from .matter_base import MatterBase
+from .matter_type_base import MatterTypeBase
 
 
-class Matter(Doctype):
+class Matter(MatterBase):
     """
     Source: /docs/document_store_schema.md Matter.
     """
@@ -16,19 +16,18 @@ class Matter(Doctype):
     def __init__(
         self,
         name: str,
-        matter_type: MatterTypeAbbr,
+        matter_type: MatterTypeBase,
         title: str,
         status: str,
-        most_recent_event: EventAbbr,
-        next_event: EventAbbr,
+        most_recent_event: EventBase,
+        next_event: EventBase,
         keywords: List[Dict[str, str]],
         external_source_id: Optional[Any],
         updated: datetime,
         created: datetime
     ):
-        self._name = name
+        super().__init__(name = name, title = title)
         self._matter_type = matter_type
-        self._title = title
         self._status = status
         self._most_recent_event = most_recent_event
         self._next_event = next_event
@@ -38,16 +37,8 @@ class Matter(Doctype):
         self._created = created
 
     @property
-    def name(self):
-        return self._name
-
-    @property
     def matter_type(self):
         return self._matter_type
-
-    @property
-    def title(self):
-        return self._title
 
     @property
     def status(self):
@@ -78,14 +69,14 @@ class Matter(Doctype):
         return self._created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Doctype:
+    def from_dict(source: Dict[str, Any]) -> MatterBase:
         return Matter(
             name = source.get("name"),
-            matter_type = MatterTypeAbbr.from_dict(source.get("matter_type")),
+            matter_type = MatterTypeBase.from_dict(source.get("matter_type")),
             title = source.get("title"),
             status = source.get("status"),
-            most_recent_event = EventAbbr.from_dict(source.get("most_recent_event", {})),
-            next_event = EventAbbr.from_dict(source.get("next_event", {})),
+            most_recent_event = EventBase.from_dict(source.get("most_recent_event", {})),
+            next_event = EventBase.from_dict(source.get("next_event", {})),
             keywords = source.get("keywords"),
             external_source_id = source.get("external_source_id"),
             updated = source.get("updated"),
@@ -94,7 +85,7 @@ class Matter(Doctype):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "name": self.name.to_dict(),
+            "name": self.name,
             "matter_type": self.matter_type.to_dict(),
             "title": self.title,
             "status": self.status,
@@ -104,54 +95,4 @@ class Matter(Doctype):
             "external_source_id": self.external_source_id,
             "updated": self.updated,
             "created": self.created
-        }
-
-
-class MatterAbbr(Matter):
-    """
-    Abbreviated Matter for nested instances in documents.
-    """
-
-    def __init__(
-        self,
-        id: str,
-        name: str,
-        title: str,
-        type: str,
-        decision: str
-    ):
-        super().__init__(name = name, title = title)
-        self._id = id
-        self._type = type
-        self._decision = decision
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def type(self):
-        return self._type
-
-    @property
-    def decision(self):
-        return self._decision
-
-    @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Matter:
-        return MatterAbbr(
-            id = source.get("id"),
-            name = source.get("name"),
-            title = source.get("title"),
-            type = source.get("type"),
-            decision = source.get("decision")
-        )
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "id": self.id,
-            "name": self.name,
-            "title": self.title,
-            "type": self.type,
-            "decision": self.decision
         }

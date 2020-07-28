@@ -3,13 +3,13 @@
 
 from datetime import datetime
 from typing import Any, Dict, Optional
-from .body import BodyAbbr
-from .doctype import Doctype
-from .file import FileAbbr
-from .seat import SeatAbbr
+from .body_base import BodyBase
+from .file_base import FileBase
+from .person_base import PersonBase
+from .seat_base import SeatBase
 
 
-class Person(Doctype):
+class Person(PersonBase):
     """
     Source: docs/document_store_schema.md Person.
     """
@@ -21,19 +21,19 @@ class Person(Doctype):
         email: Optional[str],
         phone: Optional[str],
         website: Optional[str],
-        picture_file: FileAbbr,
+        picture_file: FileBase,
         is_active: bool,
         is_council_president: bool,
-        most_recent_seat: SeatAbbr,
-        most_recent_chair_body: BodyAbbr,
+        most_recent_seat: SeatBase,
+        most_recent_chair_body: BodyBase,
         terms_serving_in_current_seat_role: int,
         terms_serving_in_current_committee_chair_role: int,
         external_source_id: Optional[Any],
         updated: datetime,
         created: datetime
     ):
+        super().__init__(name = name)
         self._router_id = router_id
-        self._name = name
         self._email = email
         self._phone = phone
         self._website = website
@@ -51,10 +51,6 @@ class Person(Doctype):
     @property
     def router_id(self):
         return self._router_id
-
-    @property
-    def name(self):
-        return self._name
 
     @property
     def email(self):
@@ -109,18 +105,18 @@ class Person(Doctype):
         return self._created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Doctype:
+    def from_dict(source: Dict[str, Any]) -> PersonBase:
         return Person(
             router_id = source.get("router_id"),
             name = source.get("name"),
             email = source.get("email"),
             phone = source.get("phone"),
             website = source.get("website"),
-            picture_file = FileAbbr.from_dict(source.get("picture_file", {})),
+            picture_file = FileBase.from_dict(source.get("picture_file", {})),
             is_active = source.get("is_active"),
             is_council_president = source.get("is_council_president"),
-            most_recent_seat = SeatAbbr.from_dict(source.get("most_recent_seat", {})),
-            most_recent_chair_body = BodyAbbr.from_dict(source.get("most_recent_chair_body", {})),
+            most_recent_seat = SeatBase.from_dict(source.get("most_recent_seat", {})),
+            most_recent_chair_body = BodyBase.from_dict(source.get("most_recent_chair_body", {})),
             terms_serving_in_current_seat_role = source.get("terms_serving_in_current_seat_role"),
             terms_serving_in_current_committee_chair_role = source.get("terms_serving_in_current_committee_chair_role"),
             external_source_id = source.get("external_source_id"),
@@ -145,35 +141,4 @@ class Person(Doctype):
             "external_source_id": self.external_source_id,
             "updated": self.updated,
             "created": self.created
-        }
-
-
-class PersonAbbr(Person):
-    """
-    Abbreviated Person for nested instances in documents.
-    """
-
-    def __init__(
-        self,
-        id: str,
-        name: str
-    ):
-        super.__init__(name = name)
-        self._id = id
-
-    @property
-    def id(self):
-        return self._id
-
-    @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Person:
-        return PersonAbbr(
-            id = source.get("id"),
-            name = source.get("name")
-        )
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "id": self.id,
-            "name": self.name
         }

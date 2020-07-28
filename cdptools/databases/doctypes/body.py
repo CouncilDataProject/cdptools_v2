@@ -3,10 +3,10 @@
 
 from datetime import datetime
 from typing import Any, Dict, Optional
-from .doctype import Doctype
+from .body_base import BodyBase
 
 
-class Body(Doctype):
+class Body(BodyBase):
     """
     Source: docs/document_store_schema.md Body.
     """
@@ -24,7 +24,7 @@ class Body(Doctype):
         updated: datetime,
         created: datetime
     ):
-        self._name = name
+        super().__init__(name = name)
         self._tag = tag
         self._description = description
         self._start_date = start_date
@@ -34,10 +34,6 @@ class Body(Doctype):
         self._external_source_id = external_source_id
         self._updated = updated
         self._created = created
-
-    @property
-    def name(self):
-        return self._name
 
     @property
     def tag(self):
@@ -76,14 +72,14 @@ class Body(Doctype):
         return self._created
 
     @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Doctype:
+    def from_dict(source: Dict[str, Any]) -> BodyBase:
         return Body(
             name = source.get("name"),
             tag = source.get("tag"),
             description = source.get("description"),
-            start_date = source.get("datetime"),
+            start_date = source.get("start_date"),
             end_date = source.get("end_date"),
-            is_active = source.get("bool"),
+            is_active = source.get("is_active"),
             chair_person_id = source.get("chair_person_id"),
             external_source_id = source.get("external_source_id"),
             updated = source.get("updated"),
@@ -102,35 +98,4 @@ class Body(Doctype):
             "external_source_id": self.external_source_id,
             "updated": self.updated,
             "created": self.created
-        }
-
-
-class BodyAbbr(Body):
-    """
-    Abbreviated Body for nested instances in documents.
-    """
-
-    def __init__(
-        self,
-        id: str,
-        name: str
-    ):
-        super.__init__(name = name)
-        self._id = id
-
-    @property
-    def id(self):
-        return self._id
-
-    @staticmethod
-    def from_dict(source: Dict[str, Any]) -> Body:
-        return BodyAbbr(
-            id = source.get("id"),
-            name = source.get("name")
-        )
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "id": self.id,
-            "name": self.name
         }

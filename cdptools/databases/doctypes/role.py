@@ -3,9 +3,9 @@
 
 from datetime import datetime
 from typing import Any, Dict, Optional
-from .body import Body
+from .body_base import BodyBase
 from .doctype import Doctype
-from .person import PersonAbbr
+from .person_base import PersonBase
 
 
 class Role(Doctype):
@@ -15,9 +15,9 @@ class Role(Doctype):
 
     def __init__(
         self,
-        person: Person,
+        person: PersonBase,
         title: str,
-        body: Body,
+        body: BodyBase,
         start_date: datetime,
         end_date: datetime,
         seat_id: str,
@@ -68,9 +68,9 @@ class Role(Doctype):
     @staticmethod
     def from_dict(source: Dict[str, Any]) -> Doctype:
         return Role(
-            person = PersonAbbr.from_dict(source.get("person", {})),
+            person = PersonBase.from_dict(source.get("person", {})),
             title = source.get("title"),
-            body = source.get("body", {}),
+            body = BodyBase.from_dict(source.get("body", {})),
             start_date = source.get("start_date"),
             end_date = source.get("end_date"),
             seat_id = source.get("seat_id"),
@@ -87,5 +87,5 @@ class Role(Doctype):
             "end_date": self.end_date,
             "seat_id": self.seat_id,
             "external_source_id": self.external_source_id,
-            "created": source.created
+            "created": self.created
         }

@@ -34,7 +34,7 @@ from cdptools.databases.doctypes.vote_base import VoteBase
     (
         {
             "body_name": "fake_name",
-            "event_datetime": "fake_event_datetime",
+            "event_datetime": datetime(2000, 1, 1, 0, 0, 0, 0),
             "id": "fake_id"
         }
     )

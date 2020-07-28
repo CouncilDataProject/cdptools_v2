@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 from typing import Any, Dict
 from .doctype import Doctype
 
@@ -13,7 +14,7 @@ class EventBase(Doctype):
 
     def __init__(
         self,
-        event_datetime: str,
+        event_datetime: datetime,
         id: str = None,
         body_name: str = None
     ):

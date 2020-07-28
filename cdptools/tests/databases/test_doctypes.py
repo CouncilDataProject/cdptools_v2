@@ -97,6 +97,7 @@ def test_event_base(event_base_dict):
             ],
             "external_source_id": "fake_external_source_id",
             "agenda_uri": "fake_agenda_uri",
+            "caption_uri": "fake_caption_uri",
             "minutes_uri": "fake_minutes_uri",
             "updated": str(datetime(2000, 1, 1, 0, 0, 0, 0)),
             "created": str(datetime(1999, 1, 1, 0, 0, 0, 0))

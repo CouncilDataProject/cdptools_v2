@@ -29,6 +29,7 @@ class Event(EventBase):
         people: List[PersonBase],
         external_source_id: Optional[Any],
         agenda_uri: str,
+        caption_uri: str,
         minutes_uri: Optional[str],
         updated: datetime,
         created: datetime
@@ -44,6 +45,7 @@ class Event(EventBase):
         self._people = people
         self._external_source_id = external_source_id
         self._agenda_uri = agenda_uri
+        self._caption_uri = caption_uri
         self._minutes_uri = minutes_uri
         self._updated = updated
         self._created = created
@@ -89,6 +91,10 @@ class Event(EventBase):
         return self._agenda_uri
 
     @property
+    def caption_uri(self):
+        return self._caption_uri
+
+    @property
     def minutes_uri(self):
         return self._minutes_uri
 
@@ -114,6 +120,7 @@ class Event(EventBase):
             people = [PersonBase.from_dict(p) for p in source.get("people", {})],
             external_source_id = source.get("external_source_id"),
             agenda_uri = source.get("agenda_uri"),
+            caption_uri = source.get("caption_uri"),
             minutes_uri = source.get("minutes_uri"),
             updated = source.get("updated"),
             created = source.get("created")
@@ -132,6 +139,7 @@ class Event(EventBase):
             "people": [p.to_dict() for p in self.people],
             "external_source_id": self.external_source_id,
             "agenda_uri": self.agenda_uri,
+            "caption_uri": self.caption_uri,
             "minutes_uri": self.minutes_uri,
             "updated": self.updated,
             "created": self.created

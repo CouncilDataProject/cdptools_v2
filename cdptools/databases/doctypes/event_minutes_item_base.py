@@ -14,7 +14,7 @@ class EventMinutesItemBase(Doctype):
     def __init__(
         self,
         decision: str,
-        id: str = None,
+        id: str = None
     ):
         self._decision = decision
         self._id = id

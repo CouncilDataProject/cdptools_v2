@@ -805,42 +805,6 @@ class DocumentStoreDatabase(ABC):
         return {}
 
     @abstractmethod
-    def search_events(self, query: str) -> List[Match]:
-        """
-        Use the stored indexed event terms to query for events given a query.
-
-        Parameters
-        ----------
-        query: str
-            A query string to be used to search for events using the already 
-            stored indexed event term collection.
-
-        Returns
-        -------
-        matches: List[Match]
-            An list of match objects sorted in most to least relevant order.
-        """
-        return []
-
-    @abstractmethod
-    def search_minutes_items(self, query: str) -> List[Match]:
-        """
-        Use the stored indexed minutes item terms to query for events given a query.
-
-        Parameters
-        ----------
-        query: str
-            A query string to be used to search for minutes items using the 
-            already stored indexed minutes items term collection.
-
-        Returns
-        -------
-        matches: List[Match]
-            An list of match objects sorted in most to least relevant order.
-        """
-        return []
-
-    @abstractmethod
     def drop_collection(self, collection: str):
         """
         Wipe the input collection.

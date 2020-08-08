@@ -18,6 +18,8 @@ from ..legistar_utils import events as legistar_event_tools
 from . import exceptions
 from .event_scraper import EventScraper
 
+from cdptools.databases.doctypes.event import Event
+
 ###############################################################################
 
 log = logging.getLogger(__name__)
@@ -162,7 +164,7 @@ class SeattleEventScraper(EventScraper):
     @staticmethod
     def _parse_seattle_channel_event(
         event_container: BeautifulSoup, complete_sibling: str, ignore_date: bool = False
-    ) -> Dict[str, Any]:
+    ) -> Event:
         """
         Parse a single event from the html of a Seattle Channel event block.
 
@@ -179,7 +181,7 @@ class SeattleEventScraper(EventScraper):
 
         Returns
         -------
-        event_details: Dict[str, Any]
+        event_details: Event
             The fully parsed event details.
         """
         # Find event details
@@ -265,24 +267,24 @@ class SeattleEventScraper(EventScraper):
                 raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 
         # Construct event
-        event = {
+        event = Event.from_dict({
             "minutes_items": [
-                SeattleEventScraper._clean_string(item) for item in agenda
+                {"name": SeattleEventScraper._clean_string(item)} for item in agenda
             ],
-            "body": SeattleEventScraper._clean_string(body),
+            "body": {"name": SeattleEventScraper._clean_string(body)},
             "event_datetime": event_dt,
             "source_uri": SeattleEventScraper._resolve_route(
                 complete_sibling, seattle_channel_page
             ),
             "video_uri": video.replace(" ", ""),
             "caption_uri": caption_uri,
-        }
+        })
         return event
 
     @staticmethod
     def _parse_single_seattle_channel_event_by_main_content(
         event_container: BeautifulSoup, source_uri: str, ignore_date: bool = False
-    ) -> Dict[str, Any]:
+    ) -> Event:
         """
         Parse a single event from the html of a Seattle Channel event block.
 
@@ -300,7 +302,7 @@ class SeattleEventScraper(EventScraper):
 
         Returns
         -------
-        event_details: Dict[str, Any]
+        event_details: Event
             The fully parsed event details.
         """
         # Find event details
@@ -382,19 +384,19 @@ class SeattleEventScraper(EventScraper):
                 raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 
         # Construct event
-        event = {
+        event = Event.from_dict({
             "minutes_items": [
-                SeattleEventScraper._clean_string(item) for item in agenda
+                {"name": SeattleEventScraper._clean_string(item)} for item in agenda
             ],
-            "body": SeattleEventScraper._clean_string(body),
+            "body": {"name": SeattleEventScraper._clean_string(body)},
             "event_datetime": event_dt,
             "source_uri": source_uri,
             "video_uri": video.replace(" ", ""),
             "caption_uri": caption_uri,
-        }
+        })
         return event
 
-    def _collect_sub_route_events(self, url: str) -> List[Dict]:
+    def _collect_sub_route_events(self, url: str) -> List[Event]:
         # Get page
         response = requests.get(url)
 
@@ -440,15 +442,15 @@ class SeattleEventScraper(EventScraper):
 
     @staticmethod
     def _attach_legistar_details_to_event(
-        event: Dict[str, Any], ignore_minutes_items: Optional[List[str]] = None
-    ) -> Dict[str, Any]:
+        event: Event, ignore_minutes_items: Optional[List[str]] = None
+    ) -> Event:
         """
         Query for and attach the best matching legistar event information to the
         provided event details.
 
         Parameters
         ----------
-        event: Dict[str, Any]
+        event: Event
             The parsed event details from the SeattleChannel website.
         ignore_minutes_items: Optional[List[str]]
             A list of minute item names to ignore when parsing the minutes items from
@@ -457,16 +459,16 @@ class SeattleEventScraper(EventScraper):
 
         Returns
         -------
-        joined: Dict[str, Any]
+        joined: Event
             The base event details object combined with the found legistar data.
         """
         # Get all legistar events surrounding the provided event date
         legistar_events = legistar_event_tools.get_legistar_events_for_timespan(
             "seattle",
-            event["event_datetime"],
-            event["event_datetime"] + timedelta(days=1),
+            event.event_datetime,
+            event.event_datetime + timedelta(days=1),
         )
-        log.debug("Pulled legistar details for event: {}".format(event["source_uri"]))
+        log.debug("Pulled legistar details for event: {}".format(event.source_uri))
 
         # Fast return for only one event returned
         if len(legistar_events) == 1:
@@ -490,15 +492,15 @@ class SeattleEventScraper(EventScraper):
 
             # Check if the Seattle Channel body name (basically a "display name") is
             # present in the list. If so, choose the events with that exact body name.
-            if event["body"] in available_bodies:
+            if event.body.name in available_bodies:
                 legistar_events = [
-                    e for e in cancelled_reduced if e["EventBodyName"] == event["body"]
+                    e for e in cancelled_reduced if e["EventBodyName"] == event.body.name
                 ]
             # No exact match available, find the closest body name by text diff
             else:
                 # Returns the closest name and the score that made it the closest
                 closest_body_name, score = process.extractOne(
-                    event["body"], available_bodies
+                    event.body.name, available_bodies
                 )
 
                 # For reasons somewhat unknown to me, SeattleChannel has videos for
@@ -520,7 +522,8 @@ class SeattleEventScraper(EventScraper):
 
             # Run agenda matching against the events
             match = legistar_event_tools.get_matching_legistar_event_by_minutes_match(
-                event["minutes_items"], legistar_events
+                [mi.name for mi in event.minutes_items],
+                legistar_events
             )
 
             # Add the details
@@ -532,22 +535,24 @@ class SeattleEventScraper(EventScraper):
         parsed_details = legistar_event_tools.parse_legistar_event_details(
             selected_event, ignore_minutes_items
         )
+        parsed_details["minutes_items"] = [{"name": mi["name"]} for mi in parsed_details["minutes_items"]]
+        parsed_details["body"] = {"name": parsed_details["body"]}
 
         # Format the event details
-        formatted_event_details = {
+        formatted_event_details = Event.from_dict({
             **parsed_details,
-            "source_uri": event["source_uri"],
-            "video_uri": event["video_uri"],
-            "caption_uri": event["caption_uri"],
-        }
+            "source_uri": event.source_uri,
+            "video_uri": event.video_uri,
+            "caption_uri": event.caption_uri,
+        })
         log.debug(
             "Attached legistar event details for event: {}".format(
-                formatted_event_details["source_uri"]
+                formatted_event_details.source_uri
             )
         )
         return formatted_event_details
 
-    def get_events(self) -> List[Dict]:
+    def get_events(self) -> List[Event]:
         # Complete seattle channel event collection in threadpool
         with ThreadPoolExecutor(
             min(self.max_concurrent_requests, os.cpu_count() * 5)
@@ -590,7 +595,7 @@ class SeattleEventScraper(EventScraper):
         # Return events
         return parsed_events
 
-    def get_single_event(self, uri: str, backfill: bool = False) -> Dict:
+    def get_single_event(self, uri: str, backfill: bool = False) -> Event:
         # Get page
         response = requests.get(uri)
 

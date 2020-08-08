@@ -37,7 +37,8 @@ from cdptools.databases.doctypes.vote_base import VoteBase
             "event_datetime": datetime(2000, 1, 1, 0, 0, 0, 0),
             "id": "fake_id"
         }
-    )
+    ),
+    ({})
 ])
 def test_event_base(event_base_dict):
     """
@@ -96,13 +97,15 @@ def test_event_base(event_base_dict):
                 ).to_dict()
             ],
             "external_source_id": "fake_external_source_id",
+            "source_uri": "fake_source_uri",
             "agenda_uri": "fake_agenda_uri",
             "caption_uri": "fake_caption_uri",
             "minutes_uri": "fake_minutes_uri",
             "updated": str(datetime(2000, 1, 1, 0, 0, 0, 0)),
             "created": str(datetime(1999, 1, 1, 0, 0, 0, 0))
         }
-    )
+    ),
+    ({})
 ])
 def test_event(event_dict):
     """
@@ -115,9 +118,9 @@ def test_event(event_dict):
     assert isinstance(event_obj.body, BodyBase)
     assert isinstance(event_obj.thumbnail_static_file, FileBase)
     assert isinstance(event_obj.thumbnail_hover_file, FileBase)
-    assert isinstance(event_obj.matters[0], MatterBase)
-    assert isinstance(event_obj.minutes_items[0], MinutesItemBase)
-    assert isinstance(event_obj.people[0], PersonBase)
+    assert isinstance(mb, MatterBase) for mb in event_obj.matters
+    assert isinstance(mib, MinutesItemBase) for mib in event_obj.minutes_items
+    assert isinstance(pb, PersonBase) for pb in event_obj.people
 
     assert new_event_dict == event_dict
 
@@ -130,7 +133,8 @@ def test_event(event_dict):
             "name": "fake_name",
             "id": "fake_id"
         }
-    )
+    ),
+    ({})
 ])
 def test_person_base(person_base_dict):
     """
@@ -175,7 +179,8 @@ def test_person_base(person_base_dict):
             "updated": str(datetime(2000, 1, 1, 0, 0, 0, 0)),
             "created": str(datetime(2000, 1, 1, 0, 0, 0, 0))
         }
-    )
+    ),
+    ({})
 ])
 def test_person(person_dict):
     """
@@ -201,7 +206,8 @@ def test_person(person_dict):
             "name": "fake_name",
             "id": "fake_id"
         }
-    )
+    ),
+    ({})
 ])
 def test_body_base(body_base_dict):
     """
@@ -228,7 +234,8 @@ def test_body_base(body_base_dict):
             "updated": str(datetime(1999, 1, 1, 0, 0, 0, 0)),
             "created": str(datetime(1998, 1, 1, 0, 0, 0, 0))
         }
-    )
+    ),
+    ({})
 ])
 def test_body(body_dict):
     """
@@ -251,7 +258,8 @@ def test_body(body_dict):
             "uri": "fake/uri",
             "id": "fake_id"
         }
-    )
+    ),
+    ({})
 ])
 def test_file_base(file_base_dict):
     """
@@ -273,7 +281,8 @@ def test_file_base(file_base_dict):
             "content_type": "fake_content_type",
             "created": str(datetime(2000, 1, 1, 0, 0, 0, 0))
         }
-    )
+    ),
+    ({})
 ])
 def test_file(file_dict):
     """
@@ -297,7 +306,8 @@ def test_file(file_dict):
             "confidence": 0.0,
             "created": str(datetime(2000, 1, 1, 0, 0, 0, 0))
         }
-    )
+    ),
+    ({})
 ])
 def test_transcript(transcript_dict):
     """
@@ -322,7 +332,8 @@ def test_transcript(transcript_dict):
             "map_uri": "fake_map_uri",
             "id": "fake_id"
         }
-    )
+    ),
+    ({})
 ])
 def test_seat_base(seat_base_dict):
     """
@@ -345,7 +356,8 @@ def test_seat_base(seat_base_dict):
             "map_uri": "fake/map_uri",
             "created": str(datetime(2000, 1, 1, 0, 0, 0, 0))
         }
-    )
+    ),
+    ({})
 ])
 def test_seat(seat_dict):
     """
@@ -379,7 +391,8 @@ def test_seat(seat_dict):
             "external_source_id": "fake_external_source_id",
             "created": str(datetime(1999, 1, 1, 0, 0, 0, 0))
         }
-    )
+    ),
+    ({})
 ])
 def test_role(role_dict):
     """
@@ -404,7 +417,8 @@ def test_role(role_dict):
             "name": "fake_name",
             "id": "fake_id"
         }
-    )
+    ),
+    ({})
 ])
 def test_minutes_item_base(minutes_item_base_dict):
     """
@@ -432,7 +446,8 @@ def test_minutes_item_base(minutes_item_base_dict):
             "external_source_id": "fake_external_source_id",
             "created": str(datetime(2000, 1, 1, 0, 0, 0, 0))
         }
-    )
+    ),
+    ({})
 ])
 def test_minutes_item_dict(minutes_item_dict):
     """
@@ -456,7 +471,8 @@ def test_minutes_item_dict(minutes_item_dict):
             "decision": "fake_decision",
             "id": "fake_id",
         }
-    )
+    ),
+    ({})
 ])
 def test_event_minutes_item_base(event_minutes_item_base_dict):
     """
@@ -502,7 +518,8 @@ def test_event_minutes_item_base(event_minutes_item_base_dict):
                 ).to_dict()
             ]
         }
-    )
+    ),
+    ({})
 ])
 def test_event_minutes_item(event_minutes_item_dict):
     """
@@ -531,7 +548,8 @@ def test_event_minutes_item(event_minutes_item_dict):
             "person_name": "fake_person_name",
             "vote_decision": "fake_vote_decision"
         }
-    )
+    ),
+    ({})
 ])
 def test_vote_base_dict(vote_base_dict):
     """
@@ -572,7 +590,8 @@ def test_vote_base_dict(vote_base_dict):
             "external_vote_item_id": "fake_external_source_id",
             "created": datetime(2000, 1, 1, 0, 0, 0, 0)
         }
-    )
+    ),
+    ({})
 ])
 def test_vote(vote_dict):
     """
@@ -602,7 +621,8 @@ def test_vote(vote_dict):
             "decision": "fake_decision",
             "id": "fake_id"
         }
-    )
+    ),
+    ({})
 ])
 def test_matter_base(matter_base_dict):
     """
@@ -644,7 +664,8 @@ def test_matter_base(matter_base_dict):
             "updated": datetime(2000, 1, 1, 0, 0, 0, 0),
             "created": datetime(1999, 1, 1, 0, 0, 0, 0)
         }
-    )
+    ),
+    ({})
 ])
 def test_matter(matter_dict):
     """
@@ -670,7 +691,8 @@ def test_matter(matter_dict):
             "name": "fake_name",
             "id": "fake_id"
         }
-    )
+    ),
+    ({})
 ])
 def test_matter_type_base(matter_type_base_dict):
     """
@@ -690,7 +712,8 @@ def test_matter_type_base(matter_type_base_dict):
             "external_source_id": "fake_external_source_id",
             "created": datetime(2000, 1, 1, 0, 0, 0, 0)
         }
-    )
+    ),
+    ({})
 ])
 def test_matter_type(matter_type_dict):
     """

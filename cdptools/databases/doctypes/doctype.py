@@ -29,7 +29,7 @@ class Doctype(ABC):
         return str(self.to_dict())
 
     def __repr__(self):
-        return self.__str__()
+        return str(self)
 
-    def __eq__(self, a, b):
-        return str(a) == str(b)
+    def __eq__(self, other):
+        return str(self) == str(other)

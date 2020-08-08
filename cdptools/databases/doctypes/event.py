@@ -27,12 +27,17 @@ class Event(EventBase):
         matters: List[MatterBase],
         minutes_items: List[MinutesItemBase],
         people: List[PersonBase],
-        external_source_id: Optional[Any],
+        source_uri: str,
         agenda_uri: str,
         caption_uri: str,
-        minutes_uri: Optional[str],
         updated: datetime,
-        created: datetime
+        created: datetime,
+        external_source_id: Optional[Any] = None,
+        minutes_uri: Optional[str] = None,
+        agenda_file_uri: Optional[str] = None,
+        minutes_file_uri: Optional[str] = None,
+        legistar_event_id: Optional[str] = None,
+        legistar_event_link: Optional[str] = None
     ):
         super().__init__(event_datetime = event_datetime)
         self._body = body
@@ -44,11 +49,18 @@ class Event(EventBase):
         self._minutes_items = minutes_items
         self._people = people
         self._external_source_id = external_source_id
+        self._source_uri = source_uri
         self._agenda_uri = agenda_uri
         self._caption_uri = caption_uri
         self._minutes_uri = minutes_uri
         self._updated = updated
         self._created = created
+        self._external_source_id = external_source_id
+        self._minutes_uri = minutes_uri
+        self._agenda_file_uri = agenda_file_uri
+        self._minutes_file_uri = minutes_file_uri
+        self._legistar_event_id = legistar_event_id
+        self._legistar_event_link = legistar_event_link
 
     @property
     def body(self):
@@ -87,6 +99,10 @@ class Event(EventBase):
         return self._external_source_id
 
     @property
+    def source_uri(self):
+        return self._source_uri
+
+    @property
     def agenda_uri(self):
         return self._agenda_uri
 
@@ -106,6 +122,30 @@ class Event(EventBase):
     def created(self):
         return self._created
 
+    @property
+    def external_source_id(self):
+        return self._external_source_id
+
+    @property
+    def minutes_uri(self):
+        return self._minutes_uri
+
+    @property
+    def agenda_file_uri(self):
+        return self._agenda_file_uri
+
+    @property
+    def minutes_file_uri(self):
+        return self._minutes_file_uri
+
+    @property
+    def legistar_event_id(self):
+        return self._legistar_event_id
+
+    @property
+    def legistar_event_link(self):
+        return self._legistar_event_link
+
     @staticmethod
     def from_dict(source: Dict[str, Any]) -> EventBase:
         return Event(
@@ -119,11 +159,18 @@ class Event(EventBase):
             minutes_items = [MinutesItemBase.from_dict(mi) for mi in source.get("minutes_items", {})],
             people = [PersonBase.from_dict(p) for p in source.get("people", {})],
             external_source_id = source.get("external_source_id"),
+            source_uri = source.get("source_uri"),
             agenda_uri = source.get("agenda_uri"),
             caption_uri = source.get("caption_uri"),
             minutes_uri = source.get("minutes_uri"),
             updated = source.get("updated"),
-            created = source.get("created")
+            created = source.get("created"),
+            external_source_id = source.get("external_source_id"),
+            minutes_uri = source.get("minutes_uri"),
+            agenda_file_uri = source.get("agenda_file_uri"),
+            minutes_file_uri = source.get("minutes_file_uri"),
+            legistar_event_id = source.get("legistar_event_id"),
+            legistar_event_link = source.get("legistar_event_link")
         )
 
     def to_dict(self) -> Dict[str, Any]:
@@ -138,9 +185,16 @@ class Event(EventBase):
             "minutes_items": [mi.to_dict() for mi in self.minutes_items],
             "people": [p.to_dict() for p in self.people],
             "external_source_id": self.external_source_id,
+            "source_uri": self.source_uri,
             "agenda_uri": self.agenda_uri,
             "caption_uri": self.caption_uri,
             "minutes_uri": self.minutes_uri,
             "updated": self.updated,
-            "created": self.created
+            "created": self.created,
+            "external_source_id": self.external_source_id,
+            "minutes_uri": self.minutes_uri,
+            "agenda_file_uri": self.agenda_file_uri,
+            "minutes_file_uri": self.minutes_file_uri,
+            "legistar_event_id": self.legistar_event_id,
+            "legistar_event_link": self.legistar_event_link
         }

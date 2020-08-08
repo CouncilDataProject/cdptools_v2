@@ -50,6 +50,7 @@ event_id: {
     ]
     external_source_id: optional[any]
     agenda_uri: str
+    caption_uri: str
     minutes_uri: optional[str]
     updated: datetime
     created: datetime

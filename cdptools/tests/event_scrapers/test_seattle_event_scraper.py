@@ -6,6 +6,7 @@ from datetime import datetime
 import pytest
 from bs4 import BeautifulSoup
 from cdptools.event_scrapers.seattle_event_scraper import SeattleEventScraper
+from cdptools.databases.doctypes.event import Event
 
 
 @pytest.mark.parametrize(
@@ -63,21 +64,21 @@ def single_event_soup(data_dir):
 
 
 MOCK_URI_SINGLE_EVENT = "http://www.seattlechannel.org/mayor-and-council/city-council/2018/2019-civic-development-public-assets-and-native-communities-committee/?videoid=x107461"  # noqa: E501
-EXPECTED_SINGLE_EVENT = {
+EXPECTED_SINGLE_EVENT = Event.from_dict({
     "minutes_items": [
-        "Chair's Report",
-        "Public Comment",
-        "Appointments and Reappointments to Board of Park Commissioners,Seattle Park District Community Oversight Committee, andCentral Waterfront Oversight committee",  # noqa: E501
-        "Review of Amended and Restated Monorail System Concession Agreement",
-        "CB 119661 -relating to Seattle Parks and Recreation (Terry Pettus Park Addition)",  # noqa: E501
-        "CB 119700: relating to the Central Waterfront Project (Ocean Pavilion)",
+        {"name": "Chair's Report"},
+        {"name": "Public Comment"},
+        {"name": "Appointments and Reappointments to Board of Park Commissioners,Seattle Park District Community Oversight Committee, andCentral Waterfront Oversight committee"},  # noqa: E501
+        {"name": "Review of Amended and Restated Monorail System Concession Agreement"},
+        {"name": "CB 119661 -relating to Seattle Parks and Recreation (Terry Pettus Park Addition)"},  # noqa: E501
+        {"name": "CB 119700: relating to the Central Waterfront Project (Ocean Pavilion)"},
     ],  # noqa: E501
-    "body": "Civic Development, Public Assets, and Native Communities Committee",
+    "body": {"name": "Civic Development, Public Assets, and Native Communities Committee"},
     "event_datetime": datetime(2019, 12, 4, 0, 0),
     "source_uri": "http://www.seattlechannel.org/mayor-and-council/city-council/2018/2019-civic-development-public-assets-and-native-communities-committee/?videoid=x107461",  # noqa: E501
     "video_uri": "https://video.seattle.gov/media/council/civdev_120419_2541939V.mp4",
     "caption_uri": "https://seattlechannel.org/documents/seattlechannel/closedcaption/2019/civdev_120419_2541939.vtt",  # noqa: E501
-}
+})
 
 
 def test_parse_single_seattle_channel_event(single_event_soup):
@@ -85,6 +86,10 @@ def test_parse_single_seattle_channel_event(single_event_soup):
         single_event_soup, MOCK_URI_SINGLE_EVENT, ignore_date=True
     )
 
+    # Type check
+    assert isinstance(event, Event)
+
+    # Value check
     assert event == EXPECTED_SINGLE_EVENT
 
 

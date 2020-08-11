@@ -435,9 +435,13 @@ class DocumentStoreDatabase(ABC):
         thumbnail_hover_file: Dict[str, str],
         video_uri: Optional[str],
         keywords: List[Dict[str, str]],
+        keyword_ids: List[str],
         matters: List[Dict[str, str]],
+        matter_ids: List[str],
         minutes_items: List[Dict[str, str]],
+        minutes_item_ids: List[str],
         people: List[Dict[str, str]],
+        person_ids: List[str],
         external_source_id: Optional[str],
         agenda_uri: str,
         minutes_uri: Optional[str],
@@ -462,12 +466,20 @@ class DocumentStoreDatabase(ABC):
             An optional video uri for the event.
         keywords: Dict[str, str]
             A dictionary containing information on the event's keywords.
+        keyword_ids: List[str]
+            A list containing the keyword ids.
         matters: Dict[str, str]
             A dictionary containing information on the event's matters.
+        matter_ids: List[str]
+            A list containing the matter ids.
         minutes_items: Dict[str, str]
             A dictionary containing information on the event's minutes_items.
+        minutes_item_ids: List[str]
+            A list containing the minutes_item ids.
         people: Dict[str, str]
             A dictionary containing information on the event's involved people.
+        person: List[str]
+            A list containing the person ids.
         external_source_id: Optional[str]
             An id in the external source this data comes from.
         agenda_uri: str
@@ -711,7 +723,9 @@ class DocumentStoreDatabase(ABC):
         decision: Optional[str],
         matter: Dict[str, str],
         votes: List[Dict[str, str]],
+        vote_ids: List[str],
         files: List[Dict[str, str]],
+        file_ids: List[str],
     ) -> Dict[str, Any]:
         """
         Get or upload a event minute item (to the database, a file store).
@@ -730,8 +744,12 @@ class DocumentStoreDatabase(ABC):
             Information on the matter of this event_minutes_item.
         votes: List[Dict[str, str]]
             Information on the votes of this event_minutes_item.
+        vote_ids: List[str]
+            A list of vote ids.
         files: List[Dict[str, str]]
             Information on the files of this event_minutes_item.
+        file_ids: List[str]
+            A list of file ids.
 
         Returns
         -------
@@ -750,6 +768,7 @@ class DocumentStoreDatabase(ABC):
         most_recent_event: Dict[str, Any],
         next_event: Dict[str, Any],
         keywords: List[Dict[str, str]],
+        keyword_ids: List[str],
         external_source_id: Optional[Any],
         updated: datetime,
         created: datetime,
@@ -773,6 +792,8 @@ class DocumentStoreDatabase(ABC):
             Information on the next event regarding this matter.
         keywords: List[Dict[str, str]]
             Information on the keywords of this matter.
+        keyword_ids: List[str]
+            A list of keyword ids.
         external_source_id: Optional[Any]
             An id in the external source this data comes from.
 

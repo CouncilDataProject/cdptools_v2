@@ -826,6 +826,30 @@ class DocumentStoreDatabase(ABC):
         return {}
 
     @abstractmethod
+    def update_collection_with_field(
+        self, field: str, value: Any, collection: str, document_id: str,
+    ) -> None:
+        """
+        Update the field of a collection.
+
+        Parameters
+        ----------
+        field: str
+            The name of the field to be updated.
+        value: Any
+            The value of the field to be updated.
+        collection: str,
+            The name of the collection to be updated.
+        document_id: str
+            The document_id of the document to be updated. 
+
+        Returns
+        -------
+        None
+        """
+        return
+
+    @abstractmethod
     def drop_collection(self, collection: str):
         """
         Wipe the input collection.

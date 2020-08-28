@@ -810,6 +810,12 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
             },
         )
 
+    def update_collection_with_field(
+        self, collection: str, document_id: str, field: str, value: any,
+    ) -> Dict:
+        document = self._root.collection(collection).document(document_id)
+        document.update({field: value})
+
     def drop_collection(self, table, batch_size):
         docs = self._root.collection(table).list_documents(batch_size)
 

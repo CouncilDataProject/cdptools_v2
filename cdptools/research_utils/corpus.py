@@ -127,19 +127,23 @@ def expand_and_sort_event_minutes_items(emis: List[Dict], db: Database) -> pd.Da
     # Get the minutes item details
     cleaned = []
     for emi in emis:
-        mi = db.select_row_by_id("minutes_item", emi["minutes_item_id"])
+        try:
+            mi = db.select_row_by_id("minutes_item", emi["minutes_item_id"])
 
-        # Negate the 1 indexing
-        cleaned.append(
-            {
-                "event_minutes_item_id": emi["event_minutes_item_id"],
-                "minutes_item_id": emi["minutes_item_id"],
-                "name": mi["name"],
-                "matter": mi["matter"],
-                "index": emi["index"],
-                "decision": emi["decision"],
-            }
-        )
+            # Negate the 1 indexing
+            cleaned.append(
+                {
+                    "event_minutes_item_id": emi["event_minutes_item_id"],
+                    "minutes_item_id": emi["minutes_item_id"],
+                    "name": mi["name"],
+                    "matter": mi["matter"],
+                    "index": emi["index"],
+                    "decision": emi["decision"],
+                }
+            )
+
+        except Exception:
+            pass
 
     # Sort list by index
     cleaned = sorted(cleaned, key=lambda item: item["index"])
@@ -171,7 +175,9 @@ def merge_events_and_emi_details(
 
 
 @task
-def finalize_dataset(dataset: pd.DataFrame) -> pd.DataFrame:
+def finalize_dataset(
+    dataset: pd.DataFrame, include_minutes_items: bool
+) -> pd.DataFrame:
     dataset = dataset.rename(
         columns={
             "confidence": "transcript_confidence",
@@ -182,27 +188,32 @@ def finalize_dataset(dataset: pd.DataFrame) -> pd.DataFrame:
         }
     )
 
-    return dataset[
-        [
-            "event_id",
-            "event_datetime",
-            "body_id",
-            "body_name",
-            "remote_video_uri",
-            "transcript_id",
-            "transcript_filename",
-            "remote_transcript_uri",
-            "transcript_confidence",
-            "event_minutes_items",
-        ]
+    return_cols = [
+        "event_id",
+        "event_datetime",
+        "body_id",
+        "body_name",
+        "remote_video_uri",
+        "transcript_id",
+        "transcript_filename",
+        "remote_transcript_uri",
+        "transcript_confidence",
     ]
+
+    if include_minutes_items:
+        return_cols.append("event_minutes_items")
+
+    return dataset[return_cols]
 
 
 ###############################################################################
 # workflow run function
 
 
-def generate_dataset(instance: CDPInstance = CDPInstance(SEATTLE)) -> pd.DataFrame:
+def generate_dataset(
+    instance: CDPInstance = CDPInstance(SEATTLE),
+    include_minutes_items: bool = False,
+) -> pd.DataFrame:
     """
     Generate a dataset with most of the important information needed for analysis.
 
@@ -211,6 +222,10 @@ def generate_dataset(instance: CDPInstance = CDPInstance(SEATTLE)) -> pd.DataFra
     instance: CDPInstance
         Which CDPInstance to target for dataset generation.
         Default: SEATTLE
+
+    include_minutes_items: bool
+        Should event minutes items be included as a column.
+        Default: False (do not include)
 
     Returns
     -------
@@ -261,20 +276,28 @@ def generate_dataset(instance: CDPInstance = CDPInstance(SEATTLE)) -> pd.DataFra
         file_ids = get_file_ids(transcripts)
         files = get_file_details.map(file_ids, db=unmapped(instance.database))
 
-        # Get each event's minutes items
-        all_emis = get_event_minutes_items.map(
-            event_ids, db=unmapped(instance.database)
-        )
-        all_emis = expand_and_sort_event_minutes_items.map(
-            all_emis, db=unmapped(instance.database)
-        )
-
         # Merge dataframes
         events = merge_event_and_body_details(events, bodies)
         transcripts = merge_transcript_and_file_details(transcripts, files)
         transcript_manifest = merge_event_and_transcript_details(events, transcripts)
-        complete_manifest = merge_events_and_emi_details(transcript_manifest, all_emis)
-        finalize_dataset(complete_manifest)
+
+        if include_minutes_items:
+            # Get each event's minutes items
+            all_emis = get_event_minutes_items.map(
+                event_ids, db=unmapped(instance.database)
+            )
+            all_emis = expand_and_sort_event_minutes_items.map(
+                all_emis, db=unmapped(instance.database)
+            )
+
+            complete_manifest = merge_events_and_emi_details(
+                transcript_manifest, all_emis
+            )
+
+        else:
+            complete_manifest = transcript_manifest
+
+        finalize_dataset(complete_manifest, include_minutes_items)
 
     # Run
     state = flow.run(executor=DaskExecutor())

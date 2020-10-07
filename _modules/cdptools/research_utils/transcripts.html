@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id7">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id10">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id18">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id8">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id11">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id19">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id26">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id30">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id32">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id27">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id31">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../changelog.html#id33">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -450,7 +450,11 @@
     <span class="n">selected_transcripts</span> <span class="o">=</span> <span class="n">get_transcript_manifest</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">order_by_field</span><span class="o">=</span><span class="n">order_by_field</span><span class="p">)</span>
 
     <span class="c1"># Create download file partial</span>
-    <span class="n">file_download</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_download_file</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,)</span>
+    <span class="n">file_download</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+        <span class="n">_download_file</span><span class="p">,</span>
+        <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span>
+        <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Begin storage</span>
     <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">exe</span><span class="p">:</span>

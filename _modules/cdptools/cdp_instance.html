@@ -177,15 +177,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#v2-0-5-2020-03-07">v2.0.5 (2020-03-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id7">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id10">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id18">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id8">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id11">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id19">Other</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#v2-0-4-2019-12-31">v2.0.4 (2019-12-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id26">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id30">Fix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id32">Other</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id27">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id31">Fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#id33">Other</a></li>
 </ul>
 </li>
 </ul>
@@ -347,7 +347,9 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="CDPInstance.download_transcripts"><a class="viewcode-back" href="../../cdptools.html#cdptools.cdp_instance.CDPInstance.download_transcripts">[docs]</a>    <span class="k">def</span> <span class="nf">download_transcripts</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">order_by_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span>
+        <span class="n">save_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Download a transcript for each event found in a CDP instance. Additionally</span>

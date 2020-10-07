@@ -108,7 +108,11 @@ ENV/
 # Credentials
 credentials/
 
+# Dask
+dask-worker-space/
+
 # Common files
 workbench.ipynb
 transcripts/
 delete_events.ipynb
+corpus/

@@ -47,20 +47,25 @@ requirements = [
     "requests[security]>=2.23.0",
     "schedule>=0.6.0",
     "setuptools>=44.0.0",
+    "six>=1.14.0",
     "tika>=1.24",
     "webvtt-py>=0.4.5",
-    "truecase>=0.0.9"
+    "truecase>=0.0.9",
 ]
 
-extra_requirements = [
-    "appdirs>=1.4.3"
-]
+extra_requirements = ["appdirs>=1.4.3"]
 
 seattle_requirements = [
     "cryptography>=2.9.2",
-    "firebase-admin>=4.3.0",
-    "google-cloud-speech>=1.3.2",
-    "google-cloud-storage>=1.28.1"
+    "firebase-admin==4.3.0",
+    "google-api-core[grpc]==1.22.1",
+    "google-api-python-client==1.10.0",
+    "google-auth==1.20.1",
+    "google-cloud-core==1.4.1",
+    "google-cloud-firestore==1.8.1",
+    "google-cloud-speech==1.3.2",
+    "google-cloud-storage==1.30.0",
+    "google-resumable-media==0.7.1",
 ]
 
 extra_requirements = {
@@ -76,7 +81,7 @@ extra_requirements = {
         *test_requirements,
         *setup_requirements,
         *dev_requirements,
-    ]
+    ],
 }
 
 setup(
@@ -90,7 +95,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
-        "Topic :: Utilities"
+        "Topic :: Utilities",
     ],
     description="Tools to interact with and deploy CouncilDataProject instances",
     entry_points={
@@ -98,7 +103,7 @@ setup(
             "run_cdp_pipeline=cdptools.bin.run_cdp_pipeline:main",
             "clone_db=cdptools.bin.clone_db:main",
             "process_single_event=cdptools.bin.process_single_event:main",
-            "clone_file_store=cdptools.bin.clone_file_store:main"
+            "clone_file_store=cdptools.bin.clone_file_store:main",
         ],
     },
     install_requires=requirements,

@@ -47,6 +47,7 @@ requirements = [
     "requests[security]>=2.23.0",
     "schedule>=0.6.0",
     "setuptools>=44.0.0",
+    "six>=1.14.0",
     "tika>=1.24",
     "webvtt-py>=0.4.5",
     "truecase>=0.0.9"

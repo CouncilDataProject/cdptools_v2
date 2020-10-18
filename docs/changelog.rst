@@ -2,6 +2,41 @@ Changelog
 =========
 
 
+v2.0.6 (2020-10-18)
+-------------------
+
+New
+~~~
+- feature/add-get-context-span-utility  (`#115
+  <https://github.com/CouncilDataProject/cdptools/pull/115>`_)
+  [JacksonMaxfield]
+
+Fix
+~~~
+- bugfix/upper-bound-sphinx  (`#143
+  <https://github.com/CouncilDataProject/cdptools/pull/143>`_)
+  [JacksonMaxfield]
+
+Other
+~~~~~
+- admin/fix-deps-and-format-files  (`#158
+  <https://github.com/CouncilDataProject/cdptools/pull/158>`_) [Jackson
+  Maxfield Brown]
+- Update paper.md [Nic]
+- admin/reorg-paper-files  (`#146
+  <https://github.com/CouncilDataProject/cdptools/pull/146>`_)
+  [JacksonMaxfield]
+- admin/update-from-cookiecutter  (`#145
+  <https://github.com/CouncilDataProject/cdptools/pull/145>`_)
+  [JacksonMaxfield]
+- admin/fix-lint-errors  (`#144
+  <https://github.com/CouncilDataProject/cdptools/pull/144>`_)
+  [JacksonMaxfield]
+- admin/replace-fuzzywuzzy-with-rapidfuzz  (`#140
+  <https://github.com/CouncilDataProject/cdptools/pull/140>`_)
+  [JacksonMaxfield, maxbachmann]
+
+
 v2.0.5 (2020-03-07)
 -------------------
 

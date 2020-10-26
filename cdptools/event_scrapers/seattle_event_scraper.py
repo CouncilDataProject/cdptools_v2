@@ -17,6 +17,7 @@ from rapidfuzz import process
 from ..legistar_utils import events as legistar_event_tools
 from . import exceptions
 from .event_scraper import EventScraper
+from ..pipelines.minimal_event_data import MinimalEventData
 
 ###############################################################################
 
@@ -29,6 +30,20 @@ class ParsedEvents(object):
     def __init__(
         self,
         success: List[Dict] = None,
+        warning: List[exceptions.EventOutOfTimeboundsError] = None,
+        error: List[
+            Union[exceptions.EventParseError, exceptions.LegistarLookupError]
+        ] = None,
+    ):
+        self.success = success if success else []
+        self.warning = warning if warning else []
+        self.error = error if error else []
+
+
+class ParsedMinimalEvents(object):
+    def __init__(
+        self,
+        success: List[MinimalEventData] = None,
         warning: List[exceptions.EventOutOfTimeboundsError] = None,
         error: List[
             Union[exceptions.EventParseError, exceptions.LegistarLookupError]
@@ -621,6 +636,191 @@ class SeattleEventScraper(EventScraper):
             raise e
 
         return result
+
+    def get_minimal_events(self) -> List[MinimalEventData]:
+        # Complete seattle channel event collection in threadpool
+        with ThreadPoolExecutor(
+            min(self.max_concurrent_requests, os.cpu_count() * 5)
+        ) as exe:
+            seattle_channel_results = list(
+                exe.map(self._collect_sub_route_minimal_events, self.get_routes())
+            )
+
+        # Join body events to single object
+        success = []
+        warning = []
+        error = []
+        for body_result in seattle_channel_results:
+            success += body_result.success
+            warning += body_result.warning
+            error += body_result.error
+        results = ParsedMinimalEvents(success, warning, error)
+        log.info(f"Found {len(results.success)} minimal events from initial gather.")
+
+        parsed_events = results.success
+
+        log.info(
+            f"Collected: {len(results.success)}. "
+            f"Ignored: {len(results.warning)}. "
+            f"Errored: {len(results.error)}."
+        )
+
+        # Return events
+        return parsed_events
+
+    def _collect_sub_route_minimal_events(self, url: str) -> List[MinimalEventData]:
+        # Get page
+        response = requests.get(url)
+
+        # Check status
+        response.raise_for_status()
+
+        # Convert to soup
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # Find all event containers
+        event_containers = soup.find_all(
+            "div", class_="row borderBottomNone paginationItem"
+        )
+
+        # Process each event
+        events = ParsedMinimalEvents()
+        for container in event_containers:
+            try:
+                # Parse event details from html
+                event = self._parse_seattle_channel_minimal_event(
+                    container, self.main_route, self.backfill
+                )
+
+                # Successful parse
+                events.success.append(event)
+
+            except (exceptions.EventOutOfTimeboundsError) as e:
+                # For logging purposes, return the errors
+                events.warning.append((container, e))
+
+            except exceptions.EventParseError as e:
+                # For logging purposes, return the errors
+                events.error.append((container, e))
+
+        # Return processed events
+        log.debug(
+            f"Collected {len(events.success)}. "
+            f"Warnings: {len(events.warning)}. "
+            f"Errors: {len(events.error)}. "
+            f"from sub-route: {url}"
+        )
+        return events
+
+    @staticmethod
+    def _parse_seattle_channel_minimal_event(
+        event_container: BeautifulSoup, complete_sibling: str, ignore_date: bool = False
+    ):
+        """
+        Parse a single event from the html of a Seattle Channel event block.
+
+        Parameters
+        ----------
+        event_container: BeautifulSoup
+            A BeautifulSoup object created from reading a single event div block from
+            SeattleChannel.
+        complete_sibling: str
+            A complete sibling to the current event containers host page.
+        ignore_date: bool
+            A boolean information whether or not to ignore the parsed event based of
+            the parsed date.
+
+        Returns
+        -------
+        event_details: Dict[str, Any]
+            The fully parsed event details.
+        """
+        # Find event details
+        event_details = event_container.find(
+            "div", class_="col-xs-12 col-sm-8 col-md-9"
+        )
+
+        # Find and clean body name
+        body = event_details.find("h2").text.replace("\n", "")
+        body = body.replace(" - Special Meeting", "")
+        body = body.replace(" Special Meeting - Public Hearing", "")
+        body_includes_date = re.search(r"[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}$", body)
+        if body_includes_date:
+            body = body.replace(f" {body_includes_date.group(0)}", "")
+
+        # Find and clean date
+        date = event_details.find("div", class_="videoDate").text
+        month, day, year = tuple(date.split("/"))
+        event_dt = datetime(int(year), int(month), int(day))
+
+        # Agendas have mixed formatting
+        try:
+            agenda = event_details.find("div", class_="titleExcerptText").find("p").text
+        except AttributeError:
+            try:
+                agenda = event_details.find("div", class_="titleExcerptText").text
+            except AttributeError:
+                raise exceptions.EventParseError(body, event_dt)
+
+        # The agenda is returned as a single string
+        # Clean it and split it into its parts
+        agenda = agenda.replace("Agenda:", "")
+        agenda = agenda.replace("Agenda Items:", "")
+
+        # Older agendas used commas instead of semicolons
+        if ";" in agenda:
+            agenda = agenda.split(";")
+        else:
+            agenda = agenda.split(",")
+
+        # Find video and thumbnail urls
+        video_and_thumbnail = event_container.find(
+            "div", class_="col-xs-12 col-sm-4 col-md-3"
+        )
+        video = video_and_thumbnail.find("a").get("onclick")
+
+        # Find video's caption vtt file uri
+        # Partial URI of caption file ends with .vtt
+        caption_uri_search = re.search(r"[a-zA-Z0-9/_]+\.vtt", video)
+        if caption_uri_search:
+            closed_caption_route = (
+                "https://seattlechannel.org/documents/seattlechannel/closedcaption/"
+            )
+            caption_uri = f"{closed_caption_route}{caption_uri_search.group(0)}"
+        else:
+            caption_uri = None
+
+        # Onclick returns a javascript function
+        # Try to find the url the function redirects to
+        try:
+            # All seattle channel videos are hosted at "video.seattle.gov/..."
+            # This will find the true url by searching for a substring that matches the
+            # above pattern
+            # Note: some of the urls have spaces in the video filename which is why the
+            # space is included in the regex search pattern.
+            video = re.search(
+                r"video\.seattle\.gov[a-zA-Z0-9\/_ ]*\.(mp4|flv)", video
+            ).group(0)
+            video = f"https://{video}"
+        except AttributeError:
+            raise exceptions.EventParseError(body, event_dt)
+
+        # If the event was not in the last two weeks, ignore it.
+        # We check the last two weeks over just the last day because sometimes events
+        # are posted late and such.
+        # Additionally, by always collecting the last two weeks, we generally get more
+        # info from legistar.
+        if not ignore_date:
+            now = SeattleEventScraper.pstnow()
+            yesterday = now - timedelta(days=8)
+            if not (event_dt > yesterday and event_dt < now):
+                raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
+
+        body = SeattleEventScraper._clean_string(body)
+        event_datetime = event_dt
+        video_uri = video.replace(" ", "")
+
+        return MinimalEventData(body, event_datetime, video_uri, caption_uri, None)
 
     def __str__(self):
         return f"<SeattleEventScraper [{self.main_route}]>"

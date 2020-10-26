@@ -89,7 +89,9 @@ class CDPInstance:
         )
 
     def download_transcripts(
-        self, order_by_field: str = "confidence", save_dir: Optional[Path] = None,
+        self,
+        order_by_field: str = "confidence",
+        save_dir: Optional[Path] = None,
     ) -> Dict[str, Path]:
         """
         Download a transcript for each event found in a CDP instance. Additionally

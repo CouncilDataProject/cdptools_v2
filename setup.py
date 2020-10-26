@@ -47,9 +47,10 @@ requirements = [
     "requests[security]>=2.23.0",
     "schedule>=0.6.0",
     "setuptools>=44.0.0",
+    "six>=1.14.0",
     "tika>=1.24",
     "webvtt-py>=0.4.5",
-    "truecase>=0.0.9"
+    "truecase>=0.0.9",
 ]
 
 extra_requirements = [
@@ -58,9 +59,17 @@ extra_requirements = [
 
 seattle_requirements = [
     "cryptography>=2.9.2",
-    "firebase-admin>=4.3.0",
+    "firebase-admin==4.3.0",
     "google-cloud-speech>=1.3.2",
+    "google-api-core[grpc]==1.22.1",
     "google-cloud-storage>=1.28.1"
+    "google-api-python-client==1.10.0",
+    "google-auth==1.20.1",
+    "google-cloud-core==1.4.1",
+    "google-cloud-firestore==1.8.1",
+    "google-cloud-speech==1.3.2",
+    "google-cloud-storage==1.30.0",
+    "google-resumable-media==0.7.1",
 ]
 
 extra_requirements = {

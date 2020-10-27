@@ -60,9 +60,7 @@ extra_requirements = [
 seattle_requirements = [
     "cryptography>=2.9.2",
     "firebase-admin==4.3.0",
-    "google-cloud-speech>=1.3.2",
     "google-api-core[grpc]==1.22.1",
-    "google-cloud-storage>=1.28.1"
     "google-api-python-client==1.10.0",
     "google-auth==1.20.1",
     "google-cloud-core==1.4.1",

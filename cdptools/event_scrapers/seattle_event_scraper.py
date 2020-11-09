@@ -17,7 +17,11 @@ from rapidfuzz import process
 from ..legistar_utils import events as legistar_event_tools
 from . import exceptions
 from .event_scraper import EventScraper
-from ..pipelines.minimal_event_data import MinimalEventData
+from ..pipelines.minimal_event_data import (
+    MinimalEventData,
+    MinimalSessionData,
+    MinimalEventAndSessionData,
+)
 
 ###############################################################################
 
@@ -44,6 +48,20 @@ class ParsedMinimalEvents(object):
     def __init__(
         self,
         success: List[MinimalEventData] = None,
+        warning: List[exceptions.EventOutOfTimeboundsError] = None,
+        error: List[
+            Union[exceptions.EventParseError, exceptions.LegistarLookupError]
+        ] = None,
+    ):
+        self.success = success if success else []
+        self.warning = warning if warning else []
+        self.error = error if error else []
+
+
+class ParsedMinimalEventsAndSessions(object):
+    def __init__(
+        self,
+        success: List[MinimalEventAndSessionData] = None,
         warning: List[exceptions.EventOutOfTimeboundsError] = None,
         error: List[
             Union[exceptions.EventParseError, exceptions.LegistarLookupError]
@@ -642,31 +660,25 @@ class SeattleEventScraper(EventScraper):
         with ThreadPoolExecutor(
             min(self.max_concurrent_requests, os.cpu_count() * 5)
         ) as exe:
-            seattle_channel_results = list(
+            minimal_events = list(
                 exe.map(self._collect_sub_route_minimal_events, self.get_routes())
             )
 
-        # Join body events to single object
-        success = []
-        warning = []
-        error = []
-        for body_result in seattle_channel_results:
-            success += body_result.success
-            warning += body_result.warning
-            error += body_result.error
-        results = ParsedMinimalEvents(success, warning, error)
-        log.info(f"Found {len(results.success)} minimal events from initial gather.")
+            # Flatten list
+            minimal_events = [item for sublist in minimal_events for item in sublist]
 
-        parsed_events = results.success
+        # Attach legistar details
+        with ThreadPoolExecutor(
+            min(self.max_concurrent_requests, os.cpu_count() * 5)
+        ) as exe:
+            minimal_events_with_legistar = list(
+                exe.map(
+                    SeattleEventScraper._attach_legistar_details_to_minimal_event,
+                    minimal_events,
+                )
+            )
 
-        log.info(
-            f"Collected: {len(results.success)}. "
-            f"Ignored: {len(results.warning)}. "
-            f"Errored: {len(results.error)}."
-        )
-
-        # Return events
-        return parsed_events
+        return minimal_events_with_legistar
 
     def _collect_sub_route_minimal_events(self, url: str) -> List[MinimalEventData]:
         # Get page
@@ -679,53 +691,60 @@ class SeattleEventScraper(EventScraper):
         soup = BeautifulSoup(response.content, "html.parser")
 
         # Find all event containers
-        event_containers = soup.find_all(
+        session_containers = soup.find_all(
             "div", class_="row borderBottomNone paginationItem"
         )
 
-        # Process each event
-        events = ParsedMinimalEvents()
-        for container in event_containers:
+        # Process session
+        events_and_sessions = ParsedMinimalEventsAndSessions()
+
+        for container in session_containers:
             try:
-                # Parse event details from html
-                event = self._parse_seattle_channel_minimal_event(
+                # Parse session details from html
+                event_and_session = self._parse_seattle_channel_minimal_session(
                     container, self.main_route, self.backfill
                 )
 
                 # Successful parse
-                events.success.append(event)
+                events_and_sessions.success.append(event_and_session)
 
             except (exceptions.EventOutOfTimeboundsError) as e:
                 # For logging purposes, return the errors
-                events.warning.append((container, e))
+                events_and_sessions.warning.append((container, e))
 
             except exceptions.EventParseError as e:
                 # For logging purposes, return the errors
-                events.error.append((container, e))
+                events_and_sessions.error.append((container, e))
 
         # Return processed events
         log.debug(
-            f"Collected {len(events.success)}. "
-            f"Warnings: {len(events.warning)}. "
-            f"Errors: {len(events.error)}. "
+            f"Collected: {len(events_and_sessions.success)}. "
+            f"Warnings: {len(events_and_sessions.warning)}. "
+            f"Errors: {len(events_and_sessions.error)}. "
             f"from sub-route: {url}"
         )
-        return events
+
+        # Match corresponding sessions to the same events
+        matched_events = self.match_events_and_sessions(events_and_sessions.success)
+
+        return matched_events
 
     @staticmethod
-    def _parse_seattle_channel_minimal_event(
-        event_container: BeautifulSoup, complete_sibling: str, ignore_date: bool = False
-    ):
+    def _parse_seattle_channel_minimal_session(
+        session_container: BeautifulSoup,
+        complete_sibling: str,
+        ignore_date: bool = False,
+    ) -> MinimalEventAndSessionData:
         """
         Parse a single event from the html of a Seattle Channel event block.
 
         Parameters
         ----------
-        event_container: BeautifulSoup
-            A BeautifulSoup object created from reading a single event div block from
+        session_container: BeautifulSoup
+            A BeautifulSoup object created from reading a single session div block from
             SeattleChannel.
         complete_sibling: str
-            A complete sibling to the current event containers host page.
+            A complete sibling to the current session containers host page.
         ignore_date: bool
             A boolean information whether or not to ignore the parsed event based of
             the parsed date.
@@ -736,48 +755,59 @@ class SeattleEventScraper(EventScraper):
             The fully parsed event details.
         """
         # Find event details
-        event_details = event_container.find(
+        session_details = session_container.find(
             "div", class_="col-xs-12 col-sm-8 col-md-9"
         )
 
         # Find and clean body name
-        body = event_details.find("h2").text.replace("\n", "")
+        body = session_details.find("h2").text.replace("\n", "")
         body = body.replace(" - Special Meeting", "")
         body = body.replace(" Special Meeting - Public Hearing", "")
         body_includes_date = re.search(r"[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}$", body)
         if body_includes_date:
             body = body.replace(f" {body_includes_date.group(0)}", "")
 
+        # Remove 'Session X' from body if it's present
+        body_and_session = body.split("Session")
+        body = body_and_session[0]
+
+        # Determine session index
+        session_index = 0
+
+        if len(body_and_session) > 1:
+            session_num = str(body_and_session[1]).replace(" ", "")
+            if str(session_num) == "I":
+                session_index = 0
+            elif str(session_num) == "II":
+                session_index = 1
+
         # Find and clean date
-        date = event_details.find("div", class_="videoDate").text
+        date = session_details.find("div", class_="videoDate").text
         month, day, year = tuple(date.split("/"))
         event_dt = datetime(int(year), int(month), int(day))
 
-        # Agendas have mixed formatting
+        # Find sister session_link
+        title_excerpt = session_container.find("div", class_="titleExcerptText")
+
+        linked_session_id = None
+
         try:
-            agenda = event_details.find("div", class_="titleExcerptText").find("p").text
-        except AttributeError:
-            try:
-                agenda = event_details.find("div", class_="titleExcerptText").text
-            except AttributeError:
-                raise exceptions.EventParseError(body, event_dt)
-
-        # The agenda is returned as a single string
-        # Clean it and split it into its parts
-        agenda = agenda.replace("Agenda:", "")
-        agenda = agenda.replace("Agenda Items:", "")
-
-        # Older agendas used commas instead of semicolons
-        if ";" in agenda:
-            agenda = agenda.split(";")
-        else:
-            agenda = agenda.split(",")
+            linked_session_uri = title_excerpt.find("a").get("href")
+            linked_session_id = str(linked_session_uri).split("videoid=")[1]
+        except Exception:
+            log.debug("Could not parse session link from title excerpt: {}".format(
+                title_excerpt))
+            pass
 
         # Find video and thumbnail urls
-        video_and_thumbnail = event_container.find(
+        video_and_thumbnail = session_container.find(
             "div", class_="col-xs-12 col-sm-4 col-md-3"
         )
         video = video_and_thumbnail.find("a").get("onclick")
+
+        # Find video id (session id in this case)
+        video_url_with_id = video_and_thumbnail.find("a").get("href")
+        session_id = str(video_url_with_id).split("videoid=")[1]
 
         # Find video's caption vtt file uri
         # Partial URI of caption file ends with .vtt
@@ -812,7 +842,7 @@ class SeattleEventScraper(EventScraper):
         # info from legistar.
         if not ignore_date:
             now = SeattleEventScraper.pstnow()
-            yesterday = now - timedelta(days=8)
+            yesterday = now - timedelta(days=14)
             if not (event_dt > yesterday and event_dt < now):
                 raise exceptions.EventOutOfTimeboundsError(event_dt, yesterday, now)
 
@@ -820,7 +850,175 @@ class SeattleEventScraper(EventScraper):
         event_datetime = event_dt
         video_uri = video.replace(" ", "")
 
-        return MinimalEventData(body, event_datetime, video_uri, caption_uri, None)
+        minimal_event_and_session = MinimalEventAndSessionData(
+            body,
+            event_datetime,
+            session_index,
+            video_uri,
+            session_id,
+            linked_session_id,
+            caption_uri,
+            None,
+        )
+
+        return minimal_event_and_session
+
+    @staticmethod
+    def match_events_and_sessions(
+        events_and_sessions: List[MinimalEventAndSessionData],
+    ) -> List[MinimalEventData]:
+        """
+        Take List[MinimalEventAndSessionData] and separate out into corresponding 
+        sessions attached to the same MinimalEventData.
+
+        Note that this implementation only works under the assumption that there 
+        can at most 2 sessions for an event.
+
+        Parameters
+        ----------
+        events_and_sesssions: List[MinimalEventAndSessionData]
+            A list of MinimalEventAndSessionData.
+
+        Returns
+        -------
+        List[MinimalEventData]
+            A list of minimal events with sessions of the same event attached.
+        """
+
+        # Create minimal event list and uri to event index map
+        minimal_events = []
+        video_uri_to_event_index_dict = {}
+
+        e_s: MinimalEventAndSessionData
+        for e_s in events_and_sessions:
+            # create minimal session data
+            session = MinimalSessionData(
+                e_s.session_datetime,
+                e_s.session_index,
+                e_s.video_uri,
+                e_s.caption_uri,
+                e_s.external_source_id,
+            )
+
+            # If found in map
+            if e_s.linked_session_id in video_uri_to_event_index_dict:
+                # Find which event the linked uri maps to
+                event_index = int(video_uri_to_event_index_dict[e_s.linked_session_id])
+
+                # add to minimal event list and store mapping in dictionary
+                minimal_events[event_index].sessions.append(session)
+                video_uri_to_event_index_dict[e_s.session_id] = event_index
+
+            else:
+                new_minimal_event = MinimalEventData(
+                    e_s.body,
+                    session.session_datetime,
+                    [session],
+                    e_s.external_source_id,
+                )
+                minimal_events.append(new_minimal_event)
+                new_event_index = len(minimal_events) - 1
+                video_uri_to_event_index_dict[e_s.session_id] = int(new_event_index)
+
+        return minimal_events
+
+    @staticmethod
+    def _attach_legistar_details_to_minimal_event(
+        minimal_event: MinimalEventData,
+        ignore_minutes_items: Optional[List[str]] = None,
+    ) -> MinimalEventData:
+        """
+        Query for and attach the best matching legistar event information to the
+        provided event details.
+
+        Parameters
+        ----------
+        minimal_event: MinimalEventData
+            The parsed minimal event details from the SeattleChannel website.
+        ignore_minutes_items: Optional[List[str]]
+            A list of minute item names to ignore when parsing the minutes items from
+            legistar. Useful for minute items that are so commonly used they lack
+            specific value.
+
+        Returns
+        -------
+        joined: MinimalEventData
+            The base event details object combined with the found legistar data.
+        """
+
+        # Get all legistar events surrounding the provided event date
+        legistar_events = legistar_event_tools.get_legistar_events_for_timespan(
+            "seattle",
+            minimal_event.event_datetime,
+            minimal_event.event_datetime + timedelta(days=1),
+        )
+
+        log.debug("Pulled legistar details for event: {}".format(minimal_event))
+
+        # Fast return for only one event returned
+        if len(legistar_events) == 1:
+            selected_event = legistar_events[0]
+        # Catch when no legistar events found for the meeting
+        elif len(legistar_events) == 0:
+            return None
+        else:
+            # Reduce events to not include cancelled events
+            cancelled_reduced = [
+                e for e in legistar_events if e["EventAgendaStatusName"] != "Cancelled"
+            ]
+
+            # Get body names
+            available_bodies = set([e["EventBodyName"] for e in cancelled_reduced])
+
+            # In the case that there were events in legistar but they were all
+            # cancelled, this will catch no events found for the meeting
+            if len(available_bodies) == 0:
+                return None
+
+            # Check if the Seattle Channel body name (basically a "display name") is
+            # present in the list. If so, choose the events with that exact body name.
+            if minimal_event.body in available_bodies:
+                legistar_events = [
+                    e
+                    for e in cancelled_reduced
+                    if e["EventBodyName"] == minimal_event.body
+                ]
+            # No exact match available, find the closest body name by text diff
+            else:
+                # Returns the closest name and the score that made it the closest
+                closest_body_name, score = process.extractOne(
+                    minimal_event.body, available_bodies
+                )
+
+                # For reasons somewhat unknown to me, SeattleChannel has videos for
+                # events that don't exist in legistar. We can somewhat detect this by
+                # filtering out body names that are drastically different.
+                # In the case that the closest body name is less than a 50% match,
+                # return None to be cleaned up after.
+                # The body names shouldn't be _that_ different which is why we are just
+                # ignoring for now
+                if score < 50:
+                    return None
+
+                # Otherwise, use the found body name
+                legistar_events = [
+                    e
+                    for e in cancelled_reduced
+                    if e["EventBodyName"] == closest_body_name
+                ]
+
+            # TODO attach other legistar details and do event matching after we add 
+            # minutes items to MinimalEventData
+            selected_event = legistar_events[0]
+
+        log.debug("Attached legistar event details for event: {}".format(minimal_event))
+
+        return MinimalEventData(
+            selected_event["EventBodyName"],
+            minimal_event.event_datetime,
+            minimal_event.sessions,
+            minimal_event.external_source_id,
+        )
 
     def __str__(self):
         return f"<SeattleEventScraper [{self.main_route}]>"

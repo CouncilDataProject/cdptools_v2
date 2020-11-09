@@ -795,8 +795,11 @@ class SeattleEventScraper(EventScraper):
             linked_session_uri = title_excerpt.find("a").get("href")
             linked_session_id = str(linked_session_uri).split("videoid=")[1]
         except Exception:
-            log.debug("Could not parse session link from title excerpt: {}".format(
-                title_excerpt))
+            log.debug(
+                "Could not parse session link from title excerpt: {}".format(
+                    title_excerpt
+                )
+            )
             pass
 
         # Find video and thumbnail urls
@@ -868,10 +871,10 @@ class SeattleEventScraper(EventScraper):
         events_and_sessions: List[MinimalEventAndSessionData],
     ) -> List[MinimalEventData]:
         """
-        Take List[MinimalEventAndSessionData] and separate out into corresponding 
+        Take List[MinimalEventAndSessionData] and separate out into corresponding
         sessions attached to the same MinimalEventData.
 
-        Note that this implementation only works under the assumption that there 
+        Note that this implementation only works under the assumption that there
         can at most 2 sessions for an event.
 
         Parameters
@@ -1007,7 +1010,7 @@ class SeattleEventScraper(EventScraper):
                     if e["EventBodyName"] == closest_body_name
                 ]
 
-            # TODO attach other legistar details and do event matching after we add 
+            # TODO attach other legistar details and do event matching after we add
             # minutes items to MinimalEventData
             selected_event = legistar_events[0]
 

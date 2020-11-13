@@ -3,6 +3,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List
+from ..pipelines.minimal_event_data import MinimalEventData
 
 ###############################################################################
 
@@ -42,3 +43,7 @@ class EventScraper(ABC):
             use for processing and storage info.
         """
         return {}
+
+    @abstractmethod
+    def get_minimal_events(self, uri: str) -> List[MinimalEventData]:
+        return

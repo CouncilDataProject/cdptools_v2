@@ -96,7 +96,7 @@ class DocumentStoreDatabase(ABC):
         """
         Construct a where condition from the passed filter object.
 
-        For available where condition operators, please view the WhereOperators class 
+        For available where condition operators, please view the WhereOperators class
         attributes.
 
         Parameters
@@ -107,15 +107,15 @@ class DocumentStoreDatabase(ABC):
         Returns
         -------
         filt: WhereCondition
-            If provided an already constructed WhereCondition, simply returns the 
+            If provided an already constructed WhereCondition, simply returns the
             provided object.
-            If provided a List or Tuple of length two, constructs a WhereCondition 
+            If provided a List or Tuple of length two, constructs a WhereCondition
             with an equal operator.
-            If provided a List or Tuple of length three, constructs a WhereCondition 
+            If provided a List or Tuple of length three, constructs a WhereCondition
             with the contents of the provided.
             Provided List or Tuple objects should follow the format:
                 {target_to_filter}, {operator}, {target_value}
-            Unless provided a List or Tuple of length two, in which case, should 
+            Unless provided a List or Tuple of length two, in which case, should
             follow the format:
                 {target_to_filter}, {target_value}
 
@@ -132,8 +132,8 @@ class DocumentStoreDatabase(ABC):
         # Returns the same WhereCondition that was passed in
 
 
-        >>> condition = Database._construct_where_condition(["event_id", 
-        ...                                                 WhereOperators.gteq, 
+        >>> condition = Database._construct_where_condition(["event_id",
+        ...                                                 WhereOperators.gteq,
         ...                                                 value="abcd"])
         WhereCondition("event_id", ">=", "abcd")
 
@@ -144,7 +144,7 @@ class DocumentStoreDatabase(ABC):
         >>> condition = Database._construct_where_condition(("event_id", "abcd"))
         WhereCondition("event_id", "==", "abcd")
 
-        # Returns a WhereCondition similar to above but the operator is set to equal 
+        # Returns a WhereCondition similar to above but the operator is set to equal
         rather than greater than or equal.
 
         """
@@ -166,7 +166,7 @@ class DocumentStoreDatabase(ABC):
         """
         Construct an orderby condition from the passed by object.
 
-        For available order condition operators, please view the OrderOperators class 
+        For available order condition operators, please view the OrderOperators class
         attributes.
 
         Parameters
@@ -177,12 +177,12 @@ class DocumentStoreDatabase(ABC):
         Returns
         -------
         by: OrderCondition
-            If provided an already constructed OrderCondition, simply 
+            If provided an already constructed OrderCondition, simply
             returns the provided object.
-            If provided a string, returns and OrderCondition with the provided 
-            string being used as the column name and defaults to descending as the 
+            If provided a string, returns and OrderCondition with the provided
+            string being used as the column name and defaults to descending as the
             operator.
-            If provided a List or Tuple of length two, constructs an OrderCondition 
+            If provided a List or Tuple of length two, constructs an OrderCondition
             with the provided data.
             Provided List or Tuple objects should follow the format:
                 {target_to_order}, {operator}
@@ -206,7 +206,7 @@ class DocumentStoreDatabase(ABC):
         # Returns the same OrderCondition as above
 
 
-        >>> condition = Database._construct_orderby_condition(["event_id", 
+        >>> condition = Database._construct_orderby_condition(["event_id",
         ...                                                   OrderOperators.desc])
         OrderCondition("event_id", "DESCENDING")
 
@@ -218,7 +218,7 @@ class DocumentStoreDatabase(ABC):
         OrderCondition("event_id", "ASCENDING")
 
 
-        # Returns an OrderCondition similar to above but the operator is set to 
+        # Returns an OrderCondition similar to above but the operator is set to
         ascending rather than descending.
 
         """
@@ -254,8 +254,8 @@ class DocumentStoreDatabase(ABC):
 
         Returns
         -------
-        If the document was found, the data from that document is returned as a 
-        dictionary. 
+        If the document was found, the data from that document is returned as a
+        dictionary.
         If not found, None is returned.
         """
         return {}
@@ -269,7 +269,7 @@ class DocumentStoreDatabase(ABC):
         limit: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """
-        Get a list of documents from a collection optionally using 
+        Get a list of documents from a collection optionally using
         filters (a list of where conditions), ordering, and limit.
 
         Parameters
@@ -281,16 +281,16 @@ class DocumentStoreDatabase(ABC):
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many documents should be returned that match the 
+            An integer limit to how many documents should be returned that match the
             query provided.
-            Commonly, running queries without credentials will have a default limit 
+            Commonly, running queries without credentials will have a default limit
             value.
 
         Returns
         -------
         results: List[Dict[str, Any]]
-            The results of the query returned as a List of Dictionaries, where each 
-            dictionary is a unique document from the collection queried. 
+            The results of the query returned as a List of Dictionaries, where each
+            dictionary is a unique document from the collection queried.
             If no documents are found, returns an empty list.
         """
         return []
@@ -312,8 +312,8 @@ class DocumentStoreDatabase(ABC):
         Returns
         -------
         formatted: Dict[str, Dict[str, Any]]
-            The documents returned as a dictionary mapping unique id to a dictionary 
-            of that documents data from the collection queried. If no documents are 
+            The documents returned as a dictionary mapping unique id to a dictionary
+            of that documents data from the collection queried. If no documents are
             provided, returns an empty dictionary.
         """
         # Format
@@ -336,14 +336,14 @@ class DocumentStoreDatabase(ABC):
         documents: List[Dict[str, Any]]
             The documents returned from a `select_documents_as_list_call`.
         collection: Optional[str]
-            If provided, the unique id for each document will be used as the index 
+            If provided, the unique id for each document will be used as the index
             value.
 
         Returns
         -------
         formatted: pandas.DataFrame
-            The documents returned as a pandas DataFrame object. If collection was 
-            provided the index of the dataframe will be the unique id's 
+            The documents returned as a pandas DataFrame object. If collection was
+            provided the index of the dataframe will be the unique id's
             for that collection.
         """
         # Cast to dataframe
@@ -405,7 +405,7 @@ class DocumentStoreDatabase(ABC):
         external_source_id: Optional[Any],
     ) -> Dict[str, Any]:
         """
-        Get or upload a minutes item. In Legistar this is commonly referred to 
+        Get or upload a minutes item. In Legistar this is commonly referred to
         as an event item.
 
         Parameters
@@ -452,7 +452,7 @@ class DocumentStoreDatabase(ABC):
         Parameters
         ----------
         video_uri: str
-            A uri that can be used to access the video file used to generate all 
+            A uri that can be used to access the video file used to generate all
             downstream data for an event.
         body: Dict[str, str]
             A dictionary that contains the event's body information.
@@ -535,12 +535,12 @@ class DocumentStoreDatabase(ABC):
         most_recent_seat: Dict[str,str]
             A dictionary containing information on this person's most recent seat.
         most_recent_chair_body: Dict[str,str]
-            A dictionary containing information on this person's most recent body they 
+            A dictionary containing information on this person's most recent body they
             were chair of.
         terms_serving_in_current_seat_role: int
             An int for how many terms this person has served in their current seat role.
         terms_serving_in_current_committee_chair_role: int
-            An int for how many terms this person has served in their current 
+            An int for how many terms this person has served in their current
             committee chair role.
         external_source_id: Optional[Any]
             An id in the external source this data comes from.
@@ -611,7 +611,7 @@ class DocumentStoreDatabase(ABC):
             An optional description for the file.
         content_type: Optional[str]
             An optional content type for the file.
-            Preferred to use MIME types: 
+            Preferred to use MIME types:
             https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
 
         Returns
@@ -665,7 +665,7 @@ class DocumentStoreDatabase(ABC):
         file_id: str
             The id for the file that contains the transcript data.
         confidence: Optional[float]
-            If available, a float / double value to store with the transcript 
+            If available, a float / double value to store with the transcript
             for the confidence of the transcription.
 
         Returns
@@ -827,7 +827,11 @@ class DocumentStoreDatabase(ABC):
 
     @abstractmethod
     def update_collection_with_field(
-        self, field: str, value: Any, collection: str, document_id: str,
+        self,
+        field: str,
+        value: Any,
+        collection: str,
+        document_id: str,
     ) -> None:
         """
         Update the field of a collection.
@@ -841,7 +845,7 @@ class DocumentStoreDatabase(ABC):
         collection: str,
             The name of the collection to be updated.
         document_id: str
-            The document_id of the document to be updated. 
+            The document_id of the document to be updated.
 
         Returns
         -------

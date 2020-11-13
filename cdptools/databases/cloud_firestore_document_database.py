@@ -372,7 +372,7 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         limit: Optional[int] = None,
     ) -> Dict[str, Dict[str, Any]]:
         """
-        Get a dictionary of documents from a table optionally using filters 
+        Get a dictionary of documents from a table optionally using filters
         (a list of where conditions), ordering, and limit.
 
         Parameters
@@ -384,8 +384,8 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many documents should be returned that match the 
-            query provided. 
+            An integer limit to how many documents should be returned that match the
+            query provided.
             Commonly, running queries without credentials will have a default
             limit value.
 
@@ -393,7 +393,7 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         -------
         results: Dict[str, Dict[str, Any]]
             The results of the query returned as a dictionary mapping unique id to a
-            dictionary of that documents data from the table queried. If no documents 
+            dictionary of that documents data from the table queried. If no documents
             are found, returns an empty dictionary.
         """
         # Get, format, and return
@@ -412,7 +412,7 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         set_id_to_index: bool = False,
     ) -> pd.DataFrame:
         """
-        Get a dataframe of documents from a table optionally using filters 
+        Get a dataframe of documents from a table optionally using filters
         (a list of where conditions), ordering, and limit.
 
         Parameters
@@ -424,8 +424,8 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         order_by: Optional[Union[OrderCondition, List, Tuple, str]]
             An order by condition to order the results by before returning.
         limit: Optional[int]
-            An integer limit to how many documents should be returned that match 
-            the query provided. 
+            An integer limit to how many documents should be returned that match
+            the query provided.
             Commonly, running queries without credentials will have a default
             limit value.
         set_id_to_index: bool
@@ -436,7 +436,7 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         -------
         results: pandas.DataFrame
             The results of the query returned as a pandas DataFrame, where each row is
-            a unique document from the table queried. 
+            a unique document from the table queried.
             If no documents are found, returns an empty DataFrame.
         """
         # Get data
@@ -655,7 +655,9 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         )
 
     def get_or_upload_matter_type(
-        self, name: str, external_source_id: Optional[Any] = None,
+        self,
+        name: str,
+        external_source_id: Optional[Any] = None,
     ) -> Dict:
         return self._get_or_upload_document(
             table="matter_type",
@@ -754,7 +756,11 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         )
 
     def get_or_upload_seat(
-        self, electoral_area: str, electoral_type: str, map_file_id: str, map_uri: str,
+        self,
+        electoral_area: str,
+        electoral_type: str,
+        map_file_id: str,
+        map_uri: str,
     ) -> Dict:
         return self._get_or_upload_document(
             table="seat",
@@ -811,7 +817,11 @@ class CloudFirestoreDocumentDatabase(DocumentStoreDatabase):
         )
 
     def update_collection_with_field(
-        self, collection: str, document_id: str, field: str, value: any,
+        self,
+        collection: str,
+        document_id: str,
+        field: str,
+        value: any,
     ) -> Dict:
         document = self._root.collection(collection).document(document_id)
         document.update({field: value})

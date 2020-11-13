@@ -192,7 +192,11 @@ def download_transcripts(
     selected_transcripts = get_transcript_manifest(db=db, order_by_field=order_by_field)
 
     # Create download file partial
-    file_download = partial(_download_file, fs=fs, save_dir=save_dir,)
+    file_download = partial(
+        _download_file,
+        fs=fs,
+        save_dir=save_dir,
+    )
 
     # Begin storage
     with ThreadPoolExecutor() as exe:

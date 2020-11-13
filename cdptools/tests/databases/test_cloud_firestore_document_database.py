@@ -171,7 +171,10 @@ def test_cloud_firestore_document_database_init(project_id, credentials_path):
         ([("person.id", "event_minutes_item.id")]),
         (
             [
-                ("person.id", "person_id",),
+                (
+                    "person.id",
+                    "person_id",
+                ),
                 ("event_minutes_item.id", "event_minutes_item_id"),
             ]
         ),
@@ -200,7 +203,10 @@ def test_cloud_firestore_document_database_select_document(no_creds_db, creds_db
         (None, None, None),
         (
             [
-                ("person.id", "person_id",),
+                (
+                    "person.id",
+                    "person_id",
+                ),
                 ("event_minutes_item.id", "event_minutes_item_id"),
             ],
             None,
@@ -208,7 +214,10 @@ def test_cloud_firestore_document_database_select_document(no_creds_db, creds_db
         ),
         (
             [
-                ("person.id", "person_id",),
+                (
+                    "person.id",
+                    "person_id",
+                ),
                 ("event_minutes_item.id", "event_minutes_item_id"),
             ],
             "person.id",
@@ -216,7 +225,10 @@ def test_cloud_firestore_document_database_select_document(no_creds_db, creds_db
         ),
         (
             [
-                ("person.id", "person_id",),
+                (
+                    "person.id",
+                    "person_id",
+                ),
                 ("event_minutes_item.id", "event_minutes_item_id"),
             ],
             None,
@@ -294,14 +306,20 @@ def test_get_cloud_firestore_value_type(val, expected):
     [
         (
             [
-                ("person.id", "person_id",),
+                (
+                    "person.id",
+                    "person_id",
+                ),
                 ("event_minutes_item.id", "event_minutes_item_id"),
             ],
             1,
         ),
         pytest.param(
             [
-                ("person.id", "person_id",),
+                (
+                    "person.id",
+                    "person_id",
+                ),
                 ("event_minutes_item.id", "event_minutes_item_id"),
             ],
             0,

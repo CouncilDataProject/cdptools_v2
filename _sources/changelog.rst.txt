@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+(unreleased)
+------------
+- admin/fix-ci-builds  (`#160
+  <https://github.com/CouncilDataProject/cdptools/pull/160>`_) [Jackson
+  Maxfield Brown]
+
+
 v2.0.6 (2020-10-18)
 -------------------
 
